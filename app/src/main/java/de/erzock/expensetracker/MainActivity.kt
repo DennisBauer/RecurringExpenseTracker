@@ -37,18 +37,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import de.erzock.expensetracker.data.BottomNavItem
-import de.erzock.expensetracker.data.MainActivityViewModel
 import de.erzock.expensetracker.data.NavigationRoute
 import de.erzock.expensetracker.data.RecurringExpenseData
 import de.erzock.expensetracker.ui.AddRecurringExpense
 import de.erzock.expensetracker.ui.RecurringExpenseOverview
 import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
+import de.erzock.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<MainActivityViewModel>()
+    private val viewModel: MainActivityViewModel by viewModels {
+        MainActivityViewModel.create((application as ExpenseTrackerApplication).repository)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
