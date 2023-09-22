@@ -1,4 +1,4 @@
-package de.erzock.subscriptions
+package de.erzock.expensetracker
 
 import org.junit.Test
 

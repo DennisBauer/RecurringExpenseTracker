@@ -1,8 +1,8 @@
-package de.erzock.subscriptions.data
+package de.erzock.expensetracker.data
 
-import de.erzock.subscriptions.toValueString
+import de.erzock.expensetracker.toValueString
 
-data class SubscriptionData(
+data class RecurringExpenseData(
     val name: String,
     val description: String,
     val priceValue: Float,

@@ -1,4 +1,4 @@
-package de.erzock.subscriptions.ui.theme
+package de.erzock.expensetracker.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package de.erzock.subscriptions.ui
+package de.erzock.expensetracker.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,31 +17,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.erzock.subscriptions.data.SubscriptionData
-import de.erzock.subscriptions.ui.theme.SubscriptionsTheme
+import de.erzock.expensetracker.data.RecurringExpenseData
+import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun SubscriptionsOverview(
-    subscriptionsData: ImmutableList<SubscriptionData>,
+fun RecurringExpenseOverview(
+    recurringExpenseData: ImmutableList<RecurringExpenseData>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth(),
     ) {
-        items(items = subscriptionsData) { subscriptionData ->
-            Subscription(
-                subscriptionData = subscriptionData,
+        items(items = recurringExpenseData) { recurringExpenseData ->
+            RecurringExpense(
+                recurringExpenseData = recurringExpenseData,
             )
         }
     }
 }
 
 @Composable
-fun Subscription(
-    subscriptionData: SubscriptionData,
+fun RecurringExpense(
+    recurringExpenseData: RecurringExpenseData,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -58,20 +58,20 @@ fun Subscription(
                     .weight(1f)
             ) {
                 Text(
-                    text = subscriptionData.name,
+                    text = recurringExpenseData.name,
                     style = MaterialTheme.typography.headlineSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = subscriptionData.description,
+                    text = recurringExpenseData.description,
                     style = MaterialTheme.typography.bodyLarge,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
             Text(
-                text = subscriptionData.priceString,
+                text = recurringExpenseData.priceString,
                 style = MaterialTheme.typography.headlineMedium
             )
         }
@@ -80,22 +80,22 @@ fun Subscription(
 
 @Preview()
 @Composable
-fun SubscriptionsOverviewPreview() {
-    SubscriptionsTheme {
+fun RecurringExpenseOverviewPreview() {
+    ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
-            SubscriptionsOverview(
+            RecurringExpenseOverview(
                 persistentListOf(
-                    SubscriptionData(
+                    RecurringExpenseData(
                         name = "Netflix",
                         description = "My Netflix description",
                         priceValue = 9.99f,
                     ),
-                    SubscriptionData(
+                    RecurringExpenseData(
                         name = "Disney Plus",
                         description = "My Disney Plus very very very very very very very very very long description",
                         priceValue = 5f,
                     ),
-                    SubscriptionData(
+                    RecurringExpenseData(
                         name = "Amazon Prime with a long name",
                         description = "My Disney Plus description",
                         priceValue = 7.95f,

@@ -1,4 +1,4 @@
-package de.erzock.subscriptions.data
+package de.erzock.expensetracker.data
 
 enum class NavigationRoute(
     val value: String

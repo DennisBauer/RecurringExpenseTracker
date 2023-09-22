@@ -1,4 +1,4 @@
-package de.erzock.subscriptions
+package de.erzock.expensetracker
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,12 +36,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import de.erzock.subscriptions.data.BottomNavItem
-import de.erzock.subscriptions.data.MainActivityViewModel
-import de.erzock.subscriptions.data.NavigationRoute
-import de.erzock.subscriptions.data.SubscriptionData
-import de.erzock.subscriptions.ui.SubscriptionsOverview
-import de.erzock.subscriptions.ui.theme.SubscriptionsTheme
+import de.erzock.expensetracker.data.BottomNavItem
+import de.erzock.expensetracker.data.MainActivityViewModel
+import de.erzock.expensetracker.data.NavigationRoute
+import de.erzock.expensetracker.data.RecurringExpenseData
+import de.erzock.expensetracker.ui.RecurringExpenseOverview
+import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MainActivityContent(
-                subscriptionsData = viewModel.subscriptionData,
+                recurringExpenseData = viewModel.recurringExpenseData,
                 monthlyPrize = viewModel.monthlyPrice,
             )
         }
@@ -62,13 +62,13 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityContent(
-    subscriptionsData: ImmutableList<SubscriptionData>,
+    recurringExpenseData: ImmutableList<RecurringExpenseData>,
     monthlyPrize: String,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
 
-    var addSubscriptionVisible by rememberSaveable { mutableStateOf(false) }
+    var addRecurringExpenseVisible by rememberSaveable { mutableStateOf(false) }
 
     val bottomNavItems = listOf(
         BottomNavItem(
@@ -83,7 +83,7 @@ fun MainActivityContent(
         ),
     )
 
-    SubscriptionsTheme {
+    ExpenseTrackerTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -95,13 +95,19 @@ fun MainActivityContent(
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Subscriptions", modifier = Modifier.weight(1f))
+                                Text(text = "Recurring Expense Tracker", modifier = Modifier.weight(1f))
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.padding(end = 16.dp),
                                 ) {
-                                    Text(text = "Monthly", style = MaterialTheme.typography.bodyMedium)
-                                    Text(text = monthlyPrize, style = MaterialTheme.typography.titleLarge)
+                                    Text(
+                                        text = "Monthly",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Text(
+                                        text = monthlyPrize,
+                                        style = MaterialTheme.typography.titleLarge
+                                    )
                                 }
                             }
                         },
@@ -132,7 +138,7 @@ fun MainActivityContent(
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = {
-                            addSubscriptionVisible = true
+                            addRecurringExpenseVisible = true
                         }
                     ) {
                         Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
@@ -147,8 +153,8 @@ fun MainActivityContent(
                             .padding(paddingValues),
                     ) {
                         composable(NavigationRoute.Home.value) {
-                            SubscriptionsOverview(
-                                subscriptionsData = subscriptionsData,
+                            RecurringExpenseOverview(
+                                recurringExpenseData = recurringExpenseData,
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
                             )
@@ -157,9 +163,9 @@ fun MainActivityContent(
 
                         }
                     }
-                    if (addSubscriptionVisible) {
-                        AddSubscription(
-                            onDismissRequest = { addSubscriptionVisible = false },
+                    if (addRecurringExpenseVisible) {
+                        AddRecurringExpense(
+                            onDismissRequest = { addRecurringExpenseVisible = false },
                         )
                     }
                 }
@@ -171,7 +177,7 @@ fun MainActivityContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddSubscription(
+fun AddRecurringExpense(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -188,17 +194,17 @@ fun AddSubscription(
 fun MainActivityContentPreview() {
     MainActivityContent(
         persistentListOf(
-            SubscriptionData(
+            RecurringExpenseData(
                 name = "Netflix",
                 description = "My Netflix description",
                 priceValue = 9.99f,
             ),
-            SubscriptionData(
+            RecurringExpenseData(
                 name = "Disney Plus",
                 description = "My Disney Plus description",
                 priceValue = 5f,
             ),
-            SubscriptionData(
+            RecurringExpenseData(
                 name = "Amazon Prime",
                 description = "My Disney Plus description",
                 priceValue = 7.95f,

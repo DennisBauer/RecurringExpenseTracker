@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "de.erzock.subscriptions"
+    namespace = "de.erzock.expensetracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "de.erzock.subscriptions"
+        applicationId = "de.erzock.expensetracker"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
