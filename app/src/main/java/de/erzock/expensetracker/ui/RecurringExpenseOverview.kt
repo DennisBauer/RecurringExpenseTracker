@@ -2,6 +2,7 @@ package de.erzock.expensetracker.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,9 +27,11 @@ import kotlinx.collections.immutable.persistentListOf
 fun RecurringExpenseOverview(
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = contentPadding,
         modifier = modifier.fillMaxWidth(),
     ) {
         items(items = recurringExpenseData) { recurringExpenseData ->
@@ -80,7 +83,7 @@ fun RecurringExpense(
 
 @Preview()
 @Composable
-fun RecurringExpenseOverviewPreview() {
+private fun RecurringExpenseOverviewPreview() {
     ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             RecurringExpenseOverview(

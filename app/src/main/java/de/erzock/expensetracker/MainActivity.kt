@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -40,6 +40,7 @@ import de.erzock.expensetracker.data.BottomNavItem
 import de.erzock.expensetracker.data.MainActivityViewModel
 import de.erzock.expensetracker.data.NavigationRoute
 import de.erzock.expensetracker.data.RecurringExpenseData
+import de.erzock.expensetracker.ui.AddRecurringExpense
 import de.erzock.expensetracker.ui.RecurringExpenseOverview
 import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -53,6 +54,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainActivityContent(
                 recurringExpenseData = viewModel.recurringExpenseData,
+                onRecurringExpenseAdded = {
+                    viewModel.addRecurringExpense(
+                        it
+                    )
+                },
                 monthlyPrize = viewModel.monthlyPrice,
             )
         }
@@ -63,6 +69,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainActivityContent(
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
+    onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
     monthlyPrize: String,
 ) {
     val navController = rememberNavController()
@@ -85,115 +92,97 @@ fun MainActivityContent(
 
     ExpenseTrackerTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+            Scaffold(topBar = {
+                TopAppBar(
+                    title = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Recurring Expense Tracker",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(end = 16.dp),
                             ) {
-                                Text(text = "Recurring Expense Tracker", modifier = Modifier.weight(1f))
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.padding(end = 16.dp),
-                                ) {
-                                    Text(
-                                        text = "Monthly",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                    Text(
-                                        text = monthlyPrize,
-                                        style = MaterialTheme.typography.titleLarge
-                                    )
-                                }
+                                Text(
+                                    text = "Monthly",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = monthlyPrize,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
                             }
-                        },
-                    )
-                },
-                bottomBar = {
-                    NavigationBar {
-                        bottomNavItems.forEach { item ->
-                            val selected =
-                                item.route.value == backStackEntry.value?.destination?.route
+                        }
+                    },
+                )
+            }, bottomBar = {
+                NavigationBar {
+                    bottomNavItems.forEach { item ->
+                        val selected = item.route.value == backStackEntry.value?.destination?.route
 
-                            NavigationBarItem(
-                                selected = selected,
-                                onClick = { navController.navigate(item.route.value) },
-                                icon = {
-                                    Icon(
-                                        imageVector = item.icon,
-                                        contentDescription = "${item.name} Icon"
-                                    )
-                                },
-                                label = {
-                                    Text(text = item.name)
-                                }
-                            )
-                        }
-                    }
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {
-                            addRecurringExpenseVisible = true
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
-                    }
-                },
-                content = { paddingValues ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = NavigationRoute.Home.value,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                    ) {
-                        composable(NavigationRoute.Home.value) {
-                            RecurringExpenseOverview(
-                                recurringExpenseData = recurringExpenseData,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                            )
-                        }
-                        composable(NavigationRoute.Settings.value) {
-
-                        }
-                    }
-                    if (addRecurringExpenseVisible) {
-                        AddRecurringExpense(
-                            onDismissRequest = { addRecurringExpenseVisible = false },
-                        )
+                        NavigationBarItem(selected = selected,
+                            onClick = { navController.navigate(item.route.value) },
+                            icon = {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = "${item.name} Icon"
+                                )
+                            },
+                            label = {
+                                Text(text = item.name)
+                            })
                     }
                 }
-            )
+            }, floatingActionButton = {
+                FloatingActionButton(onClick = {
+                    addRecurringExpenseVisible = true
+                }) {
+                    Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
+                }
+            }, content = { paddingValues ->
+                NavHost(
+                    navController = navController,
+                    startDestination = NavigationRoute.Home.value,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                ) {
+                    composable(NavigationRoute.Home.value) {
+                        RecurringExpenseOverview(
+                            recurringExpenseData = recurringExpenseData,
+                            contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
+                    composable(NavigationRoute.Settings.value) {
+
+                    }
+                }
+                if (addRecurringExpenseVisible) {
+                    AddRecurringExpense(
+                        onAddExpense = {
+                            onRecurringExpenseAdded(it)
+                            addRecurringExpenseVisible = false
+                        },
+                        onDismissRequest = { addRecurringExpenseVisible = false },
+                    )
+                }
+            })
 
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddRecurringExpense(
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        modifier = modifier,
-    ) {
-        Text(text = "Test")
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-fun MainActivityContentPreview() {
+private fun MainActivityContentPreview() {
     MainActivityContent(
-        persistentListOf(
+        recurringExpenseData = persistentListOf(
             RecurringExpenseData(
                 name = "Netflix",
                 description = "My Netflix description",
@@ -210,6 +199,7 @@ fun MainActivityContentPreview() {
                 priceValue = 7.95f,
             ),
         ),
-        "15,19 €"
+        onRecurringExpenseAdded = {},
+        monthlyPrize = "15,19 €",
     )
 }

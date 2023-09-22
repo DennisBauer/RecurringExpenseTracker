@@ -23,22 +23,61 @@ class MainActivityViewModel : ViewModel() {
         ),
         RecurringExpenseData(
             name = "Amazon Prime",
+            description = "My Amazon Prime description",
+            priceValue = 7.95f,
+        ),
+        RecurringExpenseData(
+            name = "Netflix",
+            description = "My Netflix description",
+            priceValue = 9.99f,
+        ),
+        RecurringExpenseData(
+            name = "Disney Plus",
             description = "My Disney Plus description",
+            priceValue = 5f,
+        ),
+        RecurringExpenseData(
+            name = "Amazon Prime",
+            description = "My Amazon Prime description",
+            priceValue = 7.95f,
+        ),
+        RecurringExpenseData(
+            name = "Netflix",
+            description = "My Netflix description",
+            priceValue = 9.99f,
+        ),
+        RecurringExpenseData(
+            name = "Disney Plus",
+            description = "My Disney Plus description",
+            priceValue = 5f,
+        ),
+        RecurringExpenseData(
+            name = "Amazon Prime",
+            description = "My Amazon Prime description",
             priceValue = 7.95f,
         ),
     )
     val recurringExpenseData: ImmutableList<RecurringExpenseData>
         get() = _recurringExpenseData.toImmutableList()
 
-    private var _montlyPrice by mutableStateOf("")
+    private var _monthlyPrice by mutableStateOf("")
     val monthlyPrice: String
-        get() = _montlyPrice
+        get() = _monthlyPrice
 
     init {
+        updateSummaries()
+    }
+
+    fun addRecurringExpense(recurringExpense: RecurringExpenseData) {
+        _recurringExpenseData.add(recurringExpense)
+        updateSummaries()
+    }
+
+    private fun updateSummaries() {
         var price = 0f
         _recurringExpenseData.forEach {
             price += it.priceValue
         }
-        _montlyPrice = "${price.toValueString()} €" // TODO: Make currency dynamic
+        _monthlyPrice = "${price.toValueString()} €" // TODO: Make currency dynamic
     }
 }
