@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -25,6 +27,9 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun RecurringExpenseOverview(
+    weeklyExpense: String,
+    monthlyExpense: String,
+    yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -34,6 +39,15 @@ fun RecurringExpenseOverview(
         contentPadding = contentPadding,
         modifier = modifier.fillMaxWidth(),
     ) {
+        item {
+            RecurringExpenseSummary(
+                weeklyExpense = weeklyExpense,
+                monthlyExpense = monthlyExpense,
+                yearlyExpense = yearlyExpense,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+            )
+        }
         items(items = recurringExpenseData) { recurringExpenseData ->
             RecurringExpense(
                 recurringExpenseData = recurringExpenseData,
@@ -43,7 +57,62 @@ fun RecurringExpenseOverview(
 }
 
 @Composable
-fun RecurringExpense(
+private fun RecurringExpenseSummary(
+    weeklyExpense: String,
+    monthlyExpense: String,
+    yearlyExpense: String,
+    modifier: Modifier = Modifier,
+) {
+    Card(modifier = modifier) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "Monthly",
+                style = MaterialTheme.typography.headlineSmall,
+            )
+            Text(
+                text = monthlyExpense,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Row {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Weekly",
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
+                        text = weeklyExpense,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Yearly",
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
+                        text = yearlyExpense,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
     modifier: Modifier = Modifier,
 ) {
@@ -87,7 +156,10 @@ private fun RecurringExpenseOverviewPreview() {
     ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             RecurringExpenseOverview(
-                persistentListOf(
+                weeklyExpense = "4,00 €",
+                monthlyExpense = "16,00 €",
+                yearlyExpense = "192,00 €",
+                recurringExpenseData = persistentListOf(
                     RecurringExpenseData(
                         name = "Netflix",
                         description = "My Netflix description",

@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -29,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,13 +56,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MainActivityContent(
+                weeklyExpense = viewModel.weeklyExpense,
+                monthlyExpense = viewModel.monthlyExpense,
+                yearlyExpense = viewModel.yearlyExpense,
                 recurringExpenseData = viewModel.recurringExpenseData,
                 onRecurringExpenseAdded = {
                     viewModel.addRecurringExpense(
                         it
                     )
                 },
-                monthlyPrize = viewModel.monthlyPrice,
             )
         }
     }
@@ -74,9 +73,11 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityContent(
+    weeklyExpense: String,
+    monthlyExpense: String,
+    yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
-    monthlyPrize: String,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -105,27 +106,9 @@ fun MainActivityContent(
             Scaffold(topBar = {
                 TopAppBar(
                     title = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Recurring Expense Tracker",
-                                modifier = Modifier.weight(1f)
-                            )
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(end = 16.dp),
-                            ) {
-                                Text(
-                                    text = "Monthly",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                                Text(
-                                    text = monthlyPrize,
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                            }
-                        }
+                        Text(
+                            text = "Recurring Expense Tracker",
+                        )
                     },
                     scrollBehavior = scrollBehavior,
                 )
@@ -163,6 +146,9 @@ fun MainActivityContent(
                 ) {
                     composable(NavigationRoute.Home.value) {
                         RecurringExpenseOverview(
+                            weeklyExpense = weeklyExpense,
+                            monthlyExpense = monthlyExpense,
+                            yearlyExpense = yearlyExpense,
                             recurringExpenseData = recurringExpenseData,
                             contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
                             modifier = Modifier
@@ -193,6 +179,9 @@ fun MainActivityContent(
 @Composable
 private fun MainActivityContentPreview() {
     MainActivityContent(
+        weeklyExpense = "4,00 €",
+        monthlyExpense = "16,00 €",
+        yearlyExpense = "192,00 €",
         recurringExpenseData = persistentListOf(
             RecurringExpenseData(
                 name = "Netflix",
@@ -211,6 +200,5 @@ private fun MainActivityContentPreview() {
             ),
         ),
         onRecurringExpenseAdded = {},
-        monthlyPrize = "15,19 €",
     )
 }

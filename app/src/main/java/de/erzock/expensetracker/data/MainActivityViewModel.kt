@@ -60,24 +60,32 @@ class MainActivityViewModel : ViewModel() {
     val recurringExpenseData: ImmutableList<RecurringExpenseData>
         get() = _recurringExpenseData.toImmutableList()
 
-    private var _monthlyPrice by mutableStateOf("")
-    val monthlyPrice: String
-        get() = _monthlyPrice
+    private var _weeklyExpense by mutableStateOf("")
+    private var _monthlyExpense by mutableStateOf("")
+    private var _yearlyExpense by mutableStateOf("")
+    val weeklyExpense: String
+        get() = _weeklyExpense
+    val monthlyExpense: String
+        get() = _monthlyExpense
+    val yearlyExpense: String
+        get() = _yearlyExpense
 
     init {
-        updateSummaries()
+        updateExpenseSummary()
     }
 
     fun addRecurringExpense(recurringExpense: RecurringExpenseData) {
         _recurringExpenseData.add(recurringExpense)
-        updateSummaries()
+        updateExpenseSummary()
     }
 
-    private fun updateSummaries() {
+    private fun updateExpenseSummary() {
         var price = 0f
         _recurringExpenseData.forEach {
             price += it.priceValue
         }
-        _monthlyPrice = "${price.toValueString()} €" // TODO: Make currency dynamic
+        _weeklyExpense = "${(price / 30f).toValueString()} €" // TODO: Make currency dynamic
+        _monthlyExpense = "${price.toValueString()} €" // TODO: Make currency dynamic
+        _yearlyExpense = "${(price * 12).toValueString()} €" // TODO: Make currency dynamic
     }
 }
