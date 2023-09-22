@@ -35,12 +35,16 @@ class MainActivityViewModel(
     init {
         viewModelScope.launch {
             expenseRepository.allRecurringExpensesByPrice.collect() { recurringExpenses ->
+                _recurringExpenseData.clear()
                 recurringExpenses.forEach {
-                    _recurringExpenseData.add(RecurringExpenseData(
-                        name = it.name!!,
-                        description = it.description!!,
-                        priceValue = it.price!!
-                    ))
+                    _recurringExpenseData.add(
+                        RecurringExpenseData(
+                            id = it.id,
+                            name = it.name!!,
+                            description = it.description!!,
+                            priceValue = it.price!!
+                        )
+                    )
                 }
                 updateExpenseSummary()
             }
@@ -49,12 +53,27 @@ class MainActivityViewModel(
 
     fun addRecurringExpense(recurringExpense: RecurringExpenseData) {
         viewModelScope.launch {
-            expenseRepository.insert(RecurringExpense(
-                id = 0,
-                name = recurringExpense.name,
-                description = recurringExpense.description,
-                price = recurringExpense.priceValue,
-            ))
+            expenseRepository.insert(
+                RecurringExpense(
+                    id = 0,
+                    name = recurringExpense.name,
+                    description = recurringExpense.description,
+                    price = recurringExpense.priceValue,
+                )
+            )
+        }
+    }
+
+    fun editRecurringExpense(recurringExpense: RecurringExpenseData) {
+        viewModelScope.launch {
+            expenseRepository.update(
+                RecurringExpense(
+                    id = recurringExpense.id,
+                    name = recurringExpense.name,
+                    description = recurringExpense.description,
+                    price = recurringExpense.priceValue,
+                )
+            )
         }
     }
 

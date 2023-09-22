@@ -18,6 +18,11 @@ class ExpenseRepository(
     }
 
     @WorkerThread
+    suspend fun update(recurringExpense: RecurringExpense) = withContext(Dispatchers.IO) {
+        recurringExpenseDao.update(recurringExpense)
+    }
+
+    @WorkerThread
     suspend fun delete(recurringExpense: RecurringExpense) = withContext(Dispatchers.IO) {
         recurringExpenseDao.delete(recurringExpense)
     }

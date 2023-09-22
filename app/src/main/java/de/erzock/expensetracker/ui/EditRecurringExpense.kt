@@ -36,10 +36,11 @@ import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddRecurringExpense(
-    onAddExpense: (RecurringExpenseData) -> Unit,
+fun EditRecurringExpense(
+    onUpdateExpense: (RecurringExpenseData) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    currentData: RecurringExpenseData? = null,
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -49,39 +50,42 @@ fun AddRecurringExpense(
         sheetState = sheetState,
         modifier = modifier,
     ) {
-        AddRecurringExpenseInternal(
-            onAddExpense = onAddExpense,
+        EditRecurringExpenseInternal(
+            onUpdateExpense = onUpdateExpense,
+            confirmButtonString = if (currentData == null) "Add Expense" else "Update Expense",
+            currentData = currentData,
         )
     }
 }
 
 @Composable
-private fun AddRecurringExpenseInternal(
-    onAddExpense: (RecurringExpenseData) -> Unit,
+private fun EditRecurringExpenseInternal(
+    onUpdateExpense: (RecurringExpenseData) -> Unit,
+    confirmButtonString: String,
     modifier: Modifier = Modifier,
+    currentData: RecurringExpenseData? = null,
 ) {
     var nameState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue())
+        mutableStateOf(TextFieldValue(currentData?.name ?: ""))
     }
     var nameInputError by rememberSaveable {
         mutableStateOf(false)
     }
     var descriptionState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue())
+        mutableStateOf(TextFieldValue(currentData?.description ?: ""))
     }
     var descriptionInputError by rememberSaveable {
         mutableStateOf(false)
     }
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue())
+        mutableStateOf(TextFieldValue(currentData?.priceValue.toString()))
     }
     var priceInputError by rememberSaveable {
         mutableStateOf(false)
     }
 
     Column(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         Text(
             text = "Name",
@@ -137,20 +141,19 @@ private fun AddRecurringExpenseInternal(
                 val name = nameState.text
                 val description = descriptionState.text
                 val price = priceState.text
-                if (verifyUserInput(
-                        name = name,
+                if (verifyUserInput(name = name,
                         onNameInputError = { nameInputError = true },
                         description = description,
                         onDescriptionInputError = { descriptionInputError = true },
                         price = price,
-                        onPriceInputError = { priceInputError = true }
-                    )
+                        onPriceInputError = { priceInputError = true })
                 ) {
-                    onAddExpense(
+                    onUpdateExpense(
                         RecurringExpenseData(
-                            name,
-                            description,
-                            price.toFloatIgnoreSeparator()
+                            id = currentData?.id ?: 0,
+                            name = name,
+                            description = description,
+                            priceValue = price.toFloatIgnoreSeparator()
                         )
                     )
                 }
@@ -162,7 +165,7 @@ private fun AddRecurringExpenseInternal(
                 .padding(top = 8.dp, bottom = 24.dp)
         ) {
             Text(
-                text = "Save Expense",
+                text = confirmButtonString,
                 modifier = Modifier.padding(vertical = 4.dp),
             )
         }
@@ -245,11 +248,11 @@ private fun isPriceValid(price: String): Boolean {
 
 @Preview
 @Composable
-private fun AddRecurringExpensePreview() {
+private fun EditRecurringExpensePreview() {
     ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            AddRecurringExpenseInternal(
-                onAddExpense = {},
+            EditRecurringExpenseInternal(
+                onUpdateExpense = {}, confirmButtonString = "Add Expense"
             )
         }
     }

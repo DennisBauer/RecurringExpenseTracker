@@ -1,5 +1,6 @@
 package de.erzock.expensetracker.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +32,7 @@ fun RecurringExpenseOverview(
     monthlyExpense: String,
     yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
+    onItemClicked: (RecurringExpenseData) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -51,6 +53,9 @@ fun RecurringExpenseOverview(
         items(items = recurringExpenseData) { recurringExpenseData ->
             RecurringExpense(
                 recurringExpenseData = recurringExpenseData,
+                onItemClicked = {
+                    onItemClicked(recurringExpenseData)
+                },
             )
         }
     }
@@ -114,10 +119,12 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
+    onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .clickable { onItemClicked() },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -161,21 +168,25 @@ private fun RecurringExpenseOverviewPreview() {
                 yearlyExpense = "192,00 €",
                 recurringExpenseData = persistentListOf(
                     RecurringExpenseData(
+                        id = 0,
                         name = "Netflix",
                         description = "My Netflix description",
                         priceValue = 9.99f,
                     ),
                     RecurringExpenseData(
+                        id = 1,
                         name = "Disney Plus",
                         description = "My Disney Plus very very very very very very very very very long description",
                         priceValue = 5f,
                     ),
                     RecurringExpenseData(
+                        id = 2,
                         name = "Amazon Prime with a long name",
                         description = "My Disney Plus description",
                         priceValue = 7.95f,
                     ),
-                )
+                ),
+                onItemClicked = {},
             )
         }
     }

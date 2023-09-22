@@ -39,7 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import de.erzock.expensetracker.data.BottomNavItem
 import de.erzock.expensetracker.data.NavigationRoute
 import de.erzock.expensetracker.data.RecurringExpenseData
-import de.erzock.expensetracker.ui.AddRecurringExpense
+import de.erzock.expensetracker.ui.EditRecurringExpense
 import de.erzock.expensetracker.ui.RecurringExpenseOverview
 import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.erzock.expensetracker.viewmodel.MainActivityViewModel
@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainActivityViewModel by viewModels {
         MainActivityViewModel.create((application as ExpenseTrackerApplication).repository)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,10 +64,11 @@ class MainActivity : ComponentActivity() {
                 yearlyExpense = viewModel.yearlyExpense,
                 recurringExpenseData = viewModel.recurringExpenseData,
                 onRecurringExpenseAdded = {
-                    viewModel.addRecurringExpense(
-                        it
-                    )
+                    viewModel.addRecurringExpense(it)
                 },
+                onRecurringExpenseEdited = {
+                    viewModel.editRecurringExpense(it)
+                }
             )
         }
     }
@@ -80,11 +82,14 @@ fun MainActivityContent(
     yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
+    onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
 
     var addRecurringExpenseVisible by rememberSaveable { mutableStateOf(false) }
+
+    var selectedRecurringExpense by rememberSaveable { mutableStateOf<RecurringExpenseData?>(null) }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -152,27 +157,39 @@ fun MainActivityContent(
                             monthlyExpense = monthlyExpense,
                             yearlyExpense = yearlyExpense,
                             recurringExpenseData = recurringExpenseData,
+                            onItemClicked = {
+                                selectedRecurringExpense = it
+                            },
                             contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .nestedScroll(scrollBehavior.nestedScrollConnection),
-                            )
+                        )
                     }
                     composable(NavigationRoute.Settings.value) {
 
                     }
                 }
                 if (addRecurringExpenseVisible) {
-                    AddRecurringExpense(
-                        onAddExpense = {
+                    EditRecurringExpense(
+                        onUpdateExpense = {
                             onRecurringExpenseAdded(it)
                             addRecurringExpenseVisible = false
                         },
                         onDismissRequest = { addRecurringExpenseVisible = false },
                     )
                 }
+                if (selectedRecurringExpense != null) {
+                    EditRecurringExpense(
+                        onUpdateExpense = {
+                            onRecurringExpenseEdited(it)
+                            selectedRecurringExpense = null
+                        },
+                        onDismissRequest = { selectedRecurringExpense = null },
+                        currentData = selectedRecurringExpense,
+                    )
+                }
             })
-
         }
     }
 }
@@ -186,21 +203,25 @@ private fun MainActivityContentPreview() {
         yearlyExpense = "192,00 €",
         recurringExpenseData = persistentListOf(
             RecurringExpenseData(
+                id = 0,
                 name = "Netflix",
                 description = "My Netflix description",
                 priceValue = 9.99f,
             ),
             RecurringExpenseData(
+                id = 1,
                 name = "Disney Plus",
                 description = "My Disney Plus description",
                 priceValue = 5f,
             ),
             RecurringExpenseData(
+                id = 2,
                 name = "Amazon Prime",
                 description = "My Disney Plus description",
                 priceValue = 7.95f,
             ),
         ),
         onRecurringExpenseAdded = {},
+        onRecurringExpenseEdited = {},
     )
 }

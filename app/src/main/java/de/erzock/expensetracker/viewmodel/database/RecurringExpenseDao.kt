@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,6 +17,9 @@ interface RecurringExpenseDao {
 
     @Insert
     fun insert(recurringExpense: RecurringExpense)
+
+    @Update
+    fun update(recurringExpense: RecurringExpense)
 
     @Delete
     fun delete(recurringExpense: RecurringExpense)
