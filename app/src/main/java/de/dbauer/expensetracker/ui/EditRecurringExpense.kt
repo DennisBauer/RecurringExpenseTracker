@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,10 +16,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,6 +54,7 @@ fun EditRecurringExpense(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     currentData: RecurringExpenseData? = null,
+    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -65,6 +69,7 @@ fun EditRecurringExpense(
             onUpdateExpense = onUpdateExpense,
             confirmButtonString = if (currentData == null) "Add Expense" else "Update Expense",
             currentData = currentData,
+            onDeleteExpense = onDeleteExpense,
         )
     }
 }
@@ -75,6 +80,7 @@ private fun EditRecurringExpenseInternal(
     confirmButtonString: String,
     modifier: Modifier = Modifier,
     currentData: RecurringExpenseData? = null,
+    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
     var nameState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.name ?: ""))
@@ -166,28 +172,52 @@ private fun EditRecurringExpenseInternal(
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         )
-        Button(
-            onClick = {
-                onConfirmClicked(
-                    nameInputError,
-                    priceInputError,
-                    nameState,
-                    descriptionState,
-                    priceState,
-                    onUpdateExpense,
-                    currentData
-                )
-            },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally)
                 .navigationBarsPadding()
                 .padding(top = 8.dp, bottom = 24.dp)
         ) {
-            Text(
-                text = confirmButtonString,
-                modifier = Modifier.padding(vertical = 4.dp),
-            )
+            if (currentData != null) {
+                OutlinedButton(
+                    onClick = {
+                        onDeleteExpense?.invoke(currentData)
+                    },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = "Delete",
+                        modifier = Modifier.padding(vertical = 4.dp),
+                    )
+                }
+            }
+            Button(
+                onClick = {
+                    onConfirmClicked(
+                        nameInputError,
+                        priceInputError,
+                        nameState,
+                        descriptionState,
+                        priceState,
+                        onUpdateExpense,
+                        currentData
+                    )
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentWidth()
+            ) {
+                Text(
+                    text = confirmButtonString,
+                    modifier = Modifier.padding(vertical = 4.dp),
+                )
+            }
         }
     }
 }

@@ -67,6 +67,9 @@ class MainActivity : ComponentActivity() {
                 },
                 onRecurringExpenseEdited = {
                     viewModel.editRecurringExpense(it)
+                },
+                onRecurringExpenseDeleted = {
+                    viewModel.deleteRecurringExpense(it)
                 }
             )
         }
@@ -82,6 +85,7 @@ fun MainActivityContent(
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
     onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
+    onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -199,6 +203,10 @@ fun MainActivityContent(
                             },
                             onDismissRequest = { selectedRecurringExpense = null },
                             currentData = selectedRecurringExpense,
+                            onDeleteExpense = {
+                                onRecurringExpenseDeleted(it)
+                                selectedRecurringExpense = null
+                            }
                         )
                     }
                 })
@@ -235,5 +243,6 @@ private fun MainActivityContentPreview() {
         ),
         onRecurringExpenseAdded = {},
         onRecurringExpenseEdited = {},
+        onRecurringExpenseDeleted = {},
     )
 }
