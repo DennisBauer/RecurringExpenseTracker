@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
 }
 
 android {
@@ -27,7 +28,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -49,6 +50,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    version.set(libs.versions.ktlint.version.get())
 }
 
 dependencies {
@@ -81,4 +86,6 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom))
 
     testImplementation(libs.junit)
+
+    ktlintRuleset(libs.ktlint.compose)
 }

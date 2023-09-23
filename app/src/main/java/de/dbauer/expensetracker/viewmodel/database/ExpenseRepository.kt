@@ -13,17 +13,20 @@ class ExpenseRepository(
         recurringExpenseDao.getAllByPrice()
 
     @WorkerThread
-    suspend fun insert(recurringExpense: RecurringExpense) = withContext(Dispatchers.IO) {
-        recurringExpenseDao.insert(recurringExpense)
-    }
+    suspend fun insert(recurringExpense: RecurringExpense) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.insert(recurringExpense)
+        }
 
     @WorkerThread
-    suspend fun update(recurringExpense: RecurringExpense) = withContext(Dispatchers.IO) {
-        recurringExpenseDao.update(recurringExpense)
-    }
+    suspend fun update(recurringExpense: RecurringExpense) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.update(recurringExpense)
+        }
 
     @WorkerThread
-    suspend fun delete(recurringExpense: RecurringExpense) = withContext(Dispatchers.IO) {
-        recurringExpenseDao.delete(recurringExpense)
-    }
+    suspend fun delete(recurringExpense: RecurringExpense) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.delete(recurringExpense)
+        }
 }

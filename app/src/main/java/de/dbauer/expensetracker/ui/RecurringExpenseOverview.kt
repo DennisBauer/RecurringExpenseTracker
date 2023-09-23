@@ -46,8 +46,7 @@ fun RecurringExpenseOverview(
                 weeklyExpense = weeklyExpense,
                 monthlyExpense = monthlyExpense,
                 yearlyExpense = yearlyExpense,
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
             )
         }
         items(items = recurringExpenseData) { recurringExpenseData ->
@@ -70,9 +69,10 @@ private fun RecurringExpenseSummary(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(8.dp),
     ) {
         Text(
             text = "Monthly",
@@ -86,7 +86,7 @@ private fun RecurringExpenseSummary(
         Row {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = "Weekly",
@@ -99,7 +99,7 @@ private fun RecurringExpenseSummary(
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = "Yearly",
@@ -121,18 +121,17 @@ private fun RecurringExpense(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .clickable { onItemClicked() },
+        modifier = modifier.clickable { onItemClicked() },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = recurringExpenseData.name,
@@ -151,7 +150,7 @@ private fun RecurringExpense(
             }
             Text(
                 text = recurringExpenseData.priceString,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
             )
         }
     }
@@ -166,26 +165,29 @@ private fun RecurringExpenseOverviewPreview() {
                 weeklyExpense = "4,00 €",
                 monthlyExpense = "16,00 €",
                 yearlyExpense = "192,00 €",
-                recurringExpenseData = persistentListOf(
-                    RecurringExpenseData(
-                        id = 0,
-                        name = "Netflix",
-                        description = "My Netflix description",
-                        priceValue = 9.99f,
+                recurringExpenseData =
+                    persistentListOf(
+                        RecurringExpenseData(
+                            id = 0,
+                            name = "Netflix",
+                            description = "My Netflix description",
+                            priceValue = 9.99f,
+                        ),
+                        RecurringExpenseData(
+                            id = 1,
+                            name = "Disney Plus",
+                            description =
+                                "My Disney Plus very very very very very " +
+                                    "very very very very long description",
+                            priceValue = 5f,
+                        ),
+                        RecurringExpenseData(
+                            id = 2,
+                            name = "Amazon Prime with a long name",
+                            description = "",
+                            priceValue = 7.95f,
+                        ),
                     ),
-                    RecurringExpenseData(
-                        id = 1,
-                        name = "Disney Plus",
-                        description = "My Disney Plus very very very very very very very very very long description",
-                        priceValue = 5f,
-                    ),
-                    RecurringExpenseData(
-                        id = 2,
-                        name = "Amazon Prime with a long name",
-                        description = "",
-                        priceValue = 7.95f,
-                    ),
-                ),
                 onItemClicked = {},
             )
         }

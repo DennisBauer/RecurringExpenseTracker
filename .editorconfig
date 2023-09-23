@@ -1,0 +1,19 @@
+[*]
+charset = utf-8
+
+[*.kt]
+max_line_length = 115
+indent_style = space
+indent_size = 4
+
+[*.kts]
+max_line_length = off
+
+[*.{kt,kts}]
+trim_trailing_whitespace = true
+insert_final_newline = true
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_standard_function-naming = disabled
+ktlint_standard_multiple-expession-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
