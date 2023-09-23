@@ -46,7 +46,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainActivityViewModel by viewModels {
         MainActivityViewModel.create((application as ExpenseTrackerApplication).repository)
     }
@@ -70,7 +69,7 @@ class MainActivity : ComponentActivity() {
                 },
                 onRecurringExpenseDeleted = {
                     viewModel.deleteRecurringExpense(it)
-                }
+                },
             )
         }
     }
@@ -86,6 +85,7 @@ fun MainActivityContent(
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
     onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -96,14 +96,15 @@ fun MainActivityContent(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val bottomNavigationItems = listOf(
-        BottomNavigation.Home,
-        BottomNavigation.Settings,
-    )
+    val bottomNavigationItems =
+        listOf(
+            BottomNavigation.Home,
+            BottomNavigation.Settings,
+        )
 
     ExpenseTrackerTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
             Scaffold(
@@ -148,7 +149,8 @@ fun MainActivityContent(
                                 },
                                 label = {
                                     Text(text = stringResource(id = item.name))
-                                })
+                                },
+                            )
                         }
                     }
                 },
@@ -163,9 +165,10 @@ fun MainActivityContent(
                     NavHost(
                         navController = navController,
                         startDestination = BottomNavigation.Home.route,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues),
                     ) {
                         composable(BottomNavigation.Home.route) {
                             RecurringExpenseOverview(
@@ -177,13 +180,13 @@ fun MainActivityContent(
                                     selectedRecurringExpense = it
                                 },
                                 contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
                             )
                         }
                         composable(BottomNavigation.Settings.route) {
-
                         }
                     }
                     if (addRecurringExpenseVisible) {
@@ -206,10 +209,11 @@ fun MainActivityContent(
                             onDeleteExpense = {
                                 onRecurringExpenseDeleted(it)
                                 selectedRecurringExpense = null
-                            }
+                            },
                         )
                     }
-                })
+                },
+            )
         }
     }
 }
@@ -221,26 +225,27 @@ private fun MainActivityContentPreview() {
         weeklyExpense = "4,00 €",
         monthlyExpense = "16,00 €",
         yearlyExpense = "192,00 €",
-        recurringExpenseData = persistentListOf(
-            RecurringExpenseData(
-                id = 0,
-                name = "Netflix",
-                description = "My Netflix description",
-                priceValue = 9.99f,
+        recurringExpenseData =
+            persistentListOf(
+                RecurringExpenseData(
+                    id = 0,
+                    name = "Netflix",
+                    description = "My Netflix description",
+                    priceValue = 9.99f,
+                ),
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Disney Plus",
+                    description = "My Disney Plus description",
+                    priceValue = 5f,
+                ),
+                RecurringExpenseData(
+                    id = 2,
+                    name = "Amazon Prime",
+                    description = "My Disney Plus description",
+                    priceValue = 7.95f,
+                ),
             ),
-            RecurringExpenseData(
-                id = 1,
-                name = "Disney Plus",
-                description = "My Disney Plus description",
-                priceValue = 5f,
-            ),
-            RecurringExpenseData(
-                id = 2,
-                name = "Amazon Prime",
-                description = "My Disney Plus description",
-                priceValue = 7.95f,
-            ),
-        ),
         onRecurringExpenseAdded = {},
         onRecurringExpenseEdited = {},
         onRecurringExpenseDeleted = {},

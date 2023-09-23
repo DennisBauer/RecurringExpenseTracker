@@ -34,7 +34,7 @@ class MainActivityViewModel(
 
     init {
         viewModelScope.launch {
-            expenseRepository.allRecurringExpensesByPrice.collect() { recurringExpenses ->
+            expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
                 _recurringExpenseData.clear()
                 recurringExpenses.forEach {
                     _recurringExpenseData.add(
@@ -42,8 +42,8 @@ class MainActivityViewModel(
                             id = it.id,
                             name = it.name!!,
                             description = it.description!!,
-                            priceValue = it.price!!
-                        )
+                            priceValue = it.price!!,
+                        ),
                     )
                 }
                 updateExpenseSummary()
@@ -59,7 +59,7 @@ class MainActivityViewModel(
                     name = recurringExpense.name,
                     description = recurringExpense.description,
                     price = recurringExpense.priceValue,
-                )
+                ),
             )
         }
     }
@@ -72,7 +72,7 @@ class MainActivityViewModel(
                     name = recurringExpense.name,
                     description = recurringExpense.description,
                     price = recurringExpense.priceValue,
-                )
+                ),
             )
         }
     }
@@ -85,7 +85,7 @@ class MainActivityViewModel(
                     name = recurringExpense.name,
                     description = recurringExpense.description,
                     price = recurringExpense.priceValue,
-                )
+                ),
             )
         }
     }
