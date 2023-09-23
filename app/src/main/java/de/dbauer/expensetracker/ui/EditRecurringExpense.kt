@@ -85,9 +85,6 @@ private fun EditRecurringExpenseInternal(
     var descriptionState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.description ?: ""))
     }
-    val descriptionInputError = rememberSaveable {
-        mutableStateOf(false)
-    }
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.priceValue?.toString() ?: ""))
     }
@@ -133,7 +130,6 @@ private fun EditRecurringExpenseInternal(
                 onNext = { localFocusManager.moveFocus(FocusDirection.Next) }
             ),
             maxLines = 2,
-            isError = descriptionInputError.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
@@ -155,7 +151,6 @@ private fun EditRecurringExpenseInternal(
                 onDone = {
                     onConfirmClicked(
                         nameInputError,
-                        descriptionInputError,
                         priceInputError,
                         nameState,
                         descriptionState,
@@ -175,7 +170,6 @@ private fun EditRecurringExpenseInternal(
             onClick = {
                 onConfirmClicked(
                     nameInputError,
-                    descriptionInputError,
                     priceInputError,
                     nameState,
                     descriptionState,
@@ -242,7 +236,6 @@ private fun CustomTextField(
 
 private fun onConfirmClicked(
     nameInputError: MutableState<Boolean>,
-    descriptionInputError: MutableState<Boolean>,
     priceInputError: MutableState<Boolean>,
     nameState: TextFieldValue,
     descriptionState: TextFieldValue,
@@ -251,7 +244,6 @@ private fun onConfirmClicked(
     currentData: RecurringExpenseData?
 ) {
     nameInputError.value = false
-    descriptionInputError.value = false
     priceInputError.value = false
 
     val name = nameState.text
@@ -259,8 +251,6 @@ private fun onConfirmClicked(
     val price = priceState.text
     if (verifyUserInput(name = name,
             onNameInputError = { nameInputError.value = true },
-            description = description,
-            onDescriptionInputError = { descriptionInputError.value = true },
             price = price,
             onPriceInputError = { priceInputError.value = true })
     ) {
@@ -278,18 +268,12 @@ private fun onConfirmClicked(
 private fun verifyUserInput(
     name: String,
     onNameInputError: () -> Unit,
-    description: String,
-    onDescriptionInputError: () -> Unit,
     price: String,
     onPriceInputError: () -> Unit,
 ): Boolean {
     var everythingCorrect = true
     if (!isNameValid(name)) {
         onNameInputError()
-        everythingCorrect = false
-    }
-    if (!isDescriptionValid(description)) {
-        onDescriptionInputError()
         everythingCorrect = false
     }
     if (!isPriceValid(price)) {
@@ -301,10 +285,6 @@ private fun verifyUserInput(
 
 private fun isNameValid(name: String): Boolean {
     return name.isNotBlank()
-}
-
-private fun isDescriptionValid(description: String): Boolean {
-    return description.isNotBlank()
 }
 
 private fun isPriceValid(price: String): Boolean {
