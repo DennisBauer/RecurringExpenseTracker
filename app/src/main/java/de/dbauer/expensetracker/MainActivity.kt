@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -36,8 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import de.dbauer.expensetracker.data.BottomNavItem
-import de.dbauer.expensetracker.data.NavigationRoute
+import de.dbauer.expensetracker.data.BottomNavigation
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.EditRecurringExpense
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
@@ -93,17 +91,9 @@ fun MainActivityContent(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val bottomNavItems = listOf(
-        BottomNavItem(
-            name = "Home",
-            route = NavigationRoute.Home,
-            icon = Icons.Rounded.Home,
-        ),
-        BottomNavItem(
-            name = "Settings",
-            route = NavigationRoute.Settings,
-            icon = Icons.Rounded.Settings,
-        ),
+    val bottomNavigationItems = listOf(
+        BottomNavigation.Home,
+        BottomNavigation.Settings,
     )
 
     ExpenseTrackerTheme {
@@ -124,21 +114,21 @@ fun MainActivityContent(
                 },
                 bottomBar = {
                     NavigationBar {
-                        bottomNavItems.forEach { item ->
+                        bottomNavigationItems.forEach { item ->
                             val selected =
-                                item.route.value == backStackEntry.value?.destination?.route
+                                item.route == backStackEntry.value?.destination?.route
 
                             NavigationBarItem(
                                 selected = selected,
-                                onClick = { navController.navigate(item.route.value) },
+                                onClick = { navController.navigate(item.route) },
                                 icon = {
                                     Icon(
                                         imageVector = item.icon,
-                                        contentDescription = "${item.name} Icon",
+                                        contentDescription = "$item Icon",
                                     )
                                 },
                                 label = {
-                                    Text(text = item.name)
+                                    Text(text = stringResource(id = item.name))
                                 })
                         }
                     }
@@ -153,12 +143,12 @@ fun MainActivityContent(
                 content = { paddingValues ->
                     NavHost(
                         navController = navController,
-                        startDestination = NavigationRoute.Home.value,
+                        startDestination = BottomNavigation.Home.route,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(paddingValues),
                     ) {
-                        composable(NavigationRoute.Home.value) {
+                        composable(BottomNavigation.Home.route) {
                             RecurringExpenseOverview(
                                 weeklyExpense = weeklyExpense,
                                 monthlyExpense = monthlyExpense,
@@ -173,7 +163,7 @@ fun MainActivityContent(
                                     .nestedScroll(scrollBehavior.nestedScrollConnection),
                             )
                         }
-                        composable(NavigationRoute.Settings.value) {
+                        composable(BottomNavigation.Settings.route) {
 
                         }
                     }
