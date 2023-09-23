@@ -72,9 +72,9 @@ private fun RecurringExpenseSummary(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            modifier
+                .fillMaxWidth()
+                .padding(8.dp),
     ) {
         Text(
             text = stringResource(R.string.home_summary_monthly),
@@ -131,9 +131,9 @@ private fun RecurringExpense(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .padding(end = 16.dp)
-                    .weight(1f),
+                    Modifier
+                        .padding(end = 16.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = recurringExpenseData.name,
