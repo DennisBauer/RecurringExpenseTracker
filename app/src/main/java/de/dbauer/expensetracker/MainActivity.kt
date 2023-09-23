@@ -108,88 +108,95 @@ fun MainActivityContent(
 
     ExpenseTrackerTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
         ) {
-            Scaffold(topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = "Recurring Expense Tracker",
-                        )
-                    },
-                    scrollBehavior = scrollBehavior,
-                )
-            }, bottomBar = {
-                NavigationBar {
-                    bottomNavItems.forEach { item ->
-                        val selected = item.route.value == backStackEntry.value?.destination?.route
-
-                        NavigationBarItem(selected = selected,
-                            onClick = { navController.navigate(item.route.value) },
-                            icon = {
-                                Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = "${item.name} Icon"
-                                )
-                            },
-                            label = {
-                                Text(text = item.name)
-                            })
-                    }
-                }
-            }, floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    addRecurringExpenseVisible = true
-                }) {
-                    Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
-                }
-            }, content = { paddingValues ->
-                NavHost(
-                    navController = navController,
-                    startDestination = NavigationRoute.Home.value,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                ) {
-                    composable(NavigationRoute.Home.value) {
-                        RecurringExpenseOverview(
-                            weeklyExpense = weeklyExpense,
-                            monthlyExpense = monthlyExpense,
-                            yearlyExpense = yearlyExpense,
-                            recurringExpenseData = recurringExpenseData,
-                            onItemClicked = {
-                                selectedRecurringExpense = it
-                            },
-                            contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .nestedScroll(scrollBehavior.nestedScrollConnection),
-                        )
-                    }
-                    composable(NavigationRoute.Settings.value) {
-
-                    }
-                }
-                if (addRecurringExpenseVisible) {
-                    EditRecurringExpense(
-                        onUpdateExpense = {
-                            onRecurringExpenseAdded(it)
-                            addRecurringExpenseVisible = false
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = "Recurring Expense Tracker",
+                            )
                         },
-                        onDismissRequest = { addRecurringExpenseVisible = false },
+                        scrollBehavior = scrollBehavior,
                     )
-                }
-                if (selectedRecurringExpense != null) {
-                    EditRecurringExpense(
-                        onUpdateExpense = {
-                            onRecurringExpenseEdited(it)
-                            selectedRecurringExpense = null
-                        },
-                        onDismissRequest = { selectedRecurringExpense = null },
-                        currentData = selectedRecurringExpense,
-                    )
-                }
-            })
+                },
+                bottomBar = {
+                    NavigationBar {
+                        bottomNavItems.forEach { item ->
+                            val selected =
+                                item.route.value == backStackEntry.value?.destination?.route
+
+                            NavigationBarItem(
+                                selected = selected,
+                                onClick = { navController.navigate(item.route.value) },
+                                icon = {
+                                    Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = "${item.name} Icon",
+                                    )
+                                },
+                                label = {
+                                    Text(text = item.name)
+                                })
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    FloatingActionButton(onClick = {
+                        addRecurringExpenseVisible = true
+                    }) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
+                    }
+                },
+                content = { paddingValues ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = NavigationRoute.Home.value,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                    ) {
+                        composable(NavigationRoute.Home.value) {
+                            RecurringExpenseOverview(
+                                weeklyExpense = weeklyExpense,
+                                monthlyExpense = monthlyExpense,
+                                yearlyExpense = yearlyExpense,
+                                recurringExpenseData = recurringExpenseData,
+                                onItemClicked = {
+                                    selectedRecurringExpense = it
+                                },
+                                contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                            )
+                        }
+                        composable(NavigationRoute.Settings.value) {
+
+                        }
+                    }
+                    if (addRecurringExpenseVisible) {
+                        EditRecurringExpense(
+                            onUpdateExpense = {
+                                onRecurringExpenseAdded(it)
+                                addRecurringExpenseVisible = false
+                            },
+                            onDismissRequest = { addRecurringExpenseVisible = false },
+                        )
+                    }
+                    if (selectedRecurringExpense != null) {
+                        EditRecurringExpense(
+                            onUpdateExpense = {
+                                onRecurringExpenseEdited(it)
+                                selectedRecurringExpense = null
+                            },
+                            onDismissRequest = { selectedRecurringExpense = null },
+                            currentData = selectedRecurringExpense,
+                        )
+                    }
+                })
         }
     }
 }
