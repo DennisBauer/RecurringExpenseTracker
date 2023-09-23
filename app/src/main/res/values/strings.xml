@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">Recurring Expenses</string>
 
+    <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_settings">Settings</string>
+
+    <!-- Home Tab -->
+    <string name="home_title">Recurring Expense Tracker</string>
+    <string name="home_summary_monthly">Monthly</string>
+    <string name="home_summary_weekly">Weekly</string>
+    <string name="home_summary_yearly">Yearly</string>
+    <string name="home_add_expense_fab_content_description">Add expense</string>
+
+    <!-- Edit expense Bottom Sheet -->
+    <string name="edit_expense_button_add">Add Expense</string>
+    <string name="edit_expense_button_delete">Delete</string>
+    <string name="edit_expense_button_update">Update Expense</string>
+    <string name="edit_expense_description">Description</string>
+    <string name="edit_expense_description_placeholder">e.g. special subscription</string>
+    <string name="edit_expense_invalid_input">Invalid input</string>
+    <string name="edit_expense_name">Name</string>
+    <string name="edit_expense_name_placeholder">e.g. Netflix</string>
+    <string name="edit_expense_price">Price</string>
+    <string name="edit_expense_price_placeholder">0,00</string>
 </resources>

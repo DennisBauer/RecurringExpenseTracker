@@ -18,9 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -70,12 +72,12 @@ private fun RecurringExpenseSummary(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(8.dp),
     ) {
         Text(
-            text = "Monthly",
+            text = stringResource(R.string.home_summary_monthly),
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
@@ -89,7 +91,7 @@ private fun RecurringExpenseSummary(
                 modifier = Modifier.weight(1f),
             ) {
                 Text(
-                    text = "Weekly",
+                    text = stringResource(R.string.home_summary_weekly),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
@@ -102,7 +104,7 @@ private fun RecurringExpenseSummary(
                 modifier = Modifier.weight(1f),
             ) {
                 Text(
-                    text = "Yearly",
+                    text = stringResource(R.string.home_summary_yearly),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
@@ -129,9 +131,9 @@ private fun RecurringExpense(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .padding(end = 16.dp)
-                        .weight(1f),
+                Modifier
+                    .padding(end = 16.dp)
+                    .weight(1f),
             ) {
                 Text(
                     text = recurringExpenseData.name,
