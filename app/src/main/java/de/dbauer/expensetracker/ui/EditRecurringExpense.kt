@@ -30,6 +30,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -187,7 +188,7 @@ private fun CustomTextField(
     onValueChange: (TextFieldValue) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     isError: Boolean = false,
