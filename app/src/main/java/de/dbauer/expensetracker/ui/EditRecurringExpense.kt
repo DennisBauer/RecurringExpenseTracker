@@ -1,31 +1,44 @@
 package de.dbauer.expensetracker.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +54,7 @@ fun EditRecurringExpense(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     currentData: RecurringExpenseData? = null,
+    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -48,12 +62,14 @@ fun EditRecurringExpense(
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
+        windowInsets = WindowInsets.statusBars,
         modifier = modifier,
     ) {
         EditRecurringExpenseInternal(
             onUpdateExpense = onUpdateExpense,
             confirmButtonString = if (currentData == null) "Add Expense" else "Update Expense",
             currentData = currentData,
+            onDeleteExpense = onDeleteExpense,
         )
     }
 }
@@ -64,28 +80,31 @@ private fun EditRecurringExpenseInternal(
     confirmButtonString: String,
     modifier: Modifier = Modifier,
     currentData: RecurringExpenseData? = null,
+    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
     var nameState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.name ?: ""))
     }
-    var nameInputError by rememberSaveable {
+    val nameInputError = rememberSaveable {
         mutableStateOf(false)
     }
     var descriptionState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.description ?: ""))
     }
-    var descriptionInputError by rememberSaveable {
-        mutableStateOf(false)
-    }
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.priceValue.toString()))
+        mutableStateOf(TextFieldValue(currentData?.priceValue?.toString() ?: ""))
     }
-    var priceInputError by rememberSaveable {
+    val priceInputError = rememberSaveable {
         mutableStateOf(false)
     }
 
+    val scrollState = rememberScrollState()
+    val localFocusManager = LocalFocusManager.current
+
     Column(
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .verticalScroll(scrollState)
     ) {
         Text(
             text = "Name",
@@ -95,8 +114,11 @@ private fun EditRecurringExpenseInternal(
             value = nameState,
             onValueChange = { nameState = it },
             placeholder = "e.g. Netflix",
+            keyboardActions = KeyboardActions(
+                onNext = { localFocusManager.moveFocus(FocusDirection.Next) }
+            ),
             singleLine = true,
-            isError = nameInputError,
+            isError = nameInputError.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
@@ -110,8 +132,10 @@ private fun EditRecurringExpenseInternal(
             value = descriptionState,
             onValueChange = { descriptionState = it },
             placeholder = "e.g. special subscription",
+            keyboardActions = KeyboardActions(
+                onNext = { localFocusManager.moveFocus(FocusDirection.Next) }
+            ),
             maxLines = 2,
-            isError = descriptionInputError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
@@ -125,49 +149,75 @@ private fun EditRecurringExpenseInternal(
             value = priceState,
             onValueChange = { priceState = it },
             placeholder = "0,00",
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Done,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onConfirmClicked(
+                        nameInputError,
+                        priceInputError,
+                        nameState,
+                        descriptionState,
+                        priceState,
+                        onUpdateExpense,
+                        currentData
+                    )
+                }
+            ),
             singleLine = true,
-            isError = priceInputError,
+            isError = priceInputError.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         )
-        Button(
-            onClick = {
-                nameInputError = false
-                descriptionInputError = false
-                priceInputError = false
-
-                val name = nameState.text
-                val description = descriptionState.text
-                val price = priceState.text
-                if (verifyUserInput(name = name,
-                        onNameInputError = { nameInputError = true },
-                        description = description,
-                        onDescriptionInputError = { descriptionInputError = true },
-                        price = price,
-                        onPriceInputError = { priceInputError = true })
-                ) {
-                    onUpdateExpense(
-                        RecurringExpenseData(
-                            id = currentData?.id ?: 0,
-                            name = name,
-                            description = description,
-                            priceValue = price.toFloatIgnoreSeparator()
-                        )
-                    )
-                }
-            },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally)
                 .navigationBarsPadding()
                 .padding(top = 8.dp, bottom = 24.dp)
         ) {
-            Text(
-                text = confirmButtonString,
-                modifier = Modifier.padding(vertical = 4.dp),
-            )
+            if (currentData != null) {
+                OutlinedButton(
+                    onClick = {
+                        onDeleteExpense?.invoke(currentData)
+                    },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = "Delete",
+                        modifier = Modifier.padding(vertical = 4.dp),
+                    )
+                }
+            }
+            Button(
+                onClick = {
+                    onConfirmClicked(
+                        nameInputError,
+                        priceInputError,
+                        nameState,
+                        descriptionState,
+                        priceState,
+                        onUpdateExpense,
+                        currentData
+                    )
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentWidth()
+            ) {
+                Text(
+                    text = confirmButtonString,
+                    modifier = Modifier.padding(vertical = 4.dp),
+                )
+            }
         }
     }
 }
@@ -178,7 +228,11 @@ private fun CustomTextField(
     onValueChange: (TextFieldValue) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        capitalization = KeyboardCapitalization.Words,
+        imeAction = ImeAction.Next,
+    ),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     isError: Boolean = false,
@@ -188,6 +242,7 @@ private fun CustomTextField(
         onValueChange = onValueChange,
         placeholder = { Text(text = placeholder) },
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         singleLine = singleLine,
         isError = isError,
         maxLines = maxLines,
@@ -209,21 +264,46 @@ private fun CustomTextField(
     )
 }
 
+private fun onConfirmClicked(
+    nameInputError: MutableState<Boolean>,
+    priceInputError: MutableState<Boolean>,
+    nameState: TextFieldValue,
+    descriptionState: TextFieldValue,
+    priceState: TextFieldValue,
+    onUpdateExpense: (RecurringExpenseData) -> Unit,
+    currentData: RecurringExpenseData?
+) {
+    nameInputError.value = false
+    priceInputError.value = false
+
+    val name = nameState.text
+    val description = descriptionState.text
+    val price = priceState.text
+    if (verifyUserInput(name = name,
+            onNameInputError = { nameInputError.value = true },
+            price = price,
+            onPriceInputError = { priceInputError.value = true })
+    ) {
+        onUpdateExpense(
+            RecurringExpenseData(
+                id = currentData?.id ?: 0,
+                name = name,
+                description = description,
+                priceValue = price.toFloatIgnoreSeparator()
+            )
+        )
+    }
+}
+
 private fun verifyUserInput(
     name: String,
     onNameInputError: () -> Unit,
-    description: String,
-    onDescriptionInputError: () -> Unit,
     price: String,
     onPriceInputError: () -> Unit,
 ): Boolean {
     var everythingCorrect = true
     if (!isNameValid(name)) {
         onNameInputError()
-        everythingCorrect = false
-    }
-    if (!isDescriptionValid(description)) {
-        onDescriptionInputError()
         everythingCorrect = false
     }
     if (!isPriceValid(price)) {
@@ -235,10 +315,6 @@ private fun verifyUserInput(
 
 private fun isNameValid(name: String): Boolean {
     return name.isNotBlank()
-}
-
-private fun isDescriptionValid(description: String): Boolean {
-    return description.isNotBlank()
 }
 
 private fun isPriceValid(price: String): Boolean {

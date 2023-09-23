@@ -76,11 +76,11 @@ private fun RecurringExpenseSummary(
     ) {
         Text(
             text = "Monthly",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
         )
         Text(
             text = monthlyExpense,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleMedium,
         )
         Spacer(modifier = Modifier.size(8.dp))
         Row {
@@ -136,20 +136,22 @@ private fun RecurringExpense(
             ) {
                 Text(
                     text = recurringExpenseData.name,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(
-                    text = recurringExpenseData.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                if (recurringExpenseData.description.isNotBlank()) {
+                    Text(
+                        text = recurringExpenseData.description,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
             Text(
                 text = recurringExpenseData.priceString,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineSmall
             )
         }
     }
@@ -180,7 +182,7 @@ private fun RecurringExpenseOverviewPreview() {
                     RecurringExpenseData(
                         id = 2,
                         name = "Amazon Prime with a long name",
-                        description = "My Disney Plus description",
+                        description = "",
                         priceValue = 7.95f,
                     ),
                 ),
