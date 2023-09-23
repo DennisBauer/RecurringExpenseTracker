@@ -78,7 +78,7 @@ private fun EditRecurringExpenseInternal(
         mutableStateOf(false)
     }
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.priceValue.toString()))
+        mutableStateOf(TextFieldValue(currentData?.priceValue?.toString() ?: ""))
     }
     var priceInputError by rememberSaveable {
         mutableStateOf(false)
