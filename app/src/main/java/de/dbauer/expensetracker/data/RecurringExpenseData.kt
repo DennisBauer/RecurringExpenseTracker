@@ -1,6 +1,6 @@
-package de.erzock.expensetracker.data
+package de.dbauer.expensetracker.data
 
-import de.erzock.expensetracker.toValueString
+import de.dbauer.expensetracker.toValueString
 
 data class RecurringExpenseData(
     val id: Int,

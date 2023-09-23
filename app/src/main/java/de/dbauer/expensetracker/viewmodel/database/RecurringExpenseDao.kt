@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.viewmodel.database
+package de.dbauer.expensetracker.viewmodel.database
 
 import androidx.room.Dao
 import androidx.room.Delete

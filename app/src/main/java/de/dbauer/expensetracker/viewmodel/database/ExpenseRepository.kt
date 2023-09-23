@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.viewmodel.database
+package de.dbauer.expensetracker.viewmodel.database
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.Dispatchers

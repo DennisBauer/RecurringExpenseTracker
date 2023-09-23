@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.viewmodel
+package de.dbauer.expensetracker.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -7,10 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import de.erzock.expensetracker.data.RecurringExpenseData
-import de.erzock.expensetracker.toValueString
-import de.erzock.expensetracker.viewmodel.database.ExpenseRepository
-import de.erzock.expensetracker.viewmodel.database.RecurringExpense
+import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.toValueString
+import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
+import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch

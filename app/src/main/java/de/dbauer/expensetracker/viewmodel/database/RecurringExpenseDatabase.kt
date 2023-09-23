@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.viewmodel.database
+package de.dbauer.expensetracker.viewmodel.database
 
 import android.content.Context
 import androidx.room.Database

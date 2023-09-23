@@ -1,8 +1,8 @@
-package de.erzock.expensetracker
+package de.dbauer.expensetracker
 
 import android.app.Application
-import de.erzock.expensetracker.viewmodel.database.ExpenseRepository
-import de.erzock.expensetracker.viewmodel.database.RecurringExpenseDatabase
+import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
+import de.dbauer.expensetracker.viewmodel.database.RecurringExpenseDatabase
 
 class ExpenseTrackerApplication : Application() {
     private val database by lazy { RecurringExpenseDatabase.getDatabase(this) }

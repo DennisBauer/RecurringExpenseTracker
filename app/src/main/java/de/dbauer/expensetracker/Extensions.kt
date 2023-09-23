@@ -1,4 +1,4 @@
-package de.erzock.expensetracker
+package de.dbauer.expensetracker
 
 fun Float.toValueString(): String {
     return "%.2f".format(this)

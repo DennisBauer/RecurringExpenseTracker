@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.ui.theme
+package de.dbauer.expensetracker.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

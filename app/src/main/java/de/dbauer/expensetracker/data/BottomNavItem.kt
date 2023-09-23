@@ -1,4 +1,4 @@
-package de.erzock.expensetracker.data
+package de.dbauer.expensetracker.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

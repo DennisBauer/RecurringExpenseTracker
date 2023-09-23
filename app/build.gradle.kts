@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "de.erzock.expensetracker"
+    namespace = "de.dbauer.expensetracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "de.erzock.expensetracker"
+        applicationId = "de.dbauer.expensetracker"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -1,4 +1,4 @@
-package de.erzock.expensetracker
+package de.dbauer.expensetracker
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,13 +36,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import de.erzock.expensetracker.data.BottomNavItem
-import de.erzock.expensetracker.data.NavigationRoute
-import de.erzock.expensetracker.data.RecurringExpenseData
-import de.erzock.expensetracker.ui.EditRecurringExpense
-import de.erzock.expensetracker.ui.RecurringExpenseOverview
-import de.erzock.expensetracker.ui.theme.ExpenseTrackerTheme
-import de.erzock.expensetracker.viewmodel.MainActivityViewModel
+import de.dbauer.expensetracker.data.BottomNavItem
+import de.dbauer.expensetracker.data.NavigationRoute
+import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.ui.EditRecurringExpense
+import de.dbauer.expensetracker.ui.RecurringExpenseOverview
+import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
+import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
