@@ -4,4 +4,5 @@ A Material You recurring expense tracker, allowing you to keep track of your mon
 ## This app is currently under heavy development.<br>Once the basic functionality works the app will be available on F-Droid.
 
 ### Sneak Peak
-<img src="https://github.com/DennisBauer/RecurringExpenseTracker/assets/37552885/f65a4ddb-c0aa-4661-b1f7-57dc2d1a4537" width="360"/>
+<img src="https://github.com/DennisBauer/RecurringExpenseTracker/assets/37552885/dd2a8cdb-0b10-467f-ac38-5249bdfb489f" width="360"/>
+<img src="https://github.com/DennisBauer/RecurringExpenseTracker/assets/37552885/019067fd-99a9-48d6-a08a-2700710a0ac3" width="360"/>
