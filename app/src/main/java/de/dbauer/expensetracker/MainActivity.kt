@@ -112,7 +112,7 @@ fun MainActivityContent(
                     TopAppBar(
                         title = {
                             Text(
-                                text = "Recurring Expense Tracker",
+                                text = stringResource(id = R.string.home_title),
                             )
                         },
                         scrollBehavior = scrollBehavior,
@@ -144,7 +144,7 @@ fun MainActivityContent(
                                 icon = {
                                     Icon(
                                         imageVector = item.icon,
-                                        contentDescription = "$item Icon",
+                                        contentDescription = null,
                                     )
                                 },
                                 label = {
@@ -158,7 +158,7 @@ fun MainActivityContent(
                     FloatingActionButton(onClick = {
                         addRecurringExpenseVisible = true
                     }) {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.home_add_expense_fab_content_description))
                     }
                 },
                 content = { paddingValues ->
@@ -166,9 +166,9 @@ fun MainActivityContent(
                         navController = navController,
                         startDestination = BottomNavigation.Home.route,
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(paddingValues),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
                     ) {
                         composable(BottomNavigation.Home.route) {
                             RecurringExpenseOverview(
@@ -181,9 +181,9 @@ fun MainActivityContent(
                                 },
                                 contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
                                 modifier =
-                                    Modifier
-                                        .padding(horizontal = 16.dp)
-                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .nestedScroll(scrollBehavior.nestedScrollConnection),
                             )
                         }
                         composable(BottomNavigation.Settings.route) {
