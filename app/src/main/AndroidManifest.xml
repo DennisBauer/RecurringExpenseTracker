@@ -16,7 +16,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main"
             android:theme="@style/Theme.ExpenseTracker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
