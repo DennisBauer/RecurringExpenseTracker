@@ -16,6 +16,8 @@ ktlint-version = "1.0.0"
 lifecycle-runtime-ktx = "2.6.2"
 material = "1.9.0"
 navigation-compose = "2.7.2"
+oss-licenses-plugin = "0.10.6"
+oss-licenses-services = "17.0.1"
 room = "2.5.2"
 
 [libraries]
@@ -33,6 +35,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "oss-licenses-plugin" }
+oss-licenses-services = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss-licenses-services" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

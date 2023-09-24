@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,8 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,10 +39,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import de.dbauer.expensetracker.data.BottomNavigation
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.EditRecurringExpense
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
+import de.dbauer.expensetracker.ui.SettingsScreen
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -70,6 +75,9 @@ class MainActivity : ComponentActivity() {
                 onRecurringExpenseDeleted = {
                     viewModel.deleteRecurringExpense(it)
                 },
+                onLicensesClicked = {
+                    startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+                },
             )
         }
     }
@@ -85,10 +93,21 @@ fun MainActivityContent(
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
     onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
+    onLicensesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
+
+    val titleRes by remember {
+        derivedStateOf {
+            when (backStackEntry.value?.destination?.route) {
+                BottomNavigation.Home.route -> R.string.home_title
+                BottomNavigation.Settings.route -> R.string.settings_title
+                else -> R.string.home_title
+            }
+        }
+    }
 
     var addRecurringExpenseVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -112,7 +131,7 @@ fun MainActivityContent(
                     TopAppBar(
                         title = {
                             Text(
-                                text = stringResource(id = R.string.home_title),
+                                text = stringResource(id = titleRes),
                             )
                         },
                         scrollBehavior = scrollBehavior,
@@ -155,13 +174,16 @@ fun MainActivityContent(
                     }
                 },
                 floatingActionButton = {
-                    FloatingActionButton(onClick = {
-                        addRecurringExpenseVisible = true
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = stringResource(R.string.home_add_expense_fab_content_description),
-                        )
+                    if (BottomNavigation.Home.route == backStackEntry.value?.destination?.route) {
+                        FloatingActionButton(onClick = {
+                            addRecurringExpenseVisible = true
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription =
+                                    stringResource(R.string.home_add_expense_fab_content_description),
+                            )
+                        }
                     }
                 },
                 content = { paddingValues ->
@@ -190,6 +212,9 @@ fun MainActivityContent(
                             )
                         }
                         composable(BottomNavigation.Settings.route) {
+                            SettingsScreen(
+                                onLicensesClicked = onLicensesClicked,
+                            )
                         }
                     }
                     if (addRecurringExpenseVisible) {
@@ -252,5 +277,6 @@ private fun MainActivityContentPreview() {
         onRecurringExpenseAdded = {},
         onRecurringExpenseEdited = {},
         onRecurringExpenseDeleted = {},
+        onLicensesClicked = {},
     )
 }
