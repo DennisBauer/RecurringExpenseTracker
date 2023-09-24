@@ -22,5 +22,4 @@
     <string name="edit_expense_name">Name</string>
     <string name="edit_expense_name_placeholder">e.g. Netflix</string>
     <string name="edit_expense_price">Price</string>
-    <string name="edit_expense_price_placeholder">0,00</string>
 </resources>

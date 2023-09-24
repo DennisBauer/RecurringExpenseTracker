@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -151,7 +152,7 @@ private fun RecurringExpense(
                 }
             }
             Text(
-                text = recurringExpenseData.priceString,
+                text = recurringExpenseData.price.toCurrencyString(),
                 style = MaterialTheme.typography.headlineSmall,
             )
         }
@@ -173,7 +174,7 @@ private fun RecurringExpenseOverviewPreview() {
                             id = 0,
                             name = "Netflix",
                             description = "My Netflix description",
-                            priceValue = 9.99f,
+                            price = 9.99f,
                         ),
                         RecurringExpenseData(
                             id = 1,
@@ -181,13 +182,13 @@ private fun RecurringExpenseOverviewPreview() {
                             description =
                                 "My Disney Plus very very very very very " +
                                     "very very very very long description",
-                            priceValue = 5f,
+                            price = 5f,
                         ),
                         RecurringExpenseData(
                             id = 2,
                             name = "Amazon Prime with a long name",
                             description = "",
-                            priceValue = 7.95f,
+                            price = 7.95f,
                         ),
                     ),
                 onItemClicked = {},
