@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -88,6 +89,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.oss.licenses.services)
     implementation(platform(libs.compose.bom))
 
     annotationProcessor(libs.room.compiler)
