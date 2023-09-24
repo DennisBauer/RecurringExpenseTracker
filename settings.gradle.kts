@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Recurring Expense Tracker"
+rootProject.name = "RecurringExpenseTracker"
 include(":app")
- 
