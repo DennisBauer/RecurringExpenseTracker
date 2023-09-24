@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toFloatIgnoreSeparator
-import de.dbauer.expensetracker.toValueString
+import de.dbauer.expensetracker.toLocalString
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +104,7 @@ private fun EditRecurringExpenseInternal(
         mutableStateOf(TextFieldValue(currentData?.description ?: ""))
     }
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.priceValue?.toValueString() ?: ""))
+        mutableStateOf(TextFieldValue(currentData?.price?.toLocalString() ?: ""))
     }
     val priceInputError =
         rememberSaveable {
@@ -166,7 +166,7 @@ private fun EditRecurringExpenseInternal(
         CustomTextField(
             value = priceState,
             onValueChange = { priceState = it },
-            placeholder = stringResource(R.string.edit_expense_price_placeholder),
+            placeholder = 0f.toLocalString(),
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -320,7 +320,7 @@ private fun onConfirmClicked(
                 id = currentData?.id ?: 0,
                 name = name,
                 description = description,
-                priceValue = price.toFloatIgnoreSeparator(),
+                price = price.toFloatIgnoreSeparator(),
             ),
         )
     }

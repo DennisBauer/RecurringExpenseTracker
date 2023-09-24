@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import de.dbauer.expensetracker.data.RecurringExpenseData
-import de.dbauer.expensetracker.toValueString
+import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
 import kotlinx.collections.immutable.ImmutableList
@@ -42,7 +42,7 @@ class MainActivityViewModel(
                             id = it.id,
                             name = it.name!!,
                             description = it.description!!,
-                            priceValue = it.price!!,
+                            price = it.price!!,
                         ),
                     )
                 }
@@ -58,7 +58,7 @@ class MainActivityViewModel(
                     id = 0,
                     name = recurringExpense.name,
                     description = recurringExpense.description,
-                    price = recurringExpense.priceValue,
+                    price = recurringExpense.price,
                 ),
             )
         }
@@ -71,7 +71,7 @@ class MainActivityViewModel(
                     id = recurringExpense.id,
                     name = recurringExpense.name,
                     description = recurringExpense.description,
-                    price = recurringExpense.priceValue,
+                    price = recurringExpense.price,
                 ),
             )
         }
@@ -84,7 +84,7 @@ class MainActivityViewModel(
                     id = recurringExpense.id,
                     name = recurringExpense.name,
                     description = recurringExpense.description,
-                    price = recurringExpense.priceValue,
+                    price = recurringExpense.price,
                 ),
             )
         }
@@ -93,11 +93,11 @@ class MainActivityViewModel(
     private fun updateExpenseSummary() {
         var price = 0f
         _recurringExpenseData.forEach {
-            price += it.priceValue
+            price += it.price
         }
-        _weeklyExpense = "${(price / 30f).toValueString()} €" // TODO: Make currency dynamic
-        _monthlyExpense = "${price.toValueString()} €" // TODO: Make currency dynamic
-        _yearlyExpense = "${(price * 12).toValueString()} €" // TODO: Make currency dynamic
+        _weeklyExpense = (price / 30f).toCurrencyString()
+        _monthlyExpense = price.toCurrencyString()
+        _yearlyExpense = (price * 12).toCurrencyString()
     }
 
     companion object {

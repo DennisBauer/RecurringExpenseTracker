@@ -73,7 +73,7 @@ jobs:
 
     - run: |
         echo "Run, Build Application"
-        ./gradlew build
+        ./gradlew assembleDebug test lint
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
