@@ -22,6 +22,11 @@
     <string name="edit_expense_name">Name</string>
     <string name="edit_expense_name_placeholder">e.g. Netflix</string>
     <string name="edit_expense_price">Price</string>
+    <string name="edit_expense_recurrence">Recurrence</string>
+    <string name="edit_expense_recurrence_day">Day(s)</string>
+    <string name="edit_expense_recurrence_week">Week(s)</string>
+    <string name="edit_expense_recurrence_month">Month(s)</string>
+    <string name="edit_expense_recurrence_year">Year(s)</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_licenses">Licenses</string>

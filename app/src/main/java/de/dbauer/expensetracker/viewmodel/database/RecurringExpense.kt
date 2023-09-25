@@ -10,4 +10,6 @@ data class RecurringExpense(
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "price") val price: Float?,
+    @ColumnInfo(name = "everyXRecurrence") val everyXRecurrence: Int?,
+    @ColumnInfo(name = "recurrence") val recurrence: Int?,
 )
