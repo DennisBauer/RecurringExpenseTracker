@@ -134,7 +134,7 @@ class MainActivityViewModel(
         _recurringExpenseData.forEach {
             price += it.monthlyPrice
         }
-        _weeklyExpense = (price / 30f).toCurrencyString()
+        _weeklyExpense = (price / (52 / 12f)).toCurrencyString()
         _monthlyExpense = price.toCurrencyString()
         _yearlyExpense = (price * 12).toCurrencyString()
     }
