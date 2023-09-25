@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Recurring Expenses</string>
+    <string name="app_name" translatable="false">Recurring Expenses</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_settings">Settings</string>
 
     <!-- Home Tab -->
-    <string name="home_title">Recurring Expense Tracker</string>
+    <string name="home_title" translatable="false">Recurring Expense Tracker</string>
     <string name="home_summary_monthly">Monthly</string>
     <string name="home_summary_weekly">Weekly</string>
     <string name="home_summary_yearly">Yearly</string>
