@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
+import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -151,10 +152,23 @@ private fun RecurringExpense(
                     )
                 }
             }
-            Text(
-                text = recurringExpenseData.price.toCurrencyString(),
-                style = MaterialTheme.typography.headlineSmall,
-            )
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = recurringExpenseData.monthlyPrice.toCurrencyString(),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                if (recurringExpenseData.recurrence != Recurrence.Monthly ||
+                    recurringExpenseData.everyXRecurrence != 1
+                ) {
+                    Text(
+                        text =
+                            "${recurringExpenseData.price.toCurrencyString()} / " +
+                                "${recurringExpenseData.everyXRecurrence} " +
+                                stringResource(id = recurringExpenseData.recurrence.stringRes),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
         }
     }
 }
@@ -175,6 +189,9 @@ private fun RecurringExpenseOverviewPreview() {
                             name = "Netflix",
                             description = "My Netflix description",
                             price = 9.99f,
+                            monthlyPrice = 9.99f,
+                            everyXRecurrence = 1,
+                            recurrence = Recurrence.Monthly,
                         ),
                         RecurringExpenseData(
                             id = 1,
@@ -183,12 +200,18 @@ private fun RecurringExpenseOverviewPreview() {
                                 "My Disney Plus very very very very very " +
                                     "very very very very long description",
                             price = 5f,
+                            monthlyPrice = 5f,
+                            everyXRecurrence = 1,
+                            recurrence = Recurrence.Monthly,
                         ),
                         RecurringExpenseData(
                             id = 2,
                             name = "Amazon Prime with a long name",
                             description = "",
                             price = 7.95f,
+                            monthlyPrice = 7.95f,
+                            everyXRecurrence = 1,
+                            recurrence = Recurrence.Monthly,
                         ),
                     ),
                 onItemClicked = {},

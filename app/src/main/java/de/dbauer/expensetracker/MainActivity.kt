@@ -41,6 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import de.dbauer.expensetracker.data.BottomNavigation
+import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.EditRecurringExpense
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
@@ -260,18 +261,27 @@ private fun MainActivityContentPreview() {
                     name = "Netflix",
                     description = "My Netflix description",
                     price = 9.99f,
+                    monthlyPrice = 9.99f,
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
                 ),
                 RecurringExpenseData(
                     id = 1,
                     name = "Disney Plus",
                     description = "My Disney Plus description",
                     price = 5f,
+                    monthlyPrice = 5f,
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
                 ),
                 RecurringExpenseData(
                     id = 2,
                     name = "Amazon Prime",
                     description = "My Disney Plus description",
                     price = 7.95f,
+                    monthlyPrice = 7.95f,
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
                 ),
             ),
         onRecurringExpenseAdded = {},

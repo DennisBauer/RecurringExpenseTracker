@@ -2,11 +2,13 @@ package de.dbauer.expensetracker.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -17,7 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -45,6 +49,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
+import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toFloatIgnoreSeparator
 import de.dbauer.expensetracker.toLocalString
@@ -85,6 +90,7 @@ fun EditRecurringExpense(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditRecurringExpenseInternal(
     onUpdateExpense: (RecurringExpenseData) -> Unit,
@@ -106,10 +112,15 @@ private fun EditRecurringExpenseInternal(
     var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(currentData?.price?.toLocalString() ?: ""))
     }
-    val priceInputError =
-        rememberSaveable {
-            mutableStateOf(false)
-        }
+    val priceInputError = rememberSaveable { mutableStateOf(false) }
+    var everyXRecurrenceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(currentData?.everyXRecurrence?.toString() ?: ""))
+    }
+    val everyXRecurrenceInputError = rememberSaveable { mutableStateOf(false) }
+    var selectedRecurrence by rememberSaveable {
+        mutableStateOf(currentData?.recurrence ?: Recurrence.Monthly)
+    }
+    var recurrenceExpanded by rememberSaveable { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
@@ -170,21 +181,11 @@ private fun EditRecurringExpenseInternal(
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                 ),
             keyboardActions =
                 KeyboardActions(
-                    onDone = {
-                        onConfirmClicked(
-                            nameInputError,
-                            priceInputError,
-                            nameState,
-                            descriptionState,
-                            priceState,
-                            onUpdateExpense,
-                            currentData,
-                        )
-                    },
+                    onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
                 ),
             singleLine = true,
             isError = priceInputError.value,
@@ -193,6 +194,76 @@ private fun EditRecurringExpenseInternal(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
         )
+        Text(
+            text = stringResource(R.string.edit_expense_recurrence),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        Row {
+            CustomTextField(
+                value = everyXRecurrenceState,
+                onValueChange = { everyXRecurrenceState = it },
+                placeholder = "1",
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done,
+                    ),
+                keyboardActions =
+                    KeyboardActions(
+                        onDone = {
+                            onConfirmClicked(
+                                nameInputError,
+                                priceInputError,
+                                everyXRecurrenceInputError,
+                                nameState,
+                                descriptionState,
+                                priceState,
+                                everyXRecurrenceState,
+                                selectedRecurrence,
+                                onUpdateExpense,
+                                currentData,
+                            )
+                        },
+                    ),
+                singleLine = true,
+                isError = everyXRecurrenceInputError.value,
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(vertical = 8.dp),
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            ExposedDropdownMenuBox(
+                expanded = recurrenceExpanded,
+                onExpandedChange = { recurrenceExpanded = !recurrenceExpanded },
+                modifier =
+                    Modifier
+                        .weight(3f)
+                        .padding(vertical = 8.dp),
+            ) {
+                TextField(
+                    value = stringResource(id = selectedRecurrence.stringRes),
+                    onValueChange = { },
+                    readOnly = true,
+                    modifier = Modifier.menuAnchor(),
+                )
+                ExposedDropdownMenu(
+                    expanded = recurrenceExpanded,
+                    onDismissRequest = { recurrenceExpanded = false },
+                ) {
+                    Recurrence.entries.forEach {
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = it.stringRes)) },
+                            onClick = {
+                                selectedRecurrence = it
+                                recurrenceExpanded = false
+                            },
+                        )
+                    }
+                }
+            }
+        }
         Row(
             modifier =
                 Modifier
@@ -226,9 +297,12 @@ private fun EditRecurringExpenseInternal(
                     onConfirmClicked(
                         nameInputError,
                         priceInputError,
+                        everyXRecurrenceInputError,
                         nameState,
                         descriptionState,
                         priceState,
+                        everyXRecurrenceState,
+                        selectedRecurrence,
                         onUpdateExpense,
                         currentData,
                     )
@@ -296,23 +370,30 @@ private fun CustomTextField(
 private fun onConfirmClicked(
     nameInputError: MutableState<Boolean>,
     priceInputError: MutableState<Boolean>,
+    everyXRecurrenceInputError: MutableState<Boolean>,
     nameState: TextFieldValue,
     descriptionState: TextFieldValue,
     priceState: TextFieldValue,
+    everyXRecurrenceState: TextFieldValue,
+    selectedRecurrence: Recurrence,
     onUpdateExpense: (RecurringExpenseData) -> Unit,
     currentData: RecurringExpenseData?,
 ) {
     nameInputError.value = false
     priceInputError.value = false
+    everyXRecurrenceInputError.value = false
 
     val name = nameState.text
     val description = descriptionState.text
     val price = priceState.text
+    val everyXRecurrence = everyXRecurrenceState.text
     if (verifyUserInput(
             name = name,
             onNameInputError = { nameInputError.value = true },
             price = price,
             onPriceInputError = { priceInputError.value = true },
+            everyXRecurrence = everyXRecurrence,
+            onEveryXRecurrenceError = { everyXRecurrenceInputError.value = true },
         )
     ) {
         onUpdateExpense(
@@ -321,6 +402,9 @@ private fun onConfirmClicked(
                 name = name,
                 description = description,
                 price = price.toFloatIgnoreSeparator(),
+                monthlyPrice = price.toFloatIgnoreSeparator(),
+                everyXRecurrence = everyXRecurrence.toIntOrNull() ?: 1,
+                recurrence = selectedRecurrence,
             ),
         )
     }
@@ -331,6 +415,8 @@ private fun verifyUserInput(
     onNameInputError: () -> Unit,
     price: String,
     onPriceInputError: () -> Unit,
+    everyXRecurrence: String,
+    onEveryXRecurrenceError: () -> Unit,
 ): Boolean {
     var everythingCorrect = true
     if (!isNameValid(name)) {
@@ -339,6 +425,10 @@ private fun verifyUserInput(
     }
     if (!isPriceValid(price)) {
         onPriceInputError()
+        everythingCorrect = false
+    }
+    if (!isEveryXRecurrenceValid(everyXRecurrence)) {
+        onEveryXRecurrenceError()
         everythingCorrect = false
     }
     return everythingCorrect
@@ -351,6 +441,10 @@ private fun isNameValid(name: String): Boolean {
 private fun isPriceValid(price: String): Boolean {
     val priceConverted = price.replace(",", ".")
     return priceConverted.toFloatOrNull() != null
+}
+
+private fun isEveryXRecurrenceValid(everyXRecurrence: String): Boolean {
+    return everyXRecurrence.isBlank() || everyXRecurrence.toIntOrNull() != null
 }
 
 @Preview
