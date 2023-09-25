@@ -150,7 +150,7 @@ class MainActivityViewModel(
                 1f / everyXRecurrence!! * price!!
             }
             RecurrenceDatabase.Yearly.value -> {
-                everyXRecurrence!! * price!! / 12f
+                price!! / (everyXRecurrence!! * 12f)
             }
             else -> 0f
         }
