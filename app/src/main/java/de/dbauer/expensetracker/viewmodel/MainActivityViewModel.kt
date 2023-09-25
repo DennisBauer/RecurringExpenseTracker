@@ -59,6 +59,7 @@ class MainActivityViewModel(
                         ),
                     )
                 }
+                _recurringExpenseData.sortByDescending { it.monthlyPrice }
                 updateExpenseSummary()
             }
         }
