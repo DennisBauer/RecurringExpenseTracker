@@ -6,15 +6,4 @@ plugins {
     alias(libs.plugins.com.google.devtools.ksp) apply false
     alias(libs.plugins.org.jlleitschuh.gradle.ktlint) apply false
 }
-
-// Unfortunately the oss-licenses plugin doesn't support the new plugin mechanism
-buildscript {
-    repositories {
-        google()
-    }
-    dependencies {
-        classpath(libs.oss.licenses.plugin)
-    }
-}
-
 true // Needed to make the Suppress annotation work for the plugins block
