@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toCurrencyString
@@ -159,13 +161,9 @@ class MainActivityViewModel(
 
     companion object {
         fun create(expenseRepository: ExpenseRepository): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-                        @Suppress("UNCHECKED_CAST")
-                        return MainActivityViewModel(expenseRepository) as T
-                    }
-                    throw IllegalArgumentException("Unknown ViewModel class")
+            return viewModelFactory {
+                initializer {
+                    MainActivityViewModel(expenseRepository)
                 }
             }
         }
