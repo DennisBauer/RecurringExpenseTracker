@@ -1,9 +1,9 @@
 [versions]
 activity-compose = "1.7.2"
-agp = "8.1.1"
+agp = "8.1.2"
 androidx-test-ext-junit = "1.1.5"
 appcompat = "1.6.1"
-compose-bom = "2023.09.00"
+compose-bom = "2023.09.02"
 core-ktx = "1.12.0"
 espresso-core = "3.5.1"
 junit = "4.13.2"
@@ -15,7 +15,7 @@ ktlint-plugin = "11.6.0"
 ktlint-version = "1.0.0"
 lifecycle-runtime-ktx = "2.6.2"
 material = "1.9.0"
-navigation-compose = "2.7.2"
+navigation-compose = "2.7.3"
 room = "2.5.2"
 
 [libraries]
