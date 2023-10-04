@@ -1,8 +1,12 @@
 # RecurringExpenseTracker
 A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
 
-## This app is currently under development.<br>I'm working on making it available on F-Droid or IzzyOnDroid soon.
+It's a simple app with the basic functionality of tracking recurring expenses. My idea is to add new features one by one and I'm happy for any contribution. Feel free to create feature requests or report bugs if you find some.
 
-### Preview
-<img src="https://github.com/DennisBauer/RecurringExpenseTracker/assets/37552885/a01c2d40-6458-4330-87b3-e5ad79bc737a" width="360"/>
-<img src="https://github.com/DennisBauer/RecurringExpenseTracker/assets/37552885/5927a077-2cad-411d-9e13-24e89ceb564e" width="360"/>
+[<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" width="200px"/>](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
+
+### Screenshots
+<div style="display:flex">
+<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/Screenshot_1.png" width="360"/>
+<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/Screenshot_2.png" width="360"/>
+</div>
