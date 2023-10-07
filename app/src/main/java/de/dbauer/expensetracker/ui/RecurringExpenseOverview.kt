@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -166,6 +167,7 @@ private fun RecurringExpense(
                                 "${recurringExpenseData.everyXRecurrence} " +
                                 stringResource(id = recurringExpenseData.recurrence.stringRes),
                         style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.End,
                     )
                 }
             }
@@ -212,6 +214,15 @@ private fun RecurringExpenseOverviewPreview() {
                             monthlyPrice = 7.95f,
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
+                        ),
+                        RecurringExpenseData(
+                            id = 3,
+                            name = "Yearly Test Subscription",
+                            description = "Test Description with another very long name",
+                            price = 72f,
+                            monthlyPrice = 6f,
+                            everyXRecurrence = 1,
+                            recurrence = Recurrence.Yearly,
                         ),
                     ),
                 onItemClicked = {},
