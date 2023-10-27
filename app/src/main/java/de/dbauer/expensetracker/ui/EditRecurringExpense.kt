@@ -243,7 +243,7 @@ private fun EditRecurringExpenseInternal(
                         .padding(vertical = 8.dp),
             ) {
                 TextField(
-                    value = stringResource(id = selectedRecurrence.stringRes),
+                    value = stringResource(id = selectedRecurrence.fullStringRes),
                     onValueChange = { },
                     readOnly = true,
                     modifier = Modifier.menuAnchor(),
@@ -254,7 +254,7 @@ private fun EditRecurringExpenseInternal(
                 ) {
                     Recurrence.entries.forEach {
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(id = it.stringRes)) },
+                            text = { Text(text = stringResource(id = it.fullStringRes)) },
                             onClick = {
                                 selectedRecurrence = it
                                 recurrenceExpanded = false

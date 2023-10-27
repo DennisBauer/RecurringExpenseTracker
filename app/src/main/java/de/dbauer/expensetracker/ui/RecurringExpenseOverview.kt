@@ -165,7 +165,7 @@ private fun RecurringExpense(
                         text =
                             "${recurringExpenseData.price.toCurrencyString()} / " +
                                 "${recurringExpenseData.everyXRecurrence} " +
-                                stringResource(id = recurringExpenseData.recurrence.stringRes),
+                                stringResource(id = recurringExpenseData.recurrence.shortStringRes),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.End,
                     )
