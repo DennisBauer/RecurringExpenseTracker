@@ -23,10 +23,14 @@
     <string name="edit_expense_name_placeholder">e.g. Netflix</string>
     <string name="edit_expense_price">Price</string>
     <string name="edit_expense_recurrence">Recurrence</string>
-    <string name="edit_expense_recurrence_day">D</string>
-    <string name="edit_expense_recurrence_week">W</string>
-    <string name="edit_expense_recurrence_month">M</string>
-    <string name="edit_expense_recurrence_year">Y</string>
+    <string name="edit_expense_recurrence_day">Day(s)</string>
+    <string name="edit_expense_recurrence_day_short">D</string>
+    <string name="edit_expense_recurrence_week">Week(s)</string>
+    <string name="edit_expense_recurrence_week_short">W</string>
+    <string name="edit_expense_recurrence_month">Month(s)</string>
+    <string name="edit_expense_recurrence_month_short">M</string>
+    <string name="edit_expense_recurrence_year">Year(s)</string>
+    <string name="edit_expense_recurrence_year_short">Y</string>
 
     <string name="settings_title">Settings</string>
 

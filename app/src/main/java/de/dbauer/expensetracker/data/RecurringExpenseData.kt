@@ -4,12 +4,13 @@ import androidx.annotation.StringRes
 import de.dbauer.expensetracker.R
 
 enum class Recurrence(
-    @StringRes val stringRes: Int,
+    @StringRes val fullStringRes: Int,
+    @StringRes val shortStringRes: Int,
 ) {
-    Daily(R.string.edit_expense_recurrence_day),
-    Weekly(R.string.edit_expense_recurrence_week),
-    Monthly(R.string.edit_expense_recurrence_month),
-    Yearly(R.string.edit_expense_recurrence_year),
+    Daily(R.string.edit_expense_recurrence_day, R.string.edit_expense_recurrence_day_short),
+    Weekly(R.string.edit_expense_recurrence_week, R.string.edit_expense_recurrence_week_short),
+    Monthly(R.string.edit_expense_recurrence_month, R.string.edit_expense_recurrence_month_short),
+    Yearly(R.string.edit_expense_recurrence_year, R.string.edit_expense_recurrence_year_short),
 }
 
 data class RecurringExpenseData(
