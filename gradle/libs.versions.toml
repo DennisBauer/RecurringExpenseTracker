@@ -1,9 +1,9 @@
 [versions]
-activity-compose = "1.7.2"
+activity-compose = "1.8.0"
 agp = "8.1.2"
 androidx-test-ext-junit = "1.1.5"
 appcompat = "1.6.1"
-compose-bom = "2023.09.02"
+compose-bom = "2023.10.01"
 core-ktx = "1.12.0"
 espresso-core = "3.5.1"
 junit = "4.13.2"
@@ -14,9 +14,9 @@ ktlint-compose = "0.3.0"
 ktlint-plugin = "11.6.1"
 ktlint-version = "1.0.0"
 lifecycle-runtime-ktx = "2.6.2"
-material = "1.9.0"
-navigation-compose = "2.7.3"
-room = "2.5.2"
+material = "1.10.0"
+navigation-compose = "2.7.4"
+room = "2.6.0"
 
 [libraries]
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
