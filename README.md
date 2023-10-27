@@ -3,10 +3,10 @@ A Material You recurring expense tracker, allowing you to keep track of your mon
 
 It's a simple app with the basic functionality of tracking recurring expenses. My idea is to add new features one by one and I'm happy for any contribution. Feel free to create feature requests or report bugs if you find some.
 
-[<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" width="200px"/>](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
+[<img src="assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" width="200px"/>](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
 
 ### Screenshots
 <div style="display:flex">
-<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/Screenshot_1.png" width="360"/>
-<img src="https://github.com/DennisBauer/RecurringExpenseTracker/blob/8e814566064d20eaa8684f27e41e2979e43c6595/assets/Screenshot_2.png" width="360"/>
+<img src="assets/Screenshot_1.png" width="360"/>
+<img src="assets/Screenshot_2.png" width="360"/>
 </div>
