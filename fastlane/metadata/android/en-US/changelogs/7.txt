@@ -1,0 +1,2 @@
+Changelog 0.2.5:
+* Fix recurrence string in create or edit of an expense
