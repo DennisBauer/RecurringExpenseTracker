@@ -33,5 +33,12 @@
     <string name="edit_expense_recurrence_year_short">Y</string>
 
     <string name="settings_title">Settings</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_create">Create backup</string>
+    <string name="settings_backup_restore">Restore backup</string>
+    <string name="settings_backup_created_toast">Backup successful</string>
+    <string name="settings_backup_not_created_toast">Backup failed</string>
+    <string name="settings_backup_restored_toast">Backup restored</string>
+    <string name="settings_backup_not_restored_toast">Backup could not be restored</string>
 
 </resources>
