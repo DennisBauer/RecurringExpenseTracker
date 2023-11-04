@@ -31,4 +31,11 @@
     <string name="edit_expense_recurrence_year_short">J</string>
 
     <string name="settings_title">Einstellungen</string>
+    <string name="settings_backup">Sicherung</string>
+    <string name="settings_backup_create">Sicherung erstellen</string>
+    <string name="settings_backup_restore">Sicherung Wiederherstellen</string>
+    <string name="settings_backup_created_toast">Backup erstellt</string>
+    <string name="settings_backup_not_created_toast">Backup fehlgeschlagen</string>
+    <string name="settings_backup_restored_toast">Backup wiederhergestellt</string>
+    <string name="settings_backup_not_restored_toast">Backup konnte nicht wiederhergestellt werden</string>
 </resources>

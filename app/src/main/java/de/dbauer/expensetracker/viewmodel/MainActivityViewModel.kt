@@ -16,6 +16,7 @@ import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 private enum class RecurrenceDatabase(
@@ -47,22 +48,7 @@ class MainActivityViewModel(
     init {
         viewModelScope.launch {
             expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
-                _recurringExpenseData.clear()
-                recurringExpenses.forEach {
-                    _recurringExpenseData.add(
-                        RecurringExpenseData(
-                            id = it.id,
-                            name = it.name!!,
-                            description = it.description!!,
-                            price = it.price!!,
-                            monthlyPrice = it.monthlyPrice(),
-                            everyXRecurrence = it.everyXRecurrence!!,
-                            recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
-                        ),
-                    )
-                }
-                _recurringExpenseData.sortByDescending { it.monthlyPrice }
-                updateExpenseSummary()
+                onDatabaseUpdated(recurringExpenses)
             }
         }
     }
@@ -110,6 +96,32 @@ class MainActivityViewModel(
                 ),
             )
         }
+    }
+
+    fun onDatabaseRestored() {
+        viewModelScope.launch {
+            val recurringExpenses = expenseRepository.allRecurringExpensesByPrice.first()
+            onDatabaseUpdated(recurringExpenses)
+        }
+    }
+
+    private fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+        _recurringExpenseData.clear()
+        recurringExpenses.forEach {
+            _recurringExpenseData.add(
+                RecurringExpenseData(
+                    id = it.id,
+                    name = it.name!!,
+                    description = it.description!!,
+                    price = it.price!!,
+                    monthlyPrice = it.monthlyPrice(),
+                    everyXRecurrence = it.everyXRecurrence!!,
+                    recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
+                ),
+            )
+        }
+        _recurringExpenseData.sortByDescending { it.monthlyPrice }
+        updateExpenseSummary()
     }
 
     private fun getRecurrenceFromDatabaseInt(recurrenceInt: Int): Recurrence {
