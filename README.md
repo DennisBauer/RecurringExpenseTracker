@@ -1,4 +1,4 @@
-<p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></a></p> 
+<p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p> 
 <h2 align="center"><b>Recurring Expense Tracker</b></h2>
 <h4 align="center">A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
 </h4>
@@ -26,4 +26,5 @@ It's a simple app with the basic functionality. My idea is to add new features o
 <div style="display:flex">
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png" width="360"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="360"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png" width="360"/>
 </div>
