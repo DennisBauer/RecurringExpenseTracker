@@ -15,7 +15,7 @@ ktlint-plugin = "11.6.1"
 ktlint-version = "1.0.0"
 lifecycle-runtime-ktx = "2.6.2"
 material = "1.10.0"
-navigation-compose = "2.7.4"
+navigation-compose = "2.7.5"
 room = "2.6.0"
 
 [libraries]
