@@ -28,7 +28,7 @@ jobs:
           java-version: '17'
       - name: Decode Keystore
         id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2.3
+        uses: timheuer/base64-to-file@v1.2.4
         with:
           fileName: 'android_keystore.jks'
           fileDir: '/home/runner/work/RecurringExpenseTracker/RecurringExpenseTracker/app/keystore/'
