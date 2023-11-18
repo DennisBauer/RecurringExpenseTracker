@@ -6,7 +6,7 @@
     ":disableDependencyDashboard",
     ":separatePatchReleases",
     ":separateMultipleMajorReleases",
-    "schedule:daily"
+    "schedule:weekends"
   ],
   "rebaseWhen": "auto",
   "customManagers": [
