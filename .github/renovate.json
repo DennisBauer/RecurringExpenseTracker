@@ -37,12 +37,6 @@
     },
     {
       "matchPackagePatterns": [
-        "org.jetbrains.kotlinx"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
