@@ -3,7 +3,7 @@
   "labels": ["dependencies"],
   "extends": [
     "config:recommended",
-    ":dependencyDashboard",
+    ":disableDependencyDashboard",
     ":separatePatchReleases",
     ":separateMultipleMajorReleases",
     "schedule:daily"
