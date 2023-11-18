@@ -3,24 +3,13 @@
   "labels": ["dependencies"],
   "extends": [
     "config:recommended",
+    "group:all",
     ":disableDependencyDashboard",
     ":separatePatchReleases",
     ":separateMultipleMajorReleases",
     "schedule:weekends"
   ],
   "rebaseWhen": "auto",
-  "customManagers": [
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "^.*.ya?ml$"
-      ],
-      "matchStrings": [
-        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?\"(?<currentValue>.*)\"\\s"
-      ],
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
-    }
-  ],
   "packageRules": [
     {
       "matchPackagePatterns": [
