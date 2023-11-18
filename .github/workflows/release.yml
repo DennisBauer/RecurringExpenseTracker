@@ -42,7 +42,7 @@ jobs:
       - name: Verify Signature
         run: $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ github.event.inputs.version }}.apk
       - name: Upload APK
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: RecurringExpenseTracker
           path: app/build/outputs/apk/release/RecurringExpenseTracker_${{ github.event.inputs.version }}.apk
