@@ -15,7 +15,6 @@ ktlint-compose = "0.3.7"
 ktlint-plugin = "12.0.3"
 ktlint-version = "1.0.0"
 lifecycle-runtime-ktx = "2.6.2"
-material = "1.10.0"
 navigation-compose = "2.7.6"
 room = "2.6.1"
 
@@ -30,7 +29,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 ktlint-compose = { group = "io.nlopez.compose.rules", name = "ktlint", version.ref = "ktlint-compose" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
