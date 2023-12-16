@@ -84,7 +84,6 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.material)
     implementation(libs.material.icons.extended)
     implementation(libs.material3)
     implementation(libs.navigation.compose)
