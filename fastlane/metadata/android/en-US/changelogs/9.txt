@@ -1,0 +1,4 @@
+Changelog 0.4.0:
+* Upcoming payments overview
+* Add option to add first payment date of an expense
+* Updated libraries
