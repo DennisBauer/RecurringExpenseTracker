@@ -21,4 +21,5 @@ data class RecurringExpenseData(
     val monthlyPrice: Float,
     val everyXRecurrence: Int,
     val recurrence: Recurrence,
+    val firstPayment: Long,
 )

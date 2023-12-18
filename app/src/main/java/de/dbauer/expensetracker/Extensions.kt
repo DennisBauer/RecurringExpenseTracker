@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker
 
 import java.text.NumberFormat
+import java.util.Calendar
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -33,4 +34,10 @@ fun ZipInputStream.forEachEntry(block: (entry: ZipEntry) -> Unit) {
             this.closeEntry()
         }
     }
+}
+
+fun Calendar.isSameDay(other: Calendar): Boolean {
+    return this.get(Calendar.YEAR) == other.get(Calendar.YEAR) &&
+        this.get(Calendar.MONTH) == other.get(Calendar.MONTH) &&
+        this.get(Calendar.DAY_OF_MONTH) == other.get(Calendar.DAY_OF_MONTH)
 }

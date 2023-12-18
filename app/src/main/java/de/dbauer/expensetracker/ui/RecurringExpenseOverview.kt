@@ -194,6 +194,7 @@ private fun RecurringExpenseOverviewPreview() {
                             monthlyPrice = 9.99f,
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
+                            0L,
                         ),
                         RecurringExpenseData(
                             id = 1,
@@ -205,6 +206,7 @@ private fun RecurringExpenseOverviewPreview() {
                             monthlyPrice = 5f,
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
+                            1L,
                         ),
                         RecurringExpenseData(
                             id = 2,
@@ -214,6 +216,7 @@ private fun RecurringExpenseOverviewPreview() {
                             monthlyPrice = 7.95f,
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
+                            2L,
                         ),
                         RecurringExpenseData(
                             id = 3,
@@ -223,6 +226,7 @@ private fun RecurringExpenseOverviewPreview() {
                             monthlyPrice = 6f,
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Yearly,
+                            3L,
                         ),
                     ),
                 onItemClicked = {},

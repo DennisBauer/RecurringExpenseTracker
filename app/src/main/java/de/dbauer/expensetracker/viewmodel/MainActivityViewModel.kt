@@ -13,20 +13,12 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
+import de.dbauer.expensetracker.viewmodel.database.RecurrenceDatabase
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
-private enum class RecurrenceDatabase(
-    val value: Int,
-) {
-    Daily(1),
-    Weekly(2),
-    Monthly(3),
-    Yearly(4),
-}
 
 class MainActivityViewModel(
     private val expenseRepository: ExpenseRepository,
@@ -63,6 +55,7 @@ class MainActivityViewModel(
                     price = recurringExpense.price,
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
+                    firstPayment = recurringExpense.firstPayment,
                 ),
             )
         }
@@ -78,6 +71,7 @@ class MainActivityViewModel(
                     price = recurringExpense.price,
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
+                    firstPayment = recurringExpense.firstPayment,
                 ),
             )
         }
@@ -93,6 +87,7 @@ class MainActivityViewModel(
                     price = recurringExpense.price,
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
+                    firstPayment = recurringExpense.firstPayment,
                 ),
             )
         }
@@ -117,6 +112,7 @@ class MainActivityViewModel(
                     monthlyPrice = it.monthlyPrice(),
                     everyXRecurrence = it.everyXRecurrence!!,
                     recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
+                    firstPayment = it.firstPayment!!,
                 ),
             )
         }
