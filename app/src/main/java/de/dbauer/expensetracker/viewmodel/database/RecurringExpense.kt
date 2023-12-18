@@ -12,4 +12,14 @@ data class RecurringExpense(
     @ColumnInfo(name = "price") val price: Float?,
     @ColumnInfo(name = "everyXRecurrence") val everyXRecurrence: Int?,
     @ColumnInfo(name = "recurrence") val recurrence: Int?,
+    @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
 )
+
+enum class RecurrenceDatabase(
+    val value: Int,
+) {
+    Daily(1),
+    Weekly(2),
+    Monthly(3),
+    Yearly(4),
+}

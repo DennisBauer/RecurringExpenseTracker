@@ -47,12 +47,14 @@ import androidx.navigation.compose.rememberNavController
 import de.dbauer.expensetracker.data.BottomNavigation
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
-import de.dbauer.expensetracker.ui.EditRecurringExpense
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
 import de.dbauer.expensetracker.ui.SettingsScreen
+import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpense
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
+import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
 import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import de.dbauer.expensetracker.viewmodel.SettingsViewModel
+import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -60,6 +62,9 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val mainActivityViewModel: MainActivityViewModel by viewModels {
         MainActivityViewModel.create((application as ExpenseTrackerApplication).repository)
+    }
+    private val upcomingPaymentsViewModel: UpcomingPaymentsViewModel by viewModels {
+        UpcomingPaymentsViewModel.create((application as ExpenseTrackerApplication).repository)
     }
     private val settingsViewModel: SettingsViewModel by viewModels {
         SettingsViewModel.create(getDatabasePath(Constants.DATABASE_NAME).path)
@@ -114,11 +119,13 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this@MainActivity, toastStringRes, Toast.LENGTH_LONG).show()
                     }
                 },
+                upcomingPaymentsViewModel = upcomingPaymentsViewModel,
             )
         }
     }
 }
 
+@Suppress("ktlint:compose:vm-forwarding-check")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityContent(
@@ -131,6 +138,7 @@ fun MainActivityContent(
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
     onSelectBackupPath: (backupPath: Uri) -> Unit,
     onSelectImportFile: (importPath: Uri) -> Unit,
+    upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
@@ -140,6 +148,7 @@ fun MainActivityContent(
         derivedStateOf {
             when (backStackEntry.value?.destination?.route) {
                 BottomNavigation.Home.route -> R.string.home_title
+                BottomNavigation.Upcoming.route -> R.string.upcoming_title
                 BottomNavigation.Settings.route -> R.string.settings_title
                 else -> R.string.home_title
             }
@@ -155,6 +164,7 @@ fun MainActivityContent(
     val bottomNavigationItems =
         listOf(
             BottomNavigation.Home,
+            BottomNavigation.Upcoming,
             BottomNavigation.Settings,
         )
 
@@ -254,11 +264,25 @@ fun MainActivityContent(
                                 onItemClicked = {
                                     selectedRecurringExpense = it
                                 },
-                                contentPadding = PaddingValues(top = 8.dp, bottom = 88.dp),
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        bottom = 88.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
                                 modifier =
                                     Modifier
-                                        .padding(horizontal = 16.dp)
                                         .nestedScroll(scrollBehavior.nestedScrollConnection),
+                            )
+                        }
+                        composable(BottomNavigation.Upcoming.route) {
+                            UpcomingPaymentsScreen(
+                                upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                                modifier =
+                                    Modifier
+                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                             )
                         }
                         composable(BottomNavigation.Settings.route) {
@@ -318,6 +342,7 @@ private fun MainActivityContentPreview() {
                     monthlyPrice = 9.99f,
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
+                    0L,
                 ),
                 RecurringExpenseData(
                     id = 1,
@@ -327,6 +352,7 @@ private fun MainActivityContentPreview() {
                     monthlyPrice = 5f,
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
+                    1L,
                 ),
                 RecurringExpenseData(
                     id = 2,
@@ -336,6 +362,7 @@ private fun MainActivityContentPreview() {
                     monthlyPrice = 7.95f,
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
+                    2L,
                 ),
             ),
         onRecurringExpenseAdded = {},
@@ -343,5 +370,6 @@ private fun MainActivityContentPreview() {
         onRecurringExpenseDeleted = {},
         onSelectBackupPath = { },
         onSelectImportFile = { },
+        upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
     )
 }

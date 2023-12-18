@@ -2,6 +2,7 @@
 <resources>
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Start</string>
+    <string name="bottom_nav_upcoming">Bevorstehend</string>
     <string name="bottom_nav_settings">Einstellungen</string>
 
     <!-- Home Tab -->
@@ -14,7 +15,7 @@
     <string name="edit_expense_button_add">Ausgabe hinzufügen</string>
     <string name="edit_expense_button_delete">Löschen</string>
     <string name="edit_expense_button_update">Ausgabe aktualisieren</string>
-    <string name="edit_expense_description">Beschreibung</string>
+    <string name="edit_expense_description">Beschreibung (optional)</string>
     <string name="edit_expense_description_placeholder">z.B. spezielles Abo</string>
     <string name="edit_expense_invalid_input">Ungültige Eingabe</string>
     <string name="edit_expense_name">Name</string>
@@ -29,7 +30,17 @@
     <string name="edit_expense_recurrence_month_short">M</string>
     <string name="edit_expense_recurrence_year">Jahr(e)</string>
     <string name="edit_expense_recurrence_year_short">J</string>
+    <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
+    <string name="edit_expense_first_payment_placeholder">z.B. Heute</string>
 
+    <!-- Upcoming Payments Tab -->
+    <string name="upcoming_title">Ausstehende Zahlungen</string>
+    <string name="upcoming_placeholder_title">Definiere ein Datum für die erste Zahlung einer Ausgabe um eine Übersicht der anstehenden Zahlungen zu erhalten</string>
+    <string name="upcoming_time_remaining_today">heute</string>
+    <string name="upcoming_time_remaining_tomorrow">morgen</string>
+    <string name="upcoming_time_remaining_days">in %1$d Tagen</string>
+
+    <!-- Settings Tab -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_backup">Sicherung</string>
     <string name="settings_backup_create">Sicherung erstellen</string>
@@ -38,4 +49,7 @@
     <string name="settings_backup_not_created_toast">Backup fehlgeschlagen</string>
     <string name="settings_backup_restored_toast">Backup wiederhergestellt</string>
     <string name="settings_backup_not_restored_toast">Backup konnte nicht wiederhergestellt werden</string>
+
+    <!-- General -->
+    <string name="dialog_ok">OK</string>
 </resources>
