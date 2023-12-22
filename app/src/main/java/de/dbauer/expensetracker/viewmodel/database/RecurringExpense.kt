@@ -13,7 +13,25 @@ data class RecurringExpense(
     @ColumnInfo(name = "everyXRecurrence") val everyXRecurrence: Int?,
     @ColumnInfo(name = "recurrence") val recurrence: Int?,
     @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
-)
+) {
+    fun getMonthlyPrice(): Float {
+        return when (recurrence) {
+            RecurrenceDatabase.Daily.value -> {
+                (365 / 12f) / everyXRecurrence!! * price!!
+            }
+            RecurrenceDatabase.Weekly.value -> {
+                (52 / 12f) / everyXRecurrence!! * price!!
+            }
+            RecurrenceDatabase.Monthly.value -> {
+                1f / everyXRecurrence!! * price!!
+            }
+            RecurrenceDatabase.Yearly.value -> {
+                price!! / (everyXRecurrence!! * 12f)
+            }
+            else -> 0f
+        }
+    }
+}
 
 enum class RecurrenceDatabase(
     val value: Int,

@@ -280,6 +280,9 @@ fun MainActivityContent(
                         composable(BottomNavigation.Upcoming.route) {
                             UpcomingPaymentsScreen(
                                 upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                                onItemClicked = {
+                                    selectedRecurringExpense = it
+                                },
                                 modifier =
                                     Modifier
                                         .nestedScroll(scrollBehavior.nestedScrollConnection),

@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker.ui.upcomingexpenses
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
+import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -39,12 +41,16 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun UpcomingPaymentsScreen(
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
+    onItemClicked: (RecurringExpenseData) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     if (upcomingPaymentsViewModel.upcomingPaymentsData.size > 0) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
+            onItemClicked = {
+                upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onItemClicked)
+            },
             modifier = modifier,
             contentPadding = contentPadding,
         )
@@ -61,6 +67,7 @@ fun UpcomingPaymentsScreen(
 @Composable
 private fun UpcomingPaymentsOverview(
     upcomingPaymentsData: ImmutableList<UpcomingPaymentData>,
+    onItemClicked: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -72,6 +79,9 @@ private fun UpcomingPaymentsOverview(
         items(items = upcomingPaymentsData) { upcomingPaymentData ->
             UpcomingPayment(
                 upcomingPaymentData = upcomingPaymentData,
+                onItemClicked = {
+                    onItemClicked(upcomingPaymentData.id)
+                },
             )
         }
     }
@@ -80,6 +90,7 @@ private fun UpcomingPaymentsOverview(
 @Composable
 private fun UpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
+    onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString =
@@ -94,7 +105,7 @@ private fun UpcomingPayment(
         }
 
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onItemClicked() },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -179,24 +190,28 @@ private fun UpcomingPaymentsOverviewPreview() {
                 upcomingPaymentsData =
                     persistentListOf(
                         UpcomingPaymentData(
+                            id = 0,
                             name = "Netflix",
                             price = 9.99f,
                             nextPaymentRemainingDays = nextPaymentDays1,
                             nextPaymentDate = nextPaymentDate1String,
                         ),
                         UpcomingPaymentData(
+                            id = 1,
                             name = "Disney Plus",
                             price = 5f,
                             nextPaymentRemainingDays = nextPaymentDays2,
                             nextPaymentDate = nextPaymentDate2String,
                         ),
                         UpcomingPaymentData(
+                            id = 2,
                             name = "Amazon Prime with a long name",
                             price = 7.95f,
                             nextPaymentRemainingDays = nextPaymentDays3,
                             nextPaymentDate = nextPaymentDate3String,
                         ),
                     ),
+                onItemClicked = {},
                 contentPadding = PaddingValues(8.dp),
             )
         }
