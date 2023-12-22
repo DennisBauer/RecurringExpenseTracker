@@ -63,6 +63,6 @@ jobs:
         with:
           tag_name: v${{ github.event.inputs.version }}
           name: Release v${{ github.event.inputs.version }}
-          draft: false
+          draft: true
           prerelease: ${{ github.event.inputs.prerelease }}
           files: RecurringExpenseTracker/RecurringExpenseTracker_${{ github.event.inputs.version }}.apk
