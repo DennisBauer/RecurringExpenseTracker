@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import de.dbauer.expensetracker.data.Recurrence
+import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.isSameDay
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
@@ -43,6 +45,28 @@ class UpcomingPaymentsViewModel(
         }
     }
 
+    fun onExpenseWithIdClicked(
+        expenceId: Int,
+        onItemClicked: (RecurringExpenseData) -> Unit,
+    ) {
+        viewModelScope.launch {
+            expenseRepository?.getRecurringExpenseById(expenceId)?.let {
+                val recurringExpenseData =
+                    RecurringExpenseData(
+                        id = it.id,
+                        name = it.name!!,
+                        description = it.description!!,
+                        price = it.price!!,
+                        monthlyPrice = it.getMonthlyPrice(),
+                        everyXRecurrence = it.everyXRecurrence!!,
+                        recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
+                        firstPayment = it.firstPayment!!,
+                    )
+                onItemClicked(recurringExpenseData)
+            }
+        }
+    }
+
     private fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
         _upcomingPaymentsData.clear()
         recurringExpenses.forEach {
@@ -54,6 +78,7 @@ class UpcomingPaymentsViewModel(
             if (firstPayment > 0L) {
                 _upcomingPaymentsData.add(
                     UpcomingPaymentData(
+                        id = it.id,
                         name = it.name!!,
                         price = it.price!!,
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
@@ -97,6 +122,16 @@ class UpcomingPaymentsViewModel(
             }
         val difference = nextPaymentInMilliseconds - today.timeInMillis
         return TimeUnit.MILLISECONDS.toDays(difference).toInt()
+    }
+
+    private fun getRecurrenceFromDatabaseInt(recurrenceInt: Int): Recurrence {
+        return when (recurrenceInt) {
+            RecurrenceDatabase.Daily.value -> Recurrence.Daily
+            RecurrenceDatabase.Weekly.value -> Recurrence.Weekly
+            RecurrenceDatabase.Monthly.value -> Recurrence.Monthly
+            RecurrenceDatabase.Yearly.value -> Recurrence.Yearly
+            else -> Recurrence.Monthly
+        }
     }
 
     companion object {

@@ -109,7 +109,7 @@ class MainActivityViewModel(
                     name = it.name!!,
                     description = it.description!!,
                     price = it.price!!,
-                    monthlyPrice = it.monthlyPrice(),
+                    monthlyPrice = it.getMonthlyPrice(),
                     everyXRecurrence = it.everyXRecurrence!!,
                     recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
                     firstPayment = it.firstPayment!!,
@@ -147,24 +147,6 @@ class MainActivityViewModel(
         _weeklyExpense = (price / (52 / 12f)).toCurrencyString()
         _monthlyExpense = price.toCurrencyString()
         _yearlyExpense = (price * 12).toCurrencyString()
-    }
-
-    private fun RecurringExpense.monthlyPrice(): Float {
-        return when (recurrence) {
-            RecurrenceDatabase.Daily.value -> {
-                (365 / 12f) / everyXRecurrence!! * price!!
-            }
-            RecurrenceDatabase.Weekly.value -> {
-                (52 / 12f) / everyXRecurrence!! * price!!
-            }
-            RecurrenceDatabase.Monthly.value -> {
-                1f / everyXRecurrence!! * price!!
-            }
-            RecurrenceDatabase.Yearly.value -> {
-                price!! / (everyXRecurrence!! * 12f)
-            }
-            else -> 0f
-        }
     }
 
     companion object {

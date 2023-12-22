@@ -235,7 +235,9 @@ fun MainActivityContent(
                     }
                 },
                 floatingActionButton = {
-                    if (BottomNavigation.Home.route == backStackEntry.value?.destination?.route) {
+                    if (BottomNavigation.Home.route == backStackEntry.value?.destination?.route ||
+                        BottomNavigation.Upcoming.route == backStackEntry.value?.destination?.route
+                    ) {
                         FloatingActionButton(onClick = {
                             addRecurringExpenseVisible = true
                         }) {
@@ -280,6 +282,9 @@ fun MainActivityContent(
                         composable(BottomNavigation.Upcoming.route) {
                             UpcomingPaymentsScreen(
                                 upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                                onItemClicked = {
+                                    selectedRecurringExpense = it
+                                },
                                 modifier =
                                     Modifier
                                         .nestedScroll(scrollBehavior.nestedScrollConnection),

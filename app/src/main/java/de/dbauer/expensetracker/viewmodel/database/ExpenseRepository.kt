@@ -13,6 +13,12 @@ class ExpenseRepository(
         recurringExpenseDao.getAllByPrice()
 
     @WorkerThread
+    suspend fun getRecurringExpenseById(id: Int): RecurringExpense? =
+        withContext(Dispatchers.IO) {
+            return@withContext recurringExpenseDao.getById(id)
+        }
+
+    @WorkerThread
     suspend fun insert(recurringExpense: RecurringExpense) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.insert(recurringExpense)
