@@ -235,7 +235,9 @@ fun MainActivityContent(
                     }
                 },
                 floatingActionButton = {
-                    if (BottomNavigation.Home.route == backStackEntry.value?.destination?.route) {
+                    if (BottomNavigation.Home.route == backStackEntry.value?.destination?.route ||
+                        BottomNavigation.Upcoming.route == backStackEntry.value?.destination?.route
+                    ) {
                         FloatingActionButton(onClick = {
                             addRecurringExpenseVisible = true
                         }) {
