@@ -13,6 +13,7 @@ import de.dbauer.expensetracker.viewmodel.database.RecurrenceDatabase
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Calendar
@@ -34,11 +35,20 @@ class UpcomingPaymentsViewModel(
         }
     }
 
+    fun onDatabaseRestored() {
+        viewModelScope.launch {
+            expenseRepository?.allRecurringExpensesByPrice?.first()?.let { recurringExpenses ->
+                onDatabaseUpdated(recurringExpenses)
+            }
+        }
+    }
+
     private fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
         _upcomingPaymentsData.clear()
         recurringExpenses.forEach {
             val firstPayment = it.firstPayment!!
-            val nextPaymentInMilliseconds = getNextPaymentInMilliseconds(firstPayment, it.recurrence!!)
+            val nextPaymentInMilliseconds =
+                getNextPaymentInMilliseconds(firstPayment, it.everyXRecurrence!!, it.recurrence!!)
             val nextPaymentRemainingDays = getNextPaymentDays(nextPaymentInMilliseconds)
             val nextPaymentDate = DateFormat.getDateInstance().format(Date(nextPaymentInMilliseconds))
             if (firstPayment > 0L) {
@@ -57,6 +67,7 @@ class UpcomingPaymentsViewModel(
 
     private fun getNextPaymentInMilliseconds(
         firstPayment: Long,
+        everyXRecurrence: Int,
         recurrence: Int,
     ): Long {
         val today = Calendar.getInstance()
@@ -72,7 +83,7 @@ class UpcomingPaymentsViewModel(
                     RecurrenceDatabase.Yearly.value -> Calendar.YEAR
                     else -> Calendar.DAY_OF_MONTH
                 }
-            nextPayment.add(field, 1)
+            nextPayment.add(field, everyXRecurrence)
         }
         return nextPayment.timeInMillis
     }

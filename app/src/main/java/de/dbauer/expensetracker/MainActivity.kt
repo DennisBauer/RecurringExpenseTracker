@@ -112,6 +112,7 @@ class MainActivity : ComponentActivity() {
                         val toastStringRes =
                             if (backupRestored) {
                                 mainActivityViewModel.onDatabaseRestored()
+                                upcomingPaymentsViewModel.onDatabaseRestored()
                                 R.string.settings_backup_restored_toast
                             } else {
                                 R.string.settings_backup_not_restored_toast
