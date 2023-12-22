@@ -1,0 +1,9 @@
+Changelog 0.4.1:
+* Allow editing expenses from upcoming payments tab
+* Allow adding new expenses from upcoming payments tab
+* Fix upcoming payment calculation if recurrence is > 1
+* Refresh upcoming payments after restoring backup
+From 0.4.0:
+* Upcoming payments overview
+* Add option to add first payment date of an expense
+* Updated libraries
