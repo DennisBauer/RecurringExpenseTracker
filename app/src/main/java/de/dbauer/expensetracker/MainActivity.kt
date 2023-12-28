@@ -52,7 +52,7 @@ import de.dbauer.expensetracker.ui.SettingsScreen
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpense
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
-import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
+import de.dbauer.expensetracker.viewmodel.RecurringExpenseViewModel
 import de.dbauer.expensetracker.viewmodel.SettingsViewModel
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -60,8 +60,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    private val mainActivityViewModel: MainActivityViewModel by viewModels {
-        MainActivityViewModel.create((application as ExpenseTrackerApplication).repository)
+    private val recurringExpenseViewModel: RecurringExpenseViewModel by viewModels {
+        RecurringExpenseViewModel.create((application as ExpenseTrackerApplication).repository)
     }
     private val upcomingPaymentsViewModel: UpcomingPaymentsViewModel by viewModels {
         UpcomingPaymentsViewModel.create((application as ExpenseTrackerApplication).repository)
@@ -77,18 +77,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MainActivityContent(
-                weeklyExpense = mainActivityViewModel.weeklyExpense,
-                monthlyExpense = mainActivityViewModel.monthlyExpense,
-                yearlyExpense = mainActivityViewModel.yearlyExpense,
-                recurringExpenseData = mainActivityViewModel.recurringExpenseData,
+                weeklyExpense = recurringExpenseViewModel.weeklyExpense,
+                monthlyExpense = recurringExpenseViewModel.monthlyExpense,
+                yearlyExpense = recurringExpenseViewModel.yearlyExpense,
+                recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                 onRecurringExpenseAdded = {
-                    mainActivityViewModel.addRecurringExpense(it)
+                    recurringExpenseViewModel.addRecurringExpense(it)
                 },
                 onRecurringExpenseEdited = {
-                    mainActivityViewModel.editRecurringExpense(it)
+                    recurringExpenseViewModel.editRecurringExpense(it)
                 },
                 onRecurringExpenseDeleted = {
-                    mainActivityViewModel.deleteRecurringExpense(it)
+                    recurringExpenseViewModel.deleteRecurringExpense(it)
                 },
                 onSelectBackupPath = {
                     val takeFlags: Int =
@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
                         val backupRestored = settingsViewModel.restoreDatabase(it, applicationContext)
                         val toastStringRes =
                             if (backupRestored) {
-                                mainActivityViewModel.onDatabaseRestored()
+                                recurringExpenseViewModel.onDatabaseRestored()
                                 upcomingPaymentsViewModel.onDatabaseRestored()
                                 R.string.settings_backup_restored_toast
                             } else {

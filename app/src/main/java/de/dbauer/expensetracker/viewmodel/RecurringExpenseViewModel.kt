@@ -20,7 +20,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(
+class RecurringExpenseViewModel(
     private val expenseRepository: ExpenseRepository,
 ) : ViewModel() {
     private val _recurringExpenseData = mutableStateListOf<RecurringExpenseData>()
@@ -153,7 +153,7 @@ class MainActivityViewModel(
         fun create(expenseRepository: ExpenseRepository): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
-                    MainActivityViewModel(expenseRepository)
+                    RecurringExpenseViewModel(expenseRepository)
                 }
             }
         }
