@@ -14,7 +14,7 @@ kotlinx-collections-immutable = "0.3.7"
 ktlint-compose = "0.3.9"
 ktlint-plugin = "12.0.3"
 ktlint-version = "1.0.0"
-lifecycle-runtime-ktx = "2.6.2"
+lifecycle-runtime-ktx = "2.7.0"
 navigation-compose = "2.7.6"
 room = "2.6.1"
 
