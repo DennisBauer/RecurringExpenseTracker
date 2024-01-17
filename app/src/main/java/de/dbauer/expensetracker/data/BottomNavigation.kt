@@ -14,7 +14,9 @@ sealed class BottomNavigation(
     val icon: ImageVector,
 ) {
     data object Home : BottomNavigation("home", R.string.bottom_nav_home, Icons.Rounded.Home)
+
     data object Upcoming : BottomNavigation("upcoming", R.string.bottom_nav_upcoming, Icons.Rounded.Payment)
+
     data object Settings :
         BottomNavigation("settings", R.string.bottom_nav_settings, Icons.Rounded.Settings)
 }
