@@ -1,0 +1,5 @@
+Changelog 0.5.0:
+* Feature: Add option to define a color for an expense
+* Feature: Decrease app size in release significantly by enabling minify and resource shrinking
+* Fix: Price input verification taking locale specific number formatting into consideration
+* Fix: Nested scroll behavior for TopAppBar when switching between tabs
