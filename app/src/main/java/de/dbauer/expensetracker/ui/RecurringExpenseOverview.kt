@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toCurrencyString
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -127,6 +129,7 @@ private fun RecurringExpense(
 ) {
     Card(
         modifier = modifier.clickable { onItemClicked() },
+        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -195,6 +198,7 @@ private fun RecurringExpenseOverviewPreview() {
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             0L,
+                            ExpenseColor.Dynamic,
                         ),
                         RecurringExpenseData(
                             id = 1,
@@ -207,6 +211,7 @@ private fun RecurringExpenseOverviewPreview() {
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             1L,
+                            ExpenseColor.Orange,
                         ),
                         RecurringExpenseData(
                             id = 2,
@@ -217,6 +222,7 @@ private fun RecurringExpenseOverviewPreview() {
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             2L,
+                            ExpenseColor.Turquoise,
                         ),
                         RecurringExpenseData(
                             id = 3,
@@ -227,6 +233,7 @@ private fun RecurringExpenseOverviewPreview() {
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Yearly,
                             3L,
+                            ExpenseColor.Dynamic,
                         ),
                     ),
                 onItemClicked = {},

@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toCurrencyString
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
 import de.dbauer.expensetracker.viewmodel.database.RecurrenceDatabase
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
@@ -56,6 +57,7 @@ class RecurringExpenseViewModel(
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
                     firstPayment = recurringExpense.firstPayment,
+                    color = recurringExpense.color.toInt(),
                 ),
             )
         }
@@ -72,6 +74,7 @@ class RecurringExpenseViewModel(
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
                     firstPayment = recurringExpense.firstPayment,
+                    color = recurringExpense.color.toInt(),
                 ),
             )
         }
@@ -88,6 +91,7 @@ class RecurringExpenseViewModel(
                     everyXRecurrence = recurringExpense.everyXRecurrence,
                     recurrence = getRecurrenceIntFromUIRecurrence(recurringExpense.recurrence),
                     firstPayment = recurringExpense.firstPayment,
+                    color = recurringExpense.color.toInt(),
                 ),
             )
         }
@@ -113,6 +117,7 @@ class RecurringExpenseViewModel(
                     everyXRecurrence = it.everyXRecurrence!!,
                     recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
                     firstPayment = it.firstPayment!!,
+                    color = ExpenseColor.fromInt(it.color),
                 ),
             )
         }

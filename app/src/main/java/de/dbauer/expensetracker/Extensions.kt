@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker
 
+import androidx.compose.ui.Modifier
 import java.text.NumberFormat
 import java.util.Calendar
 import java.util.zip.ZipEntry
@@ -40,4 +41,15 @@ fun Calendar.isSameDay(other: Calendar): Boolean {
     return this.get(Calendar.YEAR) == other.get(Calendar.YEAR) &&
         this.get(Calendar.MONTH) == other.get(Calendar.MONTH) &&
         this.get(Calendar.DAY_OF_MONTH) == other.get(Calendar.DAY_OF_MONTH)
+}
+
+fun Modifier.conditional(
+    condition: Boolean,
+    modifier: Modifier.() -> Modifier,
+): Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
+    }
 }

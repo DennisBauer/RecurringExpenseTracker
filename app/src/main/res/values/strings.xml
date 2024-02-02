@@ -34,6 +34,7 @@
     <string name="edit_expense_recurrence_year_short">Y</string>
     <string name="edit_expense_first_payment">First Payment (optional)</string>
     <string name="edit_expense_first_payment_placeholder">e.g. today</string>
+    <string name="edit_expense_color">Color</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Upcoming Payments</string>

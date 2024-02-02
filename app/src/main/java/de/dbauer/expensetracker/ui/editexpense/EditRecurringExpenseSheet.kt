@@ -34,13 +34,14 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.toFloatIgnoreSeparator
 import de.dbauer.expensetracker.toLocalString
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,6 +111,9 @@ private fun EditRecurringExpenseInternal(
     var firstPaymentDate by rememberSaveable {
         mutableLongStateOf(currentData?.firstPayment ?: 0L)
     }
+    var expenseColor by rememberSaveable {
+        mutableStateOf(currentData?.color ?: ExpenseColor.Dynamic)
+    }
 
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
@@ -148,6 +152,10 @@ private fun EditRecurringExpenseInternal(
         FirstPaymentOption(
             date = firstPaymentDate,
             onDateSelected = { firstPaymentDate = it },
+        )
+        ColorOption(
+            expenseColor = expenseColor,
+            onExpenseColorSelected = { expenseColor = it },
         )
         Row(
             modifier =
@@ -189,6 +197,7 @@ private fun EditRecurringExpenseInternal(
                         everyXRecurrenceState,
                         selectedRecurrence,
                         firstPaymentDate,
+                        expenseColor,
                         onUpdateExpense,
                         currentData,
                     )
@@ -217,6 +226,7 @@ private fun onConfirmClicked(
     everyXRecurrenceState: TextFieldValue,
     selectedRecurrence: Recurrence,
     firstPayment: Long,
+    expenseColor: ExpenseColor,
     onUpdateExpense: (RecurringExpenseData) -> Unit,
     currentData: RecurringExpenseData?,
 ) {
@@ -247,6 +257,7 @@ private fun onConfirmClicked(
                 everyXRecurrence = everyXRecurrence.toIntOrNull() ?: 1,
                 recurrence = selectedRecurrence,
                 firstPayment = firstPayment,
+                color = expenseColor,
             ),
         )
     }
@@ -289,7 +300,7 @@ private fun isEveryXRecurrenceValid(everyXRecurrence: String): Boolean {
     return everyXRecurrence.isBlank() || everyXRecurrence.toIntOrNull() != null
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun EditRecurringExpensePreview() {
     ExpenseTrackerTheme {

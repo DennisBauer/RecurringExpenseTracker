@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,12 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.toCurrencyString
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -106,6 +108,7 @@ private fun UpcomingPayment(
 
     Card(
         modifier = modifier.clickable { onItemClicked() },
+        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -163,7 +166,7 @@ fun UpcomingPaymentsOverviewPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun UpcomingPaymentsOverviewPreview() {
     val dateFormat = DateFormat.getDateInstance()
@@ -195,6 +198,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                             price = 9.99f,
                             nextPaymentRemainingDays = nextPaymentDays1,
                             nextPaymentDate = nextPaymentDate1String,
+                            color = ExpenseColor.Dynamic,
                         ),
                         UpcomingPaymentData(
                             id = 1,
@@ -202,6 +206,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                             price = 5f,
                             nextPaymentRemainingDays = nextPaymentDays2,
                             nextPaymentDate = nextPaymentDate2String,
+                            color = ExpenseColor.Green,
                         ),
                         UpcomingPaymentData(
                             id = 2,
@@ -209,6 +214,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                             price = 7.95f,
                             nextPaymentRemainingDays = nextPaymentDays3,
                             nextPaymentDate = nextPaymentDate3String,
+                            color = ExpenseColor.Pink,
                         ),
                     ),
                 onItemClicked = {},
@@ -218,7 +224,7 @@ private fun UpcomingPaymentsOverviewPreview() {
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun UpcomingPaymentsOverviewPlaceholderPreview() {
     ExpenseTrackerTheme {
