@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="expense_predefined_red">#80ff6666</color>
+    <color name="expense_predefined_orange">#80ffb366</color>
+    <color name="expense_predefined_yellow">#80ffff66</color>
+    <color name="expense_predefined_green">#8066ff66</color>
+    <color name="expense_predefined_mint">#8066ffb3</color>
+    <color name="expense_predefined_turquoise">#8066ffff</color>
+    <color name="expense_predefined_cyan">#8066b2ff</color>
+    <color name="expense_predefined_blue">#807f66ff</color>
+    <color name="expense_predefined_purple">#80cc66ff</color>
+    <color name="expense_predefined_pink">#80ff66ff</color>
+    <color name="expense_predefined_maroon">#80ff66b3</color>
+</resources>

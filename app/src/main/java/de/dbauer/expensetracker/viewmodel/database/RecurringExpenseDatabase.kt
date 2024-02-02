@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [RecurringExpense::class], version = 3)
+@Database(entities = [RecurringExpense::class], version = 4)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
 
@@ -25,6 +25,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     )
                         .addMigrations(migration_1_2)
                         .addMigrations(migration_2_3)
+                        .addMigrations(migration_3_4)
                         .build()
                 instance = tmpInstance
                 tmpInstance
@@ -45,6 +46,13 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             object : Migration(2, 3) {
                 override fun migrate(db: SupportSQLiteDatabase) {
                     db.execSQL("ALTER TABLE recurring_expenses ADD COLUMN firstPayment INTEGER DEFAULT 0")
+                }
+            }
+
+        private val migration_3_4 =
+            object : Migration(3, 4) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("ALTER TABLE recurring_expenses ADD COLUMN color INTEGER DEFAULT 0")
                 }
             }
     }

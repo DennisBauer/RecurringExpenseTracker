@@ -10,6 +10,7 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.isSameDay
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
 import de.dbauer.expensetracker.viewmodel.database.RecurrenceDatabase
 import de.dbauer.expensetracker.viewmodel.database.RecurringExpense
@@ -61,6 +62,7 @@ class UpcomingPaymentsViewModel(
                         everyXRecurrence = it.everyXRecurrence!!,
                         recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
                         firstPayment = it.firstPayment!!,
+                        color = ExpenseColor.fromInt(it.color),
                     )
                 onItemClicked(recurringExpenseData)
             }
@@ -83,6 +85,7 @@ class UpcomingPaymentsViewModel(
                         price = it.price!!,
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
                         nextPaymentDate = nextPaymentDate,
+                        color = ExpenseColor.fromInt(it.color),
                     ),
                 )
             }

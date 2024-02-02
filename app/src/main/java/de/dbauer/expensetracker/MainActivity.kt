@@ -49,6 +49,7 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
 import de.dbauer.expensetracker.ui.SettingsScreen
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpense
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
@@ -349,6 +350,7 @@ private fun MainActivityContentPreview() {
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
                     0L,
+                    ExpenseColor.Dynamic,
                 ),
                 RecurringExpenseData(
                     id = 1,
@@ -359,6 +361,7 @@ private fun MainActivityContentPreview() {
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
                     1L,
+                    ExpenseColor.Red,
                 ),
                 RecurringExpenseData(
                     id = 2,
@@ -369,6 +372,7 @@ private fun MainActivityContentPreview() {
                     everyXRecurrence = 1,
                     recurrence = Recurrence.Monthly,
                     2L,
+                    ExpenseColor.Blue,
                 ),
             ),
         onRecurringExpenseAdded = {},
