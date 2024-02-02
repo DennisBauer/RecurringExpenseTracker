@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
-import de.dbauer.expensetracker.toFloatIgnoreSeparator
+import de.dbauer.expensetracker.toFloatLocaleAware
 import de.dbauer.expensetracker.toLocalString
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -252,8 +252,8 @@ private fun onConfirmClicked(
                 id = currentData?.id ?: 0,
                 name = name,
                 description = description,
-                price = price.toFloatIgnoreSeparator(),
-                monthlyPrice = price.toFloatIgnoreSeparator(),
+                price = price.toFloatLocaleAware() ?: 0f,
+                monthlyPrice = price.toFloatLocaleAware() ?: 0f,
                 everyXRecurrence = everyXRecurrence.toIntOrNull() ?: 1,
                 recurrence = selectedRecurrence,
                 firstPayment = firstPayment,
@@ -292,8 +292,7 @@ private fun isNameValid(name: String): Boolean {
 }
 
 private fun isPriceValid(price: String): Boolean {
-    val priceConverted = price.replace(",", ".")
-    return priceConverted.toFloatOrNull() != null
+    return price.toFloatLocaleAware() != null
 }
 
 private fun isEveryXRecurrenceValid(everyXRecurrence: String): Boolean {

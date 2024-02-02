@@ -17,9 +17,8 @@ fun Float.toLocalString(): String {
     }
 }
 
-fun String.toFloatIgnoreSeparator(): Float {
-    val converted = replace(",", ".")
-    return converted.toFloat()
+fun String.toFloatLocaleAware(): Float? {
+    return NumberFormat.getInstance().parse(this)?.toFloat()
 }
 
 fun ZipInputStream.forEachEntry(block: (entry: ZipEntry) -> Unit) {
