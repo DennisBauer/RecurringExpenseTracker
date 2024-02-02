@@ -161,7 +161,17 @@ fun MainActivityContent(
 
     var selectedRecurringExpense by rememberSaveable { mutableStateOf<RecurringExpenseData?>(null) }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val upcomingScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val topAppBarScrollBehavior by remember {
+        derivedStateOf {
+            when (backStackEntry.value?.destination?.route) {
+                BottomNavigation.Home.route -> homeScrollBehavior
+                BottomNavigation.Upcoming.route -> upcomingScrollBehavior
+                else -> homeScrollBehavior
+            }
+        }
+    }
 
     val bottomNavigationItems =
         listOf(
@@ -196,7 +206,7 @@ fun MainActivityContent(
                                 text = stringResource(id = titleRes),
                             )
                         },
-                        scrollBehavior = scrollBehavior,
+                        scrollBehavior = topAppBarScrollBehavior,
                     )
                 },
                 bottomBar = {
@@ -277,7 +287,7 @@ fun MainActivityContent(
                                     ),
                                 modifier =
                                     Modifier
-                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                        .nestedScroll(homeScrollBehavior.nestedScrollConnection),
                             )
                         }
                         composable(BottomNavigation.Upcoming.route) {
@@ -288,7 +298,7 @@ fun MainActivityContent(
                                 },
                                 modifier =
                                     Modifier
-                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                                        .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
                                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                             )
                         }
