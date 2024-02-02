@@ -47,6 +47,7 @@ enum class ExpenseColor(private val value: Int) {
         fun fromInt(value: Int?): ExpenseColor {
             return when (value) {
                 Dynamic.value -> Dynamic
+                Red.value -> Red
                 Orange.value -> Orange
                 Yellow.value -> Yellow
                 Green.value -> Green
