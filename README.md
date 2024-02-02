@@ -28,4 +28,6 @@ It's a simple app with the basic functionality. My idea is to add new features o
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="360"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png" width="360"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png" width="360"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png" width="360"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.png" width="360"/>
 </div>
