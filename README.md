@@ -34,3 +34,12 @@ It's a simple app with the basic functionality. My idea is to add new features o
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png" width="360"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.png" width="360"/>
 </div>
+
+## Contributing
+You have ideas on how to improve this app and want to making it even better?
+Feel free to contribute by submitting ideas, <a href="https://hosted.weblate.org/engage/recurringexpensetracker/">add missing translations</a> or even checkout the project and implement the changes yourself. You can build the app like any other normal Android project by using Android Studio.
+
+## Translations
+<a href="https://hosted.weblate.org/engage/recurringexpensetracker/">
+<img src="https://hosted.weblate.org/widget/recurringexpensetracker/recurringexpensetracker/287x66-white.png" alt="Translation status" />
+</a>
