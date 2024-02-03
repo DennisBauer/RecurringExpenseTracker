@@ -163,11 +163,13 @@ fun MainActivityContent(
 
     val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val upcomingScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val settingsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val topAppBarScrollBehavior by remember {
         derivedStateOf {
             when (backStackEntry.value?.destination?.route) {
                 BottomNavigation.Home.route -> homeScrollBehavior
                 BottomNavigation.Upcoming.route -> upcomingScrollBehavior
+                BottomNavigation.Settings.route -> settingsScrollBehavior
                 else -> homeScrollBehavior
             }
         }
@@ -316,6 +318,7 @@ fun MainActivityContent(
                                 onRestoreClicked = {
                                     importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                                 },
+                                modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
                             )
                         }
                     }
