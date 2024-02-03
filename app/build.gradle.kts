@@ -73,6 +73,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    lint {
+        disable += "MissingTranslation"
+    }
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
