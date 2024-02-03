@@ -18,6 +18,9 @@ It's a simple app with the basic functionality. My idea is to add new features o
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+     alt="Download from Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=de.dbauer.expensetracker)
 [<img src="assets/get-it-on-github.png"
      alt="Download from GitHub"
      height="80">](https://github.com/DennisBauer/RecurringExpenseTracker/releases/latest)
