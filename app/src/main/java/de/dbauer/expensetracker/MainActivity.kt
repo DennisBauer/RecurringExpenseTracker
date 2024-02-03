@@ -299,7 +299,13 @@ fun MainActivityContent(
                                 modifier =
                                     Modifier
                                         .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        bottom = 88.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
                             )
                         }
                         composable(BottomNavigation.Settings.route) {
