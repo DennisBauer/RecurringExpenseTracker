@@ -2,6 +2,7 @@ package de.dbauer.expensetracker
 
 import androidx.compose.ui.Modifier
 import java.text.NumberFormat
+import java.text.ParseException
 import java.util.Calendar
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -18,7 +19,11 @@ fun Float.toLocalString(): String {
 }
 
 fun String.toFloatLocaleAware(): Float? {
-    return NumberFormat.getInstance().parse(this)?.toFloat()
+    return try {
+        NumberFormat.getInstance().parse(this)?.toFloat()
+    } catch (e: ParseException) {
+        null
+    }
 }
 
 fun ZipInputStream.forEachEntry(block: (entry: ZipEntry) -> Unit) {
