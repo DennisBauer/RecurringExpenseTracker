@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="home_summary_weekly">साप्ताहिक</string>
+    <string name="home_summary_yearly">वार्षिक</string>
+    <string name="home_add_expense_fab_content_description">खर्चा जोड़ें</string>
+    <string name="edit_expense_button_delete">मिटायें</string>
+    <string name="edit_expense_button_update">खर्चा अद्यतन</string>
+    <string name="edit_expense_invalid_input">अमान्य इनपुट</string>
+    <string name="edit_expense_name">ख़र्च का नाम</string>
+    <string name="edit_expense_name_placeholder">उदाहरणार्थ नेटफ्लिक्स</string>
+    <string name="edit_expense_price">क़ीमत</string>
+    <string name="edit_expense_recurrence">आवृत्ति</string>
+    <string name="edit_expense_recurrence_day_short">दि</string>
+    <string name="edit_expense_recurrence_week">सप्ताह</string>
+    <string name="edit_expense_recurrence_week_short">स</string>
+    <string name="edit_expense_recurrence_month">महीने</string>
+    <string name="upcoming_title">आगामी भुगतान</string>
+    <string name="upcoming_time_remaining_today">आज</string>
+    <string name="upcoming_time_remaining_tomorrow">कल</string>
+    <string name="upcoming_time_remaining_days">%1$d दिनों में</string>
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_backup_create">बैकअप बनाएं</string>
+    <string name="settings_backup_restore">बैकअप बहाल</string>
+    <string name="dialog_ok">ठीक</string>
+    <string name="bottom_nav_home">होम</string>
+    <string name="bottom_nav_upcoming">आगामी</string>
+    <string name="bottom_nav_settings">सेटिंग</string>
+    <string name="home_summary_monthly">मासिक</string>
+    <string name="edit_expense_recurrence_year">साल</string>
+    <string name="edit_expense_button_add">खर्चा जोड़ें</string>
+    <string name="edit_expense_description">विवरण (वैकल्पिक)</string>
+    <string name="edit_expense_description_placeholder">उदाहरणार्थ विशेष सदस्यता</string>
+    <string name="edit_expense_recurrence_day">दिन</string>
+    <string name="edit_expense_recurrence_month_short">म</string>
+    <string name="edit_expense_recurrence_year_short">सा</string>
+    <string name="edit_expense_first_payment">पहला भुगतान (वैकल्पिक)</string>
+    <string name="edit_expense_first_payment_placeholder">उदाहरणार्थ आज</string>
+    <string name="edit_expense_color">रंग</string>
+    <string name="settings_backup_created_toast">बैकअप सफल</string>
+    <string name="settings_backup_not_created_toast">बैकअप विफल रहा</string>
+    <string name="settings_backup_restored_toast">बैकअप बहाल हो गया</string>
+    <string name="settings_backup_not_restored_toast">बैकअप बहाल नहीं किया जा सका</string>
+    <string name="upcoming_placeholder_title">आगामी भुगतानों की समीक्षा के लिए खर्चों की पहली भुगतान तिथि निर्धारित करें</string>
+    <string name="settings_backup">बैकअप</string>
+</resources>
