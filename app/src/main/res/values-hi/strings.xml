@@ -4,7 +4,6 @@
     <string name="home_summary_yearly">वार्षिक</string>
     <string name="home_add_expense_fab_content_description">खर्चा जोड़ें</string>
     <string name="edit_expense_button_delete">मिटायें</string>
-    <string name="edit_expense_button_update">खर्चा अद्यतन</string>
     <string name="edit_expense_invalid_input">अमान्य इनपुट</string>
     <string name="edit_expense_name">ख़र्च का नाम</string>
     <string name="edit_expense_name_placeholder">उदाहरणार्थ नेटफ्लिक्स</string>

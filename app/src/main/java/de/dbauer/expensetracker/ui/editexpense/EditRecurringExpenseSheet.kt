@@ -70,7 +70,7 @@ fun EditRecurringExpense(
                     stringResource(R.string.edit_expense_button_add)
                 } else {
                     stringResource(
-                        R.string.edit_expense_button_update,
+                        R.string.edit_expense_button_save,
                     )
                 },
             currentData = currentData,
