@@ -41,4 +41,5 @@
     <string name="settings_backup_not_restored_toast">बैकअप बहाल नहीं किया जा सका</string>
     <string name="upcoming_placeholder_title">आगामी भुगतानों की समीक्षा के लिए खर्चों की पहली भुगतान तिथि निर्धारित करें</string>
     <string name="settings_backup">बैकअप</string>
+    <string name="edit_expense_button_save">सहेजें</string>
 </resources>
