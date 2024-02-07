@@ -72,7 +72,7 @@ fun RecurrenceOption(
                 onExpandedChange = { recurrenceExpanded = !recurrenceExpanded },
                 modifier =
                     Modifier
-                        .weight(3f)
+                        .weight(2f)
                         .padding(vertical = 8.dp),
             ) {
                 TextField(
