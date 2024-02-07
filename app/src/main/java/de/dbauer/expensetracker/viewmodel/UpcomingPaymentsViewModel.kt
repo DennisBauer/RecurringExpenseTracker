@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 class UpcomingPaymentsViewModel(
@@ -118,7 +119,7 @@ class UpcomingPaymentsViewModel(
 
     private fun getNextPaymentDays(nextPaymentInMilliseconds: Long): Int {
         val today =
-            Calendar.getInstance().apply {
+            Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
