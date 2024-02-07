@@ -32,6 +32,30 @@ fun ExpenseTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     isError: Boolean = false,
 ) {
+    val supportingText: (@Composable () -> Unit)? =
+        if (isError) {
+            {
+                Text(
+                    text = stringResource(R.string.edit_expense_invalid_input),
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        } else {
+            null
+        }
+    val trailingIcon: (@Composable () -> Unit)? =
+        if (isError) {
+            {
+                Icon(
+                    imageVector = Icons.Rounded.Error,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        } else {
+            null
+        }
+
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -41,23 +65,8 @@ fun ExpenseTextField(
         singleLine = singleLine,
         isError = isError,
         maxLines = maxLines,
-        supportingText = {
-            if (isError) {
-                Text(
-                    text = stringResource(R.string.edit_expense_invalid_input),
-                    color = MaterialTheme.colorScheme.error,
-                )
-            }
-        },
-        trailingIcon = {
-            if (isError) {
-                Icon(
-                    imageVector = Icons.Rounded.Error,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.error,
-                )
-            }
-        },
+        supportingText = supportingText,
+        trailingIcon = trailingIcon,
         modifier = modifier,
     )
 }
