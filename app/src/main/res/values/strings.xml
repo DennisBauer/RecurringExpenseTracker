@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Recurring Expenses</string>
+    <string name="app_name" translatable="false">Expenses</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Home</string>
