@@ -5,8 +5,7 @@
     "config:recommended",
     ":disableDependencyDashboard",
     ":separatePatchReleases",
-    ":separateMultipleMajorReleases",
-    "schedule:weekends"
+    ":separateMultipleMajorReleases"
   ],
   "rebaseWhen": "auto",
   "customManagers": [
