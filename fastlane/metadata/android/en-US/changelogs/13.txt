@@ -1,0 +1,19 @@
+Changelog 0.5.2:
+* Fix next payment days calculation
+* Fix bug where BottomSheet was overlapping with navigation bar
+* Rename app in launcher to "Expenses"
+* Shorten text for "Update Expense" button
+* Make recurrence input field wider
+* Add app translation for Hindi
+
+Changelog 0.5.1:
+* Fix content padding on upcoming with fab
+* Fix nested scroll behavior for TopAppBar when switching to settings
+* Fix crash when entering empty price and clicking on add expense
+* Add app translation for French
+
+From 0.5.0:
+* Feature: Add option to define a color for an expense
+* Feature: Decrease app size in release significantly by enabling minify and resource shrinking
+* Fix: Price input verification taking locale specific number formatting into consideration
+* Fix: Nested scroll behavior for TopAppBar when switching between tabs
