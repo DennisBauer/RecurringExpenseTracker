@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ fun RecurringExpenseOverview(
     monthlyExpense: String,
     yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
+    selectedExpense: RecurringExpenseData?,
     onItemClicked: (RecurringExpenseData) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -59,6 +61,7 @@ fun RecurringExpenseOverview(
         items(items = recurringExpenseData) { recurringExpenseData ->
             RecurringExpense(
                 recurringExpenseData = recurringExpenseData,
+                selected = recurringExpenseData == selectedExpense,
                 onItemClicked = {
                     onItemClicked(recurringExpenseData)
                 },
@@ -124,12 +127,21 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
+    selected: Boolean,
     onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val cardBorderStroke =
+        if (selected) {
+            BorderStroke(width = 2.dp, MaterialTheme.colorScheme.onSurface)
+        } else {
+            null
+        }
+
     Card(
         modifier = modifier.clickable { onItemClicked() },
         colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
+        border = cardBorderStroke,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -236,6 +248,7 @@ private fun RecurringExpenseOverviewPreview() {
                             ExpenseColor.Dynamic,
                         ),
                     ),
+                selectedExpense = null,
                 onItemClicked = {},
             )
         }

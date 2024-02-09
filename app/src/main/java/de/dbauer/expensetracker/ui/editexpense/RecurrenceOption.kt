@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.Recurrence
@@ -31,8 +30,8 @@ import de.dbauer.expensetracker.data.Recurrence
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecurrenceOption(
-    everyXRecurrence: TextFieldValue,
-    onEveryXRecurrenceChanged: (TextFieldValue) -> Unit,
+    everyXRecurrence: String,
+    onEveryXRecurrenceChanged: (String) -> Unit,
     everyXRecurrenceInputError: Boolean,
     selectedRecurrence: Recurrence,
     onSelectRecurrence: (Recurrence) -> Unit,

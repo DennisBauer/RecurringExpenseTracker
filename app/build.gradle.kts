@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.material.icons.extended)
     implementation(libs.material3)
+    implementation(libs.material3.adaptive)
+    implementation(libs.material3.adaptive.navigation.suite)
     implementation(libs.navigation.compose)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

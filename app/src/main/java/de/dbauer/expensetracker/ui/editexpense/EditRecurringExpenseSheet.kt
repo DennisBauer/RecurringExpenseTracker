@@ -11,17 +11,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
@@ -42,38 +38,27 @@ import de.dbauer.expensetracker.toLocalString
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditRecurringExpense(
     onUpdateExpense: (RecurringExpenseData) -> Unit,
-    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     currentData: RecurringExpenseData? = null,
     onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
-    val sheetState: SheetState =
-        rememberModalBottomSheetState(
-            skipPartiallyExpanded = true,
-        )
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
+    EditRecurringExpenseInternal(
+        onUpdateExpense = onUpdateExpense,
+        confirmButtonString =
+            if (currentData == null) {
+                stringResource(R.string.edit_expense_button_add)
+            } else {
+                stringResource(
+                    R.string.edit_expense_button_save,
+                )
+            },
+        currentData = currentData,
+        onDeleteExpense = onDeleteExpense,
         modifier = modifier,
-    ) {
-        EditRecurringExpenseInternal(
-            onUpdateExpense = onUpdateExpense,
-            confirmButtonString =
-                if (currentData == null) {
-                    stringResource(R.string.edit_expense_button_add)
-                } else {
-                    stringResource(
-                        R.string.edit_expense_button_save,
-                    )
-                },
-            currentData = currentData,
-            onDeleteExpense = onDeleteExpense,
-        )
-    }
+    )
 }
 
 @Composable
@@ -84,22 +69,25 @@ private fun EditRecurringExpenseInternal(
     currentData: RecurringExpenseData? = null,
     onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
-    var nameState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.name ?: ""))
+    var id by rememberSaveable {
+        mutableIntStateOf(currentData?.id ?: Int.MIN_VALUE)
+    }
+    var nameState by rememberSaveable {
+        mutableStateOf(currentData?.name ?: "")
     }
     val nameInputError =
         rememberSaveable {
             mutableStateOf(false)
         }
-    var descriptionState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.description ?: ""))
+    var descriptionState by rememberSaveable {
+        mutableStateOf(currentData?.description ?: "")
     }
-    var priceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.price?.toLocalString() ?: ""))
+    var priceState by rememberSaveable {
+        mutableStateOf(currentData?.price?.toLocalString() ?: "")
     }
     val priceInputError = rememberSaveable { mutableStateOf(false) }
-    var everyXRecurrenceState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(currentData?.everyXRecurrence?.toString() ?: ""))
+    var everyXRecurrenceState by rememberSaveable {
+        mutableStateOf(currentData?.everyXRecurrence?.toString() ?: "")
     }
     val everyXRecurrenceInputError = rememberSaveable { mutableStateOf(false) }
     var selectedRecurrence by rememberSaveable {
@@ -112,13 +100,28 @@ private fun EditRecurringExpenseInternal(
         mutableStateOf(currentData?.color ?: ExpenseColor.Dynamic)
     }
 
+    currentData?.let {
+        if (id != it.id) {
+            id = it.id
+            nameState = it.name
+            nameInputError.value = false
+            descriptionState = it.description
+            priceState = it.price.toLocalString()
+            priceInputError.value = false
+            everyXRecurrenceState = it.everyXRecurrence.toString()
+            everyXRecurrenceInputError.value = false
+            selectedRecurrence = it.recurrence
+            firstPaymentDate = it.firstPayment
+            expenseColor = it.color
+        }
+    }
+
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
 
     Column(
         modifier =
             modifier
-                .padding(horizontal = 16.dp)
                 .verticalScroll(scrollState),
     ) {
         NameOption(
@@ -217,10 +220,10 @@ private fun onConfirmClicked(
     nameInputError: MutableState<Boolean>,
     priceInputError: MutableState<Boolean>,
     everyXRecurrenceInputError: MutableState<Boolean>,
-    nameState: TextFieldValue,
-    descriptionState: TextFieldValue,
-    priceState: TextFieldValue,
-    everyXRecurrenceState: TextFieldValue,
+    name: String,
+    description: String,
+    price: String,
+    everyXRecurrence: String,
     selectedRecurrence: Recurrence,
     firstPayment: Long,
     expenseColor: ExpenseColor,
@@ -231,10 +234,6 @@ private fun onConfirmClicked(
     priceInputError.value = false
     everyXRecurrenceInputError.value = false
 
-    val name = nameState.text
-    val description = descriptionState.text
-    val price = priceState.text
-    val everyXRecurrence = everyXRecurrenceState.text
     if (verifyUserInput(
             name = name,
             onNameInputError = { nameInputError.value = true },

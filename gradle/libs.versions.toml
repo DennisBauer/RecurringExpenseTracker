@@ -15,6 +15,8 @@ ktlint-compose = "0.3.11"
 ktlint-plugin = "12.1.0"
 ktlint-version = "1.1.1"
 lifecycle-runtime-ktx = "2.7.0"
+material3-adaptive = "1.0.0-alpha06"
+material3-adaptive-navigation-suite = "1.0.0-alpha03"
 navigation-compose = "2.7.7"
 room = "2.6.1"
 
@@ -31,6 +33,8 @@ ktlint-compose = { group = "io.nlopez.compose.rules", name = "ktlint", version.r
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
+material3-adaptive = { group = "androidx.compose.material3", name = "material3-adaptive", version.ref = "material3-adaptive" }
+material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "material3-adaptive-navigation-suite" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

@@ -10,14 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 
 @Composable
 fun NameOption(
-    name: TextFieldValue,
-    onNameChanged: (TextFieldValue) -> Unit,
+    name: String,
+    onNameChanged: (String) -> Unit,
     nameInputError: Boolean,
     onNext: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier,

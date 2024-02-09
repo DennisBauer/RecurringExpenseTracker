@@ -13,15 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.toLocalString
 
 @Composable
 fun PriceOption(
-    price: TextFieldValue,
-    onPriceChanged: (TextFieldValue) -> Unit,
+    price: String,
+    onPriceChanged: (String) -> Unit,
     priceInputError: Boolean,
     onNext: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier,
