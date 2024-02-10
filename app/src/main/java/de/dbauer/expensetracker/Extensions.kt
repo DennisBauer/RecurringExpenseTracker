@@ -47,6 +47,22 @@ fun Calendar.isSameDay(other: Calendar): Boolean {
         this.get(Calendar.DAY_OF_MONTH) == other.get(Calendar.DAY_OF_MONTH)
 }
 
+fun Calendar.isInDaysAfter(other: Calendar): Boolean {
+    if (this.get(Calendar.YEAR) > other.get(Calendar.YEAR)) {
+        return true
+    } else if (this.get(Calendar.YEAR) == other.get(Calendar.YEAR) &&
+        this.get(Calendar.MONTH) > other.get(Calendar.MONTH)
+    ) {
+        return true
+    } else if (this.get(Calendar.YEAR) == other.get(Calendar.YEAR) &&
+        this.get(Calendar.MONTH) == other.get(Calendar.MONTH) &&
+        this.get(Calendar.DAY_OF_MONTH) > other.get(Calendar.DAY_OF_MONTH)
+    ) {
+        return true
+    }
+    return false
+}
+
 fun Modifier.conditional(
     condition: Boolean,
     modifier: Modifier.() -> Modifier,

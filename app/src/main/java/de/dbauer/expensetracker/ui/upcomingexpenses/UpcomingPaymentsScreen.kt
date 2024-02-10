@@ -30,13 +30,13 @@ import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
+import de.dbauer.expensetracker.helper.UtcDateFormat
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import java.text.DateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -169,7 +169,7 @@ fun UpcomingPaymentsOverviewPlaceholder(modifier: Modifier = Modifier) {
 @PreviewLightDark
 @Composable
 private fun UpcomingPaymentsOverviewPreview() {
-    val dateFormat = DateFormat.getDateInstance()
+    val dateFormat = UtcDateFormat.getDateInstance()
 
     val nextPaymentDays1 = 0
     val nextPaymentDate1String =

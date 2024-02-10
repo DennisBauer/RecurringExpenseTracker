@@ -29,8 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
-import java.text.DateFormat
+import de.dbauer.expensetracker.helper.UtcDateFormat
 import java.util.Date
+import java.util.TimeZone
 
 private const val INVALID_DATE = 0L
 
@@ -46,7 +47,7 @@ fun FirstPaymentOption(
 
     val formattedDate =
         if (date != INVALID_DATE) {
-            DateFormat.getDateInstance().format(Date(date))
+            UtcDateFormat.getDateInstance().format(Date(date))
         } else {
             stringResource(id = R.string.edit_expense_first_payment_placeholder)
         }
@@ -77,7 +78,7 @@ fun FirstPaymentOption(
             if (date != INVALID_DATE) {
                 IconButton(onClick = {
                     onDateSelected(INVALID_DATE)
-                    datePickerState.selectedDateMillis = System.currentTimeMillis()
+                    datePickerState.selectedDateMillis = INVALID_DATE.orNowIfInvalid()
                 }) {
                     Icon(imageVector = Icons.Rounded.Cancel, contentDescription = null)
                 }
@@ -113,5 +114,5 @@ fun FirstPaymentOption(
 }
 
 private fun Long.orNowIfInvalid(): Long {
-    return if (this != INVALID_DATE) this else System.currentTimeMillis()
+    return if (this != INVALID_DATE) this else System.currentTimeMillis() + TimeZone.getDefault().rawOffset
 }
