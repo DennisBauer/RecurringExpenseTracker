@@ -9,6 +9,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.UpcomingPaymentData
+import de.dbauer.expensetracker.helper.UtcDateFormat
+import de.dbauer.expensetracker.isInDaysAfter
 import de.dbauer.expensetracker.isSameDay
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.viewmodel.database.ExpenseRepository
@@ -18,7 +20,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
@@ -77,7 +78,7 @@ class UpcomingPaymentsViewModel(
             val nextPaymentInMilliseconds =
                 getNextPaymentInMilliseconds(firstPayment, it.everyXRecurrence!!, it.recurrence!!)
             val nextPaymentRemainingDays = getNextPaymentDays(nextPaymentInMilliseconds)
-            val nextPaymentDate = DateFormat.getDateInstance().format(Date(nextPaymentInMilliseconds))
+            val nextPaymentDate = UtcDateFormat.getDateInstance().format(Date(nextPaymentInMilliseconds))
             if (firstPayment > 0L) {
                 _upcomingPaymentsData.add(
                     UpcomingPaymentData(
@@ -100,10 +101,10 @@ class UpcomingPaymentsViewModel(
         recurrence: Int,
     ): Long {
         val today = Calendar.getInstance()
-        val nextPayment = Calendar.getInstance()
+        val nextPayment = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         nextPayment.timeInMillis = firstPayment
 
-        while (today > nextPayment && !today.isSameDay(nextPayment)) {
+        while (today.isInDaysAfter(nextPayment) && !today.isSameDay(nextPayment)) {
             val field =
                 when (recurrence) {
                     RecurrenceDatabase.Daily.value -> Calendar.DAY_OF_MONTH
@@ -118,13 +119,18 @@ class UpcomingPaymentsViewModel(
     }
 
     private fun getNextPaymentDays(nextPaymentInMilliseconds: Long): Int {
-        val today =
+        val todayInUTC =
             Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                val now = Calendar.getInstance()
+                set(Calendar.YEAR, now.get(Calendar.YEAR))
+                set(Calendar.MONTH, now.get(Calendar.MONTH))
+                set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH))
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
             }
-        val difference = nextPaymentInMilliseconds - today.timeInMillis
+        val difference = nextPaymentInMilliseconds - todayInUTC.timeInMillis
         return TimeUnit.MILLISECONDS.toDays(difference).toInt()
     }
 
