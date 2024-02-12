@@ -1,0 +1,2 @@
+Changelog 0.5.3:
+* Fix next payment calculation for all time zones
