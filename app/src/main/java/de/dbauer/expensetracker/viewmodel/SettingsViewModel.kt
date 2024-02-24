@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.dbauer.expensetracker.model.DatabaseBackupRestore
+import de.dbauer.expensetracker.viewmodel.database.UserPreferencesRepository
 import java.io.File
+import java.util.Locale
 
 class SettingsViewModel(
     private val databasePath: String,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private val databaseBackupRestore = DatabaseBackupRestore()
 
@@ -29,12 +32,17 @@ class SettingsViewModel(
         return databaseBackupRestore.importDatabaseFile(srcZipUri, targetPath, applicationContext)
     }
 
+    suspend fun changeGlobalCurrency(locale: Locale) {
+        userPreferencesRepository.saveCurrency(locale)
+    }
+
     companion object {
         fun create(databasePath: String): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
                     SettingsViewModel(
                         databasePath = databasePath,
+                        userPreferencesRepository = userPreferencesRepository
                     )
                 }
             }

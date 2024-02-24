@@ -3,6 +3,7 @@ package de.dbauer.expensetracker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,6 +50,7 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
 import de.dbauer.expensetracker.ui.SettingsScreen
+import de.dbauer.expensetracker.ui.changecurrency.CurrencyPicker
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpense
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -59,6 +61,7 @@ import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     private val recurringExpenseViewModel: RecurringExpenseViewModel by viewModels {
@@ -68,7 +71,10 @@ class MainActivity : ComponentActivity() {
         UpcomingPaymentsViewModel.create((application as ExpenseTrackerApplication).repository)
     }
     private val settingsViewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.create(getDatabasePath(Constants.DATABASE_NAME).path)
+        SettingsViewModel.create(
+            getDatabasePath(Constants.DATABASE_NAME).path,
+            (application as ExpenseTrackerApplication).userPreferencesRepository,
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,6 +113,12 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this@MainActivity, toastStringRes, Toast.LENGTH_LONG).show()
                     }
                 },
+                onChangeGlobalCurrency = { locale ->
+                    lifecycleScope.launch {
+                        settingsViewModel.changeGlobalCurrency(locale)
+                        Log.d("CURRENCY", "successfully written currency $locale")
+                    }
+                },
                 onSelectImportFile = {
                     lifecycleScope.launch {
                         val backupRestored = settingsViewModel.restoreDatabase(it, applicationContext)
@@ -140,6 +152,7 @@ fun MainActivityContent(
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
     onSelectBackupPath: (backupPath: Uri) -> Unit,
     onSelectImportFile: (importPath: Uri) -> Unit,
+    onChangeGlobalCurrency: (currency: Locale) -> Unit,
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -160,6 +173,9 @@ fun MainActivityContent(
     var addRecurringExpenseVisible by rememberSaveable { mutableStateOf(false) }
 
     var selectedRecurringExpense by rememberSaveable { mutableStateOf<RecurringExpenseData?>(null) }
+
+    var selectGlobalCurrencyVisible by rememberSaveable { mutableStateOf(false) }
+    var selectedCurrencyLocale by rememberSaveable { mutableStateOf<Locale?>(null) }
 
     val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val upcomingScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -318,6 +334,9 @@ fun MainActivityContent(
                                 onRestoreClicked = {
                                     importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                                 },
+                                onChangeGlobalCurrencyClicked = {
+                                    selectGlobalCurrencyVisible = true
+                                },
                                 modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
                             )
                         }
@@ -342,6 +361,31 @@ fun MainActivityContent(
                             onDeleteExpense = {
                                 onRecurringExpenseDeleted(it)
                                 selectedRecurringExpense = null
+                            },
+                        )
+                    }
+                    val locales = listOf(
+                        Locale.US,
+                        Locale.GERMANY,
+                        Locale.JAPAN,
+                        Locale("pol", "PL"),
+                        Locale.FRANCE,
+                        Locale.CHINA,
+                        Locale("hin", "IN"),
+                        Locale.ITALY,
+                        Locale.UK,
+                        Locale.CANADA,
+                    )
+                    if (selectGlobalCurrencyVisible) {
+                        CurrencyPicker(
+                            current = selectedCurrencyLocale ?: Locale.getDefault(),
+                            items = locales,
+                            onItemClicked = {
+                                selectedCurrencyLocale = it
+                                onChangeGlobalCurrency(it)
+                            },
+                            onDismissRequest = {
+                                selectGlobalCurrencyVisible = false
                             },
                         )
                     }
@@ -399,6 +443,7 @@ private fun MainActivityContentPreview() {
         onRecurringExpenseDeleted = {},
         onSelectBackupPath = { },
         onSelectImportFile = { },
+        onChangeGlobalCurrency = { },
         upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
     )
 }

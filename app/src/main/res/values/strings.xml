@@ -52,6 +52,8 @@
     <string name="settings_backup_not_created_toast">Backup failed</string>
     <string name="settings_backup_restored_toast">Backup restored</string>
     <string name="settings_backup_not_restored_toast">Backup could not be restored</string>
+    <string name="settings_currency">Currency</string>
+    <string name="settings_currency_set_global">Global currency</string>
 
     <!-- General -->
     <string name="dialog_ok">OK</string>

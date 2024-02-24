@@ -24,6 +24,7 @@ import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 fun SettingsScreen(
     onBackupClicked: () -> Unit,
     onRestoreClicked: () -> Unit,
+    onChangeGlobalCurrencyClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -42,6 +43,13 @@ fun SettingsScreen(
         SettingsClickableElement(
             name = R.string.settings_backup_restore,
             onClick = onRestoreClicked,
+        )
+        SettingsHeaderElement(
+            header = R.string.settings_currency,
+        )
+        SettingsClickableElement(
+            name = R.string.settings_currency_set_global,
+            onClick = onChangeGlobalCurrencyClicked,
         )
     }
 }
@@ -95,6 +103,7 @@ private fun SettingsScreenPreview() {
             SettingsScreen(
                 onBackupClicked = {},
                 onRestoreClicked = {},
+                onChangeGlobalCurrencyClicked = {},
             )
         }
     }
