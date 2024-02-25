@@ -76,7 +76,7 @@ fun RecurringExpenseOverview(
             contentPadding = contentPadding,
             modifier = modifier.fillMaxWidth(),
         ) {
-            item(span = StaggeredGridItemSpan.FullLine,) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 RecurringExpenseSummary(
                     weeklyExpense = weeklyExpense,
                     monthlyExpense = monthlyExpense,
@@ -171,7 +171,6 @@ private fun RecurringExpenseSummary(
     }
 }
 
-
 @Composable
 private fun GridRecurringExpense(
     recurringExpenseData: RecurringExpenseData,
@@ -184,10 +183,10 @@ private fun GridRecurringExpense(
     ) {
         Column(
             modifier =
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
@@ -195,28 +194,31 @@ private fun GridRecurringExpense(
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally),
             )
             Text(
                 text = recurringExpenseData.monthlyPrice.toCurrencyString(),
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .align(Alignment.End),
+                modifier =
+                    Modifier
+                        .align(Alignment.End),
             )
             if (recurringExpenseData.recurrence != Recurrence.Monthly ||
                 recurringExpenseData.everyXRecurrence != 1
             ) {
                 Text(
                     text =
-                    "${recurringExpenseData.price.toCurrencyString()} / " +
-                        "${recurringExpenseData.everyXRecurrence} " +
-                        stringResource(id = recurringExpenseData.recurrence.shortStringRes),
+                        "${recurringExpenseData.price.toCurrencyString()} / " +
+                            "${recurringExpenseData.everyXRecurrence} " +
+                            stringResource(id = recurringExpenseData.recurrence.shortStringRes),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .align(Alignment.End),
+                    modifier =
+                        Modifier
+                            .align(Alignment.End),
                 )
             }
             Text(

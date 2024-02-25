@@ -212,14 +212,15 @@ fun MainActivityContent(
                                 text = stringResource(id = titleRes),
                             )
                         },
-
                         actions = {
-                            //only creates toggling button if navigation is at home
+                            // only creates toggling button if navigation is at home
                             if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
                                 IconButton(onClick = { isGridMode = !isGridMode }) {
                                     Icon(
-                                        imageVector = if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView ,
-                                        contentDescription = if (isGridMode) "Close Grid Mode" else "Open Grid Mode",
+                                        imageVector =
+                                            if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
+                                        contentDescription =
+                                            if (isGridMode) "Close Grid Mode" else "Open Grid Mode",
                                     )
                                 }
                             }
