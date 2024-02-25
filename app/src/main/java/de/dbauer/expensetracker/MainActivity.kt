@@ -306,6 +306,7 @@ fun MainActivityContent(
                                 modifier =
                                     Modifier
                                         .nestedScroll(homeScrollBehavior.nestedScrollConnection),
+                                isGridMode = isGridMode,
                             )
                         }
                         composable(BottomNavigation.Upcoming.route) {

@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -42,13 +44,16 @@ fun RecurringExpenseOverview(
     onItemClicked: (RecurringExpenseData) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    isGridMode: Boolean,
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(if (isGridMode) 2 else 1),
+        verticalItemSpacing = 8.dp,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = contentPadding,
         modifier = modifier.fillMaxWidth(),
     ) {
-        item {
+        item(span = StaggeredGridItemSpan.FullLine,) {
             RecurringExpenseSummary(
                 weeklyExpense = weeklyExpense,
                 monthlyExpense = monthlyExpense,
@@ -56,13 +61,25 @@ fun RecurringExpenseOverview(
                 modifier = Modifier.padding(bottom = 8.dp),
             )
         }
-        items(items = recurringExpenseData) { recurringExpenseData ->
-            RecurringExpense(
-                recurringExpenseData = recurringExpenseData,
-                onItemClicked = {
-                    onItemClicked(recurringExpenseData)
-                },
-            )
+
+        if (isGridMode) {
+            items(items = recurringExpenseData) { recurringExpenseData ->
+                GridRecurringExpense(
+                    recurringExpenseData = recurringExpenseData,
+                    onItemClicked = {
+                        onItemClicked(recurringExpenseData)
+                    },
+                )
+            }
+        }else {
+            items(items = recurringExpenseData) { recurringExpenseData ->
+                RecurringExpense(
+                    recurringExpenseData = recurringExpenseData,
+                    onItemClicked = {
+                        onItemClicked(recurringExpenseData)
+                    },
+                )
+            }
         }
     }
 }
@@ -117,6 +134,62 @@ private fun RecurringExpenseSummary(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+private fun GridRecurringExpense(
+    recurringExpenseData: RecurringExpenseData,
+    onItemClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.clickable { onItemClicked() },
+        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
+    ) {
+        Column(
+            modifier =
+            Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = recurringExpenseData.name,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
+            )
+            Text(
+                text = recurringExpenseData.monthlyPrice.toCurrencyString(),
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .align(Alignment.End),
+            )
+            if (recurringExpenseData.recurrence != Recurrence.Monthly ||
+                recurringExpenseData.everyXRecurrence != 1
+            ) {
+                Text(
+                    text =
+                    "${recurringExpenseData.price.toCurrencyString()} / " +
+                        "${recurringExpenseData.everyXRecurrence} " +
+                        stringResource(id = recurringExpenseData.recurrence.shortStringRes),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .align(Alignment.End),
+                )
+            }
+            Text(
+                text = recurringExpenseData.description,
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }
@@ -237,6 +310,7 @@ private fun RecurringExpenseOverviewPreview() {
                         ),
                     ),
                 onItemClicked = {},
+                isGridMode = false,
             )
         }
     }
