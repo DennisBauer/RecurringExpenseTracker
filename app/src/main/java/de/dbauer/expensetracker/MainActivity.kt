@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.TableRows
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -200,6 +203,7 @@ fun MainActivityContent(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
+            var isGridMode by remember { mutableStateOf(false) }
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -207,6 +211,18 @@ fun MainActivityContent(
                             Text(
                                 text = stringResource(id = titleRes),
                             )
+                        },
+
+                        actions = {
+                            //only creates toggling button if navigation is at home
+                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
+                                IconButton(onClick = { isGridMode = !isGridMode }) {
+                                    Icon(
+                                        imageVector = if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView ,
+                                        contentDescription = if (isGridMode) "Close Grid Mode" else "Open Grid Mode",
+                                    )
+                                }
+                            }
                         },
                         scrollBehavior = topAppBarScrollBehavior,
                     )
