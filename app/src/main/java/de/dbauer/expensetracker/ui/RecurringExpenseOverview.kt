@@ -67,7 +67,7 @@ fun RecurringExpenseOverview(
                 sizeTransform = null,
             )
         },
-        label = "Animates between row mode and grid mode",
+        label = stringResource(R.string.recurring_expense_overview_toggle_anim_label),
     ) { targetValue ->
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(if (targetValue) 2 else 1),

@@ -220,7 +220,15 @@ fun MainActivityContent(
                                         imageVector =
                                             if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
                                         contentDescription =
-                                            if (isGridMode) "Close Grid Mode" else "Open Grid Mode",
+                                            if (isGridMode) {
+                                                stringResource(
+                                                    R.string.top_app_bar_icon_button_grid_close_content_desc,
+                                                )
+                                            } else {
+                                                stringResource(
+                                                    R.string.top_app_bar_icon_button_grid_open_content_desc,
+                                                )
+                                            },
                                     )
                                 }
                             }
