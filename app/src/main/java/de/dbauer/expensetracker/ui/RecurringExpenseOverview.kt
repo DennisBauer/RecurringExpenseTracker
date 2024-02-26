@@ -224,10 +224,12 @@ private fun GridRecurringExpense(
                             .align(Alignment.End),
                 )
             }
-            Text(
-                text = recurringExpenseData.description,
-                style = MaterialTheme.typography.bodySmall,
-            )
+            if (recurringExpenseData.description.isNotBlank()) {
+                Text(
+                    text = recurringExpenseData.description,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
         }
     }
 }
