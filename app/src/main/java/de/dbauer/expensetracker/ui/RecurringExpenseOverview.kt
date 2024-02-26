@@ -70,7 +70,12 @@ fun RecurringExpenseOverview(
         label = stringResource(R.string.recurring_expense_overview_toggle_anim_label),
     ) { targetValue ->
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(if (targetValue) 2 else 1),
+            columns =
+                if (targetValue) {
+                    StaggeredGridCells.Adaptive(130.dp)
+                } else {
+                    StaggeredGridCells.Fixed(1)
+                },
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = contentPadding,
