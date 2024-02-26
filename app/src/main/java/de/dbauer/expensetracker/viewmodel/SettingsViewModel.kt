@@ -37,12 +37,16 @@ class SettingsViewModel(
     }
 
     companion object {
-        fun create(databasePath: String): ViewModelProvider.Factory {
+
+        fun create(
+            databasePath: String,
+            userPreferencesRepository: UserPreferencesRepository,
+        ): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
                     SettingsViewModel(
                         databasePath = databasePath,
-                        userPreferencesRepository = userPreferencesRepository
+                        userPreferencesRepository = userPreferencesRepository,
                     )
                 }
             }
