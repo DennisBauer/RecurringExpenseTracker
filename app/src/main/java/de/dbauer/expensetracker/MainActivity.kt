@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +40,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastDistinctBy
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -50,7 +52,6 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.ui.RecurringExpenseOverview
 import de.dbauer.expensetracker.ui.SettingsScreen
-import de.dbauer.expensetracker.ui.changecurrency.CurrencyPicker
 import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpense
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -61,6 +62,7 @@ import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -83,6 +85,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val globalCurrencyLocale by settingsViewModel.getGlobalCurrency().collectAsState()
             MainActivityContent(
                 weeklyExpense = recurringExpenseViewModel.weeklyExpense,
                 monthlyExpense = recurringExpenseViewModel.monthlyExpense,
@@ -113,6 +116,7 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this@MainActivity, toastStringRes, Toast.LENGTH_LONG).show()
                     }
                 },
+                globalCurrencyLocale = globalCurrencyLocale,
                 onChangeGlobalCurrency = { locale ->
                     lifecycleScope.launch {
                         settingsViewModel.changeGlobalCurrency(locale)
@@ -139,6 +143,29 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+fun getAllLocales() = listOf(
+    Locale.US,
+    Locale.GERMANY,
+    Locale.JAPAN,
+    Locale("pol", "PL"),
+    Locale.CHINA,
+    Locale("hin", "IN"),
+    Locale.ITALY,
+    Locale.UK,
+    Locale.CANADA,
+)
+    .plus(Locale.getAvailableLocales())
+    .filter { locale ->
+        val currency = NumberFormat.getCurrencyInstance(locale).currency
+        currency != null && currency.currencyCode != "XXX" && locale.displayCountry.isNotBlank()
+    }
+    .fastDistinctBy { locale ->
+        NumberFormat
+            .getCurrencyInstance(locale)
+            .format(123_456.78F)
+    }
+    .toList()
+
 @Suppress("ktlint:compose:vm-forwarding-check")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -152,6 +179,7 @@ fun MainActivityContent(
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
     onSelectBackupPath: (backupPath: Uri) -> Unit,
     onSelectImportFile: (importPath: Uri) -> Unit,
+    globalCurrencyLocale: Locale,
     onChangeGlobalCurrency: (currency: Locale) -> Unit,
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     modifier: Modifier = Modifier,
@@ -173,9 +201,6 @@ fun MainActivityContent(
     var addRecurringExpenseVisible by rememberSaveable { mutableStateOf(false) }
 
     var selectedRecurringExpense by rememberSaveable { mutableStateOf<RecurringExpenseData?>(null) }
-
-    var selectGlobalCurrencyVisible by rememberSaveable { mutableStateOf(false) }
-    var selectedCurrencyLocale by rememberSaveable { mutableStateOf<Locale?>(null) }
 
     val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val upcomingScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -334,9 +359,9 @@ fun MainActivityContent(
                                 onRestoreClicked = {
                                     importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                                 },
-                                onChangeGlobalCurrencyClicked = {
-                                    selectGlobalCurrencyVisible = true
-                                },
+                                globalCurrencyLocale = globalCurrencyLocale,
+                                onChangeGlobalCurrencyClicked = onChangeGlobalCurrency,
+                                allLocales = remember { getAllLocales() },
                                 modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
                             )
                         }
@@ -361,31 +386,6 @@ fun MainActivityContent(
                             onDeleteExpense = {
                                 onRecurringExpenseDeleted(it)
                                 selectedRecurringExpense = null
-                            },
-                        )
-                    }
-                    val locales = listOf(
-                        Locale.US,
-                        Locale.GERMANY,
-                        Locale.JAPAN,
-                        Locale("pol", "PL"),
-                        Locale.FRANCE,
-                        Locale.CHINA,
-                        Locale("hin", "IN"),
-                        Locale.ITALY,
-                        Locale.UK,
-                        Locale.CANADA,
-                    )
-                    if (selectGlobalCurrencyVisible) {
-                        CurrencyPicker(
-                            current = selectedCurrencyLocale ?: Locale.getDefault(),
-                            items = locales,
-                            onItemClicked = {
-                                selectedCurrencyLocale = it
-                                onChangeGlobalCurrency(it)
-                            },
-                            onDismissRequest = {
-                                selectGlobalCurrencyVisible = false
                             },
                         )
                     }
@@ -443,6 +443,7 @@ private fun MainActivityContentPreview() {
         onRecurringExpenseDeleted = {},
         onSelectBackupPath = { },
         onSelectImportFile = { },
+        globalCurrencyLocale = Locale.getDefault(),
         onChangeGlobalCurrency = { },
         upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
     )

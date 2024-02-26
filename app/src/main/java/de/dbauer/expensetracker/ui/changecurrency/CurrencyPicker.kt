@@ -22,13 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import java.text.NumberFormat
+import java.util.Currency
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyPicker(
     current: Locale,
-    items: List<Locale>, onItemClicked: (Locale) -> Unit, onDismissRequest: () -> Unit,
+    items: List<Locale>,
+    onItemClicked: (Locale) -> Unit,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var query by remember { mutableStateOf("") }
@@ -45,20 +48,21 @@ fun CurrencyPicker(
             .padding(vertical = 16.dp),
     ) {
         Text(
-            text = "Selected currency is: ${current.displayName}",
+            text = "Selected currency is: $current",
             modifier = Modifier.fillMaxWidth(),
         )
 
         TextField(value = query, onValueChange = { query = it })
         LazyColumn {
             for (locale in items) {
-                val currencyCode = NumberFormat.getCurrencyInstance(locale).currency?.currencyCode ?: ""
+                val currency =
+                    NumberFormat.getCurrencyInstance(locale).currency!! // nulls already filtered out
                 if (
-                    currencyCode.contains(query, ignoreCase = true) ||
+                    currency.currencyCode.contains(query, ignoreCase = true) ||
                     locale.displayName.contains(query, ignoreCase = true)
                 ) {
                     item {
-                        CurrencyItem(locale, testNumber, onItemClicked)
+                        CurrencyItem(locale, currency, testNumber, onItemClicked)
                     }
                 }
             }
@@ -70,6 +74,7 @@ fun CurrencyPicker(
 @Composable
 private fun CurrencyItem(
     locale: Locale,
+    currency: Currency,
     testNumber: Float,
     onItemClicked: (Locale) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,9 +86,7 @@ private fun CurrencyItem(
         onClick = { onItemClicked(locale) },
     ) {
         Row {
-            Text(text = currencyCode ?: "??")
-            Spacer(modifier = Modifier.padding(10.dp))
-            Text(text = locale.displayCountry)
+            Text(text = currency.currencyCode)
             Spacer(modifier = Modifier.padding(10.dp))
             Text(
                 text = NumberFormat

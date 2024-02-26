@@ -4,10 +4,14 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.dbauer.expensetracker.model.DatabaseBackupRestore
 import de.dbauer.expensetracker.viewmodel.database.UserPreferencesRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import java.io.File
 import java.util.Locale
 
@@ -34,6 +38,14 @@ class SettingsViewModel(
 
     suspend fun changeGlobalCurrency(locale: Locale) {
         userPreferencesRepository.saveCurrency(locale)
+    }
+
+    fun getGlobalCurrency(): StateFlow<Locale> {
+        return userPreferencesRepository.getCurrency().stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            Locale.getDefault(),
+        )
     }
 
     companion object {
