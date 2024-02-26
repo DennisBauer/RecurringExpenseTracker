@@ -85,17 +85,15 @@ fun RecurringExpenseOverview(
                 )
             }
 
-            if (targetValue) {
-                items(items = recurringExpenseData) { recurringExpenseData ->
+            items(items = recurringExpenseData) { recurringExpenseData ->
+                if (targetValue) {
                     GridRecurringExpense(
                         recurringExpenseData = recurringExpenseData,
                         onItemClicked = {
                             onItemClicked(recurringExpenseData)
                         },
                     )
-                }
-            } else {
-                items(items = recurringExpenseData) { recurringExpenseData ->
+                } else {
                     RecurringExpense(
                         recurringExpenseData = recurringExpenseData,
                         onItemClicked = {
