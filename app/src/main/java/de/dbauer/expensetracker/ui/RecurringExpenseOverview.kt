@@ -187,7 +187,7 @@ private fun GridRecurringExpense(
         Column(
             modifier =
                 Modifier
-                    .padding(16.dp)
+                    .padding(8.dp)
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(2.dp),
