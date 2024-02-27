@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -47,9 +48,9 @@ fun RecurringExpenseOverview(
     yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
     onItemClicked: (RecurringExpenseData) -> Unit,
+    isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    isGridMode: Boolean,
 ) {
     AnimatedContent(
         targetState = isGridMode,
@@ -72,6 +73,7 @@ fun RecurringExpenseOverview(
             columns = StaggeredGridCells.Fixed(if (targetValue) 2 else 1),
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = contentPadding,
             modifier = modifier.fillMaxWidth(),
         ) {
             item(span = StaggeredGridItemSpan.FullLine,) {
@@ -101,6 +103,15 @@ fun RecurringExpenseOverview(
                         },
                     )
                 }
+            }
+
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Spacer(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(88.dp),
+                )
             }
         }
     }

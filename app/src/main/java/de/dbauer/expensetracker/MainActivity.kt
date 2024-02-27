@@ -296,17 +296,17 @@ fun MainActivityContent(
                                 onItemClicked = {
                                     selectedRecurringExpense = it
                                 },
-                                contentPadding =
-                                    PaddingValues(
-                                        top = 8.dp,
-                                        bottom = 88.dp,
-                                        start = 16.dp,
-                                        end = 16.dp,
-                                    ),
+                                isGridMode = isGridMode,
                                 modifier =
                                     Modifier
                                         .nestedScroll(homeScrollBehavior.nestedScrollConnection),
-                                isGridMode = isGridMode,
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        bottom = 0.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
                             )
                         }
                         composable(BottomNavigation.Upcoming.route) {
