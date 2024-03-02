@@ -30,7 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.data.Recurrence
@@ -291,9 +293,15 @@ private fun RecurringExpense(
     }
 }
 
-@Preview()
+private class GridLayoutParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(false, true)
+}
+
+@PreviewLightDark
 @Composable
-private fun RecurringExpenseOverviewPreview() {
+private fun RecurringExpenseOverviewPreview(
+    @PreviewParameter(GridLayoutParameterProvider::class) isGridMode: Boolean,
+) {
     ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             RecurringExpenseOverview(
@@ -350,7 +358,7 @@ private fun RecurringExpenseOverviewPreview() {
                         ),
                     ),
                 onItemClicked = {},
-                isGridMode = false,
+                isGridMode = isGridMode,
             )
         }
     }
