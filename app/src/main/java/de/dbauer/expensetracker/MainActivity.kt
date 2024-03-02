@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.TableRows
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -200,6 +203,7 @@ fun MainActivityContent(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
+            var isGridMode by rememberSaveable { mutableStateOf(false) }
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -207,6 +211,35 @@ fun MainActivityContent(
                             Text(
                                 text = stringResource(id = titleRes),
                             )
+                        },
+                        actions = {
+                            // only creates toggling button if navigation is at home
+                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
+                                IconButton(onClick = {
+                                    isGridMode = !isGridMode
+                                    // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
+                                    // reset and scrolled back to the top. To make sure the scroll state matches
+                                    // that we need to reset it here. It make the TopAppBar use the surface
+                                    // color again. This is a workaround which can hopefully removed in the near
+                                    // future.
+                                    homeScrollBehavior.state.contentOffset = 0f
+                                }) {
+                                    Icon(
+                                        imageVector =
+                                            if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
+                                        contentDescription =
+                                            if (isGridMode) {
+                                                stringResource(
+                                                    R.string.top_app_bar_icon_button_grid_close_content_desc,
+                                                )
+                                            } else {
+                                                stringResource(
+                                                    R.string.top_app_bar_icon_button_grid_open_content_desc,
+                                                )
+                                            },
+                                    )
+                                }
+                            }
                         },
                         scrollBehavior = topAppBarScrollBehavior,
                     )
@@ -280,16 +313,17 @@ fun MainActivityContent(
                                 onItemClicked = {
                                     selectedRecurringExpense = it
                                 },
-                                contentPadding =
-                                    PaddingValues(
-                                        top = 8.dp,
-                                        bottom = 88.dp,
-                                        start = 16.dp,
-                                        end = 16.dp,
-                                    ),
+                                isGridMode = isGridMode,
                                 modifier =
                                     Modifier
                                         .nestedScroll(homeScrollBehavior.nestedScrollConnection),
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        bottom = 0.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
                             )
                         }
                         composable(BottomNavigation.Upcoming.route) {
