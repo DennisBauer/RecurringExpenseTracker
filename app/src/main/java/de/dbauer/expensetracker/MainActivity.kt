@@ -203,7 +203,7 @@ fun MainActivityContent(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            var isGridMode by remember { mutableStateOf(false) }
+            var isGridMode by rememberSaveable { mutableStateOf(false) }
             Scaffold(
                 topBar = {
                     TopAppBar(
