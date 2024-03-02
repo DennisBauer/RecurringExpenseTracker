@@ -215,7 +215,15 @@ fun MainActivityContent(
                         actions = {
                             // only creates toggling button if navigation is at home
                             if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
-                                IconButton(onClick = { isGridMode = !isGridMode }) {
+                                IconButton(onClick = {
+                                    isGridMode = !isGridMode
+                                    // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
+                                    // reset and scrolled back to the top. To make sure the scroll state matches
+                                    // that we need to reset it here. It make the TopAppBar use the surface
+                                    // color again. This is a workaround which can hopefully removed in the near
+                                    // future.
+                                    homeScrollBehavior.state.contentOffset = 0f
+                                }) {
                                     Icon(
                                         imageVector =
                                             if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
