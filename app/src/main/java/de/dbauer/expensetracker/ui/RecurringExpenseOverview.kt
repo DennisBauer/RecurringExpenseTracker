@@ -72,7 +72,7 @@ fun RecurringExpenseOverview(
         LazyVerticalStaggeredGrid(
             columns =
                 if (targetValue) {
-                    StaggeredGridCells.Adaptive(130.dp)
+                    StaggeredGridCells.Adaptive(160.dp)
                 } else {
                     StaggeredGridCells.Fixed(1)
                 },
