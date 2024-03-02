@@ -113,7 +113,7 @@ fun RecurringExpenseOverview(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(88.dp),
+                            .height(80.dp),
                 )
             }
         }
