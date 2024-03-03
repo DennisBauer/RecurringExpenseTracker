@@ -213,8 +213,10 @@ fun MainActivityContent(
                             )
                         },
                         actions = {
-                            // only creates toggling button if navigation is at home
-                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
+                            // only creates toggling button if navigation is at home or upcoming payments
+                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route ||
+                                backStackEntry.value?.destination?.route == BottomNavigation.Upcoming.route
+                            ) {
                                 IconButton(onClick = {
                                     isGridMode = !isGridMode
                                     // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
