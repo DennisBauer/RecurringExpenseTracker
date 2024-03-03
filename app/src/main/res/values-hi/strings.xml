@@ -42,4 +42,7 @@
     <string name="upcoming_placeholder_title">आगामी भुगतानों की समीक्षा के लिए खर्चों की पहली भुगतान तिथि निर्धारित करें</string>
     <string name="settings_backup">बैकअप</string>
     <string name="edit_expense_button_save">सहेजें</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">ग्रिड मोड बंद करें</string>
+    <string name="recurring_expense_overview_toggle_anim_label">पंक्ति मोड और ग्रिड मोड के बीच एनिमेट होता है</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">ग्रिड मोड खोलें</string>
 </resources>
