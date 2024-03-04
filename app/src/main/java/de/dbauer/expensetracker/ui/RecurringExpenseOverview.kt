@@ -27,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -54,16 +56,17 @@ fun RecurringExpenseOverview(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
+    val fadeDuration: Int = integerResource(id = R.integer.overview_list_grid_toggle_fade_anim_duration)
     AnimatedContent(
         targetState = isGridMode,
         transitionSpec = {
             ContentTransform(
                 fadeIn(
-                    animationSpec = tween(durationMillis = 700),
+                    animationSpec = tween(durationMillis = fadeDuration),
                     initialAlpha = 0.0f,
                 ),
                 fadeOut(
-                    animationSpec = tween(durationMillis = 700),
+                    animationSpec = tween(durationMillis = fadeDuration),
                     targetAlpha = 0.0f,
                 ),
                 sizeTransform = null,
@@ -74,12 +77,13 @@ fun RecurringExpenseOverview(
         LazyVerticalStaggeredGrid(
             columns =
                 if (targetValue) {
-                    StaggeredGridCells.Adaptive(160.dp)
+                    StaggeredGridCells.Adaptive(dimensionResource(id = R.dimen.overview_list_grid_cell_min_width))
                 } else {
                     StaggeredGridCells.Fixed(1)
                 },
-            verticalItemSpacing = 8.dp,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalItemSpacing = dimensionResource(id = R.dimen.overview_list_grid_vertical_item_spacing),
+            horizontalArrangement =
+                Arrangement.spacedBy(dimensionResource(id = R.dimen.overview_list_grid_horizontal_arrangement_space_by)),
             contentPadding = contentPadding,
             modifier = modifier.fillMaxWidth(),
         ) {
@@ -115,7 +119,7 @@ fun RecurringExpenseOverview(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(80.dp),
+                            .height(dimensionResource(id = R.dimen.overview_list_grid_spacer_height)),
                 )
             }
         }
