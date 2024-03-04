@@ -334,13 +334,14 @@ fun MainActivityContent(
                                 onItemClicked = {
                                     selectedRecurringExpense = it
                                 },
+                                isGridMode = isGridMode,
                                 modifier =
                                     Modifier
                                         .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
                                 contentPadding =
                                     PaddingValues(
                                         top = 8.dp,
-                                        bottom = 88.dp,
+                                        bottom = 0.dp,
                                         start = 16.dp,
                                         end = 16.dp,
                                     ),
