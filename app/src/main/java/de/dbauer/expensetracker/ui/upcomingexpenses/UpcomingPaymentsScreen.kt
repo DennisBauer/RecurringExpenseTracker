@@ -1,16 +1,25 @@
 package de.dbauer.expensetracker.ui.upcomingexpenses
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Card
@@ -22,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,6 +55,7 @@ import java.util.concurrent.TimeUnit
 fun UpcomingPaymentsScreen(
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     onItemClicked: (RecurringExpenseData) -> Unit,
+    isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -53,6 +65,7 @@ fun UpcomingPaymentsScreen(
             onItemClicked = {
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onItemClicked)
             },
+            isGridMode = isGridMode,
             modifier = modifier,
             contentPadding = contentPadding,
         )
@@ -70,20 +83,124 @@ fun UpcomingPaymentsScreen(
 private fun UpcomingPaymentsOverview(
     upcomingPaymentsData: ImmutableList<UpcomingPaymentData>,
     onItemClicked: (Int) -> Unit,
+    isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = contentPadding,
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        items(items = upcomingPaymentsData) { upcomingPaymentData ->
-            UpcomingPayment(
-                upcomingPaymentData = upcomingPaymentData,
-                onItemClicked = {
-                    onItemClicked(upcomingPaymentData.id)
+    val fadeDuration: Int = integerResource(id = R.integer.overview_list_grid_toggle_fade_anim_duration)
+    AnimatedContent(
+        targetState = isGridMode,
+        transitionSpec = {
+            ContentTransform(
+                fadeIn(
+                    animationSpec = tween(durationMillis = fadeDuration),
+                    initialAlpha = 0.0f,
+                ),
+                fadeOut(
+                    animationSpec = tween(durationMillis = fadeDuration),
+                    targetAlpha = 0.0f,
+                ),
+                sizeTransform = null,
+            )
+        },
+        label = stringResource(R.string.recurring_expense_overview_toggle_anim_label),
+    ) { targetValue ->
+        LazyVerticalStaggeredGrid(
+            columns =
+                if (targetValue) {
+                    StaggeredGridCells.Adaptive(dimensionResource(id = R.dimen.overview_list_grid_cell_min_width))
+                } else {
+                    StaggeredGridCells.Fixed(1)
                 },
+            verticalItemSpacing = dimensionResource(id = R.dimen.overview_list_grid_vertical_item_spacing),
+            horizontalArrangement =
+                Arrangement.spacedBy(dimensionResource(id = R.dimen.overview_list_grid_horizontal_arrangement_space_by)),
+            contentPadding = contentPadding,
+            modifier = modifier.fillMaxWidth(),
+        ) {
+            items(items = upcomingPaymentsData) { upcomingPaymentData ->
+                if (targetValue) {
+                    GridUpcomingPayment(
+                        upcomingPaymentData = upcomingPaymentData,
+                        onItemClicked = {
+                            onItemClicked(upcomingPaymentData.id)
+                        },
+                    )
+                } else {
+                    UpcomingPayment(
+                        upcomingPaymentData = upcomingPaymentData,
+                        onItemClicked = {
+                            onItemClicked(upcomingPaymentData.id)
+                        },
+                    )
+                }
+            }
+
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Spacer(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(dimensionResource(id = R.dimen.overview_list_grid_spacer_height)),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentData): String {
+    val inDaysString =
+        when (upcomingPaymentData.nextPaymentRemainingDays) {
+            0 -> stringResource(id = R.string.upcoming_time_remaining_today)
+            1 -> stringResource(id = R.string.upcoming_time_remaining_tomorrow)
+            else ->
+                stringResource(
+                    id = R.string.upcoming_time_remaining_days,
+                    upcomingPaymentData.nextPaymentRemainingDays,
+                )
+        }
+    return inDaysString
+}
+
+@Composable
+private fun GridUpcomingPayment(
+    upcomingPaymentData: UpcomingPaymentData,
+    onItemClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
+    Card(
+        modifier = modifier.clickable { onItemClicked() },
+        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = inDaysString,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                text = upcomingPaymentData.price.toCurrencyString(),
+                style = MaterialTheme.typography.headlineSmall,
+            )
+            Text(
+                text = upcomingPaymentData.name,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = upcomingPaymentData.nextPaymentDate,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -95,17 +212,7 @@ private fun UpcomingPayment(
     onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val inDaysString =
-        when (upcomingPaymentData.nextPaymentRemainingDays) {
-            0 -> stringResource(id = R.string.upcoming_time_remaining_today)
-            1 -> stringResource(id = R.string.upcoming_time_remaining_tomorrow)
-            else ->
-                stringResource(
-                    id = R.string.upcoming_time_remaining_days,
-                    upcomingPaymentData.nextPaymentRemainingDays,
-                )
-        }
-
+    val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
         modifier = modifier.clickable { onItemClicked() },
         colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
@@ -219,6 +326,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                     ),
                 onItemClicked = {},
                 contentPadding = PaddingValues(8.dp),
+                isGridMode = false,
             )
         }
     }

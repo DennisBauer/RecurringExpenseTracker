@@ -38,9 +38,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -213,8 +213,10 @@ fun MainActivityContent(
                             )
                         },
                         actions = {
-                            // only creates toggling button if navigation is at home
-                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route) {
+                            // only creates toggling button if navigation is at home or upcoming payments
+                            if (backStackEntry.value?.destination?.route == BottomNavigation.Home.route ||
+                                backStackEntry.value?.destination?.route == BottomNavigation.Upcoming.route
+                            ) {
                                 IconButton(onClick = {
                                     isGridMode = !isGridMode
                                     // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
@@ -319,10 +321,10 @@ fun MainActivityContent(
                                         .nestedScroll(homeScrollBehavior.nestedScrollConnection),
                                 contentPadding =
                                     PaddingValues(
-                                        top = 8.dp,
-                                        bottom = 0.dp,
-                                        start = 16.dp,
-                                        end = 16.dp,
+                                        top = dimensionResource(id = R.dimen.overview_list_grid_padding_top),
+                                        bottom = dimensionResource(id = R.dimen.overview_list_grid_padding_bottom),
+                                        start = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
+                                        end = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
                                     ),
                             )
                         }
@@ -332,15 +334,16 @@ fun MainActivityContent(
                                 onItemClicked = {
                                     selectedRecurringExpense = it
                                 },
+                                isGridMode = isGridMode,
                                 modifier =
                                     Modifier
                                         .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
                                 contentPadding =
                                     PaddingValues(
-                                        top = 8.dp,
-                                        bottom = 88.dp,
-                                        start = 16.dp,
-                                        end = 16.dp,
+                                        top = dimensionResource(id = R.dimen.overview_list_grid_padding_top),
+                                        bottom = dimensionResource(id = R.dimen.overview_list_grid_padding_bottom),
+                                        start = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
+                                        end = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
                                     ),
                             )
                         }

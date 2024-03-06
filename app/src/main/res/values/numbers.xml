@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- List/Grid Animations -->
+    <integer name="overview_list_grid_toggle_fade_anim_duration">700</integer>
+
+</resources>
