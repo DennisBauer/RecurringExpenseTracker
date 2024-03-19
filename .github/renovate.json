@@ -34,6 +34,13 @@
         "io.mockk"
       ],
       "groupName": "mockk"
+    },
+    {
+      "matchPackagePatterns": [
+        "com.pinterest.ktlint",
+        "org.jlleitschuh.gradle.ktlint"
+      ],
+      "groupName": "ktlint"
     }
   ]
 }
