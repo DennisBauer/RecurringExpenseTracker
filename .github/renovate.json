@@ -23,18 +23,8 @@
   "packageRules": [
     {
       "matchPackagePatterns": [
-        "androidx.compose.compiler:compiler"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
-        "org.jetbrains.kotlin.*"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
+        "androidx.compose.compiler:compiler",
+        "org.jetbrains.kotlin.*",
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
@@ -44,6 +34,13 @@
         "io.mockk"
       ],
       "groupName": "mockk"
+    },
+    {
+      "matchPackagePatterns": [
+        "com.pinterest.ktlint",
+        "org.jlleitschuh.gradle.ktlint"
+      ],
+      "groupName": "ktlint"
     }
   ]
 }
