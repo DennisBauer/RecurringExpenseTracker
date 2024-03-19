@@ -23,18 +23,8 @@
   "packageRules": [
     {
       "matchPackagePatterns": [
-        "androidx.compose.compiler:compiler"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
-        "org.jetbrains.kotlin.*"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
+        "androidx.compose.compiler:compiler",
+        "org.jetbrains.kotlin.*",
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
