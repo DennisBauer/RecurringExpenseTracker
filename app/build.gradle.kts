@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.datastore.preferences)
 
     annotationProcessor(libs.room.compiler)
 
