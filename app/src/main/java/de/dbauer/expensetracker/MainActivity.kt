@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -59,6 +60,7 @@ import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
 import de.dbauer.expensetracker.viewmodel.RecurringExpenseViewModel
 import de.dbauer.expensetracker.viewmodel.SettingsViewModel
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
+import de.dbauer.expensetracker.viewmodel.database.UserPreferencesRepository
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -73,6 +75,9 @@ class MainActivity : ComponentActivity() {
     private val settingsViewModel: SettingsViewModel by viewModels {
         SettingsViewModel.create(getDatabasePath(Constants.DATABASE_NAME).path)
     }
+    private val userPreferencesRepository: UserPreferencesRepository by lazy {
+        (application as ExpenseTrackerApplication).userPreferencesRepository
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +85,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val isGridMode by userPreferencesRepository.getIsGridMode().collectAsState(initial = false)
+
             MainActivityContent(
                 weeklyExpense = recurringExpenseViewModel.weeklyExpense,
                 monthlyExpense = recurringExpenseViewModel.monthlyExpense,
@@ -125,6 +132,12 @@ class MainActivity : ComponentActivity() {
                     }
                 },
                 upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                isGridMode = isGridMode,
+                toggleGridMode = {
+                    lifecycleScope.launch {
+                        userPreferencesRepository.saveIsGridMode(!isGridMode)
+                    }
+                },
             )
         }
     }
@@ -138,6 +151,8 @@ fun MainActivityContent(
     monthlyExpense: String,
     yearlyExpense: String,
     recurringExpenseData: ImmutableList<RecurringExpenseData>,
+    isGridMode: Boolean,
+    toggleGridMode: () -> Unit,
     onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
     onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
     onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
@@ -203,7 +218,6 @@ fun MainActivityContent(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            var isGridMode by rememberSaveable { mutableStateOf(false) }
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -218,7 +232,7 @@ fun MainActivityContent(
                                 backStackEntry.value?.destination?.route == BottomNavigation.Upcoming.route
                             ) {
                                 IconButton(onClick = {
-                                    isGridMode = !isGridMode
+                                    toggleGridMode()
                                     // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
                                     // reset and scrolled back to the top. To make sure the scroll state matches
                                     // that we need to reset it here. It make the TopAppBar use the surface
@@ -388,9 +402,10 @@ fun MainActivityContent(
     }
 }
 
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 private fun MainActivityContentPreview() {
+    var isGridMode by remember { mutableStateOf(false) }
     MainActivityContent(
         weeklyExpense = "4,00 €",
         monthlyExpense = "16,00 €",
@@ -437,5 +452,7 @@ private fun MainActivityContentPreview() {
         onSelectBackupPath = { },
         onSelectImportFile = { },
         upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
+        isGridMode = isGridMode,
+        toggleGridMode = { isGridMode = !isGridMode },
     )
 }
