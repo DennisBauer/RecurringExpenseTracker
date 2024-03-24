@@ -6,6 +6,7 @@ appcompat = "1.6.1"
 compose-bom = "2024.03.00"
 compose-compiler = "1.5.11"
 core-ktx = "1.12.0"
+datastore-preferences = "1.0.0"
 espresso-core = "3.5.1"
 junit = "4.13.2"
 kotlin = "1.9.23"
@@ -20,6 +21,7 @@ room = "2.6.1"
 
 [libraries]
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
