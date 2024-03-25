@@ -59,5 +59,4 @@
 
     <!-- General -->
     <string name="dialog_ok">OK</string>
-    <string name="recurring_expense_overview_toggle_anim_label">Animates between row mode and grid mode</string>
 </resources>
