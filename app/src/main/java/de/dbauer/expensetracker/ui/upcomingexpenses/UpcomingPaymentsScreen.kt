@@ -103,7 +103,7 @@ private fun UpcomingPaymentsOverview(
                 sizeTransform = null,
             )
         },
-        label = stringResource(R.string.recurring_expense_overview_toggle_anim_label),
+        label = "Animates between row mode and grid mode",
     ) { targetValue ->
         LazyVerticalStaggeredGrid(
             columns =
