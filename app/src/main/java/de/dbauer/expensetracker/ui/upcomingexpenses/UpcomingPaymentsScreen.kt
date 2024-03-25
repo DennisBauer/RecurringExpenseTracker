@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Card
@@ -88,6 +89,10 @@ private fun UpcomingPaymentsOverview(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val fadeDuration: Int = integerResource(id = R.integer.overview_list_grid_toggle_fade_anim_duration)
+
+    val listState = rememberLazyStaggeredGridState()
+    val gridState = rememberLazyStaggeredGridState()
+
     AnimatedContent(
         targetState = isGridMode,
         transitionSpec = {
@@ -112,6 +117,7 @@ private fun UpcomingPaymentsOverview(
                 } else {
                     StaggeredGridCells.Fixed(1)
                 },
+            state = if (targetValue) gridState else listState,
             verticalItemSpacing = dimensionResource(id = R.dimen.overview_list_grid_vertical_item_spacing),
             horizontalArrangement =
                 Arrangement.spacedBy(
