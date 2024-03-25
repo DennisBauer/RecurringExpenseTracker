@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- TopAppBar -->
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Raster Modus öffnen</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Raster Modus schließen</string>
+
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Start</string>
     <string name="bottom_nav_upcoming">Bevorstehend</string>
