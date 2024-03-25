@@ -72,6 +72,10 @@ jobs:
     #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
 
     - run: |
+        echo "Verify Ktlint formatting"
+        ./gradlew ktlintCheck
+
+    - run: |
         echo "Run, Build Application"
         ./gradlew assembleDebug test lint
 
