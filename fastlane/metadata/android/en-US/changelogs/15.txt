@@ -1,0 +1,2 @@
+Changelog 0.6.0:
+* Feature: Grid mode as an additional option to see expenses
