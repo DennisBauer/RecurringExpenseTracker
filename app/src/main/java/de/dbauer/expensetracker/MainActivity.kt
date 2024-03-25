@@ -337,8 +337,14 @@ fun MainActivityContent(
                                     PaddingValues(
                                         top = dimensionResource(id = R.dimen.overview_list_grid_padding_top),
                                         bottom = dimensionResource(id = R.dimen.overview_list_grid_padding_bottom),
-                                        start = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
-                                        end = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
+                                        start =
+                                            dimensionResource(
+                                                id = R.dimen.overview_list_grid_padding_start_end,
+                                            ),
+                                        end =
+                                            dimensionResource(
+                                                id = R.dimen.overview_list_grid_padding_start_end,
+                                            ),
                                     ),
                             )
                         }
@@ -356,8 +362,14 @@ fun MainActivityContent(
                                     PaddingValues(
                                         top = dimensionResource(id = R.dimen.overview_list_grid_padding_top),
                                         bottom = dimensionResource(id = R.dimen.overview_list_grid_padding_bottom),
-                                        start = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
-                                        end = dimensionResource(id = R.dimen.overview_list_grid_padding_start_end),
+                                        start =
+                                            dimensionResource(
+                                                id = R.dimen.overview_list_grid_padding_start_end,
+                                            ),
+                                        end =
+                                            dimensionResource(
+                                                id = R.dimen.overview_list_grid_padding_start_end,
+                                            ),
                                     ),
                             )
                         }
