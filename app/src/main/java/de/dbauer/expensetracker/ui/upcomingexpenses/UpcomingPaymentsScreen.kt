@@ -114,7 +114,9 @@ private fun UpcomingPaymentsOverview(
                 },
             verticalItemSpacing = dimensionResource(id = R.dimen.overview_list_grid_vertical_item_spacing),
             horizontalArrangement =
-                Arrangement.spacedBy(dimensionResource(id = R.dimen.overview_list_grid_horizontal_arrangement_space_by)),
+                Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.overview_list_grid_horizontal_arrangement_space_by),
+                ),
             contentPadding = contentPadding,
             modifier = modifier.fillMaxWidth(),
         ) {

@@ -14,11 +14,12 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val IS_GRID_MODE = booleanPreferencesKey("IS_GRID_MODE")
     }
 
-    suspend fun saveIsGridMode(isGridMode: Boolean) = withContext(Dispatchers.IO) {
-        dataStore.edit {
-            it[Keys.IS_GRID_MODE] = isGridMode
+    suspend fun saveIsGridMode(isGridMode: Boolean) =
+        withContext(Dispatchers.IO) {
+            dataStore.edit {
+                it[Keys.IS_GRID_MODE] = isGridMode
+            }
         }
-    }
 
     fun getIsGridMode(): Flow<Boolean> = dataStore.data.map { it[Keys.IS_GRID_MODE] ?: false }
 }
