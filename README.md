@@ -11,10 +11,11 @@
 [![Github all releases](https://img.shields.io/github/downloads/DennisBauer/RecurringExpenseTracker/total.svg?style=for-the-badge)](https://github.com/DennisBauer/RecurringExpenseTracker/releases)
 
 As the name suggests, it focuses on reoccurring expenses such as rent, insurances, subscriptions etc.
-It's a simple app with the basic functionality. My idea is to add new features one by one and I'm happy for any contribution. Feel free to create feature requests or report bugs if you find some.
+It's a simple app with the basic functionality.
+My idea is to add new features one by one and I'm happy for any contribution.
+Feel free to create feature requests or report bugs if you find some.
 
 ## Download
-
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
@@ -32,7 +33,6 @@ It's a simple app with the basic functionality. My idea is to add new features o
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png" width="240"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png" width="240"/>
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png" width="240"/>
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.png" width="240"/>
 </div>
 
 ## Contributing
