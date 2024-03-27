@@ -98,6 +98,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.biometric)
 
     annotationProcessor(libs.room.compiler)
 
