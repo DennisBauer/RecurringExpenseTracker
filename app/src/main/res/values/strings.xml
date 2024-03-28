@@ -56,7 +56,14 @@
     <string name="settings_backup_not_created_toast">Backup failed</string>
     <string name="settings_backup_restored_toast">Backup restored</string>
     <string name="settings_backup_not_restored_toast">Backup could not be restored</string>
+    <string name="settings_title_security">Security</string>
+    <string name="settings_security_biometric_lock">Biometric lock</string>
+
+    <!-- BiometricPromptManager -->
+    <string name="biometric_prompt_manager_title">Unlock Expense Tracker</string>
+    <string name="biometric_prompt_manager_unlock">Unlock</string>
 
     <!-- General -->
     <string name="dialog_ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
