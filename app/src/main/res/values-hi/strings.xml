@@ -44,4 +44,9 @@
     <string name="edit_expense_button_save">सहेजें</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">ग्रिड मोड बंद करें</string>
     <string name="top_app_bar_icon_button_grid_open_content_desc">ग्रिड मोड खोलें</string>
+    <string name="settings_security_biometric_lock">बायोमेट्रिक लॉक</string>
+    <string name="biometric_prompt_manager_unlock">अनलॉक</string>
+    <string name="cancel">रद्द</string>
+    <string name="settings_title_security">सुरक्षा</string>
+    <string name="biometric_prompt_manager_title">व्यय ट्रैकर अनलॉक करें</string>
 </resources>
