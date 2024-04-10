@@ -1,6 +1,6 @@
 [versions]
 activity-compose = "1.8.2"
-agp = "8.3.1"
+agp = "8.3.2"
 androidx-test-ext-junit = "1.1.5"
 appcompat = "1.6.1"
 biometric = "1.1.0"
