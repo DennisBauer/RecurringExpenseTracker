@@ -1,0 +1,2 @@
+Changelog 0.7.0:
+* Feature: Biometric App Lock
