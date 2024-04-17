@@ -1,5 +1,5 @@
 [versions]
-activity-compose = "1.8.2"
+activity-compose = "1.9.0"
 agp = "8.3.2"
 appcompat = "1.6.1"
 biometric = "1.1.0"
