@@ -2,18 +2,12 @@ name: Android CI
 
 permissions:
   contents: write
+  pull-requests: read
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Application version'
-        required: true
-        default: '1.0.0'
-      prerelease:
-        description: 'Pre-Release?'
-        required: true
-        default: false
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -33,6 +27,8 @@ jobs:
           fileName: 'android_keystore.jks'
           fileDir: '/home/runner/work/RecurringExpenseTracker/RecurringExpenseTracker/app/keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
+      - id: get_version
+        uses: battila7/get-version-action@v2
       - name: Build APK
         run: ./gradlew :app:assembleRelease -x test
         env:
@@ -55,14 +51,50 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: RecurringExpenseTracker
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
+      - id: get_version
+        uses: battila7/get-version-action@v2
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configurationJson: |
+            {
+              "categories": [
+                {
+                  "title": "## 🚀 New Features",
+                  "labels": [
+                    "feature"
+                  ]
+                },
+                {
+                  "title": "## 🐛 Bugs fixed",
+                  "labels": [
+                    "bug"
+                  ]
+                },
+                {
+                  "title": "## 🧪 Updated Translations",
+                  "labels": [
+                    "translations"
+                  ]
+                },
+                {
+                  "title": "## 💬 Minor Changes",
+                  "labels": [
+                    "cleanup / restructuring",
+                    "dependencies"
+                  ]
+                }
+              ],
+              "pr_template": "- #{{TITLE}} by @#{{AUTHOR}} in ##{{NUMBER}}"
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: mikepenz/action-gh-release@v1
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: Release v${{ github.event.inputs.version }}
+          body: ${{steps.github_release.outputs.changelog}}
           draft: true
-          prerelease: ${{ github.event.inputs.prerelease }}
-          files: RecurringExpenseTracker/RecurringExpenseTracker_${{ github.event.inputs.version }}.apk
+          files: RecurringExpenseTracker/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
