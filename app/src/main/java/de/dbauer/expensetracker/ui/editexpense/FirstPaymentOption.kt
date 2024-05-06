@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -71,6 +72,10 @@ fun FirstPaymentOption(
                         datePickerOpen = true
                     },
         ) {
+            Icon(
+                modifier = Modifier.padding(16.dp),
+                imageVector = Icons.Rounded.CalendarMonth,
+                contentDescription = null)
             Text(
                 text = formattedDate,
                 modifier = Modifier.padding(16.dp).weight(1f),
