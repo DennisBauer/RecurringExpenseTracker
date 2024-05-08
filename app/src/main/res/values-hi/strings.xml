@@ -33,7 +33,6 @@
     <string name="edit_expense_recurrence_month_short">म</string>
     <string name="edit_expense_recurrence_year_short">सा</string>
     <string name="edit_expense_first_payment">पहला भुगतान (वैकल्पिक)</string>
-    <string name="edit_expense_first_payment_placeholder">उदाहरणार्थ आज</string>
     <string name="edit_expense_color">रंग</string>
     <string name="settings_backup_created_toast">बैकअप सफल</string>
     <string name="settings_backup_not_created_toast">बैकअप विफल</string>

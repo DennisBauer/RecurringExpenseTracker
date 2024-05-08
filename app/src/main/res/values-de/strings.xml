@@ -35,7 +35,6 @@
     <string name="edit_expense_recurrence_year">Jahr(e)</string>
     <string name="edit_expense_recurrence_year_short">J</string>
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
-    <string name="edit_expense_first_payment_placeholder">z.B. Heute</string>
     <string name="edit_expense_color">Farbe</string>
 
     <!-- Upcoming Payments Tab -->
