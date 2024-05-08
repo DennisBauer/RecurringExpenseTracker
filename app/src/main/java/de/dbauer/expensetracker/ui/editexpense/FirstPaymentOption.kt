@@ -75,7 +75,8 @@ fun FirstPaymentOption(
             Icon(
                 modifier = Modifier.padding(16.dp),
                 imageVector = Icons.Rounded.CalendarMonth,
-                contentDescription = null)
+                contentDescription = null,
+            )
             Text(
                 text = formattedDate,
                 modifier = Modifier.padding(16.dp).weight(1f),
