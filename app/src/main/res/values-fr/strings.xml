@@ -40,4 +40,13 @@
     <string name="upcoming_time_remaining_tomorrow">demain</string>
     <string name="upcoming_time_remaining_days">dans %1$d jours</string>
     <string name="settings_backup_restore">Restaurer sauvegarde</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Mode grille ouverte</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Fermer mode grille</string>
+    <string name="edit_expense_button_save">Sauvegarder</string>
+    <string name="edit_expense_first_payment_placeholder">Choisir une date</string>
+    <string name="settings_title_security">Sécurité</string>
+    <string name="biometric_prompt_manager_title">Débloquer ExpenseTracker</string>
+    <string name="settings_security_biometric_lock">Serrure biométrique</string>
+    <string name="biometric_prompt_manager_unlock">Déverrouiller</string>
+    <string name="cancel">Annuler</string>
 </resources>
