@@ -4,7 +4,6 @@ agp = "8.4.1"
 appcompat = "1.6.1"
 biometric = "1.1.0"
 compose-bom = "2024.05.00"
-compose-compiler = "1.5.14"
 core-ktx = "1.13.1"
 datastore-preferences = "1.1.1"
 espresso-core = "3.5.1"
@@ -25,7 +24,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
@@ -51,6 +49,7 @@ ktlint-version = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-standa
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 org-jlleitschuh-gradle-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
 
