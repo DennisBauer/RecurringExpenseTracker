@@ -1,0 +1,8 @@
+Changelog 0.7.2:
+* Update French translation
+
+Changes from 0.7.1:
+* Add icon to first payment date picker
+
+Changes from 0.7.0:
+* Feature: Biometric App Lock
