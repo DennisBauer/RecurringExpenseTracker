@@ -10,12 +10,13 @@
 [![GitHub license](https://img.shields.io/github/license/DennisBauer/RecurringExpenseTracker?style=for-the-badge)](https://github.com/DennisBauer/RecurringExpenseTracker/blob/main/LICENSE)
 [![Github all releases](https://img.shields.io/github/downloads/DennisBauer/RecurringExpenseTracker/total.svg?style=for-the-badge)](https://github.com/DennisBauer/RecurringExpenseTracker/releases)
 
-As the name suggests, it focuses on reoccurring expenses such as rent, insurances, subscriptions etc.
-It's a simple app with the basic functionality.
-My idea is to add new features one by one and I'm happy for any contribution.
-Feel free to create feature requests or report bugs if you find some.
+As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, etc.
+It's a simple Kotlin multiplatform app with basic functionality.
+My idea is to add new features iteratively and I'm happy for any contribution.
+Feel free to make feature requests or report bugs if you find any.
 
-## Download
+## Platform availability
+### Android app
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
@@ -25,6 +26,12 @@ Feel free to create feature requests or report bugs if you find some.
 [<img src="assets/get-it-on-github.png"
      alt="Download from GitHub"
      height="80">](https://github.com/DennisBauer/RecurringExpenseTracker/releases/latest)
+
+### iOS
+The app compiles for iOS and works fine, but I do not have an Apple developer account to publish it. That's why it can only be used when compiled locally. Let me know if you have an idea how to solve this problem without paying a $99 annual fee to Apple.
+
+### Desktop platforms (Windows, Linux and macOS)
+The app compiles and works for all 3 desktop OS platforms. I'll look into how to publish a version for those platforms in the future.
 
 ## Screenshots
 <div style="display:flex">

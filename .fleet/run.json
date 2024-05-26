@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "app [Desktop]",
+            "type": "gradle",
+            "workingDir": "$PROJECT_DIR$",
+            "tasks": ["desktopRun"],
+            "args": ["-DmainClass=MainKt", "--quiet"],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> null }"
+            }
+        }
+    ]
+}
