@@ -15,8 +15,8 @@ It's a simple Kotlin multiplatform app with basic functionality.
 My idea is to add new features iteratively and I'm happy for any contribution.
 Feel free to make feature requests or report bugs if you find any.
 
-## Platform availability
-### Android app
+## Download
+### Android
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
