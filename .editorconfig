@@ -8,6 +8,7 @@ indent_size = 4
 
 [*.kts]
 max_line_length = off
+ktlint_standard_chain-method-continuation = disabled
 
 [*.{kt,kts}]
 trim_trailing_whitespace = true
@@ -19,5 +20,7 @@ ij_kotlin_name_count_to_use_star_import_for_members = 500
 ktlint_standard_function-naming = disabled
 ktlint_standard_multiple-expession-wrapping = disabled
 ktlint_standard_string-template-indent = disabled
+ktlint_standard_class-signature = disabled
+ktlint_standard_function-expression-body = disabled
 compose_disallow_material2 = true
 compose_allowed_from_m2 = icons

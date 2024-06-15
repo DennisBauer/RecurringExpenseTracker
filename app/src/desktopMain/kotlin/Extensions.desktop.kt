@@ -26,7 +26,9 @@ actual fun String.toFloatLocaleAware(): Float? {
 }
 
 actual fun Instant.toLocaleString(): String {
-    return DateFormat.getDateInstance().apply {
-        timeZone = TimeZone.getTimeZone("UTC")
-    }.format(Date(this.toEpochMilliseconds()))
+    return DateFormat
+        .getDateInstance()
+        .apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }.format(Date(this.toEpochMilliseconds()))
 }

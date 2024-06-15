@@ -66,13 +66,15 @@ class BiometricPromptManager(
     ) {
         val manager = BiometricManager.from(activity)
         val promptInfo =
-            PromptInfo.Builder().apply {
-                setTitle(title)
-                setAllowedAuthenticators(authenticators)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-                    setNegativeButtonText(cancel)
-                }
-            }.build()
+            PromptInfo
+                .Builder()
+                .apply {
+                    setTitle(title)
+                    setAllowedAuthenticators(authenticators)
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                        setNegativeButtonText(cancel)
+                    }
+                }.build()
 
         when (manager.canAuthenticate(authenticators)) {
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {

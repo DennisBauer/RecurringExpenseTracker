@@ -68,8 +68,7 @@ fun FirstPaymentOption(
                     .background(
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
-                    )
-                    .clickable {
+                    ).clickable {
                         datePickerOpen = true
                     },
         ) {
@@ -122,5 +121,9 @@ fun FirstPaymentOption(
 
 private fun Instant?.orNowIfInvalid(): Long {
     return this?.toEpochMilliseconds()
-        ?: Clock.System.now().toLocalDateTime(TimeZone.UTC).toInstant(TimeZone.UTC).toEpochMilliseconds()
+        ?: Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.UTC)
+            .toInstant(TimeZone.UTC)
+            .toEpochMilliseconds()
 }

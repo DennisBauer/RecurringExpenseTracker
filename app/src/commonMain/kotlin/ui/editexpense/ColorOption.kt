@@ -109,8 +109,7 @@ private fun ColorPickerDialog(
                                         color = outlineColor,
                                         shape = RoundedCornerShape(50),
                                     )
-                                }
-                                .background(color.getColor())
+                                }.background(color.getColor())
                                 .requiredSize(48.dp)
                                 .clickable {
                                     onColorSelected(color)

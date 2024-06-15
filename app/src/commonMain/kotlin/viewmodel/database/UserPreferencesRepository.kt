@@ -33,9 +33,10 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
 
         @Composable
         fun collectAsState(): State<T> {
-            return dataStore.data.map {
-                it[this.key] ?: this.defaultValue
-            }.collectAsState(this.defaultValue)
+            return dataStore.data
+                .map {
+                    it[this.key] ?: this.defaultValue
+                }.collectAsState(this.defaultValue)
         }
     }
 

@@ -101,7 +101,11 @@ class UpcomingPaymentsViewModel(
         everyXRecurrence: Int,
         recurrence: Int,
     ): LocalDate {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
+        val today =
+            Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.UTC)
+                .date
         var nextPayment = firstPayment.toLocalDateTime(TimeZone.UTC).date
 
         while (today.isInDaysAfter(nextPayment) && !today.isSameDay(nextPayment)) {
