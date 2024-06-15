@@ -32,12 +32,12 @@ fun MainViewController() =
                     biometricSecurity = false,
                     canUseBiometric = false,
                     toggleGridMode = {},
-                    onBiometricSecurityChanged = {},
-                    onRecurringExpenseAdded = recurringExpenseViewModel::addRecurringExpense,
-                    onRecurringExpenseEdited = recurringExpenseViewModel::editRecurringExpense,
-                    onRecurringExpenseDeleted = recurringExpenseViewModel::deleteRecurringExpense,
-                    onBackupClicked = {},
-                    onRestoreClicked = {},
+                    onBiometricSecurityChange = {},
+                    onRecurringExpenseAdd = recurringExpenseViewModel::addRecurringExpense,
+                    onRecurringExpenseEdit = recurringExpenseViewModel::editRecurringExpense,
+                    onRecurringExpenseDelete = recurringExpenseViewModel::deleteRecurringExpense,
+                    onClickBackup = {},
+                    onClickRestore = {},
                     upcomingPaymentsViewModel = upcomingPaymentsViewModel,
                 )
             }

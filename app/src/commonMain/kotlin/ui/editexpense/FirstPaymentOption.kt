@@ -44,7 +44,7 @@ import toLocaleString
 @Composable
 fun FirstPaymentOption(
     date: Instant?,
-    onDateSelected: (Instant?) -> Unit,
+    onSelectDate: (Instant?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var datePickerOpen by rememberSaveable { mutableStateOf(false) }
@@ -83,7 +83,7 @@ fun FirstPaymentOption(
             )
             if (date != null) {
                 IconButton(onClick = {
-                    onDateSelected(null)
+                    onSelectDate(null)
                     datePickerState.selectedDateMillis = null.orNowIfInvalid()
                 }) {
                     Icon(imageVector = Icons.Rounded.Cancel, contentDescription = null)
@@ -105,7 +105,7 @@ fun FirstPaymentOption(
                     onClick = {
                         datePickerOpen = false
                         datePickerState.selectedDateMillis?.let {
-                            onDateSelected(Instant.fromEpochMilliseconds(it))
+                            onSelectDate(Instant.fromEpochMilliseconds(it))
                         }
                     },
                 ) {

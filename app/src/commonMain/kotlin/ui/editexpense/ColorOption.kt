@@ -40,7 +40,7 @@ import ui.theme.ExpenseTrackerTheme
 @Composable
 fun ColorOption(
     expenseColor: ExpenseColor,
-    onExpenseColorSelected: (ExpenseColor) -> Unit,
+    onSelectExpenseColor: (ExpenseColor) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var colorPickerOpen by rememberSaveable { mutableStateOf(false) }
@@ -74,7 +74,7 @@ fun ColorOption(
             predefinedColors = getAvailableColors(),
             onDismiss = { colorPickerOpen = false },
             currentlySelected = expenseColor,
-            onColorSelected = onExpenseColorSelected,
+            onSelectColor = onSelectExpenseColor,
         )
     }
 }
@@ -84,7 +84,7 @@ private fun ColorPickerDialog(
     predefinedColors: List<ExpenseColor>,
     onDismiss: (() -> Unit),
     currentlySelected: ExpenseColor,
-    onColorSelected: ((ExpenseColor) -> Unit),
+    onSelectColor: ((ExpenseColor) -> Unit),
 ) {
     val gridState = rememberLazyGridState()
 
@@ -112,7 +112,7 @@ private fun ColorPickerDialog(
                                 }.background(color.getColor())
                                 .requiredSize(48.dp)
                                 .clickable {
-                                    onColorSelected(color)
+                                    onSelectColor(color)
                                     onDismiss()
                                 },
                     ) {
@@ -139,7 +139,7 @@ private fun ColorOptionPreview() {
         ) {
             ColorOption(
                 expenseColor = ExpenseColor.Red,
-                onExpenseColorSelected = {},
+                onSelectExpenseColor = {},
             )
         }
     }
@@ -154,7 +154,7 @@ private fun ColorPickerDialogPreview() {
             predefinedColors = getAvailableColors(),
             onDismiss = {},
             currentlySelected = selectedColor,
-            onColorSelected = { selectedColor = it },
+            onSelectColor = { selectedColor = it },
         )
     }
 }

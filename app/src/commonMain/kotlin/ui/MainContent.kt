@@ -65,12 +65,12 @@ fun MainContent(
     biometricSecurity: Boolean,
     canUseBiometric: Boolean,
     toggleGridMode: () -> Unit,
-    onBiometricSecurityChanged: (Boolean) -> Unit,
-    onRecurringExpenseAdded: (RecurringExpenseData) -> Unit,
-    onRecurringExpenseEdited: (RecurringExpenseData) -> Unit,
-    onRecurringExpenseDeleted: (RecurringExpenseData) -> Unit,
-    onBackupClicked: () -> Unit,
-    onRestoreClicked: () -> Unit,
+    onBiometricSecurityChange: (Boolean) -> Unit,
+    onRecurringExpenseAdd: (RecurringExpenseData) -> Unit,
+    onRecurringExpenseEdit: (RecurringExpenseData) -> Unit,
+    onRecurringExpenseDelete: (RecurringExpenseData) -> Unit,
+    onClickBackup: () -> Unit,
+    onClickRestore: () -> Unit,
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -224,7 +224,7 @@ fun MainContent(
                         monthlyExpense = monthlyExpense,
                         yearlyExpense = yearlyExpense,
                         recurringExpenseData = recurringExpenseData,
-                        onItemClicked = {
+                        onClickItem = {
                             selectedRecurringExpense = it
                         },
                         isGridMode = isGridMode,
@@ -242,7 +242,7 @@ fun MainContent(
                 composable(BottomNavigation.Upcoming.route) {
                     UpcomingPaymentsScreen(
                         upcomingPaymentsViewModel = upcomingPaymentsViewModel,
-                        onItemClicked = {
+                        onClickItem = {
                             selectedRecurringExpense = it
                         },
                         isGridMode = isGridMode,
@@ -260,9 +260,9 @@ fun MainContent(
                 composable(BottomNavigation.Settings.route) {
                     SettingsScreen(
                         checked = biometricSecurity,
-                        onBackupClicked = onBackupClicked,
-                        onRestoreClicked = onRestoreClicked,
-                        onCheckChanged = onBiometricSecurityChanged,
+                        onClickBackup = onClickBackup,
+                        onClickRestore = onClickRestore,
+                        onCheckedChange = onBiometricSecurityChange,
                         canUseBiometric = canUseBiometric,
                         modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
                     )
@@ -271,7 +271,7 @@ fun MainContent(
             if (addRecurringExpenseVisible) {
                 EditRecurringExpense(
                     onUpdateExpense = {
-                        onRecurringExpenseAdded(it)
+                        onRecurringExpenseAdd(it)
                         addRecurringExpenseVisible = false
                     },
                     onDismissRequest = { addRecurringExpenseVisible = false },
@@ -280,13 +280,13 @@ fun MainContent(
             if (selectedRecurringExpense != null) {
                 EditRecurringExpense(
                     onUpdateExpense = {
-                        onRecurringExpenseEdited(it)
+                        onRecurringExpenseEdit(it)
                         selectedRecurringExpense = null
                     },
                     onDismissRequest = { selectedRecurringExpense = null },
                     currentData = selectedRecurringExpense,
                     onDeleteExpense = {
-                        onRecurringExpenseDeleted(it)
+                        onRecurringExpenseDelete(it)
                         selectedRecurringExpense = null
                     },
                 )
@@ -345,16 +345,16 @@ private fun MainActivityContentPreview() {
                             ExpenseColor.Blue,
                         ),
                     ),
-                onRecurringExpenseAdded = {},
-                onRecurringExpenseEdited = {},
-                onRecurringExpenseDeleted = {},
-                onBackupClicked = { },
-                onRestoreClicked = { },
+                onRecurringExpenseAdd = {},
+                onRecurringExpenseEdit = {},
+                onRecurringExpenseDelete = {},
+                onClickBackup = { },
+                onClickRestore = { },
                 upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
                 isGridMode = isGridMode,
                 toggleGridMode = { isGridMode = !isGridMode },
                 biometricSecurity = biometricSecurity,
-                onBiometricSecurityChanged = { biometricSecurity = it },
+                onBiometricSecurityChange = { biometricSecurity = it },
                 canUseBiometric = true,
             )
         }

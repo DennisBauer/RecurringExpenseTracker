@@ -21,7 +21,7 @@ import toLocalString
 @Composable
 fun PriceOption(
     price: String,
-    onPriceChanged: (String) -> Unit,
+    onPriceChange: (String) -> Unit,
     priceInputError: Boolean,
     onNext: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier,
@@ -34,7 +34,7 @@ fun PriceOption(
         )
         ExpenseTextField(
             value = price,
-            onValueChange = onPriceChanged,
+            onValueChange = onPriceChange,
             placeholder = 0f.toLocalString(),
             keyboardOptions =
                 KeyboardOptions(

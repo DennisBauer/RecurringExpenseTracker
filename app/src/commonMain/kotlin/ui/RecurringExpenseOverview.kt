@@ -52,7 +52,7 @@ fun RecurringExpenseOverview(
     monthlyExpense: String,
     yearlyExpense: String,
     recurringExpenseData: List<RecurringExpenseData>,
-    onItemClicked: (RecurringExpenseData) -> Unit,
+    onClickItem: (RecurringExpenseData) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -106,15 +106,15 @@ fun RecurringExpenseOverview(
                 if (targetValue) {
                     GridRecurringExpense(
                         recurringExpenseData = recurringExpenseData,
-                        onItemClicked = {
-                            onItemClicked(recurringExpenseData)
+                        onClickItem = {
+                            onClickItem(recurringExpenseData)
                         },
                     )
                 } else {
                     RecurringExpense(
                         recurringExpenseData = recurringExpenseData,
-                        onItemClicked = {
-                            onItemClicked(recurringExpenseData)
+                        onClickItem = {
+                            onClickItem(recurringExpenseData)
                         },
                     )
                 }
@@ -189,11 +189,11 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun GridRecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    onItemClicked: () -> Unit,
+    onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.clickable { onItemClicked() },
+        modifier = modifier.clickable { onClickItem() },
         colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Column(
@@ -249,11 +249,11 @@ private fun GridRecurringExpense(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    onItemClicked: () -> Unit,
+    onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.clickable { onItemClicked() },
+        modifier = modifier.clickable { onClickItem() },
         colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Row(
@@ -367,7 +367,7 @@ private fun RecurringExpenseOverviewPreview(
                             ExpenseColor.Dynamic,
                         ),
                     ),
-                onItemClicked = {},
+                onClickItem = {},
                 isGridMode = isGridMode,
             )
         }

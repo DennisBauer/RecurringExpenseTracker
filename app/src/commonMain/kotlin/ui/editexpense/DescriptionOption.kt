@@ -18,7 +18,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_description_
 @Composable
 fun DescriptionOption(
     description: String,
-    onDescriptionChanged: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
     onNext: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -30,7 +30,7 @@ fun DescriptionOption(
         )
         ExpenseTextField(
             value = description,
-            onValueChange = onDescriptionChanged,
+            onValueChange = onDescriptionChange,
             placeholder = stringResource(Res.string.edit_expense_description_placeholder),
             keyboardActions =
                 KeyboardActions(onNext = onNext),

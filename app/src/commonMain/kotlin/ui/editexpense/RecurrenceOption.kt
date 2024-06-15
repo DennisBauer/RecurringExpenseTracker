@@ -32,7 +32,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_recurrence
 @Composable
 fun RecurrenceOption(
     everyXRecurrence: String,
-    onEveryXRecurrenceChanged: (String) -> Unit,
+    onEveryXRecurrenceChange: (String) -> Unit,
     everyXRecurrenceInputError: Boolean,
     selectedRecurrence: Recurrence,
     onSelectRecurrence: (Recurrence) -> Unit,
@@ -50,7 +50,7 @@ fun RecurrenceOption(
         Row {
             ExpenseTextField(
                 value = everyXRecurrence,
-                onValueChange = onEveryXRecurrenceChanged,
+                onValueChange = onEveryXRecurrenceChange,
                 placeholder = "1",
                 keyboardOptions =
                     KeyboardOptions(

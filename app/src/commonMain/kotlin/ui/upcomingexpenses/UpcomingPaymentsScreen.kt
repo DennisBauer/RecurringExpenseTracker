@@ -54,16 +54,16 @@ import viewmodel.UpcomingPaymentsViewModel
 @Composable
 fun UpcomingPaymentsScreen(
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
-    onItemClicked: (RecurringExpenseData) -> Unit,
+    onClickItem: (RecurringExpenseData) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    if (upcomingPaymentsViewModel.upcomingPaymentsData.size > 0) {
+    if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
-            onItemClicked = {
-                upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onItemClicked)
+            onClickItem = {
+                upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onClickItem)
             },
             isGridMode = isGridMode,
             modifier = modifier,
@@ -82,7 +82,7 @@ fun UpcomingPaymentsScreen(
 @Composable
 private fun UpcomingPaymentsOverview(
     upcomingPaymentsData: List<UpcomingPaymentData>,
-    onItemClicked: (Int) -> Unit,
+    onClickItem: (Int) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -127,15 +127,15 @@ private fun UpcomingPaymentsOverview(
                 if (targetValue) {
                     GridUpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
-                        onItemClicked = {
-                            onItemClicked(upcomingPaymentData.id)
+                        onClickItem = {
+                            onClickItem(upcomingPaymentData.id)
                         },
                     )
                 } else {
                     UpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
-                        onItemClicked = {
-                            onItemClicked(upcomingPaymentData.id)
+                        onClickItem = {
+                            onClickItem(upcomingPaymentData.id)
                         },
                     )
                 }
@@ -171,12 +171,12 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
 @Composable
 private fun GridUpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    onItemClicked: () -> Unit,
+    onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
-        modifier = modifier.clickable { onItemClicked() },
+        modifier = modifier.clickable { onClickItem() },
         colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Column(
@@ -214,12 +214,12 @@ private fun GridUpcomingPayment(
 @Composable
 private fun UpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    onItemClicked: () -> Unit,
+    onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
-        modifier = modifier.clickable { onItemClicked() },
+        modifier = modifier.clickable { onClickItem() },
         colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Row(
@@ -318,7 +318,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                             color = ExpenseColor.Pink,
                         ),
                     ),
-                onItemClicked = {},
+                onClickItem = {},
                 contentPadding = PaddingValues(8.dp),
                 isGridMode = false,
             )
