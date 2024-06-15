@@ -1,57 +1,56 @@
 [versions]
-activity-compose = "1.9.0"
-agp = "8.4.1"
-appcompat = "1.6.1"
+agp = "8.3.2"
+android-compileSdk = "34"
+android-minSdk = "24"
+android-targetSdk = "34"
+androidx-activityCompose = "1.9.0"
 biometric = "1.1.0"
-compose-bom = "2024.05.00"
-core-ktx = "1.13.1"
-datastore-preferences = "1.1.1"
-espresso-core = "3.5.1"
-junit = "4.13.2"
-junit-test = "1.1.5"
+androidx-appcompat = "1.7.0"
+androidx-constraintlayout = "2.1.4"
+androidx-core-ktx = "1.13.1"
+androidx-test-junit = "1.1.5"
+compose-plugin = "1.6.10"
+kotlinx-datetime = "0.6.0"
 kotlin = "2.0.0"
-kotlin-ksp = "2.0.0-1.0.21"
-kotlinx-collections-immutable = "0.3.7"
+androidx-lifecycle-viewmodel = "2.8.2"
+androidx-navigation-compose = "2.7.0-alpha07"
+room = "2.7.0-alpha04"
+ksp = "2.0.0-1.0.21"
 ktlint = "0.4.1"
 ktlint-plugin = "12.1.1"
 ktlint-version = "1.2.1"
-lifecycle-runtime-ktx = "2.8.0"
-navigation-compose = "2.7.7"
-room = "2.6.1"
+sqlite = "2.5.0-alpha04"
+androidx-datastore-preferences = "1.1.1"
+kotlinx-coroutines = "1.8.1"
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
-androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
-androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit-test" }
-androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-androidx-ui = { module = "androidx.compose.ui:ui" }
-androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-junit = { module = "junit:junit", version.ref = "junit" }
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle-viewmodel" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation-compose" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore-preferences" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint" }
 ktlint-version = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-standard", version.ref = "ktlint-version" }
 
 [plugins]
-com-android-application = { id = "com.android.application", version.ref = "agp" }
-com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
 org-jlleitschuh-gradle-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
-
-[bundles]
-
