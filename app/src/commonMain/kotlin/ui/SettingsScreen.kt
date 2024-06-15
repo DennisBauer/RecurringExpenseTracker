@@ -42,9 +42,9 @@ import ui.theme.ExpenseTrackerTheme
 fun SettingsScreen(
     checked: Boolean,
     canUseBiometric: Boolean,
-    onBackupClicked: () -> Unit,
-    onRestoreClicked: () -> Unit,
-    onCheckChanged: (Boolean) -> Unit,
+    onClickBackup: () -> Unit,
+    onClickRestore: () -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -58,11 +58,11 @@ fun SettingsScreen(
         )
         SettingsClickableElement(
             name = Res.string.settings_backup_create,
-            onClick = onBackupClicked,
+            onClick = onClickBackup,
         )
         SettingsClickableElement(
             name = Res.string.settings_backup_restore,
-            onClick = onRestoreClicked,
+            onClick = onClickRestore,
         )
         if (canUseBiometric) {
             HorizontalDivider()
@@ -70,7 +70,7 @@ fun SettingsScreen(
             SettingsClickableElementWithToggle(
                 name = Res.string.settings_security_biometric_lock,
                 checked = checked,
-                onCheckChanged = onCheckChanged,
+                onCheckedChange = onCheckedChange,
             )
         }
     }
@@ -121,7 +121,7 @@ private fun SettingsClickableElement(
 private fun SettingsClickableElementWithToggle(
     name: StringResource,
     checked: Boolean,
-    onCheckChanged: (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -129,7 +129,7 @@ private fun SettingsClickableElementWithToggle(
         modifier =
             modifier
                 .fillMaxWidth()
-                .clickable { onCheckChanged(!checked) },
+                .clickable { onCheckedChange(!checked) },
     ) {
         Text(
             text = stringResource(name),
@@ -137,7 +137,7 @@ private fun SettingsClickableElementWithToggle(
             modifier = Modifier.padding(16.dp).weight(1f),
             overflow = TextOverflow.Ellipsis,
         )
-        Switch(checked = checked, onCheckedChange = onCheckChanged)
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
@@ -159,9 +159,9 @@ private fun SettingsScreenPreview(
             SettingsScreen(
                 checked = checked,
                 canUseBiometric = canUseBiometric,
-                onBackupClicked = {},
-                onRestoreClicked = {},
-                onCheckChanged = { checked = it },
+                onClickBackup = {},
+                onClickRestore = {},
+                onCheckedChange = { checked = it },
             )
         }
     }

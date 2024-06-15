@@ -43,7 +43,9 @@ fun ZipInputStream.forEachEntry(block: (entry: ZipEntry) -> Unit) {
 }
 
 actual fun Instant.toLocaleString(): String {
-    return DateFormat.getDateInstance().apply {
-        timeZone = TimeZone.getTimeZone("UTC")
-    }.format(Date(this.toEpochMilliseconds()))
+    return DateFormat
+        .getDateInstance()
+        .apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }.format(Date(this.toEpochMilliseconds()))
 }

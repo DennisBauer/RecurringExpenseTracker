@@ -201,25 +201,25 @@ class MainActivity : AppCompatActivity() {
                             monthlyExpense = recurringExpenseViewModel.monthlyExpense,
                             yearlyExpense = recurringExpenseViewModel.yearlyExpense,
                             recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
-                            onRecurringExpenseAdded = {
+                            onRecurringExpenseAdd = {
                                 recurringExpenseViewModel.addRecurringExpense(it)
                             },
-                            onRecurringExpenseEdited = {
+                            onRecurringExpenseEdit = {
                                 recurringExpenseViewModel.editRecurringExpense(it)
                             },
-                            onRecurringExpenseDeleted = {
+                            onRecurringExpenseDelete = {
                                 recurringExpenseViewModel.deleteRecurringExpense(it)
                             },
-                            onBackupClicked = {
+                            onClickBackup = {
                                 backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
                             },
-                            onRestoreClicked = {
+                            onClickRestore = {
                                 importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                             },
                             upcomingPaymentsViewModel = upcomingPaymentsViewModel,
                             isGridMode = isGridMode,
                             biometricSecurity = biometricSecurity,
-                            onBiometricSecurityChanged = {
+                            onBiometricSecurityChange = {
                                 lifecycleScope.launch {
                                     userPreferencesRepository.biometricSecurity.save(it)
                                 }

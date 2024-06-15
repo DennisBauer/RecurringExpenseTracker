@@ -18,7 +18,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_name_placeho
 @Composable
 fun NameOption(
     name: String,
-    onNameChanged: (String) -> Unit,
+    onNameChange: (String) -> Unit,
     nameInputError: Boolean,
     onNext: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier,
@@ -30,7 +30,7 @@ fun NameOption(
         )
         ExpenseTextField(
             value = name,
-            onValueChange = onNameChanged,
+            onValueChange = onNameChange,
             placeholder = stringResource(Res.string.edit_expense_name_placeholder),
             keyboardActions =
                 KeyboardActions(onNext = onNext),

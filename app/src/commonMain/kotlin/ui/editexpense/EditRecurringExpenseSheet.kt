@@ -93,24 +93,24 @@ private fun EditRecurringExpenseInternal(
     ) {
         NameOption(
             name = viewModel.nameState,
-            onNameChanged = { viewModel.nameState = it },
+            onNameChange = { viewModel.nameState = it },
             nameInputError = viewModel.nameInputError.value,
             onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
         )
         DescriptionOption(
             description = viewModel.descriptionState,
-            onDescriptionChanged = { viewModel.descriptionState = it },
+            onDescriptionChange = { viewModel.descriptionState = it },
             onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
         )
         PriceOption(
             price = viewModel.priceState,
-            onPriceChanged = { viewModel.priceState = it },
+            onPriceChange = { viewModel.priceState = it },
             priceInputError = viewModel.priceInputError.value,
             onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
         )
         RecurrenceOption(
             everyXRecurrence = viewModel.everyXRecurrenceState,
-            onEveryXRecurrenceChanged = { viewModel.everyXRecurrenceState = it },
+            onEveryXRecurrenceChange = { viewModel.everyXRecurrenceState = it },
             everyXRecurrenceInputError = viewModel.everyXRecurrenceInputError.value,
             selectedRecurrence = viewModel.selectedRecurrence,
             onSelectRecurrence = { viewModel.selectedRecurrence = it },
@@ -118,11 +118,11 @@ private fun EditRecurringExpenseInternal(
         )
         FirstPaymentOption(
             date = viewModel.firstPaymentDate,
-            onDateSelected = { viewModel.firstPaymentDate = it },
+            onSelectDate = { viewModel.firstPaymentDate = it },
         )
         ColorOption(
             expenseColor = viewModel.expenseColor,
-            onExpenseColorSelected = { viewModel.expenseColor = it },
+            onSelectExpenseColor = { viewModel.expenseColor = it },
         )
         Row(
             modifier =
