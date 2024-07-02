@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -11,22 +12,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import data.RecurringExpenseData
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import recurringexpensetracker.app.generated.resources.Res
@@ -36,51 +31,11 @@ import recurringexpensetracker.app.generated.resources.edit_expense_button_save
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.EditRecurringExpenseViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditRecurringExpense(
-    onUpdateExpense: (RecurringExpenseData) -> Unit,
-    onDismissRequest: () -> Unit,
+fun EditRecurringExpenseScreen(
+    viewModel: EditRecurringExpenseViewModel,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    currentData: RecurringExpenseData? = null,
-    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
-) {
-    val sheetState: SheetState =
-        rememberModalBottomSheetState(
-            skipPartiallyExpanded = true,
-        )
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        modifier = modifier,
-    ) {
-        EditRecurringExpenseInternal(
-            onUpdateExpense = onUpdateExpense,
-            confirmButtonString =
-                if (currentData == null) {
-                    stringResource(Res.string.edit_expense_button_add)
-                } else {
-                    stringResource(
-                        Res.string.edit_expense_button_save,
-                    )
-                },
-            currentData = currentData,
-            onDeleteExpense = onDeleteExpense,
-        )
-    }
-}
-
-@Composable
-private fun EditRecurringExpenseInternal(
-    onUpdateExpense: (RecurringExpenseData) -> Unit,
-    confirmButtonString: String,
-    modifier: Modifier = Modifier,
-    currentData: RecurringExpenseData? = null,
-    viewModel: EditRecurringExpenseViewModel =
-        viewModel<EditRecurringExpenseViewModel> {
-            EditRecurringExpenseViewModel(currentData)
-        },
-    onDeleteExpense: ((RecurringExpenseData) -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
@@ -129,13 +84,15 @@ private fun EditRecurringExpenseInternal(
                 Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    .padding(top = 8.dp)
                     .navigationBarsPadding()
-                    .padding(top = 8.dp, bottom = 24.dp),
+                    .imePadding(),
         ) {
-            if (currentData != null) {
+            if (viewModel.showDeleteButton) {
                 OutlinedButton(
                     onClick = {
-                        onDeleteExpense?.invoke(currentData)
+                        viewModel.deleteExpense()
+                        onDismiss()
                     },
                     colors =
                         ButtonDefaults.outlinedButtonColors(
@@ -154,8 +111,10 @@ private fun EditRecurringExpenseInternal(
             }
             Button(
                 onClick = {
-                    viewModel.tryCreateUpdatedRecurringExpenseData()?.let { expenseData ->
-                        onUpdateExpense(expenseData)
+                    viewModel.updateExpense { successful ->
+                        if (successful) {
+                            onDismiss()
+                        }
                     }
                 },
                 modifier =
@@ -164,7 +123,14 @@ private fun EditRecurringExpenseInternal(
                         .wrapContentWidth(),
             ) {
                 Text(
-                    text = confirmButtonString,
+                    text =
+                        stringResource(
+                            if (viewModel.isNewExpense) {
+                                Res.string.edit_expense_button_add
+                            } else {
+                                Res.string.edit_expense_button_save
+                            },
+                        ),
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
             }
@@ -177,10 +143,10 @@ private fun EditRecurringExpenseInternal(
 private fun EditRecurringExpensePreview() {
     ExpenseTrackerTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            EditRecurringExpenseInternal(
-                onUpdateExpense = {},
-                confirmButtonString = "Add Expense",
-            )
+//            EditRecurringExpenseInternal(
+//                onUpdateExpense = {},
+//                confirmButtonString = "Add Expense",
+//            )
         }
     }
 }
