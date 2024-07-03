@@ -28,12 +28,10 @@ fun main() =
                 canUseBiometric = false,
                 toggleGridMode = {},
                 onBiometricSecurityChange = {},
-                onRecurringExpenseAdd = recurringExpenseViewModel::addRecurringExpense,
-                onRecurringExpenseEdit = recurringExpenseViewModel::editRecurringExpense,
-                onRecurringExpenseDelete = recurringExpenseViewModel::deleteRecurringExpense,
                 onClickBackup = {},
                 onClickRestore = {},
                 upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                expenseRepository = repository,
             )
         }
     }

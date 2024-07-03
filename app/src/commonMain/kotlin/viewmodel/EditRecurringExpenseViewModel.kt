@@ -4,85 +4,110 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.viewModelScope
 import data.Recurrence
 import data.RecurringExpenseData
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 import toFloatLocaleAware
 import toLocalString
 import ui.customizations.ExpenseColor
+import viewmodel.database.ExpenseRepository
 
-class EditRecurringExpenseViewModel(private val currentData: RecurringExpenseData?) : ViewModel() {
-    var nameState by mutableStateOf(currentData?.name ?: "")
+class EditRecurringExpenseViewModel(
+    private val expenseId: Int?,
+    private val expenseRepository: ExpenseRepository,
+) : ViewModel() {
+    var nameState by mutableStateOf("")
     val nameInputError = mutableStateOf(false)
-    var descriptionState by mutableStateOf(currentData?.description ?: "")
-    var priceState by mutableStateOf(currentData?.price?.toLocalString() ?: "")
+    var descriptionState by mutableStateOf("")
+    var priceState by mutableStateOf("")
     val priceInputError = mutableStateOf(false)
-    var everyXRecurrenceState by mutableStateOf(currentData?.everyXRecurrence?.toString() ?: "")
+    var everyXRecurrenceState by mutableStateOf("")
     val everyXRecurrenceInputError = mutableStateOf(false)
-    var selectedRecurrence by mutableStateOf(currentData?.recurrence ?: Recurrence.Monthly)
-    var firstPaymentDate by mutableStateOf(currentData?.firstPayment)
-    var expenseColor by mutableStateOf(currentData?.color ?: ExpenseColor.Dynamic)
+    var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
+    var firstPaymentDate: Instant? by mutableStateOf(null)
+    var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
 
-    companion object {
-        fun create(currentData: RecurringExpenseData?): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    EditRecurringExpenseViewModel(currentData)
+    val isNewExpense = expenseId == null
+    val showDeleteButton = !isNewExpense
+
+    init {
+        if (expenseId != null) {
+            viewModelScope.launch {
+                expenseRepository.getRecurringExpenseById(expenseId)?.toFrontendType()?.let { expense ->
+                    nameState = expense.name
+                    descriptionState = expense.description
+                    priceState = expense.price.toLocalString()
+                    everyXRecurrenceState = expense.everyXRecurrence.toString()
+                    selectedRecurrence = expense.recurrence
+                    firstPaymentDate = expense.firstPayment
+                    expenseColor = expense.color
                 }
             }
         }
     }
 
-    fun tryCreateUpdatedRecurringExpenseData(): RecurringExpenseData? {
+    fun updateExpense(response: (successful: Boolean) -> Unit) {
+        viewModelScope.launch {
+            val validInput = verifyUserInput()
+            response(validInput)
+            if (validInput) {
+                if (expenseId == null) {
+                    addExpense()
+                } else {
+                    val recurringExpense = createRecurringExpenseData()
+                    expenseRepository.update(recurringExpense.toBackendType())
+                }
+            }
+        }
+    }
+
+    fun deleteExpense() {
+        if (expenseId == null) {
+            throw IllegalStateException("Deleting an new expense not created yet is not allowed")
+        }
+        viewModelScope.launch {
+            val recurringExpense = createRecurringExpenseData()
+            expenseRepository.delete(recurringExpense.toBackendType())
+        }
+    }
+
+    private suspend fun addExpense() {
+        val recurringExpense = createRecurringExpenseData()
+        expenseRepository.insert(recurringExpense.toBackendType())
+    }
+
+    private fun createRecurringExpenseData(): RecurringExpenseData {
+        return RecurringExpenseData(
+            id = expenseId ?: 0,
+            name = nameState,
+            description = descriptionState,
+            price = priceState.toFloatLocaleAware() ?: 0f,
+            monthlyPrice = priceState.toFloatLocaleAware() ?: 0f,
+            everyXRecurrence = everyXRecurrenceState.toIntOrNull() ?: 1,
+            recurrence = selectedRecurrence,
+            firstPayment = firstPaymentDate,
+            color = expenseColor,
+        )
+    }
+
+    private fun verifyUserInput(): Boolean {
         nameInputError.value = false
         priceInputError.value = false
         everyXRecurrenceInputError.value = false
 
-        if (verifyUserInput(
-                name = nameState,
-                onNameInputError = { nameInputError.value = true },
-                price = priceState,
-                onPriceInputError = { priceInputError.value = true },
-                everyXRecurrence = everyXRecurrenceState,
-                onEveryXRecurrenceError = { everyXRecurrenceInputError.value = true },
-            )
-        ) {
-            return RecurringExpenseData(
-                id = currentData?.id ?: 0,
-                name = nameState,
-                description = descriptionState,
-                price = priceState.toFloatLocaleAware() ?: 0f,
-                monthlyPrice = priceState.toFloatLocaleAware() ?: 0f,
-                everyXRecurrence = everyXRecurrenceState.toIntOrNull() ?: 1,
-                recurrence = selectedRecurrence,
-                firstPayment = firstPaymentDate,
-                color = expenseColor,
-            )
-        }
-        return null
-    }
-
-    private fun verifyUserInput(
-        name: String,
-        onNameInputError: () -> Unit,
-        price: String,
-        onPriceInputError: () -> Unit,
-        everyXRecurrence: String,
-        onEveryXRecurrenceError: () -> Unit,
-    ): Boolean {
         var everythingCorrect = true
-        if (!isNameValid(name)) {
-            onNameInputError()
+        if (!isNameValid(nameState)) {
+            nameInputError.value = true
             everythingCorrect = false
         }
-        if (!isPriceValid(price)) {
-            onPriceInputError()
+        if (!isPriceValid(priceState)) {
+            priceInputError.value = true
             everythingCorrect = false
         }
-        if (!isEveryXRecurrenceValid(everyXRecurrence)) {
-            onEveryXRecurrenceError()
+        if (!isEveryXRecurrenceValid(everyXRecurrenceState)) {
+            everyXRecurrenceInputError.value = true
             everythingCorrect = false
         }
         return everythingCorrect

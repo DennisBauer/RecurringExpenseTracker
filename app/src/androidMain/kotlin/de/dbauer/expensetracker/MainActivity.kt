@@ -201,15 +201,6 @@ class MainActivity : AppCompatActivity() {
                             monthlyExpense = recurringExpenseViewModel.monthlyExpense,
                             yearlyExpense = recurringExpenseViewModel.yearlyExpense,
                             recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
-                            onRecurringExpenseAdd = {
-                                recurringExpenseViewModel.addRecurringExpense(it)
-                            },
-                            onRecurringExpenseEdit = {
-                                recurringExpenseViewModel.editRecurringExpense(it)
-                            },
-                            onRecurringExpenseDelete = {
-                                recurringExpenseViewModel.deleteRecurringExpense(it)
-                            },
                             onClickBackup = {
                                 backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
                             },
@@ -230,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             },
                             canUseBiometric = canUseBiometric,
+                            expenseRepository = (application as ExpenseTrackerApplication).repository,
                         )
                     }
                 }
