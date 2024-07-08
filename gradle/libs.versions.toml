@@ -10,6 +10,8 @@ androidx-constraintlayout = "2.1.4"
 androidx-core-ktx = "1.13.1"
 androidx-test-junit = "1.2.1"
 compose-plugin = "1.6.11"
+koin = "3.6.0-Beta4"
+koin-viewmodel = "1.2.0-Beta4"
 kotlinx-datetime = "0.6.0"
 kotlin = "2.0.0"
 androidx-lifecycle-viewmodel = "2.8.3"
@@ -24,6 +26,12 @@ androidx-datastore-preferences = "1.1.1"
 kotlinx-coroutines = "1.8.1"
 
 [libraries]
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-viewmodel" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }

@@ -1,28 +1,21 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import di.platformModule
+import di.sharedModule
+import org.koin.core.context.startKoin
 import ui.MainContent
-import viewmodel.RecurringExpenseViewModel
-import viewmodel.UpcomingPaymentsViewModel
-import viewmodel.database.ExpenseRepository
-import viewmodel.database.RecurringExpenseDatabase
-import viewmodel.database.getDatabaseBuilder
 
 fun main() =
     application {
-        val database by lazy { RecurringExpenseDatabase.getRecurringExpenseDatabase(getDatabaseBuilder()) }
-        val repository by lazy { ExpenseRepository(database.recurringExpenseDao()) }
-        val recurringExpenseViewModel = RecurringExpenseViewModel(repository)
-        val upcomingPaymentsViewModel = UpcomingPaymentsViewModel(repository)
+        startKoin {
+            modules(sharedModule, platformModule)
+        }
 
         Window(
             onCloseRequest = ::exitApplication,
             title = "RecurringExpenseTracker",
         ) {
             MainContent(
-                weeklyExpense = recurringExpenseViewModel.weeklyExpense,
-                monthlyExpense = recurringExpenseViewModel.monthlyExpense,
-                yearlyExpense = recurringExpenseViewModel.yearlyExpense,
-                recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                 isGridMode = false,
                 biometricSecurity = false,
                 canUseBiometric = false,
@@ -30,8 +23,6 @@ fun main() =
                 onBiometricSecurityChange = {},
                 onClickBackup = {},
                 onClickRestore = {},
-                upcomingPaymentsViewModel = upcomingPaymentsViewModel,
-                expenseRepository = repository,
             )
         }
     }
