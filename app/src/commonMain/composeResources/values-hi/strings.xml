@@ -49,4 +49,5 @@
     <string name="settings_title_security">सुरक्षा</string>
     <string name="biometric_prompt_manager_title">Expense Tracker अनलॉक करें</string>
     <string name="edit_expense_first_payment_placeholder">एक तारीख चुनें</string>
+    <string name="edit_expense_title">व्यय संपादित करें</string>
 </resources>
