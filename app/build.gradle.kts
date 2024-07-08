@@ -41,23 +41,28 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.biometric)
+            implementation(libs.room.runtime.android)
+
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.kotlinx.datetime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.runtime)
+            implementation(compose.ui)
+
+            implementation(libs.androidx.datastore.preferences)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.kotlinx.datetime)
+
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
-            implementation(libs.androidx.datastore.preferences)
+
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
             implementation(libs.koin.compose)
