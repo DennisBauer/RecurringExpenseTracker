@@ -38,10 +38,13 @@ import data.BottomNavigation
 import data.EditExpensePane
 import data.EditExpensePane.Companion.getArgExpenseId
 import data.HomePane
-import data.RecurringExpenseData
 import data.SettingsPane
 import data.UpcomingPane
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.bottom_nav_home
 import recurringexpensetracker.app.generated.resources.bottom_nav_settings
@@ -56,27 +59,24 @@ import recurringexpensetracker.app.generated.resources.upcoming_title
 import ui.editexpense.EditRecurringExpenseScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.EditRecurringExpenseViewModel
+import viewmodel.RecurringExpenseViewModel
 import viewmodel.UpcomingPaymentsViewModel
 import viewmodel.database.ExpenseRepository
 
 @Suppress("ktlint:compose:vm-forwarding-check")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
 fun MainContent(
-    weeklyExpense: String,
-    monthlyExpense: String,
-    yearlyExpense: String,
-    recurringExpenseData: List<RecurringExpenseData>,
     isGridMode: Boolean,
     biometricSecurity: Boolean,
     canUseBiometric: Boolean,
-    expenseRepository: ExpenseRepository,
     toggleGridMode: () -> Unit,
     onBiometricSecurityChange: (Boolean) -> Unit,
     onClickBackup: () -> Unit,
     onClickRestore: () -> Unit,
-    upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     modifier: Modifier = Modifier,
+    recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
+    upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -116,188 +116,200 @@ fun MainContent(
             BottomNavigation(SettingsPane.ROUTE, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
         )
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(titleRes),
-                    )
-                },
-                navigationIcon = {
-                    if (backStackEntry.value?.destination?.route == EditExpensePane.ROUTE) {
-                        IconButton(
-                            onClick = {
-                                navController.navigateUp()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (backStackEntry.value?.destination?.route in listOf(HomePane.ROUTE, UpcomingPane.ROUTE)) {
-                        IconButton(onClick = {
-                            toggleGridMode()
-                            // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
-                            // reset and scrolled back to the top. To make sure the scroll state matches
-                            // that we need to reset it here. It make the TopAppBar use the surface
-                            // color again. This is a workaround which can hopefully removed in the near
-                            // future.
-                            homeScrollBehavior.state.contentOffset = 0f
-                        }) {
-                            Icon(
-                                imageVector =
-                                    if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
-                                contentDescription =
-                                    if (isGridMode) {
-                                        stringResource(
-                                            Res.string.top_app_bar_icon_button_grid_close_content_desc,
-                                        )
-                                    } else {
-                                        stringResource(
-                                            Res.string.top_app_bar_icon_button_grid_open_content_desc,
-                                        )
-                                    },
-                            )
-                        }
-                    }
-                },
-                scrollBehavior = topAppBarScrollBehavior,
-            )
-        },
-        bottomBar = {
-            if (backStackEntry.value?.destination?.route in
-                listOf(HomePane.ROUTE, UpcomingPane.ROUTE, SettingsPane.ROUTE)
-            ) {
-                NavigationBar {
-                    bottomNavigationItems.forEach { item ->
-                        val selected = item.route == backStackEntry.value?.destination?.route
-
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(item.route) {
-                                    // Pop up to the start destination of the graph to
-                                    // avoid building up a large stack of destinations
-                                    // on the back stack as users select items
-                                    navController.graph.findStartDestination().route?.let { route ->
-                                        popUpTo(route) {
-                                            saveState = true
-                                        }
-                                    }
-                                    // Avoid multiple copies of the same destination when
-                                    // reselecting the same item
-                                    launchSingleTop = true
-                                    // Restore state when reselecting a previously selected item
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
+    KoinContext {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(titleRes),
+                        )
+                    },
+                    navigationIcon = {
+                        if (backStackEntry.value?.destination?.route == EditExpensePane.ROUTE) {
+                            IconButton(
+                                onClick = {
+                                    navController.navigateUp()
+                                },
+                            ) {
                                 Icon(
-                                    imageVector = item.icon,
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = null,
                                 )
+                            }
+                        }
+                    },
+                    actions = {
+                        if (backStackEntry.value?.destination?.route in
+                            listOf(
+                                HomePane.ROUTE,
+                                UpcomingPane.ROUTE,
+                            )
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    toggleGridMode()
+                                    // Because of the [AnimatedContent] in [RecurringExpenseOverview] the list is
+                                    // reset and scrolled back to the top. To make sure the scroll state matches
+                                    // that we need to reset it here. It make the TopAppBar use the surface
+                                    // color again. This is a workaround which can hopefully removed in the near
+                                    // future.
+                                    homeScrollBehavior.state.contentOffset = 0f
+                                },
+                            ) {
+                                Icon(
+                                    imageVector =
+                                        if (isGridMode) Icons.Filled.TableRows else Icons.Filled.GridView,
+                                    contentDescription =
+                                        if (isGridMode) {
+                                            stringResource(
+                                                Res.string.top_app_bar_icon_button_grid_close_content_desc,
+                                            )
+                                        } else {
+                                            stringResource(
+                                                Res.string.top_app_bar_icon_button_grid_open_content_desc,
+                                            )
+                                        },
+                                )
+                            }
+                        }
+                    },
+                    scrollBehavior = topAppBarScrollBehavior,
+                )
+            },
+            bottomBar = {
+                if (backStackEntry.value?.destination?.route in
+                    listOf(HomePane.ROUTE, UpcomingPane.ROUTE, SettingsPane.ROUTE)
+                ) {
+                    NavigationBar {
+                        bottomNavigationItems.forEach { item ->
+                            val selected = item.route == backStackEntry.value?.destination?.route
+
+                            NavigationBarItem(
+                                selected = selected,
+                                onClick = {
+                                    navController.navigate(item.route) {
+                                        // Pop up to the start destination of the graph to
+                                        // avoid building up a large stack of destinations
+                                        // on the back stack as users select items
+                                        navController.graph.findStartDestination().route?.let { route ->
+                                            popUpTo(route) {
+                                                saveState = true
+                                            }
+                                        }
+                                        // Avoid multiple copies of the same destination when
+                                        // reselecting the same item
+                                        launchSingleTop = true
+                                        // Restore state when reselecting a previously selected item
+                                        restoreState = true
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = null,
+                                    )
+                                },
+                                label = {
+                                    Text(text = stringResource(item.name))
+                                },
+                            )
+                        }
+                    }
+                }
+            },
+            floatingActionButton = {
+                if (backStackEntry.value?.destination?.route in listOf(HomePane.ROUTE, UpcomingPane.ROUTE)) {
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate(EditExpensePane().destination)
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription =
+                                stringResource(Res.string.home_add_expense_fab_content_description),
+                        )
+                    }
+                }
+            },
+            content = { paddingValues ->
+                NavHost(
+                    navController = navController,
+                    startDestination = HomePane.ROUTE,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                ) {
+                    composable(HomePane.ROUTE) {
+                        RecurringExpenseOverview(
+                            weeklyExpense = recurringExpenseViewModel.weeklyExpense,
+                            monthlyExpense = recurringExpenseViewModel.monthlyExpense,
+                            yearlyExpense = recurringExpenseViewModel.yearlyExpense,
+                            recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
+                            onClickItem = {
+                                navController.navigate(EditExpensePane(it.id).destination)
                             },
-                            label = {
-                                Text(text = stringResource(item.name))
+                            isGridMode = isGridMode,
+                            modifier =
+                                Modifier
+                                    .nestedScroll(homeScrollBehavior.nestedScrollConnection),
+                            contentPadding =
+                                PaddingValues(
+                                    top = 8.dp,
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                ),
+                        )
+                    }
+                    composable(UpcomingPane.ROUTE) {
+                        UpcomingPaymentsScreen(
+                            upcomingPaymentsViewModel = upcomingPaymentsViewModel,
+                            onClickItem = {
+                                navController.navigate(EditExpensePane(it.id).destination)
+                            },
+                            isGridMode = isGridMode,
+                            modifier =
+                                Modifier
+                                    .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
+                            contentPadding =
+                                PaddingValues(
+                                    top = 8.dp,
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                ),
+                        )
+                    }
+                    composable(SettingsPane.ROUTE) {
+                        SettingsScreen(
+                            checked = biometricSecurity,
+                            onClickBackup = onClickBackup,
+                            onClickRestore = onClickRestore,
+                            onCheckedChange = onBiometricSecurityChange,
+                            canUseBiometric = canUseBiometric,
+                            modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
+                        )
+                    }
+                    composable(
+                        route = EditExpensePane.ROUTE,
+                        arguments = EditExpensePane.navArguments,
+                    ) { backStackEntry ->
+                        val expenseId = backStackEntry.getArgExpenseId()
+                        val expenseRepository = koinInject<ExpenseRepository>()
+                        val viewModel = viewModel { EditRecurringExpenseViewModel(expenseId, expenseRepository) }
+                        EditRecurringExpenseScreen(
+                            viewModel = viewModel,
+                            onDismiss = {
+                                navController.navigateUp()
                             },
                         )
                     }
                 }
-            }
-        },
-        floatingActionButton = {
-            if (backStackEntry.value?.destination?.route in listOf(HomePane.ROUTE, UpcomingPane.ROUTE)) {
-                FloatingActionButton(onClick = {
-                    navController.navigate(EditExpensePane().destination)
-                }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription =
-                            stringResource(Res.string.home_add_expense_fab_content_description),
-                    )
-                }
-            }
-        },
-        content = { paddingValues ->
-            NavHost(
-                navController = navController,
-                startDestination = HomePane.ROUTE,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-            ) {
-                composable(HomePane.ROUTE) {
-                    RecurringExpenseOverview(
-                        weeklyExpense = weeklyExpense,
-                        monthlyExpense = monthlyExpense,
-                        yearlyExpense = yearlyExpense,
-                        recurringExpenseData = recurringExpenseData,
-                        onClickItem = {
-                            navController.navigate(EditExpensePane(it.id).destination)
-                        },
-                        isGridMode = isGridMode,
-                        modifier =
-                            Modifier
-                                .nestedScroll(homeScrollBehavior.nestedScrollConnection),
-                        contentPadding =
-                            PaddingValues(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                            ),
-                    )
-                }
-                composable(UpcomingPane.ROUTE) {
-                    UpcomingPaymentsScreen(
-                        upcomingPaymentsViewModel = upcomingPaymentsViewModel,
-                        onClickItem = {
-                            navController.navigate(EditExpensePane(it.id).destination)
-                        },
-                        isGridMode = isGridMode,
-                        modifier =
-                            Modifier
-                                .nestedScroll(upcomingScrollBehavior.nestedScrollConnection),
-                        contentPadding =
-                            PaddingValues(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                            ),
-                    )
-                }
-                composable(SettingsPane.ROUTE) {
-                    SettingsScreen(
-                        checked = biometricSecurity,
-                        onClickBackup = onClickBackup,
-                        onClickRestore = onClickRestore,
-                        onCheckedChange = onBiometricSecurityChange,
-                        canUseBiometric = canUseBiometric,
-                        modifier = Modifier.nestedScroll(settingsScrollBehavior.nestedScrollConnection),
-                    )
-                }
-                composable(
-                    route = EditExpensePane.ROUTE,
-                    arguments = EditExpensePane.navArguments,
-                ) { backStackEntry ->
-                    val expenseId = backStackEntry.getArgExpenseId()
-                    val viewModel = viewModel { EditRecurringExpenseViewModel(expenseId, expenseRepository) }
-                    EditRecurringExpenseScreen(
-                        viewModel = viewModel,
-                        onDismiss = {
-                            navController.navigateUp()
-                        },
-                    )
-                }
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
 // @Preview

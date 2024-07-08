@@ -31,6 +31,8 @@ import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_title
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_unlock
@@ -43,20 +45,12 @@ import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
 import ui.theme.ExpenseTrackerTheme
-import viewmodel.RecurringExpenseViewModel
 import viewmodel.SettingsViewModel
-import viewmodel.UpcomingPaymentsViewModel
 import viewmodel.database.UserPreferencesRepository
 
 class MainActivity : AppCompatActivity() {
-    private val recurringExpenseViewModel: RecurringExpenseViewModel by viewModels {
-        RecurringExpenseViewModel.create((application as ExpenseTrackerApplication).repository)
-    }
-    private val upcomingPaymentsViewModel: UpcomingPaymentsViewModel by viewModels {
-        UpcomingPaymentsViewModel.create((application as ExpenseTrackerApplication).repository)
-    }
-    private val settingsViewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.create(getDatabasePath(Constants.DATABASE_NAME).path)
+    private val settingsViewModel: SettingsViewModel by lazy {
+        getViewModel(parameters = { parametersOf(getDatabasePath(Constants.DATABASE_NAME).path) })
     }
     private val userPreferencesRepository: UserPreferencesRepository by lazy {
         (application as ExpenseTrackerApplication).userPreferencesRepository
@@ -162,13 +156,17 @@ class MainActivity : AppCompatActivity() {
                         val backupRestored = settingsViewModel.restoreDatabase(it, applicationContext)
                         val toastString =
                             if (backupRestored) {
-                                recurringExpenseViewModel.onDatabaseRestored()
-                                upcomingPaymentsViewModel.onDatabaseRestored()
                                 Res.string.settings_backup_restored_toast
                             } else {
                                 Res.string.settings_backup_not_restored_toast
                             }.asString()
                         Toast.makeText(this@MainActivity, toastString, Toast.LENGTH_LONG).show()
+
+                        if (backupRestored) {
+                            // Restart Activity after restoring backup to make sure the repository is updated
+                            finish()
+                            startActivity(intent)
+                        }
                     }
                 }
 
@@ -197,17 +195,12 @@ class MainActivity : AppCompatActivity() {
                         }
                     } else {
                         MainContent(
-                            weeklyExpense = recurringExpenseViewModel.weeklyExpense,
-                            monthlyExpense = recurringExpenseViewModel.monthlyExpense,
-                            yearlyExpense = recurringExpenseViewModel.yearlyExpense,
-                            recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                             onClickBackup = {
                                 backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
                             },
                             onClickRestore = {
                                 importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                             },
-                            upcomingPaymentsViewModel = upcomingPaymentsViewModel,
                             isGridMode = isGridMode,
                             biometricSecurity = biometricSecurity,
                             onBiometricSecurityChange = {
@@ -221,7 +214,6 @@ class MainActivity : AppCompatActivity() {
                                 }
                             },
                             canUseBiometric = canUseBiometric,
-                            expenseRepository = (application as ExpenseTrackerApplication).repository,
                         )
                     }
                 }
