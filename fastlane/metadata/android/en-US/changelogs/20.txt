@@ -1,0 +1,6 @@
+Changelog 0.8.1:
+* Fix color definition for light and dark theme
+
+Changelog 0.8.0:
+* Migrate the whole project to Kotlin Multiplatform. This allows the project to also run on desktops and iOS in the future. For the Android app everything should continue to work as is.
+* Create separate screen for edit expense instead of the bottom sheet.
