@@ -66,44 +66,44 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 val expense_predefined_red
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80990000) else Color(0x80ff6666)
+    get() = if (isSystemInDarkTheme()) Color(0x80ff6666) else Color(0x80990000)
 
 val expense_predefined_orange
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80994d00) else Color(0x80ffb366)
+    get() = if (isSystemInDarkTheme()) Color(0x80ffb366) else Color(0x80994d00)
 
 val expense_predefined_yellow
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80999900) else Color(0x80ffff66)
+    get() = if (isSystemInDarkTheme()) Color(0x80ffff66) else Color(0x80999900)
 
 val expense_predefined_green
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80009900) else Color(0x8066ff66)
+    get() = if (isSystemInDarkTheme()) Color(0x8066ff66) else Color(0x80009900)
 
 val expense_predefined_mint
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x8000994d) else Color(0x8066ffb3)
+    get() = if (isSystemInDarkTheme()) Color(0x8066ffb3) else Color(0x8000994d)
 
 val expense_predefined_turquoise
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80009999) else Color(0x8066ffff)
+    get() = if (isSystemInDarkTheme()) Color(0x8066ffff) else Color(0x80009999)
 
 val expense_predefined_cyan
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80004c99) else Color(0x8066b2ff)
+    get() = if (isSystemInDarkTheme()) Color(0x8066b2ff) else Color(0x80004c99)
 
 val expense_predefined_blue
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80000099) else Color(0x807f66ff)
+    get() = if (isSystemInDarkTheme()) Color(0x807f66ff) else Color(0x80000099)
 
 val expense_predefined_purple
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x804c0099) else Color(0x80cc66ff)
+    get() = if (isSystemInDarkTheme()) Color(0x80cc66ff) else Color(0x804c0099)
 
 val expense_predefined_pink
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x80990099) else Color(0x80ff66ff)
+    get() = if (isSystemInDarkTheme()) Color(0x80ff66ff) else Color(0x80990099)
 
 val expense_predefined_maroon
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0x8099004d) else Color(0x80ff66b3)
+    get() = if (isSystemInDarkTheme()) Color(0x80ff66b3) else Color(0x8099004d)
