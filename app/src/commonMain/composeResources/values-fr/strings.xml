@@ -6,7 +6,7 @@
     <string name="home_summary_yearly">Annuel</string>
     <string name="edit_expense_button_add">Ajouter dépense</string>
     <string name="home_add_expense_fab_content_description">Ajouter une dépense</string>
-    <string name="edit_expense_delete">Supprimer</string>
+    <string name="delete">Supprimer</string>
     <string name="edit_expense_description">Description (facultatif)</string>
     <string name="edit_expense_invalid_input">Entrée invalide</string>
     <string name="edit_expense_name_placeholder">par exemple. Netflix</string>
@@ -42,7 +42,7 @@
     <string name="settings_backup_restore">Restaurer sauvegarde</string>
     <string name="top_app_bar_icon_button_grid_open_content_desc">Mode grille ouverte</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Fermer mode grille</string>
-    <string name="edit_expense_button_save">Sauvegarder</string>
+    <string name="save">Sauvegarder</string>
     <string name="edit_expense_first_payment_placeholder">Choisir une date</string>
     <string name="settings_title_security">Sécurité</string>
     <string name="biometric_prompt_manager_title">Débloquer ExpenseTracker</string>

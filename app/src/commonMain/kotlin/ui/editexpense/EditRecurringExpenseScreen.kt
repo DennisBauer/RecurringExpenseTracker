@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,10 +35,12 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.cancel
+import recurringexpensetracker.app.generated.resources.delete
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
-import recurringexpensetracker.app.generated.resources.edit_expense_button_save
-import recurringexpensetracker.app.generated.resources.edit_expense_delete
+import recurringexpensetracker.app.generated.resources.edit_expense_delete_dialog_text
 import recurringexpensetracker.app.generated.resources.edit_expense_title
+import recurringexpensetracker.app.generated.resources.save
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.EditRecurringExpenseViewModel
 
@@ -72,14 +76,11 @@ fun EditRecurringExpenseScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = {
-                            viewModel.deleteExpense()
-                            onDismiss()
-                        },
+                        onClick = viewModel::onDeleteClick,
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = stringResource(Res.string.edit_expense_delete),
+                            contentDescription = stringResource(Res.string.delete),
                         )
                     }
                 },
@@ -154,13 +155,38 @@ fun EditRecurringExpenseScreen(
                                     if (viewModel.isNewExpense) {
                                         Res.string.edit_expense_button_add
                                     } else {
-                                        Res.string.edit_expense_button_save
+                                        Res.string.save
                                     },
                                 ),
                             modifier = Modifier.padding(vertical = 4.dp),
                         )
                     }
                 }
+            }
+            if (viewModel.showDeleteConfirmDialog) {
+                AlertDialog(
+                    onDismissRequest = viewModel::onDismissDeleteDialog,
+                    text = {
+                        Text(text = stringResource(Res.string.edit_expense_delete_dialog_text))
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteExpense()
+                                onDismiss()
+                            },
+                        ) {
+                            Text(text = stringResource(Res.string.delete))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = viewModel::onDismissDeleteDialog,
+                        ) {
+                            Text(text = stringResource(Res.string.cancel))
+                        }
+                    },
+                )
             }
         },
     )

@@ -18,8 +18,6 @@
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
     <string name="edit_expense_button_add">Ausgabe hinzufügen</string>
-    <string name="edit_expense_delete">Löschen</string>
-    <string name="edit_expense_button_save">Speichern</string>
     <string name="edit_expense_description">Beschreibung (optional)</string>
     <string name="edit_expense_description_placeholder">z.B. spezielles Abo</string>
     <string name="edit_expense_invalid_input">Ungültige Eingabe</string>
@@ -38,6 +36,7 @@
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Datum auswählen</string>
     <string name="edit_expense_color">Farbe</string>
+    <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Ausstehende Zahlungen</string>
@@ -65,4 +64,6 @@
     <!-- General -->
     <string name="dialog_ok">OK</string>
     <string name="cancel">Abbrechen</string>
+    <string name="delete">Löschen</string>
+    <string name="save">Speichern</string>
 </resources>
