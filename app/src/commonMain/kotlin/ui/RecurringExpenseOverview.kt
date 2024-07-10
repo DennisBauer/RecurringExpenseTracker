@@ -38,6 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import data.EditExpensePane
 import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.datetime.Clock
@@ -64,8 +67,7 @@ fun RecurringExpenseOverview(
     recurringExpenseData: List<RecurringExpenseData>,
     isGridMode: Boolean,
     onToggleGridMode: () -> Unit,
-    onCreateNewExpense: () -> Unit,
-    onEditExpense: (expenseId: Int) -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -91,9 +93,14 @@ fun RecurringExpenseOverview(
                 },
             )
         },
+        bottomBar = {
+            BottomNavBar(navController = navController)
+        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onCreateNewExpense,
+                onClick = {
+                    navController.navigate(EditExpensePane().destination)
+                },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
@@ -151,14 +158,14 @@ fun RecurringExpenseOverview(
                             GridRecurringExpense(
                                 recurringExpenseData = recurringExpenseData,
                                 onClickItem = {
-                                    onEditExpense(recurringExpenseData.id)
+                                    navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
                                 },
                             )
                         } else {
                             RecurringExpense(
                                 recurringExpenseData = recurringExpenseData,
                                 onClickItem = {
-                                    onEditExpense(recurringExpenseData.id)
+                                    navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
                                 },
                             )
                         }
@@ -415,8 +422,7 @@ private fun RecurringExpenseOverviewPreview(
                     ),
                 isGridMode = isGridMode,
                 onToggleGridMode = { },
-                onCreateNewExpense = { },
-                onEditExpense = {},
+                navController = rememberNavController(),
             )
         }
     }

@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -50,6 +52,7 @@ fun SettingsScreen(
     onClickBackup: () -> Unit,
     onClickRestore: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -58,6 +61,9 @@ fun SettingsScreen(
             TopAppBar(
                 title = { Text(text = stringResource(Res.string.settings_title)) },
             )
+        },
+        bottomBar = {
+            BottomNavBar(navController = navController)
         },
         content = { paddingValues ->
             Column(
@@ -178,6 +184,7 @@ private fun SettingsScreenPreview(
                 onClickBackup = {},
                 onClickRestore = {},
                 onCheckedChange = { checked = it },
+                navController = rememberNavController(),
             )
         }
     }

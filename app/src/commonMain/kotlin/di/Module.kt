@@ -23,7 +23,7 @@ val sharedModule =
         }.bind<RecurringExpenseDao>()
         viewModelOf(::RecurringExpenseViewModel)
         viewModelOf(::UpcomingPaymentsViewModel)
-        viewModel { (expenseId: Int) ->
+        viewModel { (expenseId: Int?) ->
             EditRecurringExpenseViewModel(expenseId, get())
         }
     }

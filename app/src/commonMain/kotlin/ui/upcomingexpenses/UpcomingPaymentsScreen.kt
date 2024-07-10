@@ -40,7 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import data.RecurringExpenseData
+import androidx.navigation.NavController
+import data.EditExpensePane
 import data.UpcomingPaymentData
 import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
@@ -54,6 +55,7 @@ import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_t
 import recurringexpensetracker.app.generated.resources.upcoming_title
 import toCurrencyString
 import toLocaleString
+import ui.BottomNavBar
 import ui.ToggleGridModeButton
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
@@ -63,10 +65,9 @@ import viewmodel.UpcomingPaymentsViewModel
 @Composable
 fun UpcomingPaymentsScreen(
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
-    onClickItem: (RecurringExpenseData) -> Unit,
     isGridMode: Boolean,
     onToggleGridMode: () -> Unit,
-    onCreateNewExpense: () -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -87,9 +88,14 @@ fun UpcomingPaymentsScreen(
                 },
             )
         },
+        bottomBar = {
+            BottomNavBar(navController = navController)
+        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onCreateNewExpense,
+                onClick = {
+                    navController.navigate(EditExpensePane().destination)
+                },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
@@ -102,8 +108,10 @@ fun UpcomingPaymentsScreen(
             if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
                 UpcomingPaymentsOverview(
                     upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
-                    onClickItem = {
-                        upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onClickItem)
+                    onClickItem = { expenseId ->
+                        upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
+                            navController.navigate(EditExpensePane(expenseId).destination)
+                        }
                     },
                     isGridMode = isGridMode,
                     modifier = Modifier.padding(paddingValues),
