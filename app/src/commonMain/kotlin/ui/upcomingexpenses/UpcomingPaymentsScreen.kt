@@ -23,12 +23,17 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,42 +46,80 @@ import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.home_add_expense_fab_content_description
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_tomorrow
+import recurringexpensetracker.app.generated.resources.upcoming_title
 import toCurrencyString
 import toLocaleString
+import ui.ToggleGridModeButton
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.UpcomingPaymentsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpcomingPaymentsScreen(
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     onClickItem: (RecurringExpenseData) -> Unit,
     isGridMode: Boolean,
+    onToggleGridMode: () -> Unit,
+    onCreateNewExpense: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
-        UpcomingPaymentsOverview(
-            upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
-            onClickItem = {
-                upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onClickItem)
-            },
-            isGridMode = isGridMode,
-            modifier = modifier,
-            contentPadding = contentPadding,
-        )
-    } else {
-        UpcomingPaymentsOverviewPlaceholder(
-            modifier =
-                modifier
-                    .fillMaxSize()
-                    .padding(vertical = 16.dp),
-        )
-    }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(Res.string.upcoming_title),
+                    )
+                },
+                actions = {
+                    ToggleGridModeButton(
+                        onToggleGridMode = onToggleGridMode,
+                        isGridMode = isGridMode,
+                    )
+                },
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCreateNewExpense,
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription =
+                        stringResource(Res.string.home_add_expense_fab_content_description),
+                )
+            }
+        },
+        content = { paddingValues ->
+            if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
+                UpcomingPaymentsOverview(
+                    upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
+                    onClickItem = {
+                        upcomingPaymentsViewModel.onExpenseWithIdClicked(it, onClickItem)
+                    },
+                    isGridMode = isGridMode,
+                    modifier = Modifier.padding(paddingValues),
+                    contentPadding = contentPadding,
+                )
+            } else {
+                UpcomingPaymentsOverviewPlaceholder(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .padding(vertical = 16.dp),
+                )
+            }
+        },
+    )
 }
 
 @Composable

@@ -20,11 +20,18 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,21 +46,26 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.home_add_expense_fab_content_description
 import recurringexpensetracker.app.generated.resources.home_summary_monthly
 import recurringexpensetracker.app.generated.resources.home_summary_weekly
 import recurringexpensetracker.app.generated.resources.home_summary_yearly
+import recurringexpensetracker.app.generated.resources.home_title
 import toCurrencyString
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecurringExpenseOverview(
     weeklyExpense: String,
     monthlyExpense: String,
     yearlyExpense: String,
     recurringExpenseData: List<RecurringExpenseData>,
-    onClickItem: (RecurringExpenseData) -> Unit,
     isGridMode: Boolean,
+    onToggleGridMode: () -> Unit,
+    onCreateNewExpense: () -> Unit,
+    onEditExpense: (expenseId: Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -62,74 +74,108 @@ fun RecurringExpenseOverview(
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()
 
-    AnimatedContent(
-        targetState = isGridMode,
-        transitionSpec = {
-            ContentTransform(
-                fadeIn(
-                    animationSpec = tween(durationMillis = fadeDuration),
-                    initialAlpha = 0.0f,
-                ),
-                fadeOut(
-                    animationSpec = tween(durationMillis = fadeDuration),
-                    targetAlpha = 0.0f,
-                ),
-                sizeTransform = null,
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(Res.string.home_title),
+                    )
+                },
+                actions = {
+                    ToggleGridModeButton(
+                        onToggleGridMode = onToggleGridMode,
+                        isGridMode = isGridMode,
+                    )
+                },
             )
         },
-        label = "Animates between row mode and grid mode",
-    ) { targetValue ->
-        LazyVerticalStaggeredGrid(
-            columns =
-                if (targetValue) {
-                    StaggeredGridCells.Adaptive(160.dp)
-                } else {
-                    StaggeredGridCells.Fixed(1)
-                },
-            state = if (targetValue) gridState else listState,
-            verticalItemSpacing = 8.dp,
-            horizontalArrangement =
-                Arrangement.spacedBy(8.dp),
-            contentPadding = contentPadding,
-            modifier = modifier.fillMaxWidth(),
-        ) {
-            item(span = StaggeredGridItemSpan.FullLine) {
-                RecurringExpenseSummary(
-                    weeklyExpense = weeklyExpense,
-                    monthlyExpense = monthlyExpense,
-                    yearlyExpense = yearlyExpense,
-                    modifier = Modifier.padding(bottom = 8.dp),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCreateNewExpense,
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription =
+                        stringResource(Res.string.home_add_expense_fab_content_description),
                 )
             }
-
-            items(items = recurringExpenseData) { recurringExpenseData ->
-                if (targetValue) {
-                    GridRecurringExpense(
-                        recurringExpenseData = recurringExpenseData,
-                        onClickItem = {
-                            onClickItem(recurringExpenseData)
-                        },
+        },
+        content = { paddingValues ->
+            AnimatedContent(
+                targetState = isGridMode,
+                transitionSpec = {
+                    ContentTransform(
+                        fadeIn(
+                            animationSpec = tween(durationMillis = fadeDuration),
+                            initialAlpha = 0.0f,
+                        ),
+                        fadeOut(
+                            animationSpec = tween(durationMillis = fadeDuration),
+                            targetAlpha = 0.0f,
+                        ),
+                        sizeTransform = null,
                     )
-                } else {
-                    RecurringExpense(
-                        recurringExpenseData = recurringExpenseData,
-                        onClickItem = {
-                            onClickItem(recurringExpenseData)
+                },
+                label = "Animates between row mode and grid mode",
+            ) { targetValue ->
+                LazyVerticalStaggeredGrid(
+                    columns =
+                        if (targetValue) {
+                            StaggeredGridCells.Adaptive(160.dp)
+                        } else {
+                            StaggeredGridCells.Fixed(1)
                         },
-                    )
-                }
-            }
-
-            item(span = StaggeredGridItemSpan.FullLine) {
-                Spacer(
+                    state = if (targetValue) gridState else listState,
+                    verticalItemSpacing = 8.dp,
+                    horizontalArrangement =
+                        Arrangement.spacedBy(8.dp),
+                    contentPadding = contentPadding,
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(80.dp),
-                )
+                            .padding(paddingValues),
+                ) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        RecurringExpenseSummary(
+                            weeklyExpense = weeklyExpense,
+                            monthlyExpense = monthlyExpense,
+                            yearlyExpense = yearlyExpense,
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+                    }
+
+                    items(items = recurringExpenseData) { recurringExpenseData ->
+                        if (targetValue) {
+                            GridRecurringExpense(
+                                recurringExpenseData = recurringExpenseData,
+                                onClickItem = {
+                                    onEditExpense(recurringExpenseData.id)
+                                },
+                            )
+                        } else {
+                            RecurringExpense(
+                                recurringExpenseData = recurringExpenseData,
+                                onClickItem = {
+                                    onEditExpense(recurringExpenseData.id)
+                                },
+                            )
+                        }
+                    }
+
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Spacer(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(80.dp),
+                        )
+                    }
+                }
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -367,8 +413,10 @@ private fun RecurringExpenseOverviewPreview(
                             ExpenseColor.Dynamic,
                         ),
                     ),
-                onClickItem = {},
                 isGridMode = isGridMode,
+                onToggleGridMode = { },
+                onCreateNewExpense = { },
+                onEditExpense = {},
             )
         }
     }
