@@ -20,8 +20,6 @@
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
     <string name="edit_expense_button_add">Add Expense</string>
-    <string name="edit_expense_button_delete">Delete</string>
-    <string name="edit_expense_button_save">Save</string>
     <string name="edit_expense_description">Description (optional)</string>
     <string name="edit_expense_description_placeholder">e.g. special subscription</string>
     <string name="edit_expense_invalid_input">Invalid input</string>
@@ -40,6 +38,7 @@
     <string name="edit_expense_first_payment">First Payment (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Pick a Date</string>
     <string name="edit_expense_color">Color</string>
+    <string name="edit_expense_delete_dialog_text">Do you really want to delete this expense?</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Upcoming Payments</string>
@@ -67,4 +66,6 @@
     <!-- General -->
     <string name="dialog_ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
 </resources>

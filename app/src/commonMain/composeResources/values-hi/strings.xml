@@ -3,7 +3,7 @@
     <string name="home_summary_weekly">साप्ताहिक</string>
     <string name="home_summary_yearly">वार्षिक</string>
     <string name="home_add_expense_fab_content_description">खर्चा जोड़ें</string>
-    <string name="edit_expense_button_delete">मिटायें</string>
+    <string name="delete">मिटायें</string>
     <string name="edit_expense_invalid_input">अमान्य इनपुट</string>
     <string name="edit_expense_name">नाम</string>
     <string name="edit_expense_name_placeholder">उदा. Netflix</string>
@@ -40,7 +40,7 @@
     <string name="settings_backup_not_restored_toast">बैकअप बहाल नहीं किया जा सका</string>
     <string name="upcoming_placeholder_title">आगामी भुगतानों की समीक्षा के लिए खर्चों की पहली भुगतान तिथि निर्धारित करें</string>
     <string name="settings_backup">बैकअप</string>
-    <string name="edit_expense_button_save">सहेजें</string>
+    <string name="save">सहेजें</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">ग्रिड मोड बंद करें</string>
     <string name="top_app_bar_icon_button_grid_open_content_desc">ग्रिड मोड खोलें</string>
     <string name="settings_security_biometric_lock">बायोमेट्रिक लॉक</string>

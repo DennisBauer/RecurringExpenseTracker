@@ -29,8 +29,9 @@ class EditRecurringExpenseViewModel(
     var firstPaymentDate: Instant? by mutableStateOf(null)
     var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
 
+    var showDeleteConfirmDialog by mutableStateOf(false)
+
     val isNewExpense = expenseId == null
-    val showDeleteButton = !isNewExpense
 
     init {
         if (expenseId != null) {
@@ -63,10 +64,19 @@ class EditRecurringExpenseViewModel(
         }
     }
 
+    fun onDeleteClick() {
+        showDeleteConfirmDialog = true
+    }
+
+    fun onDismissDeleteDialog() {
+        showDeleteConfirmDialog = false
+    }
+
     fun deleteExpense() {
         if (expenseId == null) {
             throw IllegalStateException("Deleting an new expense not created yet is not allowed")
         }
+        showDeleteConfirmDialog = false
         viewModelScope.launch {
             val recurringExpense = createRecurringExpenseData()
             expenseRepository.delete(recurringExpense.toBackendType())
