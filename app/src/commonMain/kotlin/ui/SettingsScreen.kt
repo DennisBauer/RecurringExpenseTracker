@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,9 +38,11 @@ import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
 import recurringexpensetracker.app.generated.resources.settings_security_biometric_lock
+import recurringexpensetracker.app.generated.resources.settings_title
 import recurringexpensetracker.app.generated.resources.settings_title_security
 import ui.theme.ExpenseTrackerTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     checked: Boolean,
@@ -47,33 +52,44 @@ fun SettingsScreen(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier =
-            modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize(),
-    ) {
-        SettingsHeaderElement(
-            header = Res.string.settings_backup,
-        )
-        SettingsClickableElement(
-            name = Res.string.settings_backup_create,
-            onClick = onClickBackup,
-        )
-        SettingsClickableElement(
-            name = Res.string.settings_backup_restore,
-            onClick = onClickRestore,
-        )
-        if (canUseBiometric) {
-            HorizontalDivider()
-            SettingsHeaderElement(header = Res.string.settings_title_security)
-            SettingsClickableElementWithToggle(
-                name = Res.string.settings_security_biometric_lock,
-                checked = checked,
-                onCheckedChange = onCheckedChange,
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(Res.string.settings_title)) },
             )
-        }
-    }
+        },
+        content = { paddingValues ->
+            Column(
+                modifier =
+                    Modifier
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize(),
+            ) {
+                SettingsHeaderElement(
+                    header = Res.string.settings_backup,
+                )
+                SettingsClickableElement(
+                    name = Res.string.settings_backup_create,
+                    onClick = onClickBackup,
+                )
+                SettingsClickableElement(
+                    name = Res.string.settings_backup_restore,
+                    onClick = onClickRestore,
+                )
+                if (canUseBiometric) {
+                    HorizontalDivider()
+                    SettingsHeaderElement(header = Res.string.settings_title_security)
+                    SettingsClickableElementWithToggle(
+                        name = Res.string.settings_security_biometric_lock,
+                        checked = checked,
+                        onCheckedChange = onCheckedChange,
+                    )
+                }
+            }
+        },
+    )
 }
 
 @Composable
