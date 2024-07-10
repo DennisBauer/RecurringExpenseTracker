@@ -18,7 +18,7 @@
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
     <string name="edit_expense_button_add">Ausgabe hinzufügen</string>
-    <string name="edit_expense_button_delete">Löschen</string>
+    <string name="edit_expense_delete">Löschen</string>
     <string name="edit_expense_button_save">Speichern</string>
     <string name="edit_expense_description">Beschreibung (optional)</string>
     <string name="edit_expense_description_placeholder">z.B. spezielles Abo</string>

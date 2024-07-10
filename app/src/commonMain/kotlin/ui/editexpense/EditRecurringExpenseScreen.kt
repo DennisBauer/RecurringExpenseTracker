@@ -12,13 +12,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,8 +34,8 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
-import recurringexpensetracker.app.generated.resources.edit_expense_button_delete
 import recurringexpensetracker.app.generated.resources.edit_expense_button_save
+import recurringexpensetracker.app.generated.resources.edit_expense_delete
 import recurringexpensetracker.app.generated.resources.edit_expense_title
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.EditRecurringExpenseViewModel
@@ -69,6 +67,19 @@ fun EditRecurringExpenseScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            viewModel.deleteExpense()
+                            onDismiss()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = stringResource(Res.string.edit_expense_delete),
                         )
                     }
                 },
@@ -124,27 +135,6 @@ fun EditRecurringExpenseScreen(
                             .navigationBarsPadding()
                             .imePadding(),
                 ) {
-                    if (viewModel.showDeleteButton) {
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.deleteExpense()
-                                onDismiss()
-                            },
-                            colors =
-                                ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.error,
-                                ),
-                            modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .wrapContentWidth(),
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.edit_expense_button_delete),
-                                modifier = Modifier.padding(vertical = 4.dp),
-                            )
-                        }
-                    }
                     Button(
                         onClick = {
                             viewModel.updateExpense { successful ->

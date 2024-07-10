@@ -30,7 +30,6 @@ class EditRecurringExpenseViewModel(
     var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
 
     val isNewExpense = expenseId == null
-    val showDeleteButton = !isNewExpense
 
     init {
         if (expenseId != null) {

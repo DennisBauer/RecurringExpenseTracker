@@ -20,7 +20,7 @@
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
     <string name="edit_expense_button_add">Add Expense</string>
-    <string name="edit_expense_button_delete">Delete</string>
+    <string name="edit_expense_delete">Delete</string>
     <string name="edit_expense_button_save">Save</string>
     <string name="edit_expense_description">Description (optional)</string>
     <string name="edit_expense_description_placeholder">e.g. special subscription</string>

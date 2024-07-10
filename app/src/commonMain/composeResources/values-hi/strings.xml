@@ -3,7 +3,7 @@
     <string name="home_summary_weekly">साप्ताहिक</string>
     <string name="home_summary_yearly">वार्षिक</string>
     <string name="home_add_expense_fab_content_description">खर्चा जोड़ें</string>
-    <string name="edit_expense_button_delete">मिटायें</string>
+    <string name="edit_expense_delete">मिटायें</string>
     <string name="edit_expense_invalid_input">अमान्य इनपुट</string>
     <string name="edit_expense_name">नाम</string>
     <string name="edit_expense_name_placeholder">उदा. Netflix</string>
