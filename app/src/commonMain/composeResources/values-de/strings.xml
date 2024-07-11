@@ -47,6 +47,9 @@
 
     <!-- Settings Tab -->
     <string name="settings_title">Einstellungen</string>
+    <string name="settings_general">Allgemein</string>
+    <string name="settings_default_currency">Standardwährung</string>
+    <string name="settings_system_default">Systemstandard</string>
     <string name="settings_backup">Sicherung</string>
     <string name="settings_backup_create">Sicherung erstellen</string>
     <string name="settings_backup_restore">Sicherung Wiederherstellen</string>

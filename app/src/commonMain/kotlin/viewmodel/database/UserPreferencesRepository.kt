@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -42,4 +43,5 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
 
     val gridMode = Preference(booleanPreferencesKey("IS_GRID_MODE"), false)
     val biometricSecurity = Preference(booleanPreferencesKey("BIOMETRIC_SECURITY"), false)
+    val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
 }

@@ -3,11 +3,16 @@ import kotlinx.datetime.Instant
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.ParseException
+import java.util.Currency
 import java.util.Date
 import java.util.TimeZone
 
-actual fun Float.toCurrencyString(): String {
-    return NumberFormat.getCurrencyInstance().format(this)
+actual fun Float.toCurrencyString(currencyCode: String): String {
+    val currencyInstance = NumberFormat.getCurrencyInstance()
+    if (currencyCode.isNotEmpty()) {
+        currencyInstance.currency = Currency.getInstance(currencyCode)
+    }
+    return currencyInstance.format(this)
 }
 
 actual fun Float.toLocalString(): String {
