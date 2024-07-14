@@ -1,0 +1,4 @@
+Changelog 0.10.0:
+* Add default currency selection in settings
+* Only show delete button when editing an expense
+* Move biometric lock above backup and restore
