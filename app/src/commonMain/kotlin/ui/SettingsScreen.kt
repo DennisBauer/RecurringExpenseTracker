@@ -96,6 +96,15 @@ fun SettingsScreen(
                     onClick = viewModel::onSelectCurrency,
                 )
 
+                if (canUseBiometric) {
+                    SettingsHeaderElement(header = Res.string.settings_title_security)
+                    SettingsClickableElementWithToggle(
+                        name = Res.string.settings_security_biometric_lock,
+                        checked = checked,
+                        onCheckedChange = onCheckedChange,
+                    )
+                }
+
                 SettingsHeaderElement(
                     header = Res.string.settings_backup,
                 )
@@ -107,15 +116,6 @@ fun SettingsScreen(
                     title = stringResource(Res.string.settings_backup_restore),
                     onClick = onClickRestore,
                 )
-
-                if (canUseBiometric) {
-                    SettingsHeaderElement(header = Res.string.settings_title_security)
-                    SettingsClickableElementWithToggle(
-                        name = Res.string.settings_security_biometric_lock,
-                        checked = checked,
-                        onCheckedChange = onCheckedChange,
-                    )
-                }
             }
             if (viewModel.showCurrencySelectionDialog) {
                 AlertDialog(
