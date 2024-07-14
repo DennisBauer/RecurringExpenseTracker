@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import model.DatabaseBackupRestore
 import org.jetbrains.compose.resources.stringResource
+import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_title
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_unlock
@@ -49,9 +50,7 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val databasePath by lazy { getDatabasePath(Constants.DATABASE_NAME).path }
-    private val userPreferencesRepository: UserPreferencesRepository by lazy {
-        (application as ExpenseTrackerApplication).userPreferencesRepository
-    }
+    private val userPreferencesRepository = get<UserPreferencesRepository>()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     private val biometricPromptManager: BiometricPromptManager by lazy { BiometricPromptManager(this) }

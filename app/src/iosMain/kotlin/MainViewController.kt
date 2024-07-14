@@ -2,16 +2,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
 import di.platformModule
 import di.sharedModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import ui.MainContent
 import ui.theme.ExpenseTrackerTheme
+import viewmodel.database.UserPreferencesRepository
 
 fun MainViewController() =
     ComposeUIViewController {
@@ -19,7 +21,8 @@ fun MainViewController() =
             modules(sharedModule, platformModule)
         }
 
-        var isGridMode by remember { mutableStateOf(false) }
+        val userPreferencesRepository = koinInject<UserPreferencesRepository>()
+        val isGridMode by userPreferencesRepository.gridMode.collectAsState()
 
         ExpenseTrackerTheme {
             Surface(
@@ -31,7 +34,9 @@ fun MainViewController() =
                     biometricSecurity = false,
                     canUseBiometric = false,
                     toggleGridMode = {
-                        isGridMode = !isGridMode
+                        CoroutineScope(Dispatchers.Main).launch {
+                            userPreferencesRepository.gridMode.save(!isGridMode)
+                        }
                     },
                     onBiometricSecurityChange = {},
                     onClickBackup = {},
