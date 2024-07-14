@@ -32,6 +32,7 @@ class EditRecurringExpenseViewModel(
     var showDeleteConfirmDialog by mutableStateOf(false)
 
     val isNewExpense = expenseId == null
+    val showDeleteButton = !isNewExpense
 
     init {
         if (expenseId != null) {

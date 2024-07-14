@@ -75,13 +75,15 @@ fun EditRecurringExpenseScreen(
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = viewModel::onDeleteClick,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = stringResource(Res.string.delete),
-                        )
+                    if (viewModel.showDeleteButton) {
+                        IconButton(
+                            onClick = viewModel::onDeleteClick,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = stringResource(Res.string.delete),
+                            )
+                        }
                     }
                 },
             )
