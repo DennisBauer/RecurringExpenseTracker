@@ -30,9 +30,8 @@ import asString
 import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import model.DatabaseBackupRestore
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_title
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_unlock
@@ -45,13 +44,11 @@ import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
 import ui.theme.ExpenseTrackerTheme
-import viewmodel.SettingsViewModel
 import viewmodel.database.UserPreferencesRepository
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    private val settingsViewModel: SettingsViewModel by lazy {
-        getViewModel(parameters = { parametersOf(getDatabasePath(Constants.DATABASE_NAME).path) })
-    }
+    private val databasePath by lazy { getDatabasePath(Constants.DATABASE_NAME).path }
     private val userPreferencesRepository: UserPreferencesRepository by lazy {
         (application as ExpenseTrackerApplication).userPreferencesRepository
     }
@@ -139,7 +136,12 @@ class MainActivity : AppCompatActivity() {
                     applicationContext.contentResolver.takePersistableUriPermission(it, takeFlags)
 
                     lifecycleScope.launch {
-                        val backupSuccessful = settingsViewModel.backupDatabase(it, applicationContext)
+                        val backupSuccessful =
+                            DatabaseBackupRestore().exportDatabaseFile(
+                                databasePath = databasePath,
+                                targetUri = it,
+                                applicationContext = applicationContext,
+                            )
                         val toastString =
                             if (backupSuccessful) {
                                 Res.string.settings_backup_created_toast
@@ -153,19 +155,26 @@ class MainActivity : AppCompatActivity() {
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) {
                     if (it == null) return@rememberLauncherForActivityResult
                     lifecycleScope.launch {
-                        val backupRestored = settingsViewModel.restoreDatabase(it, applicationContext)
-                        val toastString =
-                            if (backupRestored) {
-                                Res.string.settings_backup_restored_toast
-                            } else {
-                                Res.string.settings_backup_not_restored_toast
-                            }.asString()
-                        Toast.makeText(this@MainActivity, toastString, Toast.LENGTH_LONG).show()
+                        File(databasePath).parent?.let { targetPath ->
+                            val backupRestored =
+                                DatabaseBackupRestore().importDatabaseFile(
+                                    srcZipUri = it,
+                                    targetPath = targetPath,
+                                    applicationContext = applicationContext,
+                                )
+                            val toastString =
+                                if (backupRestored) {
+                                    Res.string.settings_backup_restored_toast
+                                } else {
+                                    Res.string.settings_backup_not_restored_toast
+                                }.asString()
+                            Toast.makeText(this@MainActivity, toastString, Toast.LENGTH_LONG).show()
 
-                        if (backupRestored) {
-                            // Restart Activity after restoring backup to make sure the repository is updated
-                            finish()
-                            startActivity(intent)
+                            if (backupRestored) {
+                                // Restart Activity after restoring backup to make sure the repository is updated
+                                finish()
+                                startActivity(intent)
+                            }
                         }
                     }
                 }

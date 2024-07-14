@@ -2,16 +2,12 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import data.Recurrence
 import data.RecurringExpenseData
 import data.UpcomingPaymentData
 import isInDaysAfter
 import isSameDay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -37,14 +33,6 @@ class UpcomingPaymentsViewModel(
     init {
         viewModelScope.launch {
             expenseRepository?.allRecurringExpensesByPrice?.collect { recurringExpenses ->
-                onDatabaseUpdated(recurringExpenses)
-            }
-        }
-    }
-
-    fun onDatabaseRestored() {
-        viewModelScope.launch {
-            expenseRepository?.allRecurringExpensesByPrice?.first()?.let { recurringExpenses ->
                 onDatabaseUpdated(recurringExpenses)
             }
         }
@@ -133,16 +121,6 @@ class UpcomingPaymentsViewModel(
             RecurrenceDatabase.Monthly.value -> Recurrence.Monthly
             RecurrenceDatabase.Yearly.value -> Recurrence.Yearly
             else -> Recurrence.Monthly
-        }
-    }
-
-    companion object {
-        fun create(expenseRepository: ExpenseRepository): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    UpcomingPaymentsViewModel(expenseRepository)
-                }
-            }
         }
     }
 }
