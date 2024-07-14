@@ -8,15 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,16 +39,22 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
+import recurringexpensetracker.app.generated.resources.settings_default_currency
+import recurringexpensetracker.app.generated.resources.settings_general
 import recurringexpensetracker.app.generated.resources.settings_security_biometric_lock
+import recurringexpensetracker.app.generated.resources.settings_system_default
 import recurringexpensetracker.app.generated.resources.settings_title
 import recurringexpensetracker.app.generated.resources.settings_title_security
 import ui.theme.ExpenseTrackerTheme
+import viewmodel.SettingsViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
 fun SettingsScreen(
     checked: Boolean,
@@ -54,6 +64,7 @@ fun SettingsScreen(
     onCheckedChange: (Boolean) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
 ) {
     Scaffold(
         modifier = modifier,
@@ -74,18 +85,30 @@ fun SettingsScreen(
                         .fillMaxSize(),
             ) {
                 SettingsHeaderElement(
+                    header = Res.string.settings_general,
+                )
+                SettingsClickableElement(
+                    title = stringResource(Res.string.settings_default_currency),
+                    subtitle =
+                        viewModel.selectedCurrencyName.ifEmpty {
+                            stringResource(Res.string.settings_system_default)
+                        },
+                    onClick = viewModel::onSelectCurrency,
+                )
+
+                SettingsHeaderElement(
                     header = Res.string.settings_backup,
                 )
                 SettingsClickableElement(
-                    name = Res.string.settings_backup_create,
+                    title = stringResource(Res.string.settings_backup_create),
                     onClick = onClickBackup,
                 )
                 SettingsClickableElement(
-                    name = Res.string.settings_backup_restore,
+                    title = stringResource(Res.string.settings_backup_restore),
                     onClick = onClickRestore,
                 )
+
                 if (canUseBiometric) {
-                    HorizontalDivider()
                     SettingsHeaderElement(header = Res.string.settings_title_security)
                     SettingsClickableElementWithToggle(
                         name = Res.string.settings_security_biometric_lock,
@@ -93,6 +116,29 @@ fun SettingsScreen(
                         onCheckedChange = onCheckedChange,
                     )
                 }
+            }
+            if (viewModel.showCurrencySelectionDialog) {
+                AlertDialog(
+                    onDismissRequest = viewModel::onDismissCurrencySelectionDialog,
+                    text = {
+                        LazyColumn {
+                            items(viewModel.availableCurrencies.value) { currency ->
+                                TextButton(
+                                    onClick = {
+                                        viewModel.onCurrencySelected(currency)
+                                    },
+                                ) {
+                                    Text(
+                                        text = "${currency.name} (${currency.symbol})",
+                                        textAlign = TextAlign.Start,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {},
+                )
             }
         },
     )
@@ -117,8 +163,9 @@ private fun SettingsHeaderElement(
 
 @Composable
 private fun SettingsClickableElement(
-    name: StringResource,
+    title: String,
     modifier: Modifier = Modifier,
+    subtitle: String = "",
     onClick: () -> Unit,
 ) {
     Surface(
@@ -128,14 +175,22 @@ private fun SettingsClickableElement(
                 .fillMaxWidth(),
         onClick = onClick,
     ) {
-        Text(
-            text = stringResource(name),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier =
-                Modifier
-                    .padding(16.dp),
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(
+            modifier = Modifier.padding(16.dp),
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                overflow = TextOverflow.Ellipsis,
+            )
+            if (subtitle.isNotEmpty()) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
     }
 }
 

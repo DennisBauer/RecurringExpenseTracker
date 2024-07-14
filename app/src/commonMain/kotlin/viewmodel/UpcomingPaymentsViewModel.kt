@@ -24,7 +24,7 @@ import viewmodel.database.RecurrenceDatabase
 import viewmodel.database.RecurringExpense
 
 class UpcomingPaymentsViewModel(
-    private val expenseRepository: ExpenseRepository?,
+    private val expenseRepository: ExpenseRepository,
 ) : ViewModel() {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPaymentData>()
     val upcomingPaymentsData: List<UpcomingPaymentData>
@@ -32,7 +32,7 @@ class UpcomingPaymentsViewModel(
 
     init {
         viewModelScope.launch {
-            expenseRepository?.allRecurringExpensesByPrice?.collect { recurringExpenses ->
+            expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
                 onDatabaseUpdated(recurringExpenses)
             }
         }
@@ -43,7 +43,7 @@ class UpcomingPaymentsViewModel(
         onItemClicked: (RecurringExpenseData) -> Unit,
     ) {
         viewModelScope.launch {
-            expenseRepository?.getRecurringExpenseById(expenceId)?.let {
+            expenseRepository.getRecurringExpenseById(expenceId)?.let {
                 val recurringExpenseData =
                     RecurringExpenseData(
                         id = it.id,

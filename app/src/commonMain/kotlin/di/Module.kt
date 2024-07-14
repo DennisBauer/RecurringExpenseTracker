@@ -8,6 +8,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import viewmodel.EditRecurringExpenseViewModel
 import viewmodel.RecurringExpenseViewModel
+import viewmodel.SettingsViewModel
 import viewmodel.UpcomingPaymentsViewModel
 import viewmodel.database.ExpenseRepository
 import viewmodel.database.RecurringExpenseDao
@@ -26,4 +27,5 @@ val sharedModule =
         viewModel { (expenseId: Int?) ->
             EditRecurringExpenseViewModel(expenseId, get())
         }
+        viewModelOf(::SettingsViewModel)
     }

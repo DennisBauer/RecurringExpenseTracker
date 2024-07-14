@@ -8,8 +8,9 @@ import platform.Foundation.NSNumberFormatterCurrencyStyle
 import platform.Foundation.NSNumberFormatterDecimalStyle
 import platform.Foundation.dateWithTimeIntervalSince1970
 
-actual fun Float.toCurrencyString(): String {
+actual fun Float.toCurrencyString(currencyCode: String): String {
     val numberFormatter = NSNumberFormatter()
+    // TODO: Use currencyCode to adjust formatting according to selected currency
     numberFormatter.numberStyle = NSNumberFormatterCurrencyStyle
     return numberFormatter.stringFromNumber(NSNumber(this)) ?: ""
 }

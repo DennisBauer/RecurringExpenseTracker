@@ -3,6 +3,7 @@ package ui
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -14,12 +15,15 @@ import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
 import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import toCurrencyString
 import ui.editexpense.EditRecurringExpenseScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.RecurringExpenseViewModel
 import viewmodel.UpcomingPaymentsViewModel
+import viewmodel.database.UserPreferencesRepository
 
 @Suppress("ktlint:compose:vm-forwarding-check")
 @OptIn(KoinExperimentalAPI::class)
@@ -35,8 +39,10 @@ fun MainContent(
     modifier: Modifier = Modifier,
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
+    userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val navController = rememberNavController()
+    val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
 
     KoinContext {
         NavHost(
@@ -46,9 +52,9 @@ fun MainContent(
         ) {
             composable(HomePane.ROUTE) {
                 RecurringExpenseOverview(
-                    weeklyExpense = recurringExpenseViewModel.weeklyExpense,
-                    monthlyExpense = recurringExpenseViewModel.monthlyExpense,
-                    yearlyExpense = recurringExpenseViewModel.yearlyExpense,
+                    weeklyExpense = recurringExpenseViewModel.weeklyExpense.toCurrencyString(currencyCode),
+                    monthlyExpense = recurringExpenseViewModel.monthlyExpense.toCurrencyString(currencyCode),
+                    yearlyExpense = recurringExpenseViewModel.yearlyExpense.toCurrencyString(currencyCode),
                     recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                     isGridMode = isGridMode,
                     onToggleGridMode = toggleGridMode,

@@ -4,7 +4,7 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 
-expect fun Float.toCurrencyString(): String
+expect fun Float.toCurrencyString(currencyCode: String): String
 
 expect fun Float.toLocalString(): String
 

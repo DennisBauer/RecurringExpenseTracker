@@ -16,6 +16,7 @@ koin-viewmodel = "1.2.0-Beta4"
 kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.1"
 kotlinx-datetime = "0.6.0"
+kotlinx-serialization-json = "1.7.1"
 ksp = "2.0.0-1.0.23"
 ktlint = "0.4.5"
 ktlint-plugin = "12.1.1"
@@ -41,6 +42,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint" }
 ktlint-version = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-standard", version.ref = "ktlint-version" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -54,6 +56,7 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 org-jlleitschuh-gradle-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
 room = { id = "androidx.room", version.ref = "room" }

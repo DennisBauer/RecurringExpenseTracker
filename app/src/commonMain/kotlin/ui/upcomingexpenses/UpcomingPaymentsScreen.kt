@@ -35,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +47,7 @@ import data.UpcomingPaymentData
 import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.home_add_expense_fab_content_description
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
@@ -60,6 +62,7 @@ import ui.ToggleGridModeButton
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.UpcomingPaymentsViewModel
+import viewmodel.database.UserPreferencesRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -137,11 +140,14 @@ private fun UpcomingPaymentsOverview(
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val fadeDuration: Int = 700
 
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()
+
+    val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
 
     AnimatedContent(
         targetState = isGridMode,
@@ -178,6 +184,7 @@ private fun UpcomingPaymentsOverview(
                 if (targetValue) {
                     GridUpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
+                        currencyCode = currencyCode,
                         onClickItem = {
                             onClickItem(upcomingPaymentData.id)
                         },
@@ -185,6 +192,7 @@ private fun UpcomingPaymentsOverview(
                 } else {
                     UpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
+                        currencyCode = currencyCode,
                         onClickItem = {
                             onClickItem(upcomingPaymentData.id)
                         },
@@ -222,6 +230,7 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
 @Composable
 private fun GridUpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
+    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -243,7 +252,7 @@ private fun GridUpcomingPayment(
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = upcomingPaymentData.price.toCurrencyString(),
+                text = upcomingPaymentData.price.toCurrencyString(currencyCode),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(
@@ -265,6 +274,7 @@ private fun GridUpcomingPayment(
 @Composable
 private fun UpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
+    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -298,7 +308,7 @@ private fun UpcomingPayment(
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = upcomingPaymentData.price.toCurrencyString(),
+                    text = upcomingPaymentData.price.toCurrencyString(currencyCode),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
