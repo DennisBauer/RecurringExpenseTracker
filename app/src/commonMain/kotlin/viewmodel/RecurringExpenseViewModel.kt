@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.RecurringExpenseData
 import kotlinx.coroutines.launch
-import viewmodel.database.ExpenseRepository
-import viewmodel.database.RecurringExpense
+import model.database.ExpenseRepository
+import model.database.RecurringExpense
 
 class RecurringExpenseViewModel(
     private val expenseRepository: ExpenseRepository,

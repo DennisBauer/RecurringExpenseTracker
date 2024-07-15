@@ -31,6 +31,7 @@ import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import model.DatabaseBackupRestore
+import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
@@ -45,7 +46,6 @@ import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
 import ui.theme.ExpenseTrackerTheme
-import viewmodel.database.UserPreferencesRepository
 import java.io.File
 
 class MainActivity : AppCompatActivity() {

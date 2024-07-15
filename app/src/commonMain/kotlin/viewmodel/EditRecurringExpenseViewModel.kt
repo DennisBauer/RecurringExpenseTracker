@@ -9,10 +9,10 @@ import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import model.database.ExpenseRepository
 import toFloatLocaleAware
 import toLocalString
 import ui.customizations.ExpenseColor
-import viewmodel.database.ExpenseRepository
 
 class EditRecurringExpenseViewModel(
     private val expenseId: Int?,

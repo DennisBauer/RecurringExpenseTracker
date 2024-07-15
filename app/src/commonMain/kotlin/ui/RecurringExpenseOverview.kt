@@ -45,6 +45,7 @@ import data.EditExpensePane
 import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.datetime.Clock
+import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -59,7 +60,6 @@ import recurringexpensetracker.app.generated.resources.home_title
 import toCurrencyString
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
-import viewmodel.database.UserPreferencesRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

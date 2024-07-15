@@ -1,4 +1,4 @@
-package viewmodel.database
+package model.database
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

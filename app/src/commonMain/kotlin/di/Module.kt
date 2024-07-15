@@ -1,5 +1,8 @@
 package di
 
+import model.database.ExpenseRepository
+import model.database.RecurringExpenseDao
+import model.database.RecurringExpenseDatabase
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
@@ -10,9 +13,6 @@ import viewmodel.EditRecurringExpenseViewModel
 import viewmodel.RecurringExpenseViewModel
 import viewmodel.SettingsViewModel
 import viewmodel.UpcomingPaymentsViewModel
-import viewmodel.database.ExpenseRepository
-import viewmodel.database.RecurringExpenseDao
-import viewmodel.database.RecurringExpenseDatabase
 
 expect val platformModule: Module
 

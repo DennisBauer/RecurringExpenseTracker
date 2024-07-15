@@ -1,4 +1,4 @@
-package viewmodel.database
+package model.database
 
 import androidx.room.Dao
 import androidx.room.Delete

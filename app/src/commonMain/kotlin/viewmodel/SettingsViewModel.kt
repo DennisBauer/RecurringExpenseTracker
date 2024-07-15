@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import recurringexpensetracker.app.generated.resources.Res
-import viewmodel.database.UserPreferencesRepository
 
 @Serializable
 data class Currency(
