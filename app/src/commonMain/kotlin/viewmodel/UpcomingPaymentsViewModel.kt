@@ -18,10 +18,10 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import model.database.ExpenseRepository
+import model.database.RecurrenceDatabase
+import model.database.RecurringExpense
 import ui.customizations.ExpenseColor
-import viewmodel.database.ExpenseRepository
-import viewmodel.database.RecurrenceDatabase
-import viewmodel.database.RecurringExpense
 
 class UpcomingPaymentsViewModel(
     private val expenseRepository: ExpenseRepository,

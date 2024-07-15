@@ -7,10 +7,10 @@ import di.sharedModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import model.database.UserPreferencesRepository
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import ui.MainContent
-import viewmodel.database.UserPreferencesRepository
 
 fun main() =
     application {

@@ -1,4 +1,4 @@
-package viewmodel.database
+package model.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

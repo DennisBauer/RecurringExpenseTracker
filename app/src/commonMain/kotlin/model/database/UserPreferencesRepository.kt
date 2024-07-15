@@ -1,4 +1,4 @@
-package viewmodel.database
+package model.database
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

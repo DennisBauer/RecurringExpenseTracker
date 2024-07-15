@@ -45,6 +45,7 @@ import androidx.navigation.NavController
 import data.EditExpensePane
 import data.UpcomingPaymentData
 import kotlinx.datetime.Clock
+import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -62,7 +63,6 @@ import ui.ToggleGridModeButton
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.UpcomingPaymentsViewModel
-import viewmodel.database.UserPreferencesRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

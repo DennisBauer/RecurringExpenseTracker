@@ -14,6 +14,7 @@ import data.EditExpensePane.Companion.getArgExpenseId
 import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
+import model.database.UserPreferencesRepository
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -23,7 +24,6 @@ import ui.editexpense.EditRecurringExpenseScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.RecurringExpenseViewModel
 import viewmodel.UpcomingPaymentsViewModel
-import viewmodel.database.UserPreferencesRepository
 
 @Suppress("ktlint:compose:vm-forwarding-check")
 @OptIn(KoinExperimentalAPI::class)

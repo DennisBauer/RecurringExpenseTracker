@@ -3,9 +3,9 @@ package viewmodel
 import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.datetime.Instant
+import model.database.RecurrenceDatabase
+import model.database.RecurringExpense
 import ui.customizations.ExpenseColor
-import viewmodel.database.RecurrenceDatabase
-import viewmodel.database.RecurringExpense
 
 internal fun RecurringExpense.toFrontendType(): RecurringExpenseData {
     return RecurringExpenseData(

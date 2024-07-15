@@ -6,6 +6,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.RoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
+import model.database.RecurringExpenseDatabase
+import model.database.UserPreferencesRepository
 import okio.Path.Companion.toPath
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -14,8 +16,6 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
-import viewmodel.database.RecurringExpenseDatabase
-import viewmodel.database.UserPreferencesRepository
 import viewmodel.database.getDatabaseBuilder
 
 @OptIn(ExperimentalForeignApi::class)

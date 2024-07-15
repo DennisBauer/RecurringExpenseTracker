@@ -3,6 +3,7 @@ package viewmodel.database
 import Constants
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import model.database.RecurringExpenseDatabase
 import java.io.File
 
 fun getDatabaseBuilder(): RoomDatabase.Builder<RecurringExpenseDatabase> {
