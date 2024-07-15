@@ -8,29 +8,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+import model.Currency
+import model.CurrencyProvider
 import model.database.UserPreferencesRepository
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import recurringexpensetracker.app.generated.resources.Res
 
-@Serializable
-data class Currency(
-    val symbol: String,
-    val name: String,
-    val symbol_native: String,
-    val decimal_digits: Int,
-    val rounding: Int,
-    val code: String,
-    val name_plural: String,
-    val type: String,
-)
-
-@Serializable
-private data class CurrencyWrapper(val data: Map<String, Currency>)
-
-@OptIn(ExperimentalResourceApi::class)
 class SettingsViewModel(
+    private val currencyProvider: CurrencyProvider,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     private val _availableCurrencies = MutableStateFlow<List<Currency>>(emptyList())
@@ -43,9 +26,7 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
-            val currenciesFile = Res.readBytes("files/currencies.json")
-            val currencies = Json.decodeFromString<CurrencyWrapper>(currenciesFile.decodeToString())
-            val currenciesList = currencies.data.values.toList()
+            val currenciesList = currencyProvider.retrieveCurrencies()
             _availableCurrencies.emit(currenciesList)
 
             userPreferencesRepository.defaultCurrency.get().collect { defaultCurrency ->

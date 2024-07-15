@@ -1,5 +1,6 @@
 package di
 
+import model.CurrencyProvider
 import model.database.ExpenseRepository
 import model.database.RecurringExpenseDao
 import model.database.RecurringExpenseDatabase
@@ -27,5 +28,6 @@ val sharedModule =
         viewModel { (expenseId: Int?) ->
             EditRecurringExpenseViewModel(expenseId, get())
         }
+        singleOf(::CurrencyProvider)
         viewModelOf(::SettingsViewModel)
     }
