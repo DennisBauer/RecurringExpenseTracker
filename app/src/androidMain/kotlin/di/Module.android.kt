@@ -9,10 +9,10 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.RoomDatabase
 import model.database.RecurringExpenseDatabase
 import model.database.UserPreferencesRepository
+import model.database.getDatabaseBuilder
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import viewmodel.database.getDatabaseBuilder
 
 actual val platformModule =
     module {
