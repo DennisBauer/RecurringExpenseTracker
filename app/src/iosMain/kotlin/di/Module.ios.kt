@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import model.database.RecurringExpenseDatabase
 import model.database.UserPreferencesRepository
+import model.database.getDatabaseBuilder
 import okio.Path.Companion.toPath
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -16,7 +17,6 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
-import viewmodel.database.getDatabaseBuilder
 
 @OptIn(ExperimentalForeignApi::class)
 actual val platformModule =
