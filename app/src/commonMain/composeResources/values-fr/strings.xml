@@ -49,4 +49,9 @@
     <string name="settings_security_biometric_lock">Serrure biométrique</string>
     <string name="biometric_prompt_manager_unlock">Déverrouiller</string>
     <string name="cancel">Annuler</string>
+    <string name="edit_expense_title">Modifier les Dépenses</string>
+    <string name="edit_expense_delete_dialog_text">Voulez-vous vraiment supprimer cette dépense ?</string>
+    <string name="settings_general">Général</string>
+    <string name="settings_default_currency">Devise par défaut</string>
+    <string name="settings_system_default">Valeur système</string>
 </resources>
