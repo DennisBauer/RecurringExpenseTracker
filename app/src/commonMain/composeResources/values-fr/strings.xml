@@ -5,7 +5,6 @@
     <string name="home_summary_weekly">Hebdomadaire</string>
     <string name="home_summary_yearly">Annuel</string>
     <string name="edit_expense_button_add">Ajouter dépense</string>
-    <string name="home_add_expense_fab_content_description">Ajouter une dépense</string>
     <string name="delete">Supprimer</string>
     <string name="edit_expense_description">Description (facultatif)</string>
     <string name="edit_expense_invalid_input">Entrée invalide</string>

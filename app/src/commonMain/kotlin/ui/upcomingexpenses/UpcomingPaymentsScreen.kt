@@ -50,7 +50,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.home_add_expense_fab_content_description
+import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
@@ -103,7 +103,7 @@ fun UpcomingPaymentsScreen(
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription =
-                        stringResource(Res.string.home_add_expense_fab_content_description),
+                        stringResource(Res.string.edit_expense_button_add),
                 )
             }
         },

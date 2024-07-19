@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_add_expense_fab_content_description">Añadir un gasto</string>
     <string name="edit_expense_title">Editar un gasto</string>
     <string name="edit_expense_invalid_input">Entrada inválida</string>
     <string name="edit_expense_name">Nombre</string>

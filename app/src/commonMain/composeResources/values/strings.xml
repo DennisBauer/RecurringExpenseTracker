@@ -15,7 +15,6 @@
     <string name="home_summary_monthly">Monthly</string>
     <string name="home_summary_weekly">Weekly</string>
     <string name="home_summary_yearly">Yearly</string>
-    <string name="home_add_expense_fab_content_description">Add expense</string>
 
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
