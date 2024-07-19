@@ -233,7 +233,7 @@ private fun SettingsClickableElementWithToggle(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(start = 16.dp),
         )
         Text(
             text = stringResource(name),
