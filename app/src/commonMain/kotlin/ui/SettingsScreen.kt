@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -101,7 +102,7 @@ fun SettingsScreen(
                         stringResource(Res.string.settings_system_default)
                     },
                     onClick = viewModel::onSelectCurrency,
-                    icon = Icons.Rounded.CurrencyExchange,
+                    icon = Icons.Rounded.Paid,
                 )
 
                 if (canUseBiometric) {
