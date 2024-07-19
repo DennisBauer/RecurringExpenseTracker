@@ -12,8 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Backup
+import androidx.compose.material.icons.rounded.CurrencyExchange
+import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -29,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -94,6 +101,7 @@ fun SettingsScreen(
                             stringResource(Res.string.settings_system_default)
                         },
                     onClick = viewModel::onSelectCurrency,
+                    icon = Icons.Rounded.CurrencyExchange,
                 )
 
                 if (canUseBiometric) {
@@ -102,6 +110,7 @@ fun SettingsScreen(
                         name = Res.string.settings_security_biometric_lock,
                         checked = checked,
                         onCheckedChange = onCheckedChange,
+                        icon = Icons.Rounded.Fingerprint,
                     )
                 }
 
@@ -111,10 +120,12 @@ fun SettingsScreen(
                 SettingsClickableElement(
                     title = stringResource(Res.string.settings_backup_create),
                     onClick = onClickBackup,
+                    icon = Icons.Rounded.Backup,
                 )
                 SettingsClickableElement(
                     title = stringResource(Res.string.settings_backup_restore),
                     onClick = onClickRestore,
+                    icon = Icons.Rounded.Restore,
                 )
             }
             if (viewModel.showCurrencySelectionDialog) {
@@ -164,6 +175,7 @@ private fun SettingsHeaderElement(
 @Composable
 private fun SettingsClickableElement(
     title: String,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     subtitle: String = "",
     onClick: () -> Unit,
@@ -175,20 +187,29 @@ private fun SettingsClickableElement(
                 .fillMaxWidth(),
         onClick = onClick,
     ) {
-        Column(
+        Row(
             modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                overflow = TextOverflow.Ellipsis,
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
             )
-            if (subtitle.isNotEmpty()) {
+            Column(
+                modifier = Modifier.padding(start = 16.dp),
+            ) {
                 Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge,
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (subtitle.isNotEmpty()) {
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }
@@ -198,6 +219,7 @@ private fun SettingsClickableElement(
 private fun SettingsClickableElementWithToggle(
     name: StringResource,
     checked: Boolean,
+    icon: ImageVector,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -208,6 +230,11 @@ private fun SettingsClickableElementWithToggle(
                 .fillMaxWidth()
                 .clickable { onCheckedChange(!checked) },
     ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.padding(start = 16.dp),
+        )
         Text(
             text = stringResource(name),
             style = MaterialTheme.typography.bodyLarge,
