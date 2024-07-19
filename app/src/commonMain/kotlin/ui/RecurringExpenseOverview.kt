@@ -52,7 +52,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.koinInject
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.home_add_expense_fab_content_description
+import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.home_summary_monthly
 import recurringexpensetracker.app.generated.resources.home_summary_weekly
 import recurringexpensetracker.app.generated.resources.home_summary_yearly
@@ -111,7 +111,7 @@ fun RecurringExpenseOverview(
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription =
-                        stringResource(Res.string.home_add_expense_fab_content_description),
+                        stringResource(Res.string.edit_expense_button_add),
                 )
             }
         },

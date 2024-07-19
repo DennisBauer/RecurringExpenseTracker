@@ -13,7 +13,6 @@
     <string name="home_summary_monthly">Monatlich</string>
     <string name="home_summary_weekly">Wöchentlich</string>
     <string name="home_summary_yearly">Jährlich</string>
-    <string name="home_add_expense_fab_content_description">Ausgabe hinzufügen</string>
 
     <!-- Edit expense -->
     <string name="edit_expense_title">Ausgabe Bearbeiten</string>
