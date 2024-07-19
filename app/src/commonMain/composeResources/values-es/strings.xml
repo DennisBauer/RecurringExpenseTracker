@@ -13,12 +13,12 @@
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_create">Crear un backup</string>
     <string name="settings_backup_restore">Restaurar un backup</string>
-    <string name="settings_backup_not_created_toast">Backup fracasada</string>
+    <string name="settings_backup_not_created_toast">Error en la copia de seguridad</string>
     <string name="biometric_prompt_manager_unlock">Desbloquear</string>
-    <string name="top_app_bar_icon_button_grid_open_content_desc">Abrir modo de cuadrícula</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Modo de cuadrícula abierta</string>
     <string name="bottom_nav_home">Inicio</string>
-    <string name="top_app_bar_icon_button_grid_close_content_desc">Cerrar modo de cuadrícula</string>
-    <string name="bottom_nav_upcoming">Próxima</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Cerrar el modo cuadrícula</string>
+    <string name="bottom_nav_upcoming">Próximamente</string>
     <string name="bottom_nav_settings">Configuración</string>
     <string name="home_summary_monthly">Mensual</string>
     <string name="home_summary_weekly">Semanalmente</string>
