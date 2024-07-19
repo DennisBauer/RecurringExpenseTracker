@@ -175,9 +175,9 @@ private fun SettingsHeaderElement(
 @Composable
 private fun SettingsClickableElement(
     title: String,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     subtitle: String = "",
-    icon: ImageVector,
     onClick: () -> Unit,
 ) {
     Surface(
@@ -219,9 +219,9 @@ private fun SettingsClickableElement(
 private fun SettingsClickableElementWithToggle(
     name: StringResource,
     checked: Boolean,
+    icon: ImageVector,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    icon: ImageVector,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
