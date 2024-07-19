@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Backup
-import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.Fingerprint
 import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.material.icons.rounded.Restore
@@ -87,10 +86,10 @@ fun SettingsScreen(
         content = { paddingValues ->
             Column(
                 modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize(),
             ) {
                 SettingsHeaderElement(
                     header = Res.string.settings_general,
@@ -98,9 +97,9 @@ fun SettingsScreen(
                 SettingsClickableElement(
                     title = stringResource(Res.string.settings_default_currency),
                     subtitle =
-                    viewModel.selectedCurrencyName.ifEmpty {
-                        stringResource(Res.string.settings_system_default)
-                    },
+                        viewModel.selectedCurrencyName.ifEmpty {
+                            stringResource(Res.string.settings_system_default)
+                        },
                     onClick = viewModel::onSelectCurrency,
                     icon = Icons.Rounded.Paid,
                 )
@@ -166,9 +165,9 @@ private fun SettingsHeaderElement(
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.primary,
         modifier =
-        modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
+            modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
         overflow = TextOverflow.Ellipsis,
     )
 }
@@ -184,20 +183,20 @@ private fun SettingsClickableElement(
     Surface(
         color = Color.Transparent,
         modifier =
-        modifier
-            .fillMaxWidth(),
+            modifier
+                .fillMaxWidth(),
         onClick = onClick,
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
             )
             Column(
-                modifier = Modifier.padding(start =  16.dp)
+                modifier = Modifier.padding(start = 16.dp),
             ) {
                 Text(
                     text = title,
@@ -227,14 +226,14 @@ private fun SettingsClickableElementWithToggle(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
-        modifier
-            .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) },
+            modifier
+                .fillMaxWidth()
+                .clickable { onCheckedChange(!checked) },
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = modifier.padding(start = 16.dp)
+            modifier = modifier.padding(start = 16.dp),
         )
         Text(
             text = stringResource(name),
@@ -248,7 +247,6 @@ private fun SettingsClickableElementWithToggle(
 }
 
 private class SettingsScreenPreviewProvider : PreviewParameterProvider<Boolean> {
-
     override val values: Sequence<Boolean>
         get() = sequenceOf(true, false)
 }
