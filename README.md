@@ -46,6 +46,12 @@ The app compiles and works for all 3 desktop OS platforms. I'll look into how to
 You have ideas on how to improve this app and want to making it even better?
 Feel free to contribute by submitting ideas, <a href="https://hosted.weblate.org/engage/recurringexpensetracker/">add missing translations</a> or even checkout the project and implement the changes yourself. You can build the app like any other normal Android project by using Android Studio.
 
+## Donate
+Donations can be made at:
+* https://liberapay.com/DennisBauer
+
+Contributions in any form are welcome!
+
 ## Translations
 <a href="https://hosted.weblate.org/engage/recurringexpensetracker/">
 <img src="https://hosted.weblate.org/widget/recurringexpensetracker/recurringexpensetracker/287x66-white.png" alt="Translation status" />
