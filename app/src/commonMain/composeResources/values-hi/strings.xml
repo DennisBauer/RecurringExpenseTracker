@@ -49,4 +49,8 @@
     <string name="biometric_prompt_manager_title">Expense Tracker अनलॉक करें</string>
     <string name="edit_expense_first_payment_placeholder">एक तारीख चुनें</string>
     <string name="edit_expense_title">व्यय संपादित करें</string>
+    <string name="settings_general">सामान्य</string>
+    <string name="settings_default_currency">डिफॉल्ट मुद्रा</string>
+    <string name="edit_expense_delete_dialog_text">क्या आप सचमुच इस व्यय को मिटाना चाहते हैं?</string>
+    <string name="settings_system_default">सिस्टम डिफॉल्ट</string>
 </resources>
