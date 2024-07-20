@@ -35,20 +35,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import data.CurrencyValue
 import data.EditExpensePane
 import data.UpcomingPaymentData
 import kotlinx.datetime.Clock
-import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
@@ -56,7 +54,6 @@ import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_d
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_tomorrow
 import recurringexpensetracker.app.generated.resources.upcoming_title
-import toCurrencyString
 import toLocaleString
 import ui.BottomNavBar
 import ui.ToggleGridModeButton
@@ -140,14 +137,11 @@ private fun UpcomingPaymentsOverview(
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val fadeDuration: Int = 700
 
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()
-
-    val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
 
     AnimatedContent(
         targetState = isGridMode,
@@ -184,7 +178,6 @@ private fun UpcomingPaymentsOverview(
                 if (targetValue) {
                     GridUpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
-                        currencyCode = currencyCode,
                         onClickItem = {
                             onClickItem(upcomingPaymentData.id)
                         },
@@ -192,7 +185,6 @@ private fun UpcomingPaymentsOverview(
                 } else {
                     UpcomingPayment(
                         upcomingPaymentData = upcomingPaymentData,
-                        currencyCode = currencyCode,
                         onClickItem = {
                             onClickItem(upcomingPaymentData.id)
                         },
@@ -230,7 +222,6 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
 @Composable
 private fun GridUpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -252,7 +243,7 @@ private fun GridUpcomingPayment(
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = upcomingPaymentData.price.toCurrencyString(currencyCode),
+                text = upcomingPaymentData.price.toCurrencyString(),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(
@@ -274,7 +265,6 @@ private fun GridUpcomingPayment(
 @Composable
 private fun UpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -308,7 +298,7 @@ private fun UpcomingPayment(
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = upcomingPaymentData.price.toCurrencyString(currencyCode),
+                    text = upcomingPaymentData.price.toCurrencyString(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
@@ -357,7 +347,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                         UpcomingPaymentData(
                             id = 0,
                             name = "Netflix",
-                            price = 9.99f,
+                            price = CurrencyValue(9.99f, "USD"),
                             nextPaymentRemainingDays = nextPaymentDays1,
                             nextPaymentDate = nextPaymentDate1String,
                             color = ExpenseColor.Dynamic,
@@ -365,7 +355,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                         UpcomingPaymentData(
                             id = 1,
                             name = "Disney Plus",
-                            price = 5f,
+                            price = CurrencyValue(5f, "USD"),
                             nextPaymentRemainingDays = nextPaymentDays2,
                             nextPaymentDate = nextPaymentDate2String,
                             color = ExpenseColor.Green,
@@ -373,7 +363,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                         UpcomingPaymentData(
                             id = 2,
                             name = "Amazon Prime with a long name",
-                            price = 7.95f,
+                            price = CurrencyValue(7.95f, "USD"),
                             nextPaymentRemainingDays = nextPaymentDays3,
                             nextPaymentDate = nextPaymentDate3String,
                             color = ExpenseColor.Pink,

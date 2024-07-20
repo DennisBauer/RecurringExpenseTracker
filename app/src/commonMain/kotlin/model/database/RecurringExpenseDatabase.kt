@@ -11,7 +11,7 @@ interface IClearAllTablesFix {
     fun clearAllTables()
 }
 
-@Database(entities = [RecurringExpense::class], version = 5)
+@Database(entities = [RecurringExpense::class], version = 6)
 abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
 
@@ -24,6 +24,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
                 .addMigrations(migration_2_3)
                 .addMigrations(migration_3_4)
                 .addMigrations(migration_4_5)
+                .addMigrations(migration_5_6)
                 .setDriver(BundledSQLiteDriver())
                 .build()
         }
@@ -56,6 +57,15 @@ abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
             object : Migration(4, 5) {
                 override fun migrate(connection: SQLiteConnection) {
                     connection.execSQL("UPDATE recurring_expenses SET firstPayment = NULL WHERE firstPayment = 0")
+                }
+            }
+
+        private val migration_5_6 =
+            object : Migration(5, 6) {
+                override fun migrate(connection: SQLiteConnection) {
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN currencyCode TEXT DEFAULT '' NOT NULL",
+                    )
                 }
             }
     }

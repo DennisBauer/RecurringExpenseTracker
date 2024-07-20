@@ -1,5 +1,6 @@
 package viewmodel
 
+import data.CurrencyValue
 import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.datetime.Instant
@@ -7,13 +8,13 @@ import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
 import ui.customizations.ExpenseColor
 
-internal fun RecurringExpense.toFrontendType(): RecurringExpenseData {
+internal fun RecurringExpense.toFrontendType(defaultCurrencyCode: String): RecurringExpenseData {
     return RecurringExpenseData(
         id = this.id,
         name = this.name!!,
         description = this.description!!,
-        price = this.price!!,
-        monthlyPrice = this.getMonthlyPrice(),
+        price = CurrencyValue(this.price!!, this.currencyCode.ifBlank { defaultCurrencyCode }),
+        monthlyPrice = CurrencyValue(this.getMonthlyPrice(), this.currencyCode.ifBlank { defaultCurrencyCode }),
         everyXRecurrence = this.everyXRecurrence!!,
         recurrence = getRecurrenceFromDatabaseInt(this.recurrence!!),
         firstPayment = this.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
@@ -21,16 +22,17 @@ internal fun RecurringExpense.toFrontendType(): RecurringExpenseData {
     )
 }
 
-internal fun RecurringExpenseData.toBackendType(): RecurringExpense {
+internal fun RecurringExpenseData.toBackendType(defaultCurrencyCode: String): RecurringExpense {
     return RecurringExpense(
         id = this.id,
         name = this.name,
         description = this.description,
-        price = this.price,
+        price = this.price.value,
         everyXRecurrence = this.everyXRecurrence,
         recurrence = getRecurrenceIntFromUIRecurrence(this.recurrence),
         firstPayment = this.firstPayment?.toEpochMilliseconds(),
         color = this.color.toInt(),
+        currencyCode = if (defaultCurrencyCode != this.price.currencyCode) this.price.currencyCode else "",
     )
 }
 

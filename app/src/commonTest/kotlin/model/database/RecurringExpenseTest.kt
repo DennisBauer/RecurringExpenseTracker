@@ -16,6 +16,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Daily.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(152.08333f, expense.getMonthlyPrice())
@@ -33,6 +34,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Daily.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(26.614582f, expense.getMonthlyPrice())
@@ -50,6 +52,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Weekly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(43.333336f, expense.getMonthlyPrice())
@@ -67,6 +70,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Weekly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(8.666667f, expense.getMonthlyPrice())
@@ -84,6 +88,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Monthly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(10f, expense.getMonthlyPrice())
@@ -101,6 +106,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Monthly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(2.0f, expense.getMonthlyPrice())
@@ -118,6 +124,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Yearly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(0.8333333f, expense.getMonthlyPrice())
@@ -135,6 +142,7 @@ class RecurringExpenseTest {
                 RecurrenceDatabase.Yearly.value,
                 null,
                 null,
+                "USD",
             )
 
         assertEquals(0.16666667f, expense.getMonthlyPrice())

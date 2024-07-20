@@ -19,25 +19,30 @@ class ExchangeRateProvider {
 
     private var exchangeRates: ExchangeRates? = null
 
-    suspend fun exchangeCurrencyValue(from: CurrencyValue, toCurrencyCode: String): CurrencyValue? {
+    suspend fun exchangeCurrencyValue(
+        from: CurrencyValue,
+        toCurrencyCode: String,
+    ): CurrencyValue? {
         if (from.currencyCode == toCurrencyCode) return from
 
-        val exchangeRates = mutex.withLock {
-             exchangeRates ?: retrieveExchangeRates().apply {
-                exchangeRates = this
+        val exchangeRates =
+            mutex.withLock {
+                exchangeRates ?: retrieveExchangeRates().apply {
+                    exchangeRates = this
+                }
             }
-        }
         exchangeRates.data[from.currencyCode]?.let { exchangeRateSource ->
             exchangeRates.data[toCurrencyCode]?.let { exchangeRateTarget ->
-                return CurrencyValue(from.value / exchangeRateSource * exchangeRateTarget, toCurrencyCode)
+                return CurrencyValue(from.value / exchangeRateSource * exchangeRateTarget, toCurrencyCode, true)
             }
         }
         return null
     }
 
     @OptIn(ExperimentalResourceApi::class)
-    private suspend fun retrieveExchangeRates(): ExchangeRates = withContext(Dispatchers.IO) {
-        val currenciesFile = Res.readBytes("files/exchange_rates.json")
-        return@withContext Json.decodeFromString<ExchangeRates>(currenciesFile.decodeToString())
-    }
+    private suspend fun retrieveExchangeRates(): ExchangeRates =
+        withContext(Dispatchers.IO) {
+            val currenciesFile = Res.readBytes("files/exchange_rates.json")
+            return@withContext Json.decodeFromString<ExchangeRates>(currenciesFile.decodeToString())
+        }
 }

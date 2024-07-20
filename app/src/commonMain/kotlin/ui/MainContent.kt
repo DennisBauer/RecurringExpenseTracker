@@ -51,10 +51,20 @@ fun MainContent(
             modifier = modifier.fillMaxSize(),
         ) {
             composable(HomePane.ROUTE) {
+                val weeklyExpense =
+                    recurringExpenseViewModel.currencyPrefix +
+                        recurringExpenseViewModel.weeklyExpense.toCurrencyString(currencyCode)
+                val monthlyExpense =
+                    recurringExpenseViewModel.currencyPrefix +
+                        recurringExpenseViewModel.monthlyExpense.toCurrencyString(currencyCode)
+                val yearlyExpense =
+                    recurringExpenseViewModel.currencyPrefix +
+                        recurringExpenseViewModel.yearlyExpense.toCurrencyString(currencyCode)
+
                 RecurringExpenseOverview(
-                    weeklyExpense = recurringExpenseViewModel.weeklyExpense.toCurrencyString(currencyCode),
-                    monthlyExpense = recurringExpenseViewModel.monthlyExpense.toCurrencyString(currencyCode),
-                    yearlyExpense = recurringExpenseViewModel.yearlyExpense.toCurrencyString(currencyCode),
+                    weeklyExpense = weeklyExpense,
+                    monthlyExpense = monthlyExpense,
+                    yearlyExpense = yearlyExpense,
                     recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                     isGridMode = isGridMode,
                     onToggleGridMode = toggleGridMode,
