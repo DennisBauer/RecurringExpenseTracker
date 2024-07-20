@@ -10,11 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import model.Currency
 import model.CurrencyProvider
+import model.ExchangeRateProvider
 import model.database.UserPreferencesRepository
 
 class SettingsViewModel(
     private val currencyProvider: CurrencyProvider,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val exchangeRateProvider: ExchangeRateProvider,
 ) : ViewModel() {
     private val _availableCurrencies = MutableStateFlow<List<Currency>>(emptyList())
     val availableCurrencies: StateFlow<List<Currency>>
@@ -23,11 +25,15 @@ class SettingsViewModel(
         private set
     var showCurrencySelectionDialog by mutableStateOf(false)
         private set
+    var exchangeRateLastUpdate by mutableStateOf("--")
+        private set
 
     init {
         viewModelScope.launch {
             val currenciesList = currencyProvider.retrieveCurrencies()
             _availableCurrencies.emit(currenciesList)
+
+            exchangeRateLastUpdate = exchangeRateProvider.getLastUpdateInfo()
 
             userPreferencesRepository.defaultCurrency.get().collect { defaultCurrency ->
                 currenciesList.firstOrNull { it.code == defaultCurrency }?.let { currency ->

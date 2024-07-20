@@ -39,6 +39,16 @@ class ExchangeRateProvider {
         return null
     }
 
+    suspend fun getLastUpdateInfo(): String {
+        val exchangeRates =
+            mutex.withLock {
+                exchangeRates ?: retrieveExchangeRates().apply {
+                    exchangeRates = this
+                }
+            }
+        return exchangeRates.updateTime
+    }
+
     @OptIn(ExperimentalResourceApi::class)
     private suspend fun retrieveExchangeRates(): ExchangeRates =
         withContext(Dispatchers.IO) {
