@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="bottom_nav_upcoming">A venir</string>
+    <string name="bottom_nav_upcoming">À venir</string>
     <string name="home_summary_monthly">Mensuel</string>
     <string name="home_summary_weekly">Hebdomadaire</string>
     <string name="home_summary_yearly">Annuel</string>
@@ -26,7 +26,7 @@
     <string name="dialog_ok">OK</string>
     <string name="bottom_nav_home">Accueil</string>
     <string name="bottom_nav_settings">Paramètres</string>
-    <string name="edit_expense_description_placeholder">par exemple. Abonnement spécial</string>
+    <string name="edit_expense_description_placeholder">ex. abonnement spécial</string>
     <string name="edit_expense_name">Nom</string>
     <string name="edit_expense_price">Prix</string>
     <string name="edit_expense_recurrence">Récurrence</string>
