@@ -123,7 +123,7 @@ private fun Instant?.orNowIfInvalid(): Long {
     return this?.toEpochMilliseconds()
         ?: Clock.System
             .now()
-            .toLocalDateTime(TimeZone.UTC)
+            .toLocalDateTime(TimeZone.currentSystemDefault())
             .toInstant(TimeZone.UTC)
             .toEpochMilliseconds()
 }
