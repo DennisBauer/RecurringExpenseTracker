@@ -1,0 +1,7 @@
+Changelog 0.11.0:
+* Add support for predictive back action on Android
+* Add icons to the settings tab for better readability
+* Fix bug wrong date calculation
+* Spanish translations added
+* French translations updated
+* German translations updated
