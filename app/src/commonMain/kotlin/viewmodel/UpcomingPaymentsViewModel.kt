@@ -6,18 +6,11 @@ import androidx.lifecycle.viewModelScope
 import data.Recurrence
 import data.RecurringExpenseData
 import data.UpcomingPaymentData
-import isInDaysAfter
-import isSameDay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.daysUntil
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
+import model.DateTimeCalculator
 import model.database.ExpenseRepository
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
@@ -89,29 +82,22 @@ class UpcomingPaymentsViewModel(
         everyXRecurrence: Int,
         recurrence: Int,
     ): LocalDate {
-        val today =
-            Clock.System
-                .now()
-                .toLocalDateTime(TimeZone.UTC)
-                .date
-        var nextPayment = firstPayment.toLocalDateTime(TimeZone.UTC).date
-
-        while (today.isInDaysAfter(nextPayment) && !today.isSameDay(nextPayment)) {
-            val field =
+        return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
+            from = firstPayment,
+            everyXRecurrence = everyXRecurrence,
+            recurrence =
                 when (recurrence) {
                     RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
                     RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
                     RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
                     RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
                     else -> DateTimeUnit.MONTH
-                }
-            nextPayment = nextPayment.plus(everyXRecurrence, field)
-        }
-        return nextPayment
+                },
+        )
     }
 
     private fun getNextPaymentDays(nextPaymentDay: LocalDate): Int {
-        return Clock.System.now().daysUntil(nextPaymentDay.atStartOfDayIn(TimeZone.UTC), TimeZone.UTC)
+        return DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
     }
 
     private fun getRecurrenceFromDatabaseInt(recurrenceInt: Int): Recurrence {
