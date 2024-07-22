@@ -1,7 +1,5 @@
-package viewmodel.database
+package model.database
 
-import model.database.RecurrenceDatabase
-import model.database.RecurringExpense
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
