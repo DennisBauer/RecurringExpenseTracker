@@ -54,5 +54,5 @@ Contributions in any form are welcome!
 
 ## Translations
 <a href="https://hosted.weblate.org/engage/recurringexpensetracker/">
-<img src="https://hosted.weblate.org/widget/recurringexpensetracker/recurringexpensetracker/287x66-white.png" alt="Translation status" />
+<img src="https://hosted.weblate.org/widget/recurringexpensetracker/recurringexpensetracker/multi-auto.svg" alt="Translation status" />
 </a>
