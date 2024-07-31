@@ -10,8 +10,8 @@ on:
       - '*'
 
 jobs:
-  update-exchange-rates:
-    name: Update currency exchange rates
+  build-apk:
+    name: Build Signed APK
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,12 +23,6 @@ jobs:
         run: python .github/scripts/update_exchange_rates.py
         env:
           CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
-  build-apk:
-    name: Build Signed APK
-    needs: [update-exchange-rates]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Use Java 17
         uses: actions/setup-java@v4
         with:
@@ -58,10 +52,17 @@ jobs:
           path: app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
   build-appbundle:
     name: Build Signed AppBundle
-    needs: [update-exchange-rates]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Run Python script
+        run: python .github/scripts/update_exchange_rates.py
+        env:
+          CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
       - name: Use Java 17
         uses: actions/setup-java@v4
         with:
