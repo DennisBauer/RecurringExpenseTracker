@@ -11,12 +11,15 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import model.DateTimeCalculator
 import model.database.ExpenseRepository
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
 import model.database.UserPreferencesRepository
 import model.getSystemCurrencyCode
+import toLocaleString
 import ui.customizations.ExpenseColor
 
 class UpcomingPaymentsViewModel(
@@ -56,7 +59,7 @@ class UpcomingPaymentsViewModel(
                 val nextPaymentDay =
                     getNextPaymentDay(firstPayment, expense.everyXRecurrence!!, expense.recurrence!!)
                 val nextPaymentRemainingDays = getNextPaymentDays(nextPaymentDay)
-                val nextPaymentDate = nextPaymentDay.toString()
+                val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
                 _upcomingPaymentsData.add(
                     UpcomingPaymentData(
                         id = expense.id,
