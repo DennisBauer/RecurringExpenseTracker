@@ -1,0 +1,2 @@
+Changelog 0.12.0:
+* Define a currency per expense
