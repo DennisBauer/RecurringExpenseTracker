@@ -3,9 +3,10 @@ package viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.Recurrence
+import data.CurrencyValue
 import data.RecurringExpenseData
 import data.UpcomingPaymentData
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -14,14 +15,19 @@ import model.DateTimeCalculator
 import model.database.ExpenseRepository
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
+import model.database.UserPreferencesRepository
+import model.getSystemCurrencyCode
 import ui.customizations.ExpenseColor
 
 class UpcomingPaymentsViewModel(
     private val expenseRepository: ExpenseRepository,
+    userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPaymentData>()
     val upcomingPaymentsData: List<UpcomingPaymentData>
         get() = _upcomingPaymentsData
+
+    private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
 
     init {
         viewModelScope.launch {
@@ -37,18 +43,7 @@ class UpcomingPaymentsViewModel(
     ) {
         viewModelScope.launch {
             expenseRepository.getRecurringExpenseById(expenceId)?.let {
-                val recurringExpenseData =
-                    RecurringExpenseData(
-                        id = it.id,
-                        name = it.name!!,
-                        description = it.description!!,
-                        price = it.price!!,
-                        monthlyPrice = it.getMonthlyPrice(),
-                        everyXRecurrence = it.everyXRecurrence!!,
-                        recurrence = getRecurrenceFromDatabaseInt(it.recurrence!!),
-                        firstPayment = it.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
-                        color = ExpenseColor.fromInt(it.color),
-                    )
+                val recurringExpenseData = it.toFrontendType(getDefaultCurrencyCode())
                 onItemClicked(recurringExpenseData)
             }
         }
@@ -66,7 +61,7 @@ class UpcomingPaymentsViewModel(
                     UpcomingPaymentData(
                         id = expense.id,
                         name = expense.name!!,
-                        price = expense.price!!,
+                        price = CurrencyValue(expense.price!!, expense.currencyCode),
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
                         nextPaymentDate = nextPaymentDate,
                         color = ExpenseColor.fromInt(expense.color),
@@ -100,13 +95,7 @@ class UpcomingPaymentsViewModel(
         return DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
     }
 
-    private fun getRecurrenceFromDatabaseInt(recurrenceInt: Int): Recurrence {
-        return when (recurrenceInt) {
-            RecurrenceDatabase.Daily.value -> Recurrence.Daily
-            RecurrenceDatabase.Weekly.value -> Recurrence.Weekly
-            RecurrenceDatabase.Monthly.value -> Recurrence.Monthly
-            RecurrenceDatabase.Yearly.value -> Recurrence.Yearly
-            else -> Recurrence.Monthly
-        }
+    private suspend fun getDefaultCurrencyCode(): String {
+        return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
     }
 }

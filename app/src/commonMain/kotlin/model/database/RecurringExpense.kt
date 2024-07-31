@@ -14,6 +14,7 @@ data class RecurringExpense(
     @ColumnInfo(name = "recurrence") val recurrence: Int?,
     @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
     @ColumnInfo(name = "color") val color: Int?,
+    @ColumnInfo(name = "currencyCode") val currencyCode: String,
 ) {
     fun getMonthlyPrice(): Float {
         return when (recurrence) {

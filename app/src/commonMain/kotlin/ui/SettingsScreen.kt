@@ -52,6 +52,8 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
+import recurringexpensetracker.app.generated.resources.settings_currency_exchange_info
+import recurringexpensetracker.app.generated.resources.settings_currency_exchange_last_update
 import recurringexpensetracker.app.generated.resources.settings_default_currency
 import recurringexpensetracker.app.generated.resources.settings_general
 import recurringexpensetracker.app.generated.resources.settings_security_biometric_lock
@@ -102,6 +104,20 @@ fun SettingsScreen(
                         },
                     onClick = viewModel::onSelectCurrency,
                     icon = Icons.Rounded.CurrencyExchange,
+                )
+                Text(
+                    text = stringResource(Res.string.settings_currency_exchange_info),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                Text(
+                    text =
+                        stringResource(
+                            Res.string.settings_currency_exchange_last_update,
+                            viewModel.exchangeRateLastUpdate,
+                        ),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
 
                 if (canUseBiometric) {

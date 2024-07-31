@@ -33,7 +33,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -41,23 +40,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import data.CurrencyValue
 import data.EditExpensePane
 import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.datetime.Clock
-import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
-import org.koin.compose.koinInject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.home_summary_monthly
 import recurringexpensetracker.app.generated.resources.home_summary_weekly
 import recurringexpensetracker.app.generated.resources.home_summary_yearly
 import recurringexpensetracker.app.generated.resources.home_title
-import toCurrencyString
 import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
 
@@ -73,14 +70,11 @@ fun RecurringExpenseOverview(
     navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val fadeDuration = 700
 
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()
-
-    val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
 
     Scaffold(
         modifier = modifier,
@@ -163,7 +157,6 @@ fun RecurringExpenseOverview(
                         if (targetValue) {
                             GridRecurringExpense(
                                 recurringExpenseData = recurringExpenseData,
-                                currencyCode = currencyCode,
                                 onClickItem = {
                                     navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
                                 },
@@ -171,7 +164,6 @@ fun RecurringExpenseOverview(
                         } else {
                             RecurringExpense(
                                 recurringExpenseData = recurringExpenseData,
-                                currencyCode = currencyCode,
                                 onClickItem = {
                                     navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
                                 },
@@ -250,7 +242,6 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun GridRecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -276,7 +267,7 @@ private fun GridRecurringExpense(
                         .align(Alignment.CenterHorizontally),
             )
             Text(
-                text = recurringExpenseData.monthlyPrice.toCurrencyString(currencyCode),
+                text = recurringExpenseData.monthlyPrice.toCurrencyString(),
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -289,7 +280,7 @@ private fun GridRecurringExpense(
             ) {
                 Text(
                     text =
-                        "${recurringExpenseData.price.toCurrencyString(currencyCode)} / " +
+                        "${recurringExpenseData.price.toCurrencyString()} / " +
                             "${recurringExpenseData.everyXRecurrence} " +
                             stringResource(recurringExpenseData.recurrence.shortStringRes),
                     style = MaterialTheme.typography.bodySmall,
@@ -311,7 +302,6 @@ private fun GridRecurringExpense(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    currencyCode: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -346,7 +336,7 @@ private fun RecurringExpense(
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = recurringExpenseData.monthlyPrice.toCurrencyString(currencyCode),
+                    text = recurringExpenseData.monthlyPrice.toCurrencyString(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 if (recurringExpenseData.recurrence != Recurrence.Monthly ||
@@ -354,7 +344,7 @@ private fun RecurringExpense(
                 ) {
                     Text(
                         text =
-                            "${recurringExpenseData.price.toCurrencyString(currencyCode)} / " +
+                            "${recurringExpenseData.price.toCurrencyString()} / " +
                                 "${recurringExpenseData.everyXRecurrence} " +
                                 stringResource(recurringExpenseData.recurrence.shortStringRes),
                         style = MaterialTheme.typography.bodyLarge,
@@ -387,8 +377,8 @@ private fun RecurringExpenseOverviewPreview(
                             id = 0,
                             name = "Netflix",
                             description = "My Netflix description",
-                            price = 9.99f,
-                            monthlyPrice = 9.99f,
+                            price = CurrencyValue(9.99f, "USD"),
+                            monthlyPrice = CurrencyValue(9.99f, "USD"),
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             Clock.System.now(),
@@ -400,8 +390,8 @@ private fun RecurringExpenseOverviewPreview(
                             description =
                                 "My Disney Plus very very very very very " +
                                     "very very very very long description",
-                            price = 5f,
-                            monthlyPrice = 5f,
+                            price = CurrencyValue(5f, "USD"),
+                            monthlyPrice = CurrencyValue(5f, "USD"),
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             Clock.System.now(),
@@ -411,8 +401,8 @@ private fun RecurringExpenseOverviewPreview(
                             id = 2,
                             name = "Amazon Prime with a long name",
                             description = "",
-                            price = 7.95f,
-                            monthlyPrice = 7.95f,
+                            price = CurrencyValue(7.95f, "USD"),
+                            monthlyPrice = CurrencyValue(7.95f, "USD"),
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Monthly,
                             Clock.System.now(),
@@ -422,8 +412,8 @@ private fun RecurringExpenseOverviewPreview(
                             id = 3,
                             name = "Yearly Test Subscription",
                             description = "Test Description with another very long name",
-                            price = 72f,
-                            monthlyPrice = 6f,
+                            price = CurrencyValue(72f, "USD"),
+                            monthlyPrice = CurrencyValue(6f, "USD"),
                             everyXRecurrence = 1,
                             recurrence = Recurrence.Yearly,
                             Clock.System.now(),
