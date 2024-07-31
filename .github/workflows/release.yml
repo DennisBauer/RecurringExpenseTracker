@@ -115,7 +115,7 @@ jobs:
         uses: battila7/get-version-action@v2
       - name: Build Changelog
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v4
+        uses: mikepenz/release-changelog-builder-action@v5
         with:
           configurationJson: |
             {
