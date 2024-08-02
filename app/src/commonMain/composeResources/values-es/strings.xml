@@ -53,4 +53,7 @@
     <string name="dialog_ok">¡Vale!</string>
     <string name="cancel">Cancelar</string>
     <string name="delete">Eliminar</string>
+    <string name="settings_currency_exchange_last_update">Tipos de cambio desde %1$s</string>
+    <string name="settings_currency_exchange_info">El gasto en otra moneda se convertirá a esa moneda.
+\nLos tipos de cambio están codificados en la aplicación para evitar que tengas que acceder a Internet.</string>
 </resources>
