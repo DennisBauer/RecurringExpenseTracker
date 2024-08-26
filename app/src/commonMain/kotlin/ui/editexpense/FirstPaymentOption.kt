@@ -112,7 +112,6 @@ fun FirstPaymentOption(
                     Text(text = stringResource(Res.string.dialog_ok))
                 }
             },
-            modifier = modifier,
         ) {
             DatePicker(state = datePickerState)
         }
