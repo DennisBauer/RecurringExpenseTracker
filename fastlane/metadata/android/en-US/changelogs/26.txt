@@ -1,0 +1,10 @@
+Changelog 0.12.2:
+* Fix wrong currency on upcoming tab
+* Make release tags builds are reproducible again
+
+Changelog 0.12.1:
+* Update Spanish translations
+* Update Hindi translations
+
+Changelog 0.12.0:
+* Define a currency per expense
