@@ -21,17 +21,11 @@ jobs:
         run: python .github/scripts/update_exchange_rates.py
         env:
           CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
-      - name: Read versionName from build.gradle.kts and write to env variable
-        run: |
-          currentVersionName=$(grep 'versionName = ' app/build.gradle.kts | awk -F '"' '{print $2}')
-          echo "VERSION_NAME=$currentVersionName" >> $GITHUB_ENV
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
           add : |
             - app/src/commonMain/composeResources/files/exchange_rates.json
           message: |
-            Create new release ${{ env.VERSION_NAME }}
-
             Update exchange rates
-          tag: v${{ env.VERSION_NAME }}
+          new_branch: update_exchange_rates
