@@ -52,7 +52,7 @@ class UpcomingPaymentsViewModel(
         }
     }
 
-    private fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
         _upcomingPaymentsData.clear()
         recurringExpenses.forEach { expense ->
             expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) }?.let { firstPayment ->
@@ -64,7 +64,11 @@ class UpcomingPaymentsViewModel(
                     UpcomingPaymentData(
                         id = expense.id,
                         name = expense.name!!,
-                        price = CurrencyValue(expense.price!!, expense.currencyCode),
+                        price =
+                            CurrencyValue(
+                                expense.price!!,
+                                expense.currencyCode.ifBlank { getDefaultCurrencyCode() },
+                            ),
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
                         nextPaymentDate = nextPaymentDate,
                         color = ExpenseColor.fromInt(expense.color),
