@@ -151,10 +151,6 @@ compose.desktop {
     }
 }
 
-composeCompiler {
-    enableStrongSkippingMode = true
-}
-
 room {
     schemaDirectory("$projectDir/schemas")
 }
