@@ -15,14 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Run Python script
-        run: python .github/scripts/update_exchange_rates.py
-        env:
-          CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
       - name: Use Java 17
         uses: actions/setup-java@v4
         with:
@@ -55,14 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Run Python script
-        run: python .github/scripts/update_exchange_rates.py
-        env:
-          CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
       - name: Use Java 17
         uses: actions/setup-java@v4
         with:
