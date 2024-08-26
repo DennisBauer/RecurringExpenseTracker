@@ -75,10 +75,6 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
         }
 
-        sourceSets.commonMain {
-            kotlin.srcDirs("build/generated/ksp/metadata")
-        }
-
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -175,12 +171,14 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", libs.room.compiler)
-    ktlintRuleset(libs.ktlint)
-}
+    // Android
+    add("kspAndroid", libs.room.compiler)
+    // JVM (Desktop)
+    add("kspDesktop", libs.room.compiler)
+    // iOS
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
 
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
+    ktlintRuleset(libs.ktlint)
 }

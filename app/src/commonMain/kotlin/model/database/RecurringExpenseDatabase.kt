@@ -1,7 +1,9 @@
 package model.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -11,7 +13,10 @@ interface IClearAllTablesFix {
     fun clearAllTables()
 }
 
+expect object RecurringExpenseDatabaseCtor : RoomDatabaseConstructor<RecurringExpenseDatabase>
+
 @Database(entities = [RecurringExpense::class], version = 6)
+@ConstructedBy(RecurringExpenseDatabaseCtor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
 
