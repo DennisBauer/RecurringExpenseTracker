@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.Fingerprint
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,6 +50,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.dialog_ok
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
@@ -103,20 +106,7 @@ fun SettingsScreen(
                         },
                     onClick = viewModel::onSelectCurrency,
                     icon = Icons.Rounded.CurrencyExchange,
-                )
-                Text(
-                    text = stringResource(Res.string.settings_currency_exchange_info),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
-                Text(
-                    text =
-                        stringResource(
-                            Res.string.settings_currency_exchange_last_update,
-                            viewModel.exchangeRateLastUpdate,
-                        ),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    infoActionClick = viewModel::onCurrencyInfo,
                 )
 
                 if (canUseBiometric) {
@@ -165,6 +155,32 @@ fun SettingsScreen(
                     },
                     confirmButton = {},
                 )
+            } else if (viewModel.showCurrencyInfoDialog) {
+                AlertDialog(
+                    onDismissRequest = viewModel::onDismissCurrencyInfoDialog,
+                    text = {
+                        Column {
+                            Text(
+                                text = stringResource(Res.string.settings_currency_exchange_info),
+                                modifier = Modifier.padding(bottom = 16.dp),
+                            )
+                            Text(
+                                text =
+                                    stringResource(
+                                        Res.string.settings_currency_exchange_last_update,
+                                        viewModel.exchangeRateLastUpdate,
+                                    ),
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = viewModel::onDismissCurrencyInfoDialog,
+                        ) {
+                            Text(text = stringResource(Res.string.dialog_ok))
+                        }
+                    },
+                )
             }
         },
     )
@@ -193,6 +209,7 @@ private fun SettingsClickableElement(
     icon: ImageVector,
     modifier: Modifier = Modifier,
     subtitle: String = "",
+    infoActionClick: (() -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     Surface(
@@ -211,7 +228,10 @@ private fun SettingsClickableElement(
                 contentDescription = null,
             )
             Column(
-                modifier = Modifier.padding(start = 16.dp),
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = title,
@@ -223,6 +243,14 @@ private fun SettingsClickableElement(
                         text = subtitle,
                         style = MaterialTheme.typography.bodySmall,
                         overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            if (infoActionClick != null) {
+                IconButton(onClick = infoActionClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
                     )
                 }
             }

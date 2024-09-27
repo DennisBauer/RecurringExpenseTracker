@@ -25,6 +25,8 @@ class SettingsViewModel(
         private set
     var showCurrencySelectionDialog by mutableStateOf(false)
         private set
+    var showCurrencyInfoDialog by mutableStateOf(false)
+        private set
     var exchangeRateLastUpdate by mutableStateOf("--")
         private set
 
@@ -56,5 +58,13 @@ class SettingsViewModel(
         viewModelScope.launch {
             userPreferencesRepository.defaultCurrency.save(currency.code)
         }
+    }
+
+    fun onCurrencyInfo() {
+        showCurrencyInfoDialog = true
+    }
+
+    fun onDismissCurrencyInfoDialog() {
+        showCurrencyInfoDialog = false
     }
 }
