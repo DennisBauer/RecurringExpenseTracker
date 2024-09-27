@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.cancel
@@ -44,7 +43,7 @@ import recurringexpensetracker.app.generated.resources.save
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.EditRecurringExpenseViewModel
 
-@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditRecurringExpenseScreen(
     expenseId: Int?,

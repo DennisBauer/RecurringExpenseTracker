@@ -18,7 +18,6 @@ import model.database.UserPreferencesRepository
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import toCurrencyString
 import ui.editexpense.EditRecurringExpenseScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
@@ -26,7 +25,6 @@ import viewmodel.RecurringExpenseViewModel
 import viewmodel.UpcomingPaymentsViewModel
 
 @Suppress("ktlint:compose:vm-forwarding-check")
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun MainContent(
     isGridMode: Boolean,
