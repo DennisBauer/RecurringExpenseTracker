@@ -139,7 +139,7 @@ jobs:
         with:
           body: ${{steps.github_release.outputs.changelog}}
           draft: true
-          files: apk/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
+          files: RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Play Store
@@ -148,6 +148,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
           packageName: de.dbauer.expensetracker
-          releaseFiles: appbundle/app-release.aab
+          releaseFiles: app-release.aab
           track: production
-          whatsNewDirectory: whatsnew/
+          whatsNewDirectory: /
