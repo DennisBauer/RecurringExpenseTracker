@@ -95,6 +95,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: whatsnew
+          path: whatsnew
       - id: get_version
         uses: battila7/get-version-action@v2
       - name: Build Changelog
@@ -150,4 +151,4 @@ jobs:
           packageName: de.dbauer.expensetracker
           releaseFiles: app-release.aab
           track: production
-          whatsNewDirectory: /
+          whatsNewDirectory: whatsnew/
