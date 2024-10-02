@@ -41,6 +41,15 @@
         "org.jlleitschuh.gradle.ktlint"
       ],
       "groupName": "ktlint"
+    },
+    {
+      "matchPackagePatterns": [
+        "com.android.library",
+        "com.android.application",
+        "gradle"
+      ],
+      "groupName": "gradle",
+      "enabled": false
     }
   ]
 }
