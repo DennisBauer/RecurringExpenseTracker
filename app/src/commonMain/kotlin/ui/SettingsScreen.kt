@@ -207,10 +207,10 @@ private fun SettingsHeaderElement(
 private fun SettingsClickableElement(
     title: String,
     icon: ImageVector,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     subtitle: String = "",
     infoActionClick: (() -> Unit)? = null,
-    onClick: () -> Unit,
 ) {
     Surface(
         color = Color.Transparent,
