@@ -17,6 +17,9 @@ Feel free to make feature requests or report bugs if you find any.
 
 ## Download
 ### Android
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/de/packages/de.dbauer.expensetracker/)
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
@@ -34,13 +37,18 @@ The app compiles for iOS and works fine, but I do not have an Apple developer ac
 The app compiles and works for all 3 desktop OS platforms. I'll look into how to publish a version for those platforms in the future.
 
 ## Screenshots
-<div style="display:flex">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png" width="240"/>
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="240"/>
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png" width="240"/>
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png" width="240"/>
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png" width="240"/>
-</div>
+<table>
+  <tr>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png"/></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png"/></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png"/></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png"/></td>
+    <td></td>
+  </tr>
+</table>
 
 ## Contributing
 You have ideas on how to improve this app and want to making it even better?
