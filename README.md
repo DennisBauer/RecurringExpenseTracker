@@ -17,6 +17,9 @@ Feel free to make feature requests or report bugs if you find any.
 
 ## Download
 ### Android
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/de/packages/de.dbauer.expensetracker/)
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
