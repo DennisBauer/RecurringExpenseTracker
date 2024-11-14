@@ -19,16 +19,16 @@ Feel free to make feature requests or report bugs if you find any.
 ### Android
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/de/packages/de.dbauer.expensetracker/)
+     width="200">](https://f-droid.org/de/packages/de.dbauer.expensetracker/)
 [<img src="assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
-     height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
+     width="200">](https://apt.izzysoft.de/fdroid/index/apk/de.dbauer.expensetracker)
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
      alt="Download from Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=de.dbauer.expensetracker)
+     width="200">](https://play.google.com/store/apps/details?id=de.dbauer.expensetracker)
 [<img src="assets/get-it-on-github.png"
      alt="Download from GitHub"
-     height="80">](https://github.com/DennisBauer/RecurringExpenseTracker/releases/latest)
+     width="200">](https://github.com/DennisBauer/RecurringExpenseTracker/releases/latest)
 
 ### iOS
 The app compiles for iOS and works fine, but I do not have an Apple developer account to publish it. That's why it can only be used when compiled locally. Let me know if you have an idea how to solve this problem without paying a $99 annual fee to Apple.
