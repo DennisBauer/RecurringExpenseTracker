@@ -17,10 +17,6 @@ import ui.theme.ExpenseTrackerTheme
 
 fun MainViewController() =
     ComposeUIViewController {
-        startKoin {
-            modules(sharedModule, platformModule)
-        }
-
         val userPreferencesRepository = koinInject<UserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
 
@@ -45,3 +41,9 @@ fun MainViewController() =
             }
         }
     }
+
+fun initKoin() {
+    startKoin {
+        modules(sharedModule, platformModule)
+    }
+}
