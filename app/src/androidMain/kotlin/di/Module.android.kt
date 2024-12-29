@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.RoomDatabase
+import de.dbauer.expensetracker.widget.UpcomingPaymentsWidgetModel
 import model.database.RecurringExpenseDatabase
 import model.database.UserPreferencesRepository
 import model.database.getDatabaseBuilder
@@ -27,6 +28,7 @@ actual val platformModule =
             }
         }
         singleOf(::UserPreferencesRepository)
+        singleOf(::UpcomingPaymentsWidgetModel)
         factory<AlarmManager> {
             val context = get<Context>()
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

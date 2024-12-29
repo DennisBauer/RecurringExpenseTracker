@@ -41,6 +41,7 @@ fun MainViewController() =
                     navigateToPermissionsSettings = {},
                     onClickBackup = {},
                     onClickRestore = {},
+                    updateWidget = {},
                 )
             }
         }
