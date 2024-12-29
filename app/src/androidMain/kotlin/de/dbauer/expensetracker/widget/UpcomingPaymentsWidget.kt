@@ -30,6 +30,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.upcoming_title
+import ui.theme.widget.ExpenseTrackerWidgetTheme
 
 class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
     private val upcomingPayment by inject<UpcomingPaymentsWidgetModel>()
@@ -44,7 +45,7 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
             LaunchedEffect(Unit) {
                 upcomingPayment.init()
             }
-            GlanceTheme {
+            ExpenseTrackerWidgetTheme {
                 Scaffold(
                     modifier = GlanceModifier.fillMaxSize(),
                     titleBar = {
