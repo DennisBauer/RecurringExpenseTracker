@@ -1,14 +1,10 @@
-package viewmodel
+package de.dbauer.expensetracker.widget
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import data.CurrencyValue
-import data.RecurringExpenseData
 import data.UpcomingPaymentData
 import getDefaultCurrencyCode
 import getNextPaymentDays
-import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -22,33 +18,19 @@ import model.database.UserPreferencesRepository
 import toLocaleString
 import ui.customizations.ExpenseColor
 
-class UpcomingPaymentsViewModel(
+class UpcomingPaymentsWidgetModel(
     private val expenseRepository: ExpenseRepository,
     userPreferencesRepository: UserPreferencesRepository,
-) : ViewModel() {
+) {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPaymentData>()
     val upcomingPaymentsData: List<UpcomingPaymentData>
         get() = _upcomingPaymentsData
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
 
-    init {
-        viewModelScope.launch {
-            expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
-                onDatabaseUpdated(recurringExpenses)
-            }
-        }
-    }
-
-    fun onExpenseWithIdClicked(
-        expenceId: Int,
-        onItemClicked: (RecurringExpenseData) -> Unit,
-    ) {
-        viewModelScope.launch {
-            expenseRepository.getRecurringExpenseById(expenceId)?.let {
-                val recurringExpenseData = it.toFrontendType(defaultCurrency.getDefaultCurrencyCode())
-                onItemClicked(recurringExpenseData)
-            }
+    suspend fun init() {
+        expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
+            onDatabaseUpdated(recurringExpenses)
         }
     }
 
