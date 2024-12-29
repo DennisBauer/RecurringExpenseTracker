@@ -38,6 +38,7 @@ fun MainContent(
     navigateToPermissionsSettings: () -> Unit,
     onClickBackup: () -> Unit,
     onClickRestore: () -> Unit,
+    updateWidget: () -> Unit,
     modifier: Modifier = Modifier,
     startRoute: String = HomePane.ROUTE,
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
@@ -115,7 +116,10 @@ fun MainContent(
                 EditRecurringExpenseScreen(
                     expenseId = backStackEntry.getArgExpenseId(),
                     canUseNotifications = canUseNotifications,
-                    onDismiss = navController::navigateUp,
+                    onDismiss = {
+                        navController.navigateUp()
+                        updateWidget()
+                    },
                 )
             }
         }
