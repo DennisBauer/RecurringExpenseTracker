@@ -49,6 +49,8 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.androidx.glance.appwidget)
+            implementation(libs.androidx.glance.material3)
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
@@ -148,14 +150,19 @@ android {
     }
 }
 
-compose.desktop {
-    application {
-        mainClass = "MainKt"
+compose {
+    resources {
+        publicResClass = true
+    }
+    desktop {
+        application {
+            mainClass = "MainKt"
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "de.dbauer.expensetracker"
-            packageVersion = "1.0.0"
+            nativeDistributions {
+                targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+                packageName = "de.dbauer.expensetracker"
+                packageVersion = "1.0.0"
+            }
         }
     }
 }
