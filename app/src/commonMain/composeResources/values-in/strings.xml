@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Buka Mode kisi</string>
+    <string name="bottom_nav_home">Beranda</string>
+    <string name="bottom_nav_upcoming">Mendatang</string>
+    <string name="home_summary_monthly">Bulanan</string>
+    <string name="home_summary_yearly">Tahunan</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Tutup Mode Kisi</string>
+    <string name="bottom_nav_settings">Pengaturan</string>
+    <string name="home_summary_weekly">Mingguan</string>
+    <string name="edit_expense_title">Sunting Pengeluaran</string>
+</resources>
