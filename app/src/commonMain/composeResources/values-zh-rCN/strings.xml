@@ -55,4 +55,6 @@
     <string name="edit_expense_name">名称</string>
     <string name="edit_expense_price">价格</string>
     <string name="settings_backup_not_created_toast">备份失败</string>
+    <string name="app_name" translatable="false"></string>
+    <string name="home_title" translatable="false"></string>
 </resources>
