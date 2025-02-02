@@ -55,6 +55,4 @@
     <string name="settings_system_default">सिस्टम डिफॉल्ट</string>
     <string name="settings_currency_exchange_last_update">परिवर्तन दरें %1$s से हैं</string>
     <string name="settings_currency_exchange_info">किसी अन्य मुद्रा में जोड़े गए व्यय को उसी मुद्रा में परिवर्तित कर दिया जाएगा। \nविनिमय दरों को ऐप के साथ बंडल किया जाता है ताकि इसे इंटरनेट तक पहुँचने से रोका जा सके।</string>
-    <string name="app_name" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
 </resources>

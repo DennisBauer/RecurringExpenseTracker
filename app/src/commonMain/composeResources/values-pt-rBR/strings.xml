@@ -55,6 +55,4 @@
     <string name="save">Salvar</string>
     <string name="upcoming_placeholder_title">Definir uma data do primeiro pagamento das despesas para ver um resumo dos próximos pagamentos</string>
     <string name="settings_currency_exchange_info">As despesas adicionadas numa moeda diferente serão convertidas para essa moeda.\nAs taxas de câmbio são integradas no aplicativo para evitar acessar à Internet.</string>
-    <string name="home_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
 </resources>

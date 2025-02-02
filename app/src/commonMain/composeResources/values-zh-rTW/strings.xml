@@ -55,6 +55,4 @@
     <string name="settings_title_security">安全性</string>
     <string name="settings_security_biometric_lock">生物辨識鎖定</string>
     <string name="biometric_prompt_manager_title">解鎖 Recurring Expense Tracker</string>
-    <string name="app_name" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
 </resources>

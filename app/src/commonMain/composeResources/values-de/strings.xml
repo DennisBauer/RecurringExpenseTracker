@@ -63,6 +63,4 @@
     <string name="cancel">Abbrechen</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
-    <string name="app_name" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
 </resources>
