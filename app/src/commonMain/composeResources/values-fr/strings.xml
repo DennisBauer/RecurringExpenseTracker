@@ -53,4 +53,8 @@
     <string name="settings_general">Général</string>
     <string name="settings_default_currency">Devise par défaut</string>
     <string name="settings_system_default">Valeur système</string>
+    <string name="settings_currency_exchange_info"></string>
+    <string name="settings_currency_exchange_last_update"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="home_title" translatable="false"></string>
 </resources>
