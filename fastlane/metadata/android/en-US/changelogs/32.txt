@@ -1,0 +1,4 @@
+Changelog 0.12.8:
+* Update exchange rates
+* Added (Chinese (Simplified Han script)) translation
+* Added (Tamil) translation
