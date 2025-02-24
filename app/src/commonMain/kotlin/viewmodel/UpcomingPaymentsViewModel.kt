@@ -8,14 +8,11 @@ import data.RecurringExpenseData
 import data.UpcomingPaymentData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import model.DateTimeCalculator
 import model.database.ExpenseRepository
-import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
 import model.database.UserPreferencesRepository
 import model.getSystemCurrencyCode
@@ -55,9 +52,7 @@ class UpcomingPaymentsViewModel(
     private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
         _upcomingPaymentsData.clear()
         recurringExpenses.forEach { expense ->
-            expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) }?.let { firstPayment ->
-                val nextPaymentDay =
-                    getNextPaymentDay(firstPayment, expense.everyXRecurrence!!, expense.recurrence!!)
+            expense.getNextPaymentDay()?.let { nextPaymentDay ->
                 val nextPaymentRemainingDays = getNextPaymentDays(nextPaymentDay)
                 val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
                 _upcomingPaymentsData.add(
@@ -77,25 +72,6 @@ class UpcomingPaymentsViewModel(
             }
         }
         _upcomingPaymentsData.sortBy { it.nextPaymentRemainingDays }
-    }
-
-    private fun getNextPaymentDay(
-        firstPayment: Instant,
-        everyXRecurrence: Int,
-        recurrence: Int,
-    ): LocalDate {
-        return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
-            from = firstPayment,
-            everyXRecurrence = everyXRecurrence,
-            recurrence =
-                when (recurrence) {
-                    RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
-                    RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
-                    RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
-                    RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
-                    else -> DateTimeUnit.MONTH
-                },
-        )
     }
 
     private fun getNextPaymentDays(nextPaymentDay: LocalDate): Int {

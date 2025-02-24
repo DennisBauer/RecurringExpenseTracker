@@ -51,7 +51,11 @@ fun RecurrenceOption(
         Row {
             ExpenseTextField(
                 value = everyXRecurrence,
-                onValueChange = onEveryXRecurrenceChange,
+                onValueChange = {
+                    if (it.matches(Regex("\\d{0,3}"))) {
+                        onEveryXRecurrenceChange(it)
+                    }
+                },
                 placeholder = "1",
                 keyboardOptions =
                     KeyboardOptions(

@@ -3,6 +3,10 @@ package model.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import model.DateTimeCalculator
 
 @Entity(tableName = "recurring_expenses")
 data class RecurringExpense(
@@ -15,6 +19,9 @@ data class RecurringExpense(
     @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
     @ColumnInfo(name = "color") val color: Int?,
     @ColumnInfo(name = "currencyCode") val currencyCode: String,
+    @ColumnInfo(name = "notifyForExpense") val notifyForExpense: Boolean,
+    @ColumnInfo(name = "notifyXDaysBefore") val notifyXDaysBefore: Int?,
+    @ColumnInfo(name = "lastNotificationDate") val lastNotificationDate: Long?,
 ) {
     fun getMonthlyPrice(): Float {
         return when (recurrence) {
@@ -32,6 +39,24 @@ data class RecurringExpense(
             }
             else -> 0f
         }
+    }
+
+    fun getNextPaymentDay(): LocalDate? {
+        if (firstPayment == null) return null
+        if (everyXRecurrence == null) return null
+
+        return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
+            from = Instant.fromEpochMilliseconds(firstPayment),
+            everyXRecurrence = everyXRecurrence,
+            recurrence =
+                when (recurrence) {
+                    RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
+                    RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
+                    RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
+                    RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
+                    else -> DateTimeUnit.MONTH
+                },
+        )
     }
 }
 
