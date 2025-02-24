@@ -1,4 +1,5 @@
 [versions]
+accompanist-permissions = "0.37.2"
 agp = "8.7.3"
 android-compileSdk = "35"
 android-minSdk = "26"
@@ -24,6 +25,7 @@ room = "2.7.0-beta01"
 sqlite = "2.5.0-beta01"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }

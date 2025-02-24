@@ -17,6 +17,9 @@ import model.CurrencyProvider
 import model.database.ExpenseRepository
 import model.database.UserPreferencesRepository
 import model.getSystemCurrencyCode
+import org.jetbrains.compose.resources.getString
+import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.edit_expense_notification_days_advance
 import toFloatLocaleAware
 import toLocalString
 import ui.customizations.ExpenseColor
@@ -39,6 +42,10 @@ class EditRecurringExpenseViewModel(
     var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
     var firstPaymentDate: Instant? by mutableStateOf(null)
     var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
+    var expenseNotificationEnabledGlobally = userPreferencesRepository.upcomingPaymentNotification
+    var notifyForExpense by mutableStateOf(true)
+    var notifyXDaysBefore by mutableStateOf("")
+    var defaultXDaysPlaceholder by mutableStateOf("")
 
     var showDeleteConfirmDialog by mutableStateOf(false)
 
@@ -46,6 +53,7 @@ class EditRecurringExpenseViewModel(
     val showDeleteButton = !isNewExpense
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
+    private var lastNotificationDate: Instant? = null
 
     init {
         viewModelScope.launch {
@@ -67,6 +75,9 @@ class EditRecurringExpenseViewModel(
                         selectedRecurrence = expense.recurrence
                         firstPaymentDate = expense.firstPayment
                         expenseColor = expense.color
+                        notifyForExpense = expense.notifyForExpense
+                        notifyXDaysBefore = expense.notifyXDaysBefore?.toString() ?: ""
+                        lastNotificationDate = expense.lastNotificationDate
 
                         availableCurrencies.firstOrNull { it.currencyCode == expense.price.currencyCode }?.let {
                             selectedCurrencyOption = it
@@ -76,6 +87,11 @@ class EditRecurringExpenseViewModel(
                 availableCurrencies.firstOrNull { it.currencyCode == getDefaultCurrencyCode() }?.let {
                     selectedCurrencyOption = it
                 }
+            }
+        }
+        viewModelScope.launch {
+            userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.get().collect {
+                defaultXDaysPlaceholder = getString(Res.string.edit_expense_notification_days_advance, it)
             }
         }
     }
@@ -138,6 +154,9 @@ class EditRecurringExpenseViewModel(
             recurrence = selectedRecurrence,
             firstPayment = firstPaymentDate,
             color = expenseColor,
+            notifyForExpense = notifyForExpense,
+            notifyXDaysBefore = notifyXDaysBefore.takeIf { it.isNotBlank() && notifyForExpense }?.toIntOrNull(),
+            lastNotificationDate = lastNotificationDate,
         )
     }
 

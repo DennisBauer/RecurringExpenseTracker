@@ -5,6 +5,7 @@ import model.ExchangeRateProvider
 import model.database.ExpenseRepository
 import model.database.RecurringExpenseDao
 import model.database.RecurringExpenseDatabase
+import model.notification.ExpenseNotificationManager
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
@@ -32,4 +33,5 @@ val sharedModule =
         singleOf(::CurrencyProvider)
         viewModelOf(::SettingsViewModel)
         singleOf(::ExchangeRateProvider)
+        singleOf(::ExpenseNotificationManager)
     }

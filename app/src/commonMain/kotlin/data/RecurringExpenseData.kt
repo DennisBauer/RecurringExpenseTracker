@@ -35,4 +35,7 @@ data class RecurringExpenseData(
     val recurrence: Recurrence,
     val firstPayment: Instant?,
     val color: ExpenseColor,
+    val notifyForExpense: Boolean,
+    val notifyXDaysBefore: Int?,
+    val lastNotificationDate: Instant?,
 )

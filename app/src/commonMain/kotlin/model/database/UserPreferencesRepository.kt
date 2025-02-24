@@ -7,10 +7,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -27,9 +29,10 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
             }
 
         fun get(): Flow<T> {
-            return dataStore.data.map {
-                it[this.key] ?: this.defaultValue
-            }
+            return dataStore.data
+                .map {
+                    it[this.key] ?: this.defaultValue
+                }.distinctUntilChanged()
         }
 
         @Composable
@@ -44,4 +47,12 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     val gridMode = Preference(booleanPreferencesKey("IS_GRID_MODE"), false)
     val biometricSecurity = Preference(booleanPreferencesKey("BIOMETRIC_SECURITY"), false)
     val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
+    val upcomingPaymentNotification = Preference(booleanPreferencesKey("IS_UPCOMING_PAYMENT_NOTIFICATION"), false)
+
+    // default: 8:00 in the morning
+    val upcomingPaymentNotificationTime = Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_TIME"), 480)
+
+    // default: 3 days in advance
+    val upcomingPaymentNotificationDaysAdvance =
+        Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_DAYS_ADVANCE"), 3)
 }

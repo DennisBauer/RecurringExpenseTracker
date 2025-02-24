@@ -1,8 +1,8 @@
 package de.dbauer.expensetracker
 
 import Constants
-import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -23,15 +23,29 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
 import asString
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import data.HomePane
+import data.SettingsPane
+import data.UpcomingPane
 import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import model.DatabaseBackupRestore
 import model.database.UserPreferencesRepository
+import model.notification.ExpenseNotificationManager
+import model.notification.NotificationLoopReceiver
+import model.notification.startAlarmLooper
 import org.jetbrains.compose.resources.stringResource
 import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
@@ -51,6 +65,7 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
     private val databasePath by lazy { getDatabasePath(Constants.DATABASE_NAME).path }
     private val userPreferencesRepository = get<UserPreferencesRepository>()
+    private val expenseNotificationManager = get<ExpenseNotificationManager>()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     private val biometricPromptManager: BiometricPromptManager by lazy { BiometricPromptManager(this) }
@@ -60,12 +75,13 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 if (it.resultCode == FINISH_TASK_WITH_ACTIVITY) {
                     triggerAuthPrompt()
-                } else if (it.resultCode == Activity.RESULT_CANCELED) {
+                } else if (it.resultCode == RESULT_CANCELED) {
                     userPreferencesRepository.biometricSecurity.save(false)
                 }
             }
         }
 
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -121,6 +137,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         val canUseBiometric = biometricPromptManager.canUseAuthenticator()
+
+        val startRoute =
+            IntentCompat.getSerializableExtra(intent, EXTRA_START_ROUTE, StartRoute::class.java)?.destination
+                ?: StartRoute.Home.destination
+
+        val invalidExpenseId = -1
+        val expenseId = intent.getIntExtra(EXTRA_EXPENSE_ID, invalidExpenseId)
+        if (expenseId != invalidExpenseId) {
+            lifecycleScope.launch {
+                expenseNotificationManager.markNotificationAsShown(expenseId)
+            }
+        }
+
+        // Register on change for upcoming payment notification and reschedule alarm looper
+        lifecycleScope.launch {
+            userPreferencesRepository.upcomingPaymentNotification.get().collect {
+                startAlarmLooper(NotificationLoopReceiver::class.java)
+            }
+        }
+        lifecycleScope.launch {
+            userPreferencesRepository.upcomingPaymentNotificationTime.get().collect {
+                startAlarmLooper(NotificationLoopReceiver::class.java)
+            }
+        }
 
         setContent {
             val isGridMode by userPreferencesRepository.gridMode.collectAsState()
@@ -178,6 +218,14 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+            var notificationPermissionGranted by rememberSaveable { mutableStateOf(true) }
+            var notificationPermissionState: PermissionState? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                notificationPermissionState =
+                    rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+                notificationPermissionGranted = notificationPermissionState.status.isGranted
+            }
+
             ExpenseTrackerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -222,6 +270,15 @@ class MainActivity : AppCompatActivity() {
                                 }
                             },
                             canUseBiometric = canUseBiometric,
+                            canUseNotifications = true,
+                            hasNotificationPermission = notificationPermissionGranted,
+                            requestNotificationPermission = {
+                                notificationPermissionState?.launchPermissionRequest()
+                            },
+                            navigateToPermissionsSettings = {
+                                navigateToNotificationPermissionSettings()
+                            },
+                            startRoute = startRoute,
                         )
                     }
                 }
@@ -236,13 +293,42 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun navigateToNotificationPermissionSettings() {
+        startActivity(
+            Intent().apply {
+                setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            },
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         biometricPromptManager.onDestroy()
     }
 
-    private companion object {
+    companion object {
         private const val TAG = "MainActivity"
         private const val FINISH_TASK_WITH_ACTIVITY = 2
+        private const val EXTRA_EXPENSE_ID = "intent_expense_id"
+        private const val EXTRA_START_ROUTE = "intent_start_route"
+
+        fun newInstance(
+            context: Context,
+            expenseId: Int,
+            startRoute: StartRoute,
+        ): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra(EXTRA_EXPENSE_ID, expenseId)
+                putExtra(EXTRA_START_ROUTE, startRoute)
+            }
+        }
     }
+}
+
+enum class StartRoute(val destination: String) {
+    Home(HomePane.ROUTE),
+    Upcoming(UpcomingPane.ROUTE),
+    Settings(SettingsPane.ROUTE),
 }
