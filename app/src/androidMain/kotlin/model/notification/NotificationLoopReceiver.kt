@@ -4,9 +4,10 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -46,7 +47,9 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
         intent: Intent,
     ) {
         super.onReceive(context, intent)
-        runBlocking(Dispatchers.IO) {
+        val pendingResult = goAsync()
+
+        CoroutineScope(Dispatchers.IO).launch {
             when (intent.action) {
                 ACTION_START_ALARM_LOOPER -> {
                     stop(context)
@@ -69,14 +72,18 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
                             _loopPeriod = scheduleTime.minus(now)
                         }
                     } else {
-                        return@runBlocking
+                        pendingResult.finish()
+                        return@launch
                     }
                 }
+
                 ACTION_NOTIFICATION_LOOP_ACTION -> {
                     _loopPeriod = 1.days
                 }
+
                 else -> {
-                    return@runBlocking
+                    pendingResult.finish()
+                    return@launch
                 }
             }
 
@@ -84,6 +91,7 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
                 showNotification(it)
             }
             loop(context)
+            pendingResult.finish()
         }
     }
 

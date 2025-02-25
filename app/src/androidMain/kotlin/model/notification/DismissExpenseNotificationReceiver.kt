@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import kotlin.getValue
@@ -21,7 +22,7 @@ class DismissExpenseNotificationReceiver : BroadcastReceiver() {
         val invalidExpenseId = -1
         val expenseId = intent?.getIntExtra(EXTRA_EXPENSE_ID, invalidExpenseId) ?: invalidExpenseId
         if (expenseId != invalidExpenseId) {
-            runBlocking {
+            runBlocking(Dispatchers.IO) {
                 expenseNotificationManager.markNotificationAsShown(expenseId)
             }
         }
