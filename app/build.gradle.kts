@@ -42,11 +42,11 @@ kotlin {
 
         androidMain.dependencies {
             implementation(compose.preview)
+            implementation(libs.accompanist.permissions)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.biometric)
             implementation(libs.room.runtime.android)
-            implementation(libs.accompanist.permissions)
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
