@@ -29,12 +29,16 @@ fun main() =
                 isGridMode = isGridMode,
                 biometricSecurity = false,
                 canUseBiometric = false,
+                canUseNotifications = false,
+                hasNotificationPermission = true,
                 toggleGridMode = {
                     CoroutineScope(Dispatchers.Main).launch {
                         userPreferencesRepository.gridMode.save(!isGridMode)
                     }
                 },
                 onBiometricSecurityChange = {},
+                requestNotificationPermission = {},
+                navigateToPermissionsSettings = {},
                 onClickBackup = {},
                 onClickRestore = {},
             )

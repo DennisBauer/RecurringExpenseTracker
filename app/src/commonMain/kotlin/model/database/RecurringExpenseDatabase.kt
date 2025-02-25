@@ -15,7 +15,7 @@ interface IClearAllTablesFix {
 
 expect object RecurringExpenseDatabaseCtor : RoomDatabaseConstructor<RecurringExpenseDatabase>
 
-@Database(entities = [RecurringExpense::class], version = 6)
+@Database(entities = [RecurringExpense::class], version = 7)
 @ConstructedBy(RecurringExpenseDatabaseCtor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
@@ -30,6 +30,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
                 .addMigrations(migration_3_4)
                 .addMigrations(migration_4_5)
                 .addMigrations(migration_5_6)
+                .addMigrations(migration_6_7)
                 .setDriver(BundledSQLiteDriver())
                 .build()
         }
@@ -70,6 +71,21 @@ abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
                 override fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN currencyCode TEXT DEFAULT '' NOT NULL",
+                    )
+                }
+            }
+
+        private val migration_6_7 =
+            object : Migration(6, 7) {
+                override fun migrate(connection: SQLiteConnection) {
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN notifyForExpense INTEGER NOT NULL DEFAULT 1",
+                    )
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN notifyXDaysBefore INTEGER DEFAULT null",
+                    )
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN lastNotificationDate INTEGER DEFAULT 0",
                     )
                 }
             }
