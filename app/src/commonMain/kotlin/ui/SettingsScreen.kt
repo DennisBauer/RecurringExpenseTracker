@@ -76,7 +76,7 @@ import recurringexpensetracker.app.generated.resources.settings_notifications_sc
 import recurringexpensetracker.app.generated.resources.settings_notifications_schedule_days_subtitle
 import recurringexpensetracker.app.generated.resources.settings_notifications_schedule_time
 import recurringexpensetracker.app.generated.resources.settings_notifications_subtitle
-import recurringexpensetracker.app.generated.resources.settings_notifications_toggle
+import recurringexpensetracker.app.generated.resources.settings_notifications_upcoming
 import recurringexpensetracker.app.generated.resources.settings_security_biometric_lock
 import recurringexpensetracker.app.generated.resources.settings_system_default
 import recurringexpensetracker.app.generated.resources.settings_title
@@ -148,7 +148,7 @@ fun SettingsScreen(
 
                     SettingsHeaderElement(header = Res.string.settings_notifications)
                     SettingsClickableElementWithToggle(
-                        title = stringResource(Res.string.settings_notifications_toggle),
+                        title = stringResource(Res.string.settings_notifications_upcoming),
                         subtitle = stringResource(Res.string.settings_notifications_subtitle),
                         checked = notificationsEnabled,
                         onCheckedChange = {

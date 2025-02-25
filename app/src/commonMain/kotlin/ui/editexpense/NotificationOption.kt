@@ -20,9 +20,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.edit_expense_notification
 import recurringexpensetracker.app.generated.resources.edit_expense_notification_get_notified
 import recurringexpensetracker.app.generated.resources.settings_notifications_schedule_days
+import recurringexpensetracker.app.generated.resources.settings_notifications_upcoming
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +43,7 @@ fun NotificationOption(
             modifier = Modifier.sizeIn(minHeight = 64.dp),
         ) {
             Text(
-                text = stringResource(Res.string.edit_expense_notification),
+                text = stringResource(Res.string.settings_notifications_upcoming),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier =
                     Modifier
