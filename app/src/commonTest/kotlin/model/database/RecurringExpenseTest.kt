@@ -8,15 +8,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingDailyRecurrence_onceADay() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                5f,
-                1,
-                RecurrenceDatabase.Daily.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 5f,
+                everyXRecurrence = 1,
+                recurrence = RecurrenceDatabase.Daily.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(152.08333f, expense.getMonthlyPrice())
@@ -26,15 +29,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingDailyRecurrence_everyFewDays() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                7f,
-                8,
-                RecurrenceDatabase.Daily.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 7f,
+                everyXRecurrence = 8,
+                recurrence = RecurrenceDatabase.Daily.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(26.614582f, expense.getMonthlyPrice())
@@ -44,15 +50,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingWeeklyRecurrence_onceAWeek() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                1,
-                RecurrenceDatabase.Weekly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 1,
+                recurrence = RecurrenceDatabase.Weekly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(43.333336f, expense.getMonthlyPrice())
@@ -62,15 +71,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingWeeklyRecurrence_everyFewWeeks() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                5,
-                RecurrenceDatabase.Weekly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 5,
+                recurrence = RecurrenceDatabase.Weekly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(8.666667f, expense.getMonthlyPrice())
@@ -80,15 +92,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingMonthlyRecurrence_onceAMonth() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                1,
-                RecurrenceDatabase.Monthly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 1,
+                recurrence = RecurrenceDatabase.Monthly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(10f, expense.getMonthlyPrice())
@@ -98,15 +113,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingMonthlyRecurrence_everyFewMonths() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                5,
-                RecurrenceDatabase.Monthly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 5,
+                recurrence = RecurrenceDatabase.Monthly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(2.0f, expense.getMonthlyPrice())
@@ -116,15 +134,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingYearlyRecurrence_onceAYear() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                1,
-                RecurrenceDatabase.Yearly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 1,
+                recurrence = RecurrenceDatabase.Yearly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(0.8333333f, expense.getMonthlyPrice())
@@ -134,15 +155,18 @@ class RecurringExpenseTest {
     fun checkGetMonthlyPrice_usingYearlyRecurrence_everyFewYears() {
         val expense =
             RecurringExpense(
-                1,
-                null,
-                null,
-                10f,
-                5,
-                RecurrenceDatabase.Yearly.value,
-                null,
-                null,
-                "USD",
+                id = 1,
+                name = null,
+                description = null,
+                price = 10f,
+                everyXRecurrence = 5,
+                recurrence = RecurrenceDatabase.Yearly.value,
+                firstPayment = null,
+                color = null,
+                currencyCode = "USD",
+                notifyForExpense = true,
+                notifyXDaysBefore = null,
+                lastNotificationDate = null,
             )
 
         assertEquals(0.16666667f, expense.getMonthlyPrice())
