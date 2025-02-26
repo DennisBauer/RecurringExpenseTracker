@@ -47,6 +47,7 @@ import viewmodel.EditRecurringExpenseViewModel
 @Composable
 fun EditRecurringExpenseScreen(
     expenseId: Int?,
+    canUseNotifications: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
@@ -131,19 +132,21 @@ fun EditRecurringExpenseScreen(
                     expenseColor = viewModel.expenseColor,
                     onSelectExpenseColor = { viewModel.expenseColor = it },
                 )
-                NotificationOption(
-                    expenseNotificationEnabledGlobally =
-                        viewModel.expenseNotificationEnabledGlobally
-                            .collectAsState()
-                            .value,
-                    notifyForExpense = viewModel.notifyForExpense,
-                    onNotifyForExpenseChange = { viewModel.notifyForExpense = it },
-                    notifyXDaysBefore = viewModel.notifyXDaysBefore,
-                    defaultXDaysPlaceholder = viewModel.defaultXDaysPlaceholder,
-                    onNotifyXDaysBeforeChange = { viewModel.notifyXDaysBefore = it },
-                    notifyXDaysBeforeInputError = false,
-                    onNext = { localFocusManager.clearFocus() },
-                )
+                if (canUseNotifications) {
+                    NotificationOption(
+                        expenseNotificationEnabledGlobally =
+                            viewModel.expenseNotificationEnabledGlobally
+                                .collectAsState()
+                                .value,
+                        notifyForExpense = viewModel.notifyForExpense,
+                        onNotifyForExpenseChange = { viewModel.notifyForExpense = it },
+                        notifyXDaysBefore = viewModel.notifyXDaysBefore,
+                        defaultXDaysPlaceholder = viewModel.defaultXDaysPlaceholder,
+                        onNotifyXDaysBeforeChange = { viewModel.notifyXDaysBefore = it },
+                        notifyXDaysBeforeInputError = false,
+                        onNext = { localFocusManager.clearFocus() },
+                    )
+                }
                 Row(
                     modifier =
                         Modifier
