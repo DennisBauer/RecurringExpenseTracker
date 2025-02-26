@@ -114,6 +114,7 @@ fun MainContent(
             ) { backStackEntry ->
                 EditRecurringExpenseScreen(
                     expenseId = backStackEntry.getArgExpenseId(),
+                    canUseNotifications = canUseNotifications,
                     onDismiss = navController::navigateUp,
                 )
             }
