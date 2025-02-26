@@ -48,6 +48,6 @@ fun MainViewController() =
 
 fun initKoin() {
     startKoin {
-        modules(sharedModule, platformModule)
+        modules(listOf(sharedModule, platformModule))
     }
 }
