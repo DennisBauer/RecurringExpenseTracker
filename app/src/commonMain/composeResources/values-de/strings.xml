@@ -35,10 +35,12 @@
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Datum auswählen</string>
     <string name="edit_expense_color">Farbe</string>
+    <string name="edit_expense_notification_days_advance">%1$d (Standard)</string>
+    <string name="edit_expense_notification_get_notified">Lass dich über bevorstehende Zahlungen benachrichtigen. Gehe dazu zu den Einstellungen und aktiviere die Benachrichtigungen.</string>
     <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
 
     <!-- Upcoming Payments Tab -->
-    <string name="upcoming_title">Ausstehende Zahlungen</string>
+    <string name="upcoming_title">Bevorstehende Zahlungen</string>
     <string name="upcoming_placeholder_title">Definiere ein Datum für die erste Zahlung einer Ausgabe um eine Übersicht der anstehenden Zahlungen zu erhalten</string>
     <string name="upcoming_time_remaining_today">heute</string>
     <string name="upcoming_time_remaining_tomorrow">morgen</string>
@@ -60,6 +62,14 @@
     <string name="settings_backup_not_restored_toast">Backup konnte nicht wiederhergestellt werden</string>
     <string name="settings_title_security">Sicherheit</string>
     <string name="settings_security_biometric_lock">Biometrische Sicherheit</string>
+    <string name="settings_notifications">Benachrichtigungen</string>
+    <string name="settings_notifications_upcoming">Bevorstehende Zahlungserinnerung</string>
+    <string name="settings_notifications_subtitle">Benachrichtigung für bevorstehende Zahlungen anzeigen</string>
+    <string name="settings_notifications_schedule_time">Benachrichtigungszeit</string>
+    <string name="settings_notifications_schedule_days">Tage vor der Zahlung</string>
+    <string name="settings_notifications_schedule_days_subtitle">%1$d Tage im Voraus</string>
+    <string name="settings_notifications_missing_permission_title">Fehlende Berechtigung</string>
+    <string name="settings_notifications_missing_permission_subtitle">Die Benachrichtigungsberechtigung fehlt. Ohne diese Berechtigung kann die App keine Benachrichtigungen für bevorstehende Zahlungen anzeigen. Bitte klicke hier und erteile sie in den Einstellungen.</string>
 
     <!-- BiometricPromptManager -->
     <string name="biometric_prompt_manager_title">Entsperre Expense Tracker</string>
@@ -70,4 +80,10 @@
     <string name="cancel">Abbrechen</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
+
+    <!-- Notifications -->
+    <string name="notification_expense_reminder">Ausgabenerinnerung</string>
+    <string name="notification_expense_reminder_message_today">Die nächste Zahlung ist heute</string>
+    <string name="notification_expense_reminder_message_tomorrow">Die nächste Zahlung ist morgen</string>
+    <string name="notification_expense_reminder_message_days">Die nächste Zahlung ist in %1$d Tagen</string>
 </resources>

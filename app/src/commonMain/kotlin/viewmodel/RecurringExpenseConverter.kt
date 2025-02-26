@@ -19,6 +19,9 @@ internal fun RecurringExpense.toFrontendType(defaultCurrencyCode: String): Recur
         recurrence = getRecurrenceFromDatabaseInt(this.recurrence!!),
         firstPayment = this.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
         color = ExpenseColor.fromInt(this.color),
+        notifyForExpense = this.notifyForExpense,
+        notifyXDaysBefore = this.notifyXDaysBefore,
+        lastNotificationDate = this.lastNotificationDate?.let { Instant.fromEpochMilliseconds(it) },
     )
 }
 
@@ -33,6 +36,9 @@ internal fun RecurringExpenseData.toBackendType(defaultCurrencyCode: String): Re
         firstPayment = this.firstPayment?.toEpochMilliseconds(),
         color = this.color.toInt(),
         currencyCode = if (defaultCurrencyCode != this.price.currencyCode) this.price.currencyCode else "",
+        notifyForExpense = this.notifyForExpense,
+        notifyXDaysBefore = this.notifyXDaysBefore,
+        lastNotificationDate = this.lastNotificationDate?.toEpochMilliseconds(),
     )
 }
 

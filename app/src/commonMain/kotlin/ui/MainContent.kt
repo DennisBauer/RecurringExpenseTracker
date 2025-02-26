@@ -30,11 +30,16 @@ fun MainContent(
     isGridMode: Boolean,
     biometricSecurity: Boolean,
     canUseBiometric: Boolean,
+    canUseNotifications: Boolean,
+    hasNotificationPermission: Boolean,
     toggleGridMode: () -> Unit,
     onBiometricSecurityChange: (Boolean) -> Unit,
+    requestNotificationPermission: () -> Unit,
+    navigateToPermissionsSettings: () -> Unit,
     onClickBackup: () -> Unit,
     onClickRestore: () -> Unit,
     modifier: Modifier = Modifier,
+    startRoute: String = HomePane.ROUTE,
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
     userPreferencesRepository: UserPreferencesRepository = koinInject(),
@@ -45,7 +50,7 @@ fun MainContent(
     KoinContext {
         NavHost(
             navController = navController,
-            startDestination = HomePane.ROUTE,
+            startDestination = startRoute,
             modifier = modifier.fillMaxSize(),
         ) {
             composable(HomePane.ROUTE) {
@@ -91,11 +96,15 @@ fun MainContent(
             }
             composable(SettingsPane.ROUTE) {
                 SettingsScreen(
-                    checked = biometricSecurity,
+                    biometricsChecked = biometricSecurity,
                     onClickBackup = onClickBackup,
                     onClickRestore = onClickRestore,
-                    onCheckedChange = onBiometricSecurityChange,
+                    onBiometricCheckedChange = onBiometricSecurityChange,
                     canUseBiometric = canUseBiometric,
+                    canUseNotifications = canUseNotifications,
+                    hasNotificationPermission = hasNotificationPermission,
+                    requestNotificationPermission = requestNotificationPermission,
+                    navigateToPermissionsSettings = navigateToPermissionsSettings,
                     navController = navController,
                 )
             }

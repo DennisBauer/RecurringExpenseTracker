@@ -1,5 +1,7 @@
 package viewmodel
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,6 +30,13 @@ class SettingsViewModel(
     var showCurrencyInfoDialog by mutableStateOf(false)
         private set
     var exchangeRateLastUpdate by mutableStateOf("--")
+        private set
+    val upcomingPaymentNotification = userPreferencesRepository.upcomingPaymentNotification
+    var upcomingPaymentNotificationTime = userPreferencesRepository.upcomingPaymentNotificationTime
+    var upcomingPaymentNotificationTimePickerDialog by mutableStateOf(false)
+        private set
+    var upcomingPaymentNotificationDaysAdvance = userPreferencesRepository.upcomingPaymentNotificationDaysAdvance
+    var upcomingPaymentNotificationDaysAdvanceDialog by mutableStateOf(false)
         private set
 
     init {
@@ -67,4 +76,48 @@ class SettingsViewModel(
     fun onDismissCurrencyInfoDialog() {
         showCurrencyInfoDialog = false
     }
+
+    fun onUpcomingPaymentNotification(enabled: Boolean) {
+        viewModelScope.launch {
+            upcomingPaymentNotification.save(enabled)
+        }
+    }
+
+    fun onUpcomingPaymentNotificationTimeSelection() {
+        upcomingPaymentNotificationTimePickerDialog = true
+    }
+
+    fun onDismissUpcomingPaymentNotificationTimePickerDialog() {
+        upcomingPaymentNotificationTimePickerDialog = false
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun onConfirmUpcomingPaymentNotificationTimePickerDialog(timePickerState: TimePickerState) {
+        viewModelScope.launch {
+            userPreferencesRepository.upcomingPaymentNotificationTime.save(
+                timePickerState.toMinutes(),
+            )
+        }
+        upcomingPaymentNotificationTimePickerDialog = false
+    }
+
+    fun onUpcomingPaymentNotificationDaysAdvanceSelection() {
+        upcomingPaymentNotificationDaysAdvanceDialog = true
+    }
+
+    fun onDismissUpcomingPaymentNotificationDaysAdvanceDialog() {
+        upcomingPaymentNotificationDaysAdvanceDialog = false
+    }
+
+    fun onConfirmUpcomingPaymentNotificationDaysAdvanceDialog(days: Int) {
+        viewModelScope.launch {
+            userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.save(days)
+        }
+        upcomingPaymentNotificationDaysAdvanceDialog = false
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun TimePickerState.toMinutes(): Int {
+    return (hour * 60) + minute
 }
