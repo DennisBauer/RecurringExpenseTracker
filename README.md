@@ -46,7 +46,7 @@ The app compiles and works for all 3 desktop OS platforms. I'll look into how to
   <tr>
     <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png"/></td>
     <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png"/></td>
-    <td></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.png"/></td>
   </tr>
 </table>
 

@@ -1,0 +1,6 @@
+Changelog 0.13.0:
+* Added notification support
+  Now you can get reminded about upcoming payments
+* Update exchange rates
+* Updated Indonesian translation
+* Increase minimum supported Android version to 8.0
