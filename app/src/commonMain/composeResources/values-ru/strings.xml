@@ -55,4 +55,18 @@
     <string name="settings_backup_not_created_toast">Бекап не удался</string>
     <string name="settings_backup_restored_toast">Бекап восстановлен</string>
     <string name="settings_backup_not_restored_toast">Бекап не может быть восстановлен</string>
+    <string name="edit_expense_notification_days_advance">%1$d (по умолчанию)</string>
+    <string name="settings_notifications">Уведомления</string>
+    <string name="settings_notifications_upcoming">Напоминание о предстоящем платеже</string>
+    <string name="notification_expense_reminder_message_tomorrow">Следующий платеж будет завтра</string>
+    <string name="notification_expense_reminder_message_days">Следующий платеж через %1$d дней</string>
+    <string name="settings_notifications_missing_permission_title">Отсутствует разрешение</string>
+    <string name="notification_expense_reminder">Напоминание о платеже</string>
+    <string name="settings_notifications_subtitle">Показывайте уведомления о предстоящих платежах</string>
+    <string name="settings_notifications_schedule_time">Время уведомления</string>
+    <string name="edit_expense_notification_get_notified">Начните получать уведомления о предстоящих платежах. Просто зайдите в настройки и включите уведомления.</string>
+    <string name="settings_notifications_schedule_days">Дней до платежа</string>
+    <string name="settings_notifications_schedule_days_subtitle">%1$d дней заранее</string>
+    <string name="settings_notifications_missing_permission_subtitle">Отсутствует разрешение на уведомления. Без этого разрешения приложение не может показывать уведомления о предстоящих платежах. Пожалуйста, нажмите здесь и подтвердите это разрешение в настройках.</string>
+    <string name="notification_expense_reminder_message_today">Следующий платеж будет сегодня</string>
 </resources>
