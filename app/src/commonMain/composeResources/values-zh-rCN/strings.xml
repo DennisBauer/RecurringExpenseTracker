@@ -55,4 +55,18 @@
     <string name="edit_expense_name">名称</string>
     <string name="edit_expense_price">价格</string>
     <string name="settings_backup_not_created_toast">备份失败</string>
+    <string name="edit_expense_notification_get_notified">开始接收即将付款的通知。只需前往设置并启用通知功能。</string>
+    <string name="settings_notifications_schedule_time">通知时间</string>
+    <string name="notification_expense_reminder_message_today">下次付款是今天</string>
+    <string name="edit_expense_notification_days_advance">%1$d(默认)</string>
+    <string name="notification_expense_reminder">支出提醒</string>
+    <string name="settings_notifications">通知</string>
+    <string name="settings_notifications_upcoming">即将付款提醒</string>
+    <string name="settings_notifications_subtitle">显示即将付款的通知</string>
+    <string name="settings_notifications_schedule_days">付款前天数</string>
+    <string name="settings_notifications_schedule_days_subtitle">提前%1$d天</string>
+    <string name="settings_notifications_missing_permission_title">缺少权限</string>
+    <string name="settings_notifications_missing_permission_subtitle">缺少通知权限。没有此权限，应用程序无法显示即将付款的通知。请点击此处并在设置中授予该权限。</string>
+    <string name="notification_expense_reminder_message_tomorrow">下次付款是明天</string>
+    <string name="notification_expense_reminder_message_days">下次付款是%1$d天后</string>
 </resources>
