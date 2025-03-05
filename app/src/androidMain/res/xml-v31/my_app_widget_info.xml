@@ -7,9 +7,8 @@
 
     android:minResizeHeight="@dimen/widget_min_resize_height"
     android:minResizeWidth="@dimen/widget_min_resize_width"
-    android:maxResizeHeight="@dimen/widget_max_resize_height"
-    android:maxResizeWidth="@dimen/widget_max_resize_width"
     android:targetCellHeight="@integer/widget_target_cell_height"
     android:targetCellWidth="@integer/widget_target_cell_width"
-    android:initialLayout="@layout/glance_default_loading_layout">
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:configure="de.dbauer.expensetracker.widget.ConfigureWidgetActivity">
 </appwidget-provider>
