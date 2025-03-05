@@ -9,6 +9,8 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
@@ -25,7 +27,9 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import asString
 import data.UpcomingPaymentData
+import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
+import model.database.UserPreferencesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import recurringexpensetracker.app.generated.resources.Res
@@ -34,6 +38,7 @@ import ui.theme.widget.ExpenseTrackerWidgetTheme
 
 class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
     private val upcomingPayment by inject<UpcomingPaymentsWidgetModel>()
+    private val preferences by inject<UserPreferencesRepository>()
 
     override suspend fun provideGlance(
         context: Context,
@@ -47,7 +52,10 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
             }
             ExpenseTrackerWidgetTheme {
                 Scaffold(
-                    modifier = GlanceModifier.fillMaxSize(),
+                    modifier =
+                        GlanceModifier.fillMaxSize().clickable(
+                            onClick = actionStartActivity<MainActivity>(),
+                        ),
                     titleBar = {
                         TitleBar(
                             startIcon = ImageProvider(R.mipmap.ic_launcher_monochrome),
@@ -57,6 +65,7 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
                 ) {
                     StaggeredLazyVerticalGrid(
                         items = upcomingPayment.upcomingPaymentsData,
+                        gridMode = preferences.gridMode.collectAsState().value,
                     )
                 }
             }
@@ -67,8 +76,8 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
 @Composable
 private fun StaggeredLazyVerticalGrid(
     items: List<UpcomingPaymentData>,
+    gridMode: Boolean,
     modifier: GlanceModifier = GlanceModifier,
-    gridMode: Boolean = true,
 ) {
     LazyVerticalGrid(
         gridCells =

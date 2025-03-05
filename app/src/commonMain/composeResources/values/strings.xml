@@ -98,4 +98,10 @@
     <string name="notification_expense_reminder_message_tomorrow">The next payment is tomorrow</string>
     <string name="notification_expense_reminder_message_days">The next payment is in %1$d days</string>
 
+    <!-- Widget -->
+    <string name="widget_configuration_biometric">Please deactivate Biometric to use this Widget</string>
+    <string name="widget_configuration_biometric_deactivate">Deactivate Biometric</string>
+    <string name="widget_grid_mode">Grid Mode</string>
+    <string name="widget_configuration_title">Configure Expense Tracker Widget</string>
+
 </resources>
