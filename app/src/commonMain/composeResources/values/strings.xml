@@ -88,4 +88,14 @@
     <string name="notification_expense_reminder_message_today">The next payment is today</string>
     <string name="notification_expense_reminder_message_tomorrow">The next payment is tomorrow</string>
     <string name="notification_expense_reminder_message_days">The next payment is in %1$d days</string>
+
+    <!-- About section -->
+    <string name="settings_about">About</string>
+    <string name="settings_about_app">About App</string>
+    <string name="settings_about_developer">Developer</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_made_by">Made By</string>
+    <string name="settings_about_support">Support the project</string>
+    <string name="settings_about_libraries">About Libraries</string>
+    <string name="settings_libraries">Libraries</string>
 </resources>

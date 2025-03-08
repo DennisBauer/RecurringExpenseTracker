@@ -43,6 +43,7 @@ fun MainContent(
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
     userPreferencesRepository: UserPreferencesRepository = koinInject(),
+    onClickAbout: () -> Unit,
 ) {
     val navController = rememberNavController()
     val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
@@ -106,6 +107,7 @@ fun MainContent(
                     requestNotificationPermission = requestNotificationPermission,
                     navigateToPermissionsSettings = navigateToPermissionsSettings,
                     navController = navController,
+                    navigateToAboutPage = onClickAbout,
                 )
             }
             composable(

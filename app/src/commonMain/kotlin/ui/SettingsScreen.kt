@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Schedule
@@ -62,6 +63,8 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.dialog_ok
+import recurringexpensetracker.app.generated.resources.settings_about
+import recurringexpensetracker.app.generated.resources.settings_about_app
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
@@ -97,6 +100,7 @@ fun SettingsScreen(
     onBiometricCheckedChange: (Boolean) -> Unit,
     requestNotificationPermission: () -> Unit,
     navigateToPermissionsSettings: () -> Unit,
+    navigateToAboutPage: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
@@ -169,7 +173,7 @@ fun SettingsScreen(
                                     upcomingPaymentNotificationTime % 60,
                                 ).toString()
                             val upcomingPaymentNotificationDaysAdvance by
-                                viewModel.upcomingPaymentNotificationDaysAdvance.collectAsState()
+                            viewModel.upcomingPaymentNotificationDaysAdvance.collectAsState()
                             val upcomingPaymentNotificationDaysAdvanceString =
                                 stringResource(
                                     Res.string.settings_notifications_schedule_days_subtitle,
@@ -217,6 +221,14 @@ fun SettingsScreen(
                     title = stringResource(Res.string.settings_backup_restore),
                     onClick = onClickRestore,
                     icon = Icons.Rounded.Restore,
+                )
+                SettingsHeaderElement(
+                    header = Res.string.settings_about,
+                )
+                SettingsClickableElement(
+                    title = stringResource(Res.string.settings_about_app),
+                    onClick = navigateToAboutPage,
+                    icon = Icons.Rounded.Info,
                 )
             }
             if (viewModel.showCurrencySelectionDialog) {
@@ -516,6 +528,7 @@ private fun SettingsScreenPreview(
                 requestNotificationPermission = {},
                 navigateToPermissionsSettings = {},
                 navController = rememberNavController(),
+                navigateToAboutPage = {},
             )
         }
     }
