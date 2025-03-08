@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.about.libraries)
+
 }
 
 kotlin {
@@ -50,6 +52,7 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.about.libraries)
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
@@ -132,6 +135,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
