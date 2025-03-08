@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker
 
 import Constants
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity() {
             var notificationPermissionState: PermissionState? = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 notificationPermissionState =
-                    rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+                    rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
                 notificationPermissionGranted = notificationPermissionState.status.isGranted
             }
 
