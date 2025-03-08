@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.app_name
 import recurringexpensetracker.app.generated.resources.settings_about_app
 import de.dbauer.expensetracker.BuildConfig
 import org.jetbrains.compose.resources.painterResource
@@ -50,94 +49,86 @@ fun AboutScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
-                .fillMaxSize()
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_launcher),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(vertical = 32.dp)
-                            .size(120.dp)
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = {
-                            Text(text = stringResource(Res.string.app_name))
+            item {
+                Image(
+                    painter = painterResource(Res.drawable.ic_launcher),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(vertical = 32.dp)
+                        .size(120.dp)
+                )
+            }
+            item {
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            openLinkInBrowser(context,"https://github.com/dennisbauer/RecurringExpenseTracker")
                         },
-                        supportingContent = {
-                            Text(text = stringResource(Res.string.settings_about_version)+" ${BuildConfig.VERSION_NAME}")
-                        },
-                        trailingContent = {
-                            Row {
-                                Image(
-                                    painter = painterResource(Res.drawable.github),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(30.dp)
-                                        .clickable {
-                                            openLinkInBrowser(context,"https://github.com/dennisbauer/RecurringExpenseTracker")
-                                        },
-                                )
-                            }
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    ListItem(
-                        headlineContent = {
-                            Text(text = stringResource(Res.string.settings_about_made_by)+" DennisBauer")
-                        },
-                        trailingContent = {
-                            Row {
-                                Image(
-                                    painter = painterResource(Res.drawable.github),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(30.dp)
-                                        .clickable {
-                                            openLinkInBrowser(context,"https://github.com/DennisBauer")
-                                        },
-                                )
-                            }
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    ListItem(
-                        headlineContent = {
-                            Text(text = stringResource(Res.string.settings_about_support))
-                        },
-                        trailingContent = {
-                            Row {
-                                Image(
-                                    painter = painterResource(Res.drawable.liberapay),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(30.dp)
-                                        .clickable {
-                                            openLinkInBrowser(context,"https://liberapay.com/DennisBauer")
-                                        },
-                                )
-                            }
-                        }
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    FilledTonalButton(
-                        onClick = onLibrariesClick
-                    ) {
-                        Text(text = stringResource(Res.string.settings_about_libraries))
+                    headlineContent = {
+                        Text(text = stringResource(Res.string.settings_about_version))
+                    },
+                    supportingContent = {
+                        Text(" ${BuildConfig.VERSION_NAME}")
+                    },
+                    trailingContent = {
+                        Image(
+                            painter = painterResource(Res.drawable.github),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                        )
                     }
-                }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            openLinkInBrowser(context,"https://github.com/DennisBauer")
+                        },
+                    headlineContent = {
+                        Text(text = stringResource(Res.string.settings_about_made_by)+" DennisBauer")
+                    },
+                    trailingContent = {
+                        Row {
+                            Image(
+                                painter = painterResource(Res.drawable.github),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            openLinkInBrowser(context,"https://liberapay.com/DennisBauer")
+                        },
+                    headlineContent = {
+                        Text(text = stringResource(Res.string.settings_about_support))
+                    },
+                    trailingContent = {
+                        Row {
+                            Image(
+                                painter = painterResource(Res.drawable.liberapay),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                ListItem(
+                    modifier = Modifier
+                        .clickable { onLibrariesClick() },
+                    headlineContent = {
+                        Text(text = stringResource(Res.string.settings_about_libraries))
+                    },
+                )
             }
         }
     }
