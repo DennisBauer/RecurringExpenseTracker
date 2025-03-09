@@ -31,16 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import asString
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import data.AboutLibsPane
-import data.AboutPane
 import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
@@ -65,8 +60,6 @@ import recurringexpensetracker.app.generated.resources.settings_backup_restored_
 import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
-import ui.about.AboutLibrariesScreen
-import ui.about.AboutScreen
 import ui.theme.ExpenseTrackerTheme
 import java.io.File
 
@@ -258,56 +251,37 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        val navController = rememberNavController()
-                        NavHost(
-                            navController = navController,
-                            startDestination = startRoute
-                        ) {
-                            composable(StartRoute.Home.destination) {
-                                MainContent(
-                                    onClickBackup = {
-                                        backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
-                                    },
-                                    onClickRestore = {
-                                        importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
-                                    },
-                                    isGridMode = isGridMode,
-                                    biometricSecurity = biometricSecurity,
-                                    onBiometricSecurityChange = {
-                                        lifecycleScope.launch {
-                                            userPreferencesRepository.biometricSecurity.save(it)
-                                        }
-                                    },
-                                    toggleGridMode = {
-                                        lifecycleScope.launch {
-                                            userPreferencesRepository.gridMode.save(!isGridMode)
-                                        }
-                                    },
-                                    canUseBiometric = canUseBiometric,
-                                    canUseNotifications = true,
-                                    hasNotificationPermission = notificationPermissionGranted,
-                                    requestNotificationPermission = {
-                                        notificationPermissionState?.launchPermissionRequest()
-                                    },
-                                    navigateToPermissionsSettings = {
-                                        navigateToNotificationPermissionSettings()
-                                    },
-                                    onClickAbout = { navController.navigate(AboutPane.ROUTE) },
-                                    startRoute = startRoute,
-                                )
-                            }
-                            composable(AboutPane.ROUTE) {
-                                AboutScreen(
-                                    onNavigateBack = { navController.navigateUp() },
-                                    onLibrariesClick = {navController.navigate(AboutLibsPane.ROUTE)},
-                                )
-                            }
-                            composable(AboutLibsPane.ROUTE) {
-                                AboutLibrariesScreen(
-                                    onNavigateBack = { navController.navigateUp() }
-                                )
-                            }
-                        }
+                        MainContent(
+                            onClickBackup = {
+                                backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
+                            },
+                            onClickRestore = {
+                                importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
+                            },
+                            isGridMode = isGridMode,
+                            biometricSecurity = biometricSecurity,
+                            onBiometricSecurityChange = {
+                                lifecycleScope.launch {
+                                    userPreferencesRepository.biometricSecurity.save(it)
+                                }
+                            },
+                            toggleGridMode = {
+                                lifecycleScope.launch {
+                                    userPreferencesRepository.gridMode.save(!isGridMode)
+                                }
+                            },
+                            canUseBiometric = canUseBiometric,
+                            canUseNotifications = true,
+                            hasNotificationPermission = notificationPermissionGranted,
+                            requestNotificationPermission = {
+                                notificationPermissionState?.launchPermissionRequest()
+                            },
+                            navigateToPermissionsSettings = {
+                                navigateToNotificationPermissionSettings()
+                            },
+                            onClickAbout = { },
+                            startRoute = startRoute,
+                        )
                     }
                 }
             }
@@ -359,6 +333,4 @@ enum class StartRoute(val destination: String) {
     Home(HomePane.ROUTE),
     Upcoming(UpcomingPane.ROUTE),
     Settings(SettingsPane.ROUTE),
-    About(AboutPane.ROUTE),
-    AboutLibs(AboutLibsPane.ROUTE)
 }

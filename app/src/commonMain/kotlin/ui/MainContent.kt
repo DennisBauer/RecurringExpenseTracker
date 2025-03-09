@@ -98,16 +98,15 @@ fun MainContent(
             composable(SettingsPane.ROUTE) {
                 SettingsScreen(
                     biometricsChecked = biometricSecurity,
-                    onClickBackup = onClickBackup,
-                    onClickRestore = onClickRestore,
-                    onBiometricCheckedChange = onBiometricSecurityChange,
                     canUseBiometric = canUseBiometric,
                     canUseNotifications = canUseNotifications,
                     hasNotificationPermission = hasNotificationPermission,
+                    onClickBackup = onClickBackup,
+                    onClickRestore = onClickRestore,
+                    onBiometricCheckedChange = onBiometricSecurityChange,
                     requestNotificationPermission = requestNotificationPermission,
                     navigateToPermissionsSettings = navigateToPermissionsSettings,
                     navController = navController,
-                    navigateToAboutPage = onClickAbout,
                 )
             }
             composable(
