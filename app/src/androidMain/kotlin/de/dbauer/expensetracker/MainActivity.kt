@@ -279,7 +279,6 @@ class MainActivity : AppCompatActivity() {
                             navigateToPermissionsSettings = {
                                 navigateToNotificationPermissionSettings()
                             },
-                            onClickAbout = { },
                             startRoute = startRoute,
                         )
                     }

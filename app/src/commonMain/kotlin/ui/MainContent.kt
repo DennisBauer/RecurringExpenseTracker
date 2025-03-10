@@ -43,7 +43,6 @@ fun MainContent(
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
     userPreferencesRepository: UserPreferencesRepository = koinInject(),
-    onClickAbout: () -> Unit,
 ) {
     val navController = rememberNavController()
     val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
@@ -98,12 +97,12 @@ fun MainContent(
             composable(SettingsPane.ROUTE) {
                 SettingsScreen(
                     biometricsChecked = biometricSecurity,
-                    canUseBiometric = canUseBiometric,
-                    canUseNotifications = canUseNotifications,
-                    hasNotificationPermission = hasNotificationPermission,
                     onClickBackup = onClickBackup,
                     onClickRestore = onClickRestore,
                     onBiometricCheckedChange = onBiometricSecurityChange,
+                    canUseBiometric = canUseBiometric,
+                    canUseNotifications = canUseNotifications,
+                    hasNotificationPermission = hasNotificationPermission,
                     requestNotificationPermission = requestNotificationPermission,
                     navigateToPermissionsSettings = navigateToPermissionsSettings,
                     navController = navController,

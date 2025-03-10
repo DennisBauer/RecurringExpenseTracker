@@ -56,6 +56,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import data.About
+import data.Libraries
+import data.SettingsPane
 import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -93,11 +96,6 @@ import ui.theme.ExpenseTrackerTheme
 import viewmodel.SettingsViewModel
 
 
-sealed class SettingsRoute(val route: String) {
-    data object Main : SettingsRoute("settings_main")
-    data object About : SettingsRoute("settings_about")
-    data object Libraries : SettingsRoute("settings_libraries")
-}
 
 @Composable
 fun SettingsScreen(
@@ -118,10 +116,10 @@ fun SettingsScreen(
 
     NavHost(
         navController = settingsNavController,
-        startDestination = SettingsRoute.Main.route,
+        startDestination = SettingsPane.ROUTE,
         modifier = modifier
     ){
-        composable(SettingsRoute.Main.route) {
+        composable(SettingsPane.ROUTE) {
             SettingsMainScreen(
                 biometricsChecked = biometricsChecked,
                 canUseBiometric = canUseBiometric,
@@ -132,20 +130,20 @@ fun SettingsScreen(
                 onBiometricCheckedChange = onBiometricCheckedChange,
                 requestNotificationPermission = requestNotificationPermission,
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
-                navigateToAbout = { settingsNavController.navigate(SettingsRoute.About.route) },
+                navigateToAbout = { settingsNavController.navigate(About.ROUTE) },
                 navController = navController,
                 viewModel = viewModel
             )
         }
 
-        composable(SettingsRoute.About.route) {
+        composable(About.ROUTE) {
             AboutScreen(
                 onNavigateBack = { settingsNavController.navigateUp() },
-                onLibrariesClick = { settingsNavController.navigate(SettingsRoute.Libraries.route) }
+                onLibrariesClick = { settingsNavController.navigate(Libraries.ROUTE) },
             )
         }
 
-        composable(SettingsRoute.Libraries.route) {
+        composable(Libraries.ROUTE) {
             AboutLibrariesScreen(
                 onNavigateBack = { settingsNavController.navigateUp() }
             )

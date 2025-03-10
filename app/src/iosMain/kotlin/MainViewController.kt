@@ -4,7 +4,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
-import data.AboutPane
 import di.platformModule
 import di.sharedModule
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +41,6 @@ fun MainViewController() =
                     navigateToPermissionsSettings = {},
                     onClickBackup = {},
                     onClickRestore = {},
-                    onClickAbout = { navController.navigate(AboutPane.ROUTE) },
                 )
             }
         }

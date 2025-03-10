@@ -2,7 +2,6 @@
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import data.AboutPane
 import di.platformModule
 import di.sharedModule
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +41,6 @@ fun main() =
                 navigateToPermissionsSettings = {},
                 onClickBackup = {},
                 onClickRestore = {},
-                onClickAbout = { navController.navigate(AboutPane.ROUTE) },
             )
         }
     }
