@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.about.libraries)
-
 }
 
 kotlin {

@@ -24,10 +24,14 @@ import recurringexpensetracker.app.generated.resources.settings_libraries
 fun AboutLibrariesScreen(
     onNavigateBack: () -> Unit,
 <<<<<<< HEAD
+<<<<<<< HEAD
     modifier: Modifier = Modifier,
 =======
     modifier: Modifier = Modifier
 >>>>>>> 4ac3d00 (feat: add about page)
+=======
+    modifier: Modifier = Modifier
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 ) {
     Scaffold(
         modifier = modifier,
@@ -38,6 +42,7 @@ fun AboutLibrariesScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+<<<<<<< HEAD
 <<<<<<< HEAD
                             contentDescription = null,
                         )
@@ -58,6 +63,8 @@ fun AboutLibrariesScreen(
                 badgeContentColor = MaterialTheme.colorScheme.onPrimary,
             ),
 =======
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
                             contentDescription = null
                         )
                     }
@@ -75,7 +82,10 @@ fun AboutLibrariesScreen(
                 badgeBackgroundColor = MaterialTheme.colorScheme.primary,
                 badgeContentColor = MaterialTheme.colorScheme.onPrimary
             )
+<<<<<<< HEAD
 >>>>>>> 4ac3d00 (feat: add about page)
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
         )
     }
 }

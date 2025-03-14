@@ -2,6 +2,7 @@ package ui.about
 
 import androidx.compose.foundation.Image
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,17 +20,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 =======
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
+<<<<<<< HEAD
 >>>>>>> 4ac3d00 (feat: add about page)
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+<<<<<<< HEAD
 <<<<<<< HEAD
 import de.dbauer.expensetracker.BuildConfig
 import org.jetbrains.compose.resources.painterResource
@@ -44,6 +51,8 @@ import recurringexpensetracker.app.generated.resources.settings_about_made_by
 import recurringexpensetracker.app.generated.resources.settings_about_support
 import recurringexpensetracker.app.generated.resources.settings_about_version
 =======
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.settings_about_app
@@ -57,7 +66,10 @@ import recurringexpensetracker.app.generated.resources.settings_about_made_by
 import recurringexpensetracker.app.generated.resources.settings_about_version
 import recurringexpensetracker.app.generated.resources.settings_about_libraries
 import recurringexpensetracker.app.generated.resources.settings_about_support
+<<<<<<< HEAD
 >>>>>>> 4ac3d00 (feat: add about page)
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,10 +77,14 @@ fun AboutScreen(
     onNavigateBack: () -> Unit,
     onLibrariesClick: () -> Unit,
 <<<<<<< HEAD
+<<<<<<< HEAD
     modifier: Modifier = Modifier,
 =======
     modifier: Modifier = Modifier
 >>>>>>> 4ac3d00 (feat: add about page)
+=======
+    modifier: Modifier = Modifier
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
 ) {
     val context = LocalContext.current
     Scaffold(
@@ -80,6 +96,7 @@ fun AboutScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+<<<<<<< HEAD
 <<<<<<< HEAD
                             contentDescription = "Navigate back",
                         )
@@ -169,6 +186,8 @@ fun AboutScreen(
                     },
                 )
 =======
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
                             contentDescription = "Navigate back"
                         )
                     }
@@ -210,9 +229,12 @@ fun AboutScreen(
                         )
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 }
 >>>>>>> 4ac3d00 (feat: add about page)
 =======
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 ListItem(
@@ -260,7 +282,10 @@ fun AboutScreen(
                         Text(text = stringResource(Res.string.settings_about_libraries))
                     },
                 )
+<<<<<<< HEAD
 >>>>>>> 9099d28 (fix: apply suggestions)
+=======
+>>>>>>> e7ee9921430f1ef42eab5b2143d0765976a01cf2
             }
         }
     }
