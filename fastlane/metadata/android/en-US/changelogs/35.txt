@@ -1,0 +1,2 @@
+Changelog 0.13.2:
+* Updated translations
