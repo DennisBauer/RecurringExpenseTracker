@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.about.libraries)
 }
 
 kotlin {
@@ -48,6 +49,7 @@ kotlin {
             implementation(libs.androidx.biometric)
             implementation(libs.room.runtime.android)
 
+            implementation(libs.about.libraries)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }
@@ -132,6 +134,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {

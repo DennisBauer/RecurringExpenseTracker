@@ -23,6 +23,14 @@ object SettingsPane {
     const val ROUTE: String = "Settings"
 }
 
+object SettingsPaneAbout {
+    const val ROUTE: String = "Settings_About"
+}
+
+object SettingsPaneLibraries {
+    const val ROUTE: String = "Settings_Libraries"
+}
+
 class EditExpensePane(expenseId: Int? = null) {
     val destination: String = ROUTE.replace("{$ARG_EXPENSE_ID}", expenseId.toString())
 

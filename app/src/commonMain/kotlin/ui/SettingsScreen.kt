@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Schedule
@@ -52,7 +53,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import data.SettingsPane
+import data.SettingsPaneAbout
+import data.SettingsPaneLibraries
 import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -62,6 +68,8 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.dialog_ok
+import recurringexpensetracker.app.generated.resources.settings_about
+import recurringexpensetracker.app.generated.resources.settings_about_app
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
@@ -81,11 +89,12 @@ import recurringexpensetracker.app.generated.resources.settings_security_biometr
 import recurringexpensetracker.app.generated.resources.settings_system_default
 import recurringexpensetracker.app.generated.resources.settings_title
 import recurringexpensetracker.app.generated.resources.settings_title_security
+import ui.about.AboutLibrariesScreen
+import ui.about.AboutScreen
 import ui.elements.TimePickerDialog
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.SettingsViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     biometricsChecked: Boolean,
@@ -97,6 +106,60 @@ fun SettingsScreen(
     onBiometricCheckedChange: (Boolean) -> Unit,
     requestNotificationPermission: () -> Unit,
     navigateToPermissionsSettings: () -> Unit,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+    val settingsNavController = rememberNavController()
+
+    NavHost(
+        navController = settingsNavController,
+        startDestination = SettingsPane.ROUTE,
+        modifier = modifier,
+    ) {
+        composable(SettingsPane.ROUTE) {
+            SettingsMainScreen(
+                biometricsChecked = biometricsChecked,
+                canUseBiometric = canUseBiometric,
+                canUseNotifications = canUseNotifications,
+                hasNotificationPermission = hasNotificationPermission,
+                onClickBackup = onClickBackup,
+                onClickRestore = onClickRestore,
+                onBiometricCheckedChange = onBiometricCheckedChange,
+                requestNotificationPermission = requestNotificationPermission,
+                navigateToPermissionsSettings = navigateToPermissionsSettings,
+                navigateToAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
+                navController = navController,
+            )
+        }
+
+        composable(SettingsPaneAbout.ROUTE) {
+            AboutScreen(
+                onNavigateBack = { settingsNavController.navigateUp() },
+                onLibrariesClick = { settingsNavController.navigate(SettingsPaneLibraries.ROUTE) },
+            )
+        }
+
+        composable(SettingsPaneLibraries.ROUTE) {
+            AboutLibrariesScreen(
+                onNavigateBack = { settingsNavController.navigateUp() },
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SettingsMainScreen(
+    biometricsChecked: Boolean,
+    canUseBiometric: Boolean,
+    canUseNotifications: Boolean,
+    hasNotificationPermission: Boolean,
+    onClickBackup: () -> Unit,
+    onClickRestore: () -> Unit,
+    onBiometricCheckedChange: (Boolean) -> Unit,
+    requestNotificationPermission: () -> Unit,
+    navigateToPermissionsSettings: () -> Unit,
+    navigateToAbout: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
@@ -217,6 +280,14 @@ fun SettingsScreen(
                     title = stringResource(Res.string.settings_backup_restore),
                     onClick = onClickRestore,
                     icon = Icons.Rounded.Restore,
+                )
+                SettingsHeaderElement(
+                    header = Res.string.settings_about,
+                )
+                SettingsClickableElement(
+                    title = stringResource(Res.string.settings_about_app),
+                    onClick = navigateToAbout,
+                    icon = Icons.Rounded.Info,
                 )
             }
             if (viewModel.showCurrencySelectionDialog) {
