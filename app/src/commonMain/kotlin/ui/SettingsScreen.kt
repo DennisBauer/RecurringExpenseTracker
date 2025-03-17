@@ -108,7 +108,6 @@ fun SettingsScreen(
     navigateToPermissionsSettings: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
 ) {
     val settingsNavController = rememberNavController()
 
@@ -130,7 +129,6 @@ fun SettingsScreen(
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
                 navigateToAbout = { settingsNavController.navigate(About.ROUTE) },
                 navController = navController,
-                viewModel = viewModel,
             )
         }
 
@@ -163,8 +161,8 @@ private fun SettingsMainScreen(
     navigateToPermissionsSettings: () -> Unit,
     navigateToAbout: () -> Unit,
     navController: NavController,
-    viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
 ) {
     Scaffold(
         modifier = modifier,
