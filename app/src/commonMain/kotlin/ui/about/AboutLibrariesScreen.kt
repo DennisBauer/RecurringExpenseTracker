@@ -17,7 +17,7 @@ import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.settings_libraries
+import recurringexpensetracker.app.generated.resources.settings_about_libraries
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +29,7 @@ fun AboutLibrariesScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(Res.string.settings_libraries)) },
+                title = { Text(text = stringResource(Res.string.settings_about_libraries)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(

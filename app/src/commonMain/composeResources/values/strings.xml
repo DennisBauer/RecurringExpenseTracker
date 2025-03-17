@@ -75,13 +75,12 @@
 
     <!-- About section -->
     <string name="settings_about">About</string>
-    <string name="settings_about_app">About App</string>
+    <string name="settings_about_app">About app</string>
     <string name="settings_about_developer">Developer</string>
     <string name="settings_about_version">Version</string>
-    <string name="settings_about_made_by">Made By</string>
+    <string name="settings_about_made_by">Made by</string>
     <string name="settings_about_support">Support the project</string>
-    <string name="settings_about_libraries">About Libraries</string>
-    <string name="settings_libraries">Libraries</string>
+    <string name="settings_about_libraries">Libraries copyright</string>
 
     <!-- BiometricPromptManager -->
     <string name="biometric_prompt_manager_title">Unlock Expense Tracker</string>

@@ -84,7 +84,7 @@ fun AboutScreen(
                         Text(text = stringResource(Res.string.settings_about_version))
                     },
                     supportingContent = {
-                        Text(" ${BuildConfig.VERSION_NAME}")
+                        Text(BuildConfig.VERSION_NAME)
                     },
                     trailingContent = {
                         Image(
