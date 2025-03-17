@@ -56,9 +56,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import data.About
-import data.Libraries
 import data.SettingsPane
+import data.SettingsPaneAbout
+import data.SettingsPaneLibraries
 import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -127,19 +127,19 @@ fun SettingsScreen(
                 onBiometricCheckedChange = onBiometricCheckedChange,
                 requestNotificationPermission = requestNotificationPermission,
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
-                navigateToAbout = { settingsNavController.navigate(About.ROUTE) },
+                navigateToAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
                 navController = navController,
             )
         }
 
-        composable(About.ROUTE) {
+        composable(SettingsPaneAbout.ROUTE) {
             AboutScreen(
                 onNavigateBack = { settingsNavController.navigateUp() },
-                onLibrariesClick = { settingsNavController.navigate(Libraries.ROUTE) },
+                onLibrariesClick = { settingsNavController.navigate(SettingsPaneLibraries.ROUTE) },
             )
         }
 
-        composable(Libraries.ROUTE) {
+        composable(SettingsPaneLibraries.ROUTE) {
             AboutLibrariesScreen(
                 onNavigateBack = { settingsNavController.navigateUp() },
             )

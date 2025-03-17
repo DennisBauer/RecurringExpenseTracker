@@ -23,11 +23,11 @@ object SettingsPane {
     const val ROUTE: String = "Settings"
 }
 
-object About {
+object SettingsPaneAbout {
     const val ROUTE: String = "Settings_About"
 }
 
-object Libraries {
+object SettingsPaneLibraries {
     const val ROUTE: String = "Settings_Libraries"
 }
 

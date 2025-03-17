@@ -2,12 +2,13 @@ package ui.about
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,88 +60,83 @@ fun AboutScreen(
             )
         },
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier =
-                Modifier.padding(paddingValues),
+                Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
-                Image(
-                    painter = painterResource(Res.drawable.ic_launcher),
-                    contentDescription = null,
-                    modifier =
-                        Modifier
-                            .padding(vertical = 32.dp)
-                            .size(120.dp),
-                )
-            }
-            item {
-                ListItem(
-                    modifier =
-                        Modifier.clickable {
-                            openLinkInBrowser(context, "https://github.com/dennisbauer/RecurringExpenseTracker")
-                        },
-                    headlineContent = {
-                        Text(text = stringResource(Res.string.settings_about_version))
+            Image(
+                painter = painterResource(Res.drawable.ic_launcher),
+                contentDescription = null,
+                modifier =
+                    Modifier
+                        .padding(vertical = 32.dp)
+                        .size(120.dp),
+            )
+            ListItem(
+                modifier =
+                    Modifier.clickable {
+                        openLinkInBrowser(context, "https://github.com/dennisbauer/RecurringExpenseTracker")
                     },
-                    supportingContent = {
-                        Text(BuildConfig.VERSION_NAME)
+                headlineContent = {
+                    Text(text = stringResource(Res.string.settings_about_version))
+                },
+                supportingContent = {
+                    Text(BuildConfig.VERSION_NAME)
+                },
+                trailingContent = {
+                    Image(
+                        painter = painterResource(Res.drawable.github),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                },
+            )
+            ListItem(
+                modifier =
+                    Modifier.clickable {
+                        openLinkInBrowser(context, "https://github.com/DennisBauer")
                     },
-                    trailingContent = {
+                headlineContent = {
+                    Text(text = stringResource(Res.string.settings_about_made_by) + " DennisBauer")
+                },
+                trailingContent = {
+                    Row {
                         Image(
                             painter = painterResource(Res.drawable.github),
                             contentDescription = null,
                             modifier = Modifier.size(24.dp),
                         )
+                    }
+                },
+            )
+            ListItem(
+                modifier =
+                    Modifier.clickable {
+                        openLinkInBrowser(context, "https://liberapay.com/DennisBauer")
                     },
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                ListItem(
-                    modifier =
-                        Modifier.clickable {
-                            openLinkInBrowser(context, "https://github.com/DennisBauer")
-                        },
-                    headlineContent = {
-                        Text(text = stringResource(Res.string.settings_about_made_by) + " DennisBauer")
-                    },
-                    trailingContent = {
-                        Row {
-                            Image(
-                                painter = painterResource(Res.drawable.github),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                            )
-                        }
-                    },
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                ListItem(
-                    modifier =
-                        Modifier.clickable {
-                            openLinkInBrowser(context, "https://liberapay.com/DennisBauer")
-                        },
-                    headlineContent = {
-                        Text(text = stringResource(Res.string.settings_about_support))
-                    },
-                    trailingContent = {
-                        Row {
-                            Image(
-                                painter = painterResource(Res.drawable.liberapay),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                            )
-                        }
-                    },
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                ListItem(
-                    modifier =
-                        Modifier.clickable { onLibrariesClick() },
-                    headlineContent = {
-                        Text(text = stringResource(Res.string.settings_about_libraries))
-                    },
-                )
-            }
+                headlineContent = {
+                    Text(text = stringResource(Res.string.settings_about_support))
+                },
+                trailingContent = {
+                    Row {
+                        Image(
+                            painter = painterResource(Res.drawable.liberapay),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                },
+            )
+            ListItem(
+                modifier = Modifier.clickable { onLibrariesClick() },
+                headlineContent = {
+                    Text(text = stringResource(Res.string.settings_about_libraries))
+                },
+            )
         }
     }
 }

@@ -49,9 +49,9 @@ kotlin {
             implementation(libs.androidx.biometric)
             implementation(libs.room.runtime.android)
 
+            implementation(libs.about.libraries)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-            implementation(libs.about.libraries)
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
