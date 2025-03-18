@@ -39,7 +39,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
-import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import model.DatabaseBackupRestore
@@ -61,6 +60,7 @@ import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
 import ui.theme.ExpenseTrackerTheme
+import viewmodel.MainActivityViewModel
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
