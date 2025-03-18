@@ -138,7 +138,7 @@ private fun UpcomingPaymentsOverview(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    val fadeDuration: Int = 700
+    val fadeDuration = 700
 
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()
