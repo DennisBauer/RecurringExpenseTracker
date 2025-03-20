@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import de.dbauer.expensetracker.BuildConfig
+import getAppVersion
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
@@ -86,7 +86,7 @@ fun AboutScreen(
                     Text(text = stringResource(Res.string.settings_about_version))
                 },
                 supportingContent = {
-                    Text(BuildConfig.VERSION_NAME)
+                    Text(getAppVersion())
                 },
                 trailingContent = {
                     Image(
