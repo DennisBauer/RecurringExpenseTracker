@@ -71,6 +71,15 @@
     <string name="settings_notifications_missing_permission_title">Fehlende Berechtigung</string>
     <string name="settings_notifications_missing_permission_subtitle">Die Benachrichtigungsberechtigung fehlt. Ohne diese Berechtigung kann die App keine Benachrichtigungen für bevorstehende Zahlungen anzeigen. Bitte klicke hier und erteile sie in den Einstellungen.</string>
 
+    <!-- About section -->
+    <string name="settings_about">Über</string>
+    <string name="settings_about_app">Über die App</string>
+    <string name="settings_about_developer">Entwickler</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_made_by">Erstellt von</string>
+    <string name="settings_about_support">Projekt unterstützen</string>
+    <string name="settings_about_libraries">Urheberrecht der Bibliotheken</string>
+
     <!-- BiometricPromptManager -->
     <string name="biometric_prompt_manager_title">Entsperre Expense Tracker</string>
     <string name="biometric_prompt_manager_unlock">Entsperren</string>
