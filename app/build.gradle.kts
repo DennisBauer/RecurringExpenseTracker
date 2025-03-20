@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.about.libraries)
+    alias(libs.plugins.aboutLibraries)
 }
 
 kotlin {
@@ -49,7 +49,6 @@ kotlin {
             implementation(libs.androidx.biometric)
             implementation(libs.room.runtime.android)
 
-            implementation(libs.about.libraries)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }
@@ -68,6 +67,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
 
+            implementation(libs.aboutlibraries.compose.m3)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
 
@@ -190,4 +190,22 @@ dependencies {
     add("kspIosArm64", libs.room.compiler)
 
     ktlintRuleset(libs.ktlint)
+}
+
+aboutLibraries {
+    registerAndroidTasks = false
+    prettyPrint = true
+    gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
+}
+
+tasks.named("copyNonXmlValueResourcesForCommonMain") {
+    mustRunAfter("exportLibraryDefinitions")
+}
+
+android.applicationVariants.configureEach {
+    if (buildType.name == "release") {
+        preBuildProvider.configure {
+            dependsOn("exportLibraryDefinitions")
+        }
+    }
 }

@@ -1,5 +1,5 @@
 [versions]
-aboutLibraries = '11.2.3'
+aboutLibraries = '11.6.3'
 accompanist-permissions = "0.37.2"
 agp = "8.7.3"
 android-compileSdk = "35"
@@ -26,7 +26,7 @@ room = "2.7.0-rc02"
 sqlite = "2.5.0-rc02"
 
 [libraries]
-about-libraries = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
@@ -54,7 +54,7 @@ room-runtime-android = { module = "androidx.room:room-runtime-android", version.
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 [plugins]
-about-libraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -21,9 +21,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import de.dbauer.expensetracker.BuildConfig
+import getAppVersion
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
@@ -43,7 +43,6 @@ fun AboutScreen(
     onLibrariesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -60,6 +59,8 @@ fun AboutScreen(
             )
         },
     ) { paddingValues ->
+        val uriHandler = LocalUriHandler.current
+
         Column(
             modifier =
                 Modifier
@@ -79,13 +80,13 @@ fun AboutScreen(
             ListItem(
                 modifier =
                     Modifier.clickable {
-                        openLinkInBrowser(context, "https://github.com/dennisbauer/RecurringExpenseTracker")
+                        uriHandler.openUri("https://github.com/dennisbauer/RecurringExpenseTracker")
                     },
                 headlineContent = {
                     Text(text = stringResource(Res.string.settings_about_version))
                 },
                 supportingContent = {
-                    Text(BuildConfig.VERSION_NAME)
+                    Text(getAppVersion())
                 },
                 trailingContent = {
                     Image(
@@ -98,7 +99,7 @@ fun AboutScreen(
             ListItem(
                 modifier =
                     Modifier.clickable {
-                        openLinkInBrowser(context, "https://github.com/DennisBauer")
+                        uriHandler.openUri("https://github.com/DennisBauer")
                     },
                 headlineContent = {
                     Text(text = stringResource(Res.string.settings_about_made_by) + " DennisBauer")
@@ -116,7 +117,7 @@ fun AboutScreen(
             ListItem(
                 modifier =
                     Modifier.clickable {
-                        openLinkInBrowser(context, "https://liberapay.com/DennisBauer")
+                        uriHandler.openUri("https://liberapay.com/DennisBauer")
                     },
                 headlineContent = {
                     Text(text = stringResource(Res.string.settings_about_support))
