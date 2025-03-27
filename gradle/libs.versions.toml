@@ -23,7 +23,7 @@ ktlint = "0.4.22"
 ktlint-plugin = "12.1.1"
 ktlint-version = "1.5.0"
 room = "2.7.0-rc02"
-sqlite = "2.5.0-rc02"
+sqlite = "2.5.0-rc03"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
