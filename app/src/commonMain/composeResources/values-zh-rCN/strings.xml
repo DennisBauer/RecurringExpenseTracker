@@ -69,4 +69,11 @@
     <string name="settings_notifications_missing_permission_subtitle">缺少通知权限。没有此权限，应用程序无法显示即将付款的通知。请点击此处并在设置中授予该权限。</string>
     <string name="notification_expense_reminder_message_tomorrow">下次付款是明天</string>
     <string name="notification_expense_reminder_message_days">下次付款是%1$d天后</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_about_version">版本</string>
+    <string name="settings_about_app">关于APP</string>
+    <string name="settings_about_developer">开发者</string>
+    <string name="settings_about_made_by">制作</string>
+    <string name="settings_about_support">支持此项目</string>
+    <string name="settings_about_libraries">库版权</string>
 </resources>
