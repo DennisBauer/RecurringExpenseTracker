@@ -8,9 +8,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuBoxScope
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
@@ -27,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import data.CurrencyOption
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.edit_expense_invalid_input
 import recurringexpensetracker.app.generated.resources.edit_expense_price
 import toLocalString
 
@@ -36,6 +43,7 @@ fun PriceOption(
     price: String,
     onPriceChange: (String) -> Unit,
     priceInputError: Boolean,
+    currencyInputError: Boolean,
     selectedCurrencyOption: CurrencyOption,
     availableCurrencyOptions: List<CurrencyOption>,
     onSelectCurrencyOption: (CurrencyOption) -> Unit,
@@ -70,6 +78,13 @@ fun PriceOption(
                         .padding(vertical = 8.dp),
             )
             Spacer(modifier = Modifier.size(8.dp))
+            var currencyInputText by rememberSaveable(selectedCurrencyOption) {
+                mutableStateOf(selectedCurrencyOption.currencyName)
+            }
+            val filteredOptions =
+                availableCurrencyOptions.filter {
+                    it.currencyName.contains(currencyInputText, ignoreCase = true)
+                }
             ExposedDropdownMenuBox(
                 expanded = currencyOptionsExpanded,
                 onExpandedChange = { currencyOptionsExpanded = !currencyOptionsExpanded },
@@ -78,22 +93,23 @@ fun PriceOption(
                         .weight(2f)
                         .padding(vertical = 8.dp),
             ) {
-                TextField(
-                    value =
-                        selectedCurrencyOption.currencyName,
-                    onValueChange = { },
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                CurrencyTextField(
+                    currencyInputText = currencyInputText,
+                    onCurrencyInputTextChange = { currencyInputText = it },
+                    onCurrencyOptionsExpandedChange = { currencyOptionsExpanded = it },
+                    currencyInputError = currencyInputError,
+                    onSelectCurrencyOption = onSelectCurrencyOption,
                 )
                 ExposedDropdownMenu(
                     expanded = currencyOptionsExpanded,
                     onDismissRequest = { currencyOptionsExpanded = false },
                 ) {
-                    availableCurrencyOptions.forEach {
+                    filteredOptions.forEach {
                         DropdownMenuItem(
                             text = { Text(text = it.currencyName) },
                             onClick = {
                                 onSelectCurrencyOption(it)
+                                currencyInputText = it.currencyName
                                 currencyOptionsExpanded = false
                             },
                         )
@@ -102,4 +118,56 @@ fun PriceOption(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ExposedDropdownMenuBoxScope.CurrencyTextField(
+    currencyInputText: String,
+    onCurrencyInputTextChange: (String) -> Unit,
+    onCurrencyOptionsExpandedChange: (Boolean) -> Unit,
+    currencyInputError: Boolean,
+    onSelectCurrencyOption: (CurrencyOption) -> Unit,
+) {
+    val supportingText: (@Composable () -> Unit)? =
+        if (currencyInputError) {
+            {
+                Text(
+                    text = stringResource(Res.string.edit_expense_invalid_input),
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        } else {
+            null
+        }
+
+    TextField(
+        value = currencyInputText,
+        onValueChange = { newText ->
+            onCurrencyInputTextChange(newText)
+            onCurrencyOptionsExpandedChange(true)
+        },
+        trailingIcon = {
+            if (currencyInputError || currencyInputText.isEmpty()) {
+                Icon(
+                    imageVector = Icons.Rounded.Error,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            } else if (currencyInputText.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        onCurrencyInputTextChange("")
+                        onSelectCurrencyOption(CurrencyOption.INVALID)
+                    },
+                ) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                }
+            }
+        },
+        isError = currencyInputError,
+        supportingText = supportingText,
+        singleLine = true,
+        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable),
+    )
 }

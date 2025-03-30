@@ -115,6 +115,7 @@ fun EditRecurringExpenseScreen(
                     availableCurrencyOptions = viewModel.availableCurrencyOptions,
                     onSelectCurrencyOption = { viewModel.selectedCurrencyOption = it },
                     onNext = { localFocusManager.moveFocus(FocusDirection.Down) },
+                    currencyInputError = viewModel.currencyError,
                 )
                 RecurrenceOption(
                     everyXRecurrence = viewModel.everyXRecurrenceState,
