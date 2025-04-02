@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.content.IntentCompat
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
 import asString
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -39,6 +40,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
+import de.dbauer.expensetracker.widget.UpcomingPaymentsWidget
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import model.DatabaseBackupRestore
@@ -252,32 +255,41 @@ class MainActivity : AppCompatActivity() {
                         }
                     } else {
                         MainContent(
+                            isGridMode = isGridMode,
+                            biometricSecurity = biometricSecurity,
+                            canUseBiometric = canUseBiometric,
+                            canUseNotifications = true,
+                            hasNotificationPermission = notificationPermissionGranted,
+                            toggleGridMode = {
+                                lifecycleScope.launch {
+                                    userPreferencesRepository.gridMode.save(!isGridMode)
+                                }
+                            },
+                            onBiometricSecurityChange = {
+                                lifecycleScope.launch {
+                                    userPreferencesRepository.biometricSecurity.save(it)
+                                }
+                            },
+                            requestNotificationPermission = {
+                                notificationPermissionState?.launchPermissionRequest()
+                            },
+                            navigateToPermissionsSettings = {
+                                navigateToNotificationPermissionSettings()
+                            },
                             onClickBackup = {
                                 backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
                             },
                             onClickRestore = {
                                 importPathLauncher.launch(arrayOf(Constants.BACKUP_MIME_TYPE))
                             },
-                            isGridMode = isGridMode,
-                            biometricSecurity = biometricSecurity,
-                            onBiometricSecurityChange = {
-                                lifecycleScope.launch {
-                                    userPreferencesRepository.biometricSecurity.save(it)
+                            updateWidget = {
+                                lifecycleScope.launch(Dispatchers.Main.immediate) {
+                                    GlanceAppWidgetManager(
+                                        context = this@MainActivity,
+                                    ).getGlanceIds(UpcomingPaymentsWidget::class.java).forEach {
+                                        UpcomingPaymentsWidget().update(this@MainActivity, it)
+                                    }
                                 }
-                            },
-                            toggleGridMode = {
-                                lifecycleScope.launch {
-                                    userPreferencesRepository.gridMode.save(!isGridMode)
-                                }
-                            },
-                            canUseBiometric = canUseBiometric,
-                            canUseNotifications = true,
-                            hasNotificationPermission = notificationPermissionGranted,
-                            requestNotificationPermission = {
-                                notificationPermissionState?.launchPermissionRequest()
-                            },
-                            navigateToPermissionsSettings = {
-                                navigateToNotificationPermissionSettings()
                             },
                             startRoute = startRoute,
                         )

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="widget_min_height">128dp</dimen>
+    <dimen name="widget_min_width">128dp</dimen>
+    <dimen name="widget_min_resize_height">128dp</dimen>
+    <dimen name="widget_min_resize_width">128dp</dimen>
+
+    <integer name="widget_target_cell_height">2</integer>
+    <integer name="widget_target_cell_width">2</integer>
+    <integer name="widget_update_time">3000</integer>
+</resources>

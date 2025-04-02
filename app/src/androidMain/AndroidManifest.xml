@@ -26,6 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".widget.ConfigureWidgetActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
         <receiver
             android:name="model.notification.NotificationLoopReceiver"
             android:exported="true">
@@ -36,6 +42,15 @@
         <receiver
             android:name="model.notification.DismissExpenseNotificationReceiver"
             android:exported="false">
+        </receiver>
+        <receiver android:name=".widget.UpcomingPaymentsWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_app_widget_info" />
         </receiver>
     </application>
 
