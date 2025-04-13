@@ -8,19 +8,19 @@ import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 
-interface IClearAllTablesFix {
-    fun clearAllTables()
+// The Room compiler generates the `actual` implementations.
+@Suppress("NO_ACTUAL_FOR_EXPECT")
+expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<RecurringExpenseDatabase> {
+    override fun initialize(): RecurringExpenseDatabase
 }
 
-expect object RecurringExpenseDatabaseCtor : RoomDatabaseConstructor<RecurringExpenseDatabase>
-
 @Database(entities = [RecurringExpense::class], version = 7)
-@ConstructedBy(RecurringExpenseDatabaseCtor::class)
-abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
+@ConstructedBy(RecurringExpenseDatabaseConstructor::class)
+abstract class RecurringExpenseDatabase : RoomDatabase() {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
-
-    override fun clearAllTables() {}
 
     companion object {
         fun getRecurringExpenseDatabase(builder: Builder<RecurringExpenseDatabase>): RecurringExpenseDatabase {
@@ -31,7 +31,9 @@ abstract class RecurringExpenseDatabase : RoomDatabase(), IClearAllTablesFix {
                 .addMigrations(migration_4_5)
                 .addMigrations(migration_5_6)
                 .addMigrations(migration_6_7)
+                .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
         }
 

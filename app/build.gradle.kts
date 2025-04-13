@@ -35,6 +35,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "App"
             isStatic = true
+            // Required when using NativeSQLiteDriver
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -180,14 +182,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 }
 
 dependencies {
-    // Android
-    add("kspAndroid", libs.room.compiler)
-    // JVM (Desktop)
-    add("kspDesktop", libs.room.compiler)
-    // iOS
-    add("kspIosSimulatorArm64", libs.room.compiler)
-    add("kspIosX64", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
+    ksp(libs.room.compiler)
 
     ktlintRuleset(libs.ktlint)
 }

@@ -21,3 +21,5 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn kotlinx.serialization.internal.AbstractPolymorphicSerializer
+
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
