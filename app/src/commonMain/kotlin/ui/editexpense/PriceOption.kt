@@ -99,6 +99,7 @@ fun PriceOption(
                     onCurrencyOptionsExpandedChange = { currencyOptionsExpanded = it },
                     currencyInputError = currencyInputError,
                     onSelectCurrencyOption = onSelectCurrencyOption,
+                    onNext = onNext,
                 )
                 ExposedDropdownMenu(
                     expanded = currencyOptionsExpanded,
@@ -128,6 +129,7 @@ private fun ExposedDropdownMenuBoxScope.CurrencyTextField(
     onCurrencyOptionsExpandedChange: (Boolean) -> Unit,
     currencyInputError: Boolean,
     onSelectCurrencyOption: (CurrencyOption) -> Unit,
+    onNext: KeyboardActionScope.() -> Unit,
 ) {
     val supportingText: (@Composable () -> Unit)? =
         if (currencyInputError) {
@@ -168,6 +170,13 @@ private fun ExposedDropdownMenuBoxScope.CurrencyTextField(
         isError = currencyInputError,
         supportingText = supportingText,
         singleLine = true,
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next,
+            ),
+        keyboardActions =
+            KeyboardActions(onNext = onNext),
         modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable),
     )
 }
