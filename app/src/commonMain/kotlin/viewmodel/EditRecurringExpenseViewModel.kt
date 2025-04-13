@@ -39,6 +39,8 @@ class EditRecurringExpenseViewModel(
     val priceInputError = mutableStateOf(false)
     var everyXRecurrenceState by mutableStateOf("")
     val everyXRecurrenceInputError = mutableStateOf(false)
+    var currencyError by mutableStateOf(false)
+        private set
     var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
     var firstPaymentDate: Instant? by mutableStateOf(null)
     var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
@@ -164,6 +166,7 @@ class EditRecurringExpenseViewModel(
         nameInputError.value = false
         priceInputError.value = false
         everyXRecurrenceInputError.value = false
+        currencyError = false
 
         var everythingCorrect = true
         if (!isNameValid(nameState)) {
@@ -176,6 +179,10 @@ class EditRecurringExpenseViewModel(
         }
         if (!isEveryXRecurrenceValid(everyXRecurrenceState)) {
             everyXRecurrenceInputError.value = true
+            everythingCorrect = false
+        }
+        if (!currencyIsValid(selectedCurrencyOption.currencyName)) {
+            currencyError = true
             everythingCorrect = false
         }
         return everythingCorrect
@@ -191,6 +198,11 @@ class EditRecurringExpenseViewModel(
 
     private fun isEveryXRecurrenceValid(everyXRecurrence: String): Boolean {
         return everyXRecurrence.isBlank() || everyXRecurrence.toIntOrNull() != null
+    }
+
+    private fun currencyIsValid(currency: String): Boolean {
+        val currencyOption = CurrencyOption(selectedCurrencyOption.currencyCode, currency)
+        return currency.isNotBlank() && availableCurrencyOptions.any { it == currencyOption }
     }
 
     private suspend fun getDefaultCurrencyCode(): String {
