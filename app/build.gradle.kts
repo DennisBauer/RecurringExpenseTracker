@@ -188,9 +188,9 @@ dependencies {
 }
 
 aboutLibraries {
-    registerAndroidTasks = false
-    prettyPrint = true
-    gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
+    android.registerAndroidTasks = false
+    export.prettyPrint = true
+    collect.gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
 }
 
 tasks.named("copyNonXmlValueResourcesForCommonMain") {
