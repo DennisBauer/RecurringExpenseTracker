@@ -31,6 +31,10 @@ object SettingsPaneLibraries {
     const val ROUTE: String = "Settings_Libraries"
 }
 
+object SettingsPaneDefaultCurrency {
+    const val ROUTE: String = "Settings_Default_Currency"
+}
+
 class EditExpensePane(expenseId: Int? = null) {
     val destination: String = ROUTE.replace("{$ARG_EXPENSE_ID}", expenseId.toString())
 

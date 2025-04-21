@@ -1,4 +1,4 @@
-package ui
+package ui.settings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -49,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -57,9 +54,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import data.SettingsPane
 import data.SettingsPaneAbout
+import data.SettingsPaneDefaultCurrency
 import data.SettingsPaneLibraries
 import kotlinx.datetime.LocalTime
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -73,8 +70,6 @@ import recurringexpensetracker.app.generated.resources.settings_about_libraries
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
-import recurringexpensetracker.app.generated.resources.settings_currency_exchange_info
-import recurringexpensetracker.app.generated.resources.settings_currency_exchange_last_update
 import recurringexpensetracker.app.generated.resources.settings_default_currency
 import recurringexpensetracker.app.generated.resources.settings_general
 import recurringexpensetracker.app.generated.resources.settings_notifications
@@ -137,7 +132,8 @@ fun SettingsScreen(
                 onBiometricCheckedChange = onBiometricCheckedChange,
                 requestNotificationPermission = requestNotificationPermission,
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
-                navigateToAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
+                onClickDefaultCurrency = { settingsNavController.navigate(SettingsPaneDefaultCurrency.ROUTE) },
+                onClickAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
             )
         }
 
@@ -176,6 +172,25 @@ fun SettingsScreen(
             }
             AboutLibrariesScreen()
         }
+
+        composable(SettingsPaneDefaultCurrency.ROUTE) {
+            setTopAppBar {
+                TopAppBar(
+                    title = { Text(text = stringResource(Res.string.settings_default_currency)) },
+                    navigationIcon = {
+                        IconButton(onClick = { settingsNavController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                )
+            }
+            SettingsDefaultCurrencyScreen(
+                onNavigateBack = { settingsNavController.navigateUp() },
+            )
+        }
     }
 }
 
@@ -191,7 +206,8 @@ private fun SettingsMainScreen(
     onBiometricCheckedChange: (Boolean) -> Unit,
     requestNotificationPermission: () -> Unit,
     navigateToPermissionsSettings: () -> Unit,
-    navigateToAbout: () -> Unit,
+    onClickDefaultCurrency: () -> Unit,
+    onClickAbout: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
 ) {
@@ -210,9 +226,8 @@ private fun SettingsMainScreen(
                 viewModel.selectedCurrencyName.ifEmpty {
                     stringResource(Res.string.settings_system_default)
                 },
-            onClick = viewModel::onSelectCurrency,
+            onClick = onClickDefaultCurrency,
             icon = Icons.Rounded.CurrencyExchange,
-            infoActionClick = viewModel::onCurrencyInfo,
         )
 
         if (canUseBiometric) {
@@ -305,59 +320,11 @@ private fun SettingsMainScreen(
         )
         SettingsClickableElement(
             title = stringResource(Res.string.settings_about_app),
-            onClick = navigateToAbout,
+            onClick = onClickAbout,
             icon = Icons.Rounded.Info,
         )
     }
-    if (viewModel.showCurrencySelectionDialog) {
-        AlertDialog(
-            onDismissRequest = viewModel::onDismissCurrencySelectionDialog,
-            text = {
-                LazyColumn {
-                    items(viewModel.availableCurrencies.value) { currency ->
-                        TextButton(
-                            onClick = {
-                                viewModel.onCurrencySelected(currency)
-                            },
-                        ) {
-                            Text(
-                                text = "${currency.name} (${currency.symbol})",
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-                }
-            },
-            confirmButton = {},
-        )
-    } else if (viewModel.showCurrencyInfoDialog) {
-        AlertDialog(
-            onDismissRequest = viewModel::onDismissCurrencyInfoDialog,
-            text = {
-                Column {
-                    Text(
-                        text = stringResource(Res.string.settings_currency_exchange_info),
-                        modifier = Modifier.padding(bottom = 16.dp),
-                    )
-                    Text(
-                        text =
-                            stringResource(
-                                Res.string.settings_currency_exchange_last_update,
-                                viewModel.exchangeRateLastUpdate,
-                            ),
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = viewModel::onDismissCurrencyInfoDialog,
-                ) {
-                    Text(text = stringResource(Res.string.dialog_ok))
-                }
-            },
-        )
-    } else if (viewModel.upcomingPaymentNotificationTimePickerDialog) {
+    if (viewModel.upcomingPaymentNotificationTimePickerDialog) {
         val timePickerState =
             rememberTimePickerState(
                 initialHour = 8,
@@ -422,23 +389,6 @@ private fun SettingsMainScreen(
             },
         )
     }
-}
-
-@Composable
-private fun SettingsHeaderElement(
-    header: StringResource,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = stringResource(header),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.primary,
-        modifier =
-            modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-        overflow = TextOverflow.Ellipsis,
-    )
 }
 
 @Composable
