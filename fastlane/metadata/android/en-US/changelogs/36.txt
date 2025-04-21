@@ -1,0 +1,9 @@
+Changelog 0.14.0:
+* Add about page in settings
+* Make About screen multiplatform compatible
+* Make currency dropdown searchable
+* Update exchange rates
+* German translation updated
+* Chinese (Simplified Han script) translation updated
+* French Translation updated
+* Update dependencies
