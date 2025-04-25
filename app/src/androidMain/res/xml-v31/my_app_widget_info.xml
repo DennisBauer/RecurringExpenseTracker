@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="@integer/widget_update_time"
+    android:minHeight="@dimen/widget_min_height"
+    android:minWidth="@dimen/widget_min_width"
+
+    android:minResizeHeight="@dimen/widget_min_resize_height"
+    android:minResizeWidth="@dimen/widget_min_resize_width"
+    android:targetCellHeight="@integer/widget_target_cell_height"
+    android:targetCellWidth="@integer/widget_target_cell_width"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:configure="de.dbauer.expensetracker.widget.ConfigureWidgetActivity">
+</appwidget-provider>

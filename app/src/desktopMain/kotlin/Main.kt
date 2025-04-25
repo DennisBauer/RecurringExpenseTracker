@@ -41,6 +41,7 @@ fun main() =
                 navigateToPermissionsSettings = {},
                 onClickBackup = {},
                 onClickRestore = {},
+                updateWidget = {},
             )
         }
     }
