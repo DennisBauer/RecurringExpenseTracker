@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
@@ -29,7 +30,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -52,7 +52,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -70,6 +69,7 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.dialog_ok
 import recurringexpensetracker.app.generated.resources.settings_about
 import recurringexpensetracker.app.generated.resources.settings_about_app
+import recurringexpensetracker.app.generated.resources.settings_about_libraries
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
@@ -95,6 +95,7 @@ import ui.elements.TimePickerDialog
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.SettingsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     biometricsChecked: Boolean,
@@ -106,7 +107,7 @@ fun SettingsScreen(
     onBiometricCheckedChange: (Boolean) -> Unit,
     requestNotificationPermission: () -> Unit,
     navigateToPermissionsSettings: () -> Unit,
-    navController: NavController,
+    setTopAppBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val settingsNavController = rememberNavController()
@@ -117,6 +118,15 @@ fun SettingsScreen(
         modifier = modifier,
     ) {
         composable(SettingsPane.ROUTE) {
+            setTopAppBar {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(Res.string.settings_title),
+                        )
+                    },
+                )
+            }
             SettingsMainScreen(
                 biometricsChecked = biometricsChecked,
                 canUseBiometric = canUseBiometric,
@@ -128,21 +138,43 @@ fun SettingsScreen(
                 requestNotificationPermission = requestNotificationPermission,
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
                 navigateToAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
-                navController = navController,
             )
         }
 
         composable(SettingsPaneAbout.ROUTE) {
+            setTopAppBar {
+                TopAppBar(
+                    title = { Text(text = stringResource(Res.string.settings_about_app)) },
+                    navigationIcon = {
+                        IconButton(onClick = { settingsNavController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Navigate back",
+                            )
+                        }
+                    },
+                )
+            }
             AboutScreen(
-                onNavigateBack = { settingsNavController.navigateUp() },
                 onLibrariesClick = { settingsNavController.navigate(SettingsPaneLibraries.ROUTE) },
             )
         }
 
         composable(SettingsPaneLibraries.ROUTE) {
-            AboutLibrariesScreen(
-                onNavigateBack = { settingsNavController.navigateUp() },
-            )
+            setTopAppBar {
+                TopAppBar(
+                    title = { Text(text = stringResource(Res.string.settings_about_libraries)) },
+                    navigationIcon = {
+                        IconButton(onClick = { settingsNavController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                )
+            }
+            AboutLibrariesScreen()
         }
     }
 }
@@ -160,251 +192,236 @@ private fun SettingsMainScreen(
     requestNotificationPermission: () -> Unit,
     navigateToPermissionsSettings: () -> Unit,
     navigateToAbout: () -> Unit,
-    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>(),
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(Res.string.settings_title)) },
-            )
-        },
-        bottomBar = {
-            BottomNavBar(navController = navController)
-        },
-        content = { paddingValues ->
-            Column(
-                modifier =
-                    Modifier
-                        .padding(paddingValues)
-                        .verticalScroll(rememberScrollState())
-                        .fillMaxSize(),
-            ) {
-                SettingsHeaderElement(
-                    header = Res.string.settings_general,
-                )
-                SettingsClickableElement(
-                    title = stringResource(Res.string.settings_default_currency),
-                    subtitle =
-                        viewModel.selectedCurrencyName.ifEmpty {
-                            stringResource(Res.string.settings_system_default)
-                        },
-                    onClick = viewModel::onSelectCurrency,
-                    icon = Icons.Rounded.CurrencyExchange,
-                    infoActionClick = viewModel::onCurrencyInfo,
-                )
+    Column(
+        modifier =
+            modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+    ) {
+        SettingsHeaderElement(
+            header = Res.string.settings_general,
+        )
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_default_currency),
+            subtitle =
+                viewModel.selectedCurrencyName.ifEmpty {
+                    stringResource(Res.string.settings_system_default)
+                },
+            onClick = viewModel::onSelectCurrency,
+            icon = Icons.Rounded.CurrencyExchange,
+            infoActionClick = viewModel::onCurrencyInfo,
+        )
 
-                if (canUseBiometric) {
-                    SettingsHeaderElement(header = Res.string.settings_title_security)
-                    SettingsClickableElementWithToggle(
-                        title = stringResource(Res.string.settings_security_biometric_lock),
-                        checked = biometricsChecked,
-                        onCheckedChange = onBiometricCheckedChange,
-                        icon = Icons.Rounded.Fingerprint,
+        if (canUseBiometric) {
+            SettingsHeaderElement(header = Res.string.settings_title_security)
+            SettingsClickableElementWithToggle(
+                title = stringResource(Res.string.settings_security_biometric_lock),
+                checked = biometricsChecked,
+                onCheckedChange = onBiometricCheckedChange,
+                icon = Icons.Rounded.Fingerprint,
+            )
+        }
+
+        if (canUseNotifications) {
+            val notificationsEnabled by viewModel.upcomingPaymentNotification.collectAsState()
+
+            SettingsHeaderElement(header = Res.string.settings_notifications)
+            SettingsClickableElementWithToggle(
+                title = stringResource(Res.string.settings_notifications_upcoming),
+                subtitle = stringResource(Res.string.settings_notifications_subtitle),
+                checked = notificationsEnabled,
+                onCheckedChange = {
+                    viewModel.onUpcomingPaymentNotification(it)
+                    if (it && !hasNotificationPermission) {
+                        requestNotificationPermission()
+                    }
+                },
+                icon = Icons.Rounded.Notifications,
+            )
+            AnimatedVisibility(notificationsEnabled) {
+                Column {
+                    val upcomingPaymentNotificationTime by viewModel.upcomingPaymentNotificationTime
+                        .collectAsState()
+                    val upcomingPaymentNotificationTimeString =
+                        LocalTime(
+                            upcomingPaymentNotificationTime / 60,
+                            upcomingPaymentNotificationTime % 60,
+                        ).toString()
+                    val upcomingPaymentNotificationDaysAdvance by
+                        viewModel.upcomingPaymentNotificationDaysAdvance.collectAsState()
+                    val upcomingPaymentNotificationDaysAdvanceString =
+                        stringResource(
+                            Res.string.settings_notifications_schedule_days_subtitle,
+                            upcomingPaymentNotificationDaysAdvance,
+                        )
+
+                    if (!hasNotificationPermission) {
+                        SettingsMissingPermissionElement(
+                            title =
+                                stringResource(
+                                    Res.string.settings_notifications_missing_permission_title,
+                                ),
+                            subtitle =
+                                stringResource(
+                                    Res.string.settings_notifications_missing_permission_subtitle,
+                                ),
+                            onClick = navigateToPermissionsSettings,
+                        )
+                    }
+                    SettingsClickableElement(
+                        title = stringResource(Res.string.settings_notifications_schedule_time),
+                        subtitle = upcomingPaymentNotificationTimeString,
+                        onClick = viewModel::onUpcomingPaymentNotificationTimeSelection,
+                        icon = Icons.Rounded.Schedule,
+                    )
+                    SettingsClickableElement(
+                        title = stringResource(Res.string.settings_notifications_schedule_days),
+                        subtitle = upcomingPaymentNotificationDaysAdvanceString,
+                        onClick = viewModel::onUpcomingPaymentNotificationDaysAdvanceSelection,
+                        icon = Icons.Rounded.DateRange,
                     )
                 }
+            }
+        }
 
-                if (canUseNotifications) {
-                    val notificationsEnabled by viewModel.upcomingPaymentNotification.collectAsState()
-
-                    SettingsHeaderElement(header = Res.string.settings_notifications)
-                    SettingsClickableElementWithToggle(
-                        title = stringResource(Res.string.settings_notifications_upcoming),
-                        subtitle = stringResource(Res.string.settings_notifications_subtitle),
-                        checked = notificationsEnabled,
-                        onCheckedChange = {
-                            viewModel.onUpcomingPaymentNotification(it)
-                            if (it && !hasNotificationPermission) {
-                                requestNotificationPermission()
-                            }
-                        },
-                        icon = Icons.Rounded.Notifications,
-                    )
-                    AnimatedVisibility(notificationsEnabled) {
-                        Column {
-                            val upcomingPaymentNotificationTime by viewModel.upcomingPaymentNotificationTime
-                                .collectAsState()
-                            val upcomingPaymentNotificationTimeString =
-                                LocalTime(
-                                    upcomingPaymentNotificationTime / 60,
-                                    upcomingPaymentNotificationTime % 60,
-                                ).toString()
-                            val upcomingPaymentNotificationDaysAdvance by
-                                viewModel.upcomingPaymentNotificationDaysAdvance.collectAsState()
-                            val upcomingPaymentNotificationDaysAdvanceString =
-                                stringResource(
-                                    Res.string.settings_notifications_schedule_days_subtitle,
-                                    upcomingPaymentNotificationDaysAdvance,
-                                )
-
-                            if (!hasNotificationPermission) {
-                                SettingsMissingPermissionElement(
-                                    title =
-                                        stringResource(
-                                            Res.string.settings_notifications_missing_permission_title,
-                                        ),
-                                    subtitle =
-                                        stringResource(
-                                            Res.string.settings_notifications_missing_permission_subtitle,
-                                        ),
-                                    onClick = navigateToPermissionsSettings,
-                                )
-                            }
-                            SettingsClickableElement(
-                                title = stringResource(Res.string.settings_notifications_schedule_time),
-                                subtitle = upcomingPaymentNotificationTimeString,
-                                onClick = viewModel::onUpcomingPaymentNotificationTimeSelection,
-                                icon = Icons.Rounded.Schedule,
-                            )
-                            SettingsClickableElement(
-                                title = stringResource(Res.string.settings_notifications_schedule_days),
-                                subtitle = upcomingPaymentNotificationDaysAdvanceString,
-                                onClick = viewModel::onUpcomingPaymentNotificationDaysAdvanceSelection,
-                                icon = Icons.Rounded.DateRange,
+        SettingsHeaderElement(
+            header = Res.string.settings_backup,
+        )
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_backup_create),
+            onClick = onClickBackup,
+            icon = Icons.Rounded.Backup,
+        )
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_backup_restore),
+            onClick = onClickRestore,
+            icon = Icons.Rounded.Restore,
+        )
+        SettingsHeaderElement(
+            header = Res.string.settings_about,
+        )
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_about_app),
+            onClick = navigateToAbout,
+            icon = Icons.Rounded.Info,
+        )
+    }
+    if (viewModel.showCurrencySelectionDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissCurrencySelectionDialog,
+            text = {
+                LazyColumn {
+                    items(viewModel.availableCurrencies.value) { currency ->
+                        TextButton(
+                            onClick = {
+                                viewModel.onCurrencySelected(currency)
+                            },
+                        ) {
+                            Text(
+                                text = "${currency.name} (${currency.symbol})",
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     }
                 }
-
-                SettingsHeaderElement(
-                    header = Res.string.settings_backup,
-                )
-                SettingsClickableElement(
-                    title = stringResource(Res.string.settings_backup_create),
-                    onClick = onClickBackup,
-                    icon = Icons.Rounded.Backup,
-                )
-                SettingsClickableElement(
-                    title = stringResource(Res.string.settings_backup_restore),
-                    onClick = onClickRestore,
-                    icon = Icons.Rounded.Restore,
-                )
-                SettingsHeaderElement(
-                    header = Res.string.settings_about,
-                )
-                SettingsClickableElement(
-                    title = stringResource(Res.string.settings_about_app),
-                    onClick = navigateToAbout,
-                    icon = Icons.Rounded.Info,
-                )
-            }
-            if (viewModel.showCurrencySelectionDialog) {
-                AlertDialog(
-                    onDismissRequest = viewModel::onDismissCurrencySelectionDialog,
-                    text = {
-                        LazyColumn {
-                            items(viewModel.availableCurrencies.value) { currency ->
-                                TextButton(
-                                    onClick = {
-                                        viewModel.onCurrencySelected(currency)
-                                    },
-                                ) {
-                                    Text(
-                                        text = "${currency.name} (${currency.symbol})",
-                                        textAlign = TextAlign.Start,
-                                        modifier = Modifier.fillMaxWidth(),
-                                    )
-                                }
-                            }
-                        }
-                    },
-                    confirmButton = {},
-                )
-            } else if (viewModel.showCurrencyInfoDialog) {
-                AlertDialog(
-                    onDismissRequest = viewModel::onDismissCurrencyInfoDialog,
-                    text = {
-                        Column {
-                            Text(
-                                text = stringResource(Res.string.settings_currency_exchange_info),
-                                modifier = Modifier.padding(bottom = 16.dp),
-                            )
-                            Text(
-                                text =
-                                    stringResource(
-                                        Res.string.settings_currency_exchange_last_update,
-                                        viewModel.exchangeRateLastUpdate,
-                                    ),
-                            )
-                        }
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = viewModel::onDismissCurrencyInfoDialog,
-                        ) {
-                            Text(text = stringResource(Res.string.dialog_ok))
-                        }
-                    },
-                )
-            } else if (viewModel.upcomingPaymentNotificationTimePickerDialog) {
-                val timePickerState =
-                    rememberTimePickerState(
-                        initialHour = 8,
-                        initialMinute = 0,
+            },
+            confirmButton = {},
+        )
+    } else if (viewModel.showCurrencyInfoDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissCurrencyInfoDialog,
+            text = {
+                Column {
+                    Text(
+                        text = stringResource(Res.string.settings_currency_exchange_info),
+                        modifier = Modifier.padding(bottom = 16.dp),
                     )
-                val upcomingPaymentNotificationTime by viewModel.upcomingPaymentNotificationTime.collectAsState()
-                upcomingPaymentNotificationTime.takeIf { it >= 0 }?.let { initialTime ->
-                    timePickerState.hour = initialTime / 60
-                    timePickerState.minute = initialTime % 60
+                    Text(
+                        text =
+                            stringResource(
+                                Res.string.settings_currency_exchange_last_update,
+                                viewModel.exchangeRateLastUpdate,
+                            ),
+                    )
                 }
-                TimePickerDialog(
-                    onDismiss = viewModel::onDismissUpcomingPaymentNotificationTimePickerDialog,
-                    onConfirm = viewModel::onConfirmUpcomingPaymentNotificationTimePickerDialog,
-                    timePickerState = timePickerState,
-                )
-            } else if (viewModel.upcomingPaymentNotificationDaysAdvanceDialog) {
-                val upcomingPaymentNotificationDaysAdvance by viewModel.upcomingPaymentNotificationDaysAdvance
-                    .collectAsState()
-                var days by rememberSaveable { mutableStateOf("") }
-                upcomingPaymentNotificationDaysAdvance.takeIf { it >= 0 }?.let { daysAdvance ->
-                    days = daysAdvance.toString()
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = viewModel::onDismissCurrencyInfoDialog,
+                ) {
+                    Text(text = stringResource(Res.string.dialog_ok))
                 }
-                var inputError by rememberSaveable { mutableStateOf(false) }
-                AlertDialog(
-                    onDismissRequest = viewModel::onDismissUpcomingPaymentNotificationDaysAdvanceDialog,
-                    text = {
-                        TextField(
-                            value = days,
-                            onValueChange = {
-                                if (it.matches(Regex("\\d{0,2}"))) {
-                                    days = it
-                                    inputError = false
-                                }
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(Res.string.settings_notifications_schedule_days),
-                                )
-                            },
-                            keyboardOptions =
-                                KeyboardOptions(
-                                    keyboardType = KeyboardType.Decimal,
-                                    imeAction = ImeAction.Next,
-                                ),
-                            singleLine = true,
-                            isError = inputError,
+            },
+        )
+    } else if (viewModel.upcomingPaymentNotificationTimePickerDialog) {
+        val timePickerState =
+            rememberTimePickerState(
+                initialHour = 8,
+                initialMinute = 0,
+            )
+        val upcomingPaymentNotificationTime by viewModel.upcomingPaymentNotificationTime.collectAsState()
+        upcomingPaymentNotificationTime.takeIf { it >= 0 }?.let { initialTime ->
+            timePickerState.hour = initialTime / 60
+            timePickerState.minute = initialTime % 60
+        }
+        TimePickerDialog(
+            onDismiss = viewModel::onDismissUpcomingPaymentNotificationTimePickerDialog,
+            onConfirm = viewModel::onConfirmUpcomingPaymentNotificationTimePickerDialog,
+            timePickerState = timePickerState,
+        )
+    } else if (viewModel.upcomingPaymentNotificationDaysAdvanceDialog) {
+        val upcomingPaymentNotificationDaysAdvance by viewModel.upcomingPaymentNotificationDaysAdvance
+            .collectAsState()
+        var days by rememberSaveable { mutableStateOf("") }
+        upcomingPaymentNotificationDaysAdvance.takeIf { it >= 0 }?.let { daysAdvance ->
+            days = daysAdvance.toString()
+        }
+        var inputError by rememberSaveable { mutableStateOf(false) }
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissUpcomingPaymentNotificationDaysAdvanceDialog,
+            text = {
+                TextField(
+                    value = days,
+                    onValueChange = {
+                        if (it.matches(Regex("\\d{0,2}"))) {
+                            days = it
+                            inputError = false
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(Res.string.settings_notifications_schedule_days),
                         )
                     },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                val daysOrNull = days.toIntOrNull()
-                                if (daysOrNull != null && daysOrNull >= 0) {
-                                    viewModel.onConfirmUpcomingPaymentNotificationDaysAdvanceDialog(daysOrNull)
-                                } else {
-                                    inputError = true
-                                }
-                            },
-                        ) {
-                            Text(text = stringResource(Res.string.dialog_ok))
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next,
+                        ),
+                    singleLine = true,
+                    isError = inputError,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val daysOrNull = days.toIntOrNull()
+                        if (daysOrNull != null && daysOrNull >= 0) {
+                            viewModel.onConfirmUpcomingPaymentNotificationDaysAdvanceDialog(daysOrNull)
+                        } else {
+                            inputError = true
                         }
                     },
-                )
-            }
-        },
-    )
+                ) {
+                    Text(text = stringResource(Res.string.dialog_ok))
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -586,7 +603,7 @@ private fun SettingsScreenPreview(
                 onBiometricCheckedChange = { checked = it },
                 requestNotificationPermission = {},
                 navigateToPermissionsSettings = {},
-                navController = rememberNavController(),
+                setTopAppBar = {},
             )
         }
     }

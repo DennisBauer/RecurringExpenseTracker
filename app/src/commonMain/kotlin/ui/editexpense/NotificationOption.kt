@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import recurringexpensetracker.app.generated.resources.edit_expense_notification
 import recurringexpensetracker.app.generated.resources.settings_notifications_schedule_days
 import recurringexpensetracker.app.generated.resources.settings_notifications_upcoming
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationOption(
     expenseNotificationEnabledGlobally: Boolean,

@@ -13,6 +13,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import viewmodel.EditRecurringExpenseViewModel
+import viewmodel.MainNavigationViewModel
 import viewmodel.RecurringExpenseViewModel
 import viewmodel.SettingsViewModel
 import viewmodel.UpcomingPaymentsViewModel
@@ -34,4 +35,5 @@ val sharedModule =
         viewModelOf(::SettingsViewModel)
         singleOf(::ExchangeRateProvider)
         singleOf(::ExpenseNotificationManager)
+        viewModelOf(::MainNavigationViewModel)
     }
