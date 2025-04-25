@@ -1,0 +1,4 @@
+Changelog 0.15.0:
+* Add Widget support for Upcoming Payments
+* Only export the licenses of release dependencies
+* Update dependencies
