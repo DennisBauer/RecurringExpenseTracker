@@ -189,7 +189,10 @@ dependencies {
 
 aboutLibraries {
     android.registerAndroidTasks = false
-    export.prettyPrint = true
+    export {
+        prettyPrint = true
+        exportVariant = "release"
+    }
     collect.gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
 }
 
