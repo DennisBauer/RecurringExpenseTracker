@@ -102,6 +102,5 @@
     <string name="widget_configuration_biometric">Please deactivate Biometric to use this Widget</string>
     <string name="widget_configuration_biometric_deactivate">Deactivate Biometric</string>
     <string name="widget_grid_mode">Grid Mode</string>
-    <string name="widget_configuration_title">Configure Expense Tracker Widget</string>
-
+    <string name="widget_configuration_title">Configure Widget</string>
 </resources>

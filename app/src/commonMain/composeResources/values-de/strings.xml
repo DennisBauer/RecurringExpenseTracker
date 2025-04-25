@@ -95,4 +95,10 @@
     <string name="notification_expense_reminder_message_today">Die nächste Zahlung ist heute</string>
     <string name="notification_expense_reminder_message_tomorrow">Die nächste Zahlung ist morgen</string>
     <string name="notification_expense_reminder_message_days">Die nächste Zahlung ist in %1$d Tagen</string>
+
+    <!-- Widget -->
+    <string name="widget_configuration_biometric">Bitte deaktivieren Sie die Biometrie, um dieses Widget zu verwenden</string>
+    <string name="widget_configuration_biometric_deactivate">Biometrie deaktivieren</string>
+    <string name="widget_grid_mode">Raster Modus</string>
+    <string name="widget_configuration_title">Widget konfigurieren</string>
 </resources>
