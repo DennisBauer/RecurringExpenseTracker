@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -26,20 +25,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,56 +63,32 @@ import com.mikepenz.aboutlibraries.ui.compose.util.strippedLicenseContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.settings_about_libraries
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun AboutLibrariesScreen(
-    onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(Res.string.settings_about_libraries)) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
-                        )
-                    }
-                },
-            )
-        },
-    ) { padding ->
-        val libraries by rememberLibraries {
-            Res.readBytes("files/aboutlibraries.json").decodeToString()
-        }
-        val hasLibraries = libraries?.libraries?.isNotEmpty() == true
-        if (hasLibraries) {
-            LibrariesContainer(
-                libraries,
-                modifier =
-                    Modifier
-                        .padding(padding)
-                        .fillMaxSize(),
-            )
-        } else {
-            Text(
-                text = "Used libraries are only shown in release builds.",
-                textAlign = TextAlign.Center,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                        .padding(horizontal = 16.dp)
-                        .wrapContentSize(),
-            )
-        }
+fun AboutLibrariesScreen(modifier: Modifier = Modifier) {
+    val libraries by rememberLibraries {
+        Res.readBytes("files/aboutlibraries.json").decodeToString()
+    }
+    val hasLibraries = libraries?.libraries?.isNotEmpty() == true
+    if (hasLibraries) {
+        LibrariesContainer(
+            libraries,
+            modifier =
+                modifier
+                    .fillMaxSize(),
+        )
+    } else {
+        Text(
+            text = "Used libraries are only shown in release builds.",
+            textAlign = TextAlign.Center,
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .wrapContentSize(),
+        )
     }
 }
 
@@ -191,7 +159,6 @@ fun LibrariesContainer(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LicenseDialog(
     library: Library,
@@ -348,7 +315,6 @@ internal inline fun LazyListScope.libraryItems(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun Library(
     library: Library,
@@ -435,7 +401,6 @@ fun Library(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LibraryScaffoldLayout(
     name: @Composable BoxScope.() -> Unit,

@@ -18,7 +18,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,168 +48,162 @@ fun EditRecurringExpenseScreen(
     expenseId: Int?,
     canUseNotifications: Boolean,
     onDismiss: () -> Unit,
+    setTopAppBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
 ) {
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
-
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(Res.string.edit_expense_title),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onDismiss,
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
-                        )
-                    }
-                },
-                actions = {
-                    if (viewModel.showDeleteButton) {
-                        IconButton(
-                            onClick = viewModel::onDeleteClick,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = stringResource(Res.string.delete),
-                            )
+    Column(
+        modifier =
+            modifier
+                .padding(horizontal = 16.dp)
+                .verticalScroll(scrollState),
+    ) {
+        NameOption(
+            name = viewModel.nameState,
+            onNameChange = { viewModel.nameState = it },
+            nameInputError = viewModel.nameInputError.value,
+            onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
+        )
+        DescriptionOption(
+            description = viewModel.descriptionState,
+            onDescriptionChange = { viewModel.descriptionState = it },
+            onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
+        )
+        PriceOption(
+            price = viewModel.priceState,
+            onPriceChange = { viewModel.priceState = it },
+            priceInputError = viewModel.priceInputError.value,
+            selectedCurrencyOption = viewModel.selectedCurrencyOption,
+            availableCurrencyOptions = viewModel.availableCurrencyOptions,
+            onSelectCurrencyOption = { viewModel.selectedCurrencyOption = it },
+            onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
+            currencyInputError = viewModel.currencyError,
+        )
+        RecurrenceOption(
+            everyXRecurrence = viewModel.everyXRecurrenceState,
+            onEveryXRecurrenceChange = { viewModel.everyXRecurrenceState = it },
+            everyXRecurrenceInputError = viewModel.everyXRecurrenceInputError.value,
+            selectedRecurrence = viewModel.selectedRecurrence,
+            onSelectRecurrence = { viewModel.selectedRecurrence = it },
+            onNext = { localFocusManager.clearFocus() },
+        )
+        FirstPaymentOption(
+            date = viewModel.firstPaymentDate,
+            onSelectDate = { viewModel.firstPaymentDate = it },
+        )
+        ColorOption(
+            expenseColor = viewModel.expenseColor,
+            onSelectExpenseColor = { viewModel.expenseColor = it },
+        )
+        if (canUseNotifications) {
+            NotificationOption(
+                expenseNotificationEnabledGlobally =
+                    viewModel.expenseNotificationEnabledGlobally
+                        .collectAsState()
+                        .value,
+                notifyForExpense = viewModel.notifyForExpense,
+                onNotifyForExpenseChange = { viewModel.notifyForExpense = it },
+                notifyXDaysBefore = viewModel.notifyXDaysBefore,
+                defaultXDaysPlaceholder = viewModel.defaultXDaysPlaceholder,
+                onNotifyXDaysBeforeChange = { viewModel.notifyXDaysBefore = it },
+                notifyXDaysBeforeInputError = false,
+                onNext = { localFocusManager.clearFocus() },
+            )
+        }
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    .padding(top = 8.dp)
+                    .navigationBarsPadding()
+                    .imePadding(),
+        ) {
+            Button(
+                onClick = {
+                    viewModel.updateExpense { successful ->
+                        if (successful) {
+                            onDismiss()
                         }
                     }
                 },
-            )
-        },
-        content = { paddingValues ->
-            Column(
                 modifier =
                     Modifier
-                        .padding(paddingValues)
-                        .padding(horizontal = 16.dp)
-                        .verticalScroll(scrollState),
+                        .weight(1f)
+                        .wrapContentWidth(),
             ) {
-                NameOption(
-                    name = viewModel.nameState,
-                    onNameChange = { viewModel.nameState = it },
-                    nameInputError = viewModel.nameInputError.value,
-                    onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
+                Text(
+                    text =
+                        stringResource(
+                            if (viewModel.isNewExpense) {
+                                Res.string.edit_expense_button_add
+                            } else {
+                                Res.string.save
+                            },
+                        ),
+                    modifier = Modifier.padding(vertical = 4.dp),
                 )
-                DescriptionOption(
-                    description = viewModel.descriptionState,
-                    onDescriptionChange = { viewModel.descriptionState = it },
-                    onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
+            }
+        }
+    }
+    if (viewModel.showDeleteConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissDeleteDialog,
+            text = {
+                Text(text = stringResource(Res.string.edit_expense_delete_dialog_text))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteExpense()
+                        onDismiss()
+                    },
+                ) {
+                    Text(text = stringResource(Res.string.delete))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = viewModel::onDismissDeleteDialog,
+                ) {
+                    Text(text = stringResource(Res.string.cancel))
+                }
+            },
+        )
+    }
+    setTopAppBar {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(Res.string.edit_expense_title),
                 )
-                PriceOption(
-                    price = viewModel.priceState,
-                    onPriceChange = { viewModel.priceState = it },
-                    priceInputError = viewModel.priceInputError.value,
-                    selectedCurrencyOption = viewModel.selectedCurrencyOption,
-                    availableCurrencyOptions = viewModel.availableCurrencyOptions,
-                    onSelectCurrencyOption = { viewModel.selectedCurrencyOption = it },
-                    onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
-                    currencyInputError = viewModel.currencyError,
-                )
-                RecurrenceOption(
-                    everyXRecurrence = viewModel.everyXRecurrenceState,
-                    onEveryXRecurrenceChange = { viewModel.everyXRecurrenceState = it },
-                    everyXRecurrenceInputError = viewModel.everyXRecurrenceInputError.value,
-                    selectedRecurrence = viewModel.selectedRecurrence,
-                    onSelectRecurrence = { viewModel.selectedRecurrence = it },
-                    onNext = { localFocusManager.clearFocus() },
-                )
-                FirstPaymentOption(
-                    date = viewModel.firstPaymentDate,
-                    onSelectDate = { viewModel.firstPaymentDate = it },
-                )
-                ColorOption(
-                    expenseColor = viewModel.expenseColor,
-                    onSelectExpenseColor = { viewModel.expenseColor = it },
-                )
-                if (canUseNotifications) {
-                    NotificationOption(
-                        expenseNotificationEnabledGlobally =
-                            viewModel.expenseNotificationEnabledGlobally
-                                .collectAsState()
-                                .value,
-                        notifyForExpense = viewModel.notifyForExpense,
-                        onNotifyForExpenseChange = { viewModel.notifyForExpense = it },
-                        notifyXDaysBefore = viewModel.notifyXDaysBefore,
-                        defaultXDaysPlaceholder = viewModel.defaultXDaysPlaceholder,
-                        onNotifyXDaysBeforeChange = { viewModel.notifyXDaysBefore = it },
-                        notifyXDaysBeforeInputError = false,
-                        onNext = { localFocusManager.clearFocus() },
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = onDismiss,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
                     )
                 }
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                            .padding(top = 8.dp)
-                            .navigationBarsPadding()
-                            .imePadding(),
-                ) {
-                    Button(
-                        onClick = {
-                            viewModel.updateExpense { successful ->
-                                if (successful) {
-                                    onDismiss()
-                                }
-                            }
-                        },
-                        modifier =
-                            Modifier
-                                .weight(1f)
-                                .wrapContentWidth(),
+            },
+            actions = {
+                if (viewModel.showDeleteButton) {
+                    IconButton(
+                        onClick = viewModel::onDeleteClick,
                     ) {
-                        Text(
-                            text =
-                                stringResource(
-                                    if (viewModel.isNewExpense) {
-                                        Res.string.edit_expense_button_add
-                                    } else {
-                                        Res.string.save
-                                    },
-                                ),
-                            modifier = Modifier.padding(vertical = 4.dp),
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = stringResource(Res.string.delete),
                         )
                     }
                 }
-            }
-            if (viewModel.showDeleteConfirmDialog) {
-                AlertDialog(
-                    onDismissRequest = viewModel::onDismissDeleteDialog,
-                    text = {
-                        Text(text = stringResource(Res.string.edit_expense_delete_dialog_text))
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                viewModel.deleteExpense()
-                                onDismiss()
-                            },
-                        ) {
-                            Text(text = stringResource(Res.string.delete))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = viewModel::onDismissDeleteDialog,
-                        ) {
-                            Text(text = stringResource(Res.string.cancel))
-                        }
-                    },
-                )
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
 @Preview
