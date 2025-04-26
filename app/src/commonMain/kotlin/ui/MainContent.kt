@@ -38,6 +38,7 @@ import recurringexpensetracker.app.generated.resources.home_title
 import recurringexpensetracker.app.generated.resources.upcoming_title
 import toCurrencyString
 import ui.editexpense.EditRecurringExpenseScreen
+import ui.settings.SettingsScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.MainNavigationViewModel
 import viewmodel.RecurringExpenseViewModel

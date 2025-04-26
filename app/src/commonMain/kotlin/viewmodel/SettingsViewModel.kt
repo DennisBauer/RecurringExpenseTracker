@@ -3,12 +3,11 @@ package viewmodel
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import model.Currency
 import model.CurrencyProvider
@@ -20,14 +19,12 @@ class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
 ) : ViewModel() {
-    private val _availableCurrencies = MutableStateFlow<List<Currency>>(emptyList())
-    val availableCurrencies: StateFlow<List<Currency>>
+    private val _availableCurrencies = mutableStateListOf<Currency>()
+    val availableCurrencies: List<Currency>
         get() = _availableCurrencies
     var selectedCurrencyName: String by mutableStateOf("")
         private set
-    var showCurrencySelectionDialog by mutableStateOf(false)
-        private set
-    var showCurrencyInfoDialog by mutableStateOf(false)
+    var selectedCurrencyCode: String by mutableStateOf("")
         private set
     var exchangeRateLastUpdate by mutableStateOf("--")
         private set
@@ -42,39 +39,22 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             val currenciesList = currencyProvider.retrieveCurrencies()
-            _availableCurrencies.emit(currenciesList)
+            _availableCurrencies.addAll(currenciesList)
 
             exchangeRateLastUpdate = exchangeRateProvider.getLastUpdateInfo()
-
             userPreferencesRepository.defaultCurrency.get().collect { defaultCurrency ->
                 currenciesList.firstOrNull { it.code == defaultCurrency }?.let { currency ->
                     selectedCurrencyName = "${currency.name} (${currency.symbol})"
+                    selectedCurrencyCode = currency.code
                 }
             }
         }
     }
 
-    fun onSelectCurrency() {
-        showCurrencySelectionDialog = true
-    }
-
-    fun onDismissCurrencySelectionDialog() {
-        showCurrencySelectionDialog = false
-    }
-
     fun onCurrencySelected(currency: Currency) {
-        showCurrencySelectionDialog = false
         viewModelScope.launch {
             userPreferencesRepository.defaultCurrency.save(currency.code)
         }
-    }
-
-    fun onCurrencyInfo() {
-        showCurrencyInfoDialog = true
-    }
-
-    fun onDismissCurrencyInfoDialog() {
-        showCurrencyInfoDialog = false
     }
 
     fun onUpcomingPaymentNotification(enabled: Boolean) {
