@@ -39,7 +39,7 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             val currenciesList = currencyProvider.retrieveCurrencies()
-            _availableCurrencies.addAll(currenciesList)
+            _availableCurrencies.addAll(currenciesList.sortedBy { it.name })
 
             exchangeRateLastUpdate = exchangeRateProvider.getLastUpdateInfo()
             userPreferencesRepository.defaultCurrency.get().collect { defaultCurrency ->

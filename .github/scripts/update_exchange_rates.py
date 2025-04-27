@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 api_key = os.getenv('CURRENCY_EXCHANGE_API_KEY')
-command = f'curl "https://api.freecurrencyapi.com/v1/latest" -H "apikey: {api_key}"'
+command = f'curl "https://api.currencyapi.com/v3/latest" -H "apikey: {api_key}"'
 output_file = os.path.join(os.path.dirname(__file__), "./../../app/src/commonMain/composeResources/files/exchange_rates.json")
 
 os.system(f'{command} > {output_file}')

@@ -6,13 +6,30 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import recurringexpensetracker.app.generated.resources.Res
 
 @Serializable
-private data class ExchangeRates(val data: Map<String, Float>, val updateTime: String)
+data class ExchangeRates(
+    val meta: Meta,
+    val data: Map<String, Rate>,
+    val updateTime: String,
+)
+
+@Serializable
+data class Meta(
+    @SerialName("last_updated_at")
+    val lastUpdatedAt: String,
+)
+
+@Serializable
+data class Rate(
+    val code: String,
+    val value: Float,
+)
 
 class ExchangeRateProvider {
     private val mutex = Mutex()
@@ -31,8 +48,8 @@ class ExchangeRateProvider {
                     exchangeRates = this
                 }
             }
-        exchangeRates.data[from.currencyCode]?.let { exchangeRateSource ->
-            exchangeRates.data[toCurrencyCode]?.let { exchangeRateTarget ->
+        exchangeRates.data[from.currencyCode]?.value?.let { exchangeRateSource ->
+            exchangeRates.data[toCurrencyCode]?.value?.let { exchangeRateTarget ->
                 return CurrencyValue(from.value / exchangeRateSource * exchangeRateTarget, toCurrencyCode, true)
             }
         }
@@ -46,7 +63,7 @@ class ExchangeRateProvider {
                     exchangeRates = this
                 }
             }
-        return exchangeRates.updateTime
+        return exchangeRates.meta.lastUpdatedAt
     }
 
     @OptIn(ExperimentalResourceApi::class)
