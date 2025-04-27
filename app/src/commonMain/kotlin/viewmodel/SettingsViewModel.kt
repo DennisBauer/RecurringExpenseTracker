@@ -46,14 +46,17 @@ class SettingsViewModel(
                 currenciesList.firstOrNull { it.code == defaultCurrency }?.let { currency ->
                     selectedCurrencyName = "${currency.name} (${currency.symbol})"
                     selectedCurrencyCode = currency.code
+                } ?: run {
+                    selectedCurrencyName = ""
+                    selectedCurrencyCode = ""
                 }
             }
         }
     }
 
-    fun onCurrencySelected(currency: Currency) {
+    fun onCurrencySelected(currency: Currency?) {
         viewModelScope.launch {
-            userPreferencesRepository.defaultCurrency.save(currency.code)
+            userPreferencesRepository.defaultCurrency.save(currency?.code ?: "")
         }
     }
 
