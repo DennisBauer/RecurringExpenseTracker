@@ -37,6 +37,7 @@ import data.UpcomingPaymentData
 import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
@@ -49,11 +50,11 @@ import viewmodel.UpcomingPaymentsViewModel
 
 @Composable
 fun UpcomingPaymentsScreen(
-    upcomingPaymentsViewModel: UpcomingPaymentsViewModel,
     isGridMode: Boolean,
     navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
 ) {
     if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
