@@ -42,10 +42,8 @@ import ui.settings.SettingsScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.MainNavigationViewModel
 import viewmodel.RecurringExpenseViewModel
-import viewmodel.UpcomingPaymentsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ktlint:compose:vm-forwarding-check")
 @Composable
 fun MainContent(
     isGridMode: Boolean,
@@ -64,7 +62,6 @@ fun MainContent(
     startRoute: String = HomePane.ROUTE,
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
-    upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
     userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val navController = rememberNavController()
@@ -166,7 +163,6 @@ fun MainContent(
                         }
 
                         UpcomingPaymentsScreen(
-                            upcomingPaymentsViewModel = upcomingPaymentsViewModel,
                             isGridMode = isGridMode,
                             navController = navController,
                             contentPadding =
