@@ -1,0 +1,4 @@
+Changelog 0.16.0:
+* Create separate screen for default currency selection
+* Add option to switch back to system default currency
+* Add support for 170+ currencies
