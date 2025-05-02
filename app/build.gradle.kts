@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -211,6 +212,16 @@ android.applicationVariants.configureEach {
     if (buildType.name == "release") {
         preBuildProvider.configure {
             dependsOn("exportLibraryDefinitions")
+        }
+    }
+}
+
+// Make sure Coroutines can be debugged properly
+tasks.withType<KotlinCompile> {
+    if (project.gradle.startParameter.taskNames.any { it.contains("Debug") }) {
+        compilerOptions {
+            freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
+            freeCompilerArgs.add("-Xdebug")
         }
     }
 }
