@@ -41,6 +41,7 @@
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Bevorstehende Zahlungen</string>
+    <string name="upcoming_expenses_remaining_this_month">Diesen Monat noch</string>
     <string name="upcoming_placeholder_title">Definiere ein Datum für die erste Zahlung einer Ausgabe um eine Übersicht der anstehenden Zahlungen zu erhalten</string>
     <string name="upcoming_time_remaining_today">heute</string>
     <string name="upcoming_time_remaining_tomorrow">morgen</string>
