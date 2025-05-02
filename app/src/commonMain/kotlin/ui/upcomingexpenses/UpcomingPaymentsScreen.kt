@@ -39,6 +39,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.upcoming_expenses_remaining_this_month
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
@@ -59,6 +60,7 @@ fun UpcomingPaymentsScreen(
     if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
+            remainingExpenseThisMonth = upcomingPaymentsViewModel.remainingExpenseThisMonth,
             onClickItem = { expenseId ->
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
                     navController.navigate(EditExpensePane(expenseId).destination)
@@ -81,6 +83,7 @@ fun UpcomingPaymentsScreen(
 @Composable
 private fun UpcomingPaymentsOverview(
     upcomingPaymentsData: List<UpcomingPaymentData>,
+    remainingExpenseThisMonth: String,
     onClickItem: (Int) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
@@ -103,6 +106,11 @@ private fun UpcomingPaymentsOverview(
         contentPadding = contentPadding,
         modifier = modifier.fillMaxWidth(),
     ) {
+        item(span = StaggeredGridItemSpan.FullLine) {
+            UpcomingPaymentsSummary(
+                remainingExpenseThisMonth = remainingExpenseThisMonth,
+            )
+        }
         items(items = upcomingPaymentsData) { upcomingPaymentData ->
             if (isGridMode) {
                 GridUpcomingPayment(
@@ -145,6 +153,29 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
                 )
         }
     return inDaysString
+}
+
+@Composable
+private fun UpcomingPaymentsSummary(
+    remainingExpenseThisMonth: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+    ) {
+        Text(
+            text = stringResource(Res.string.upcoming_expenses_remaining_this_month),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Text(
+            text = remainingExpenseThisMonth,
+            style = MaterialTheme.typography.titleMedium,
+        )
+    }
 }
 
 @Composable
@@ -297,6 +328,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                             color = ExpenseColor.Pink,
                         ),
                     ),
+                remainingExpenseThisMonth = "$100.00",
                 onClickItem = {},
                 contentPadding = PaddingValues(8.dp),
                 isGridMode = false,
