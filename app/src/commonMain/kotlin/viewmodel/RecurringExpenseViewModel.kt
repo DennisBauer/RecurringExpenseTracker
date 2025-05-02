@@ -27,6 +27,7 @@ class RecurringExpenseViewModel(
         get() = _recurringExpenseData
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
+    private val showConvertedCurrency = userPreferencesRepository.showConvertedCurrency.get()
 
     var currencyPrefix by mutableStateOf("")
         private set
@@ -50,6 +51,13 @@ class RecurringExpenseViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            showConvertedCurrency.collect {
+                if (_recurringExpenseData.isNotEmpty()) {
+                    onDatabaseUpdated(expenseRepository.allRecurringExpensesByPrice.first())
+                }
+            }
+        }
     }
 
     private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
@@ -59,8 +67,8 @@ class RecurringExpenseViewModel(
         recurringExpenses.forEach {
             var expense = it.toFrontendType(getDefaultCurrencyCode())
             if (expense.price.currencyCode != defaultCurrency) {
-                val newPrice = expense.price.exchangeToDefaultCurrency() ?: expense.price
-                val newMonthlyPrice = expense.monthlyPrice.exchangeToDefaultCurrency() ?: expense.monthlyPrice
+                val newPrice = expense.price.currencyValueBasedOnSetting()
+                val newMonthlyPrice = expense.monthlyPrice.currencyValueBasedOnSetting()
                 expense =
                     expense.copy(
                         price = newPrice,
@@ -85,6 +93,14 @@ class RecurringExpenseViewModel(
         weeklyExpense = (price / (52 / 12f))
         monthlyExpense = price
         yearlyExpense = (price * 12)
+    }
+
+    private suspend fun CurrencyValue.currencyValueBasedOnSetting(): CurrencyValue {
+        return if (showConvertedCurrency.first()) {
+            exchangeRateProvider.exchangeCurrencyValue(this, getDefaultCurrencyCode()) ?: this
+        } else {
+            this
+        }
     }
 
     private suspend fun CurrencyValue.exchangeToDefaultCurrency(): CurrencyValue? {

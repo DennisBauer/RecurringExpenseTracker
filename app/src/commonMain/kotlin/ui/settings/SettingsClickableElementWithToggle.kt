@@ -42,7 +42,7 @@ fun SettingsClickableElementWithToggle(
         Column(
             modifier =
                 Modifier
-                    .padding(start = 16.dp)
+                    .padding(horizontal = 16.dp)
                     .weight(1f),
         ) {
             Text(

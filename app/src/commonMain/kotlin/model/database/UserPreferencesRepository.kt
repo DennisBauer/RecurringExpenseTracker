@@ -47,6 +47,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     val gridMode = Preference(booleanPreferencesKey("IS_GRID_MODE"), false)
     val biometricSecurity = Preference(booleanPreferencesKey("BIOMETRIC_SECURITY"), false)
     val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
+    val showConvertedCurrency = Preference(booleanPreferencesKey("SHOW_CONVERTED_CURRENCY"), true)
     val upcomingPaymentNotification = Preference(booleanPreferencesKey("IS_UPCOMING_PAYMENT_NOTIFICATION"), false)
 
     // default: 8:00 in the morning
