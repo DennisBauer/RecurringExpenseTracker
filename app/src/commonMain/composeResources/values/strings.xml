@@ -43,7 +43,6 @@
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Upcoming Payments</string>
-    <string name="upcoming_expenses_remaining_this_month">Remaining this month</string>
     <string name="upcoming_placeholder_title">Define a first payment date for expenses to see an overview of upcoming payments</string>
     <string name="upcoming_time_remaining_today">today</string>
     <string name="upcoming_time_remaining_tomorrow">tomorrow</string>

@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import model.DateTimeCalculator
 
 @Entity(tableName = "recurring_expenses")
@@ -48,14 +50,19 @@ data class RecurringExpense(
         return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
             from = Instant.fromEpochMilliseconds(firstPayment),
             everyXRecurrence = everyXRecurrence,
-            recurrence =
-                when (recurrence) {
-                    RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
-                    RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
-                    RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
-                    RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
-                    else -> DateTimeUnit.MONTH
-                },
+            recurrence = recurrence.toDateTimeUnit(),
+        )
+    }
+
+    fun getNextPaymentDayAfter(afterDate: LocalDate): LocalDate? {
+        if (firstPayment == null) return null
+        if (everyXRecurrence == null) return null
+
+        return DateTimeCalculator.getDayOfNextOccurrence(
+            atPointInTime = afterDate.atStartOfDayIn(TimeZone.UTC),
+            first = Instant.fromEpochMilliseconds(firstPayment),
+            everyXRecurrence = everyXRecurrence,
+            recurrence = recurrence.toDateTimeUnit(),
         )
     }
 }
@@ -67,4 +74,14 @@ enum class RecurrenceDatabase(
     Weekly(2),
     Monthly(3),
     Yearly(4),
+}
+
+private fun Int?.toDateTimeUnit(): DateTimeUnit.DateBased {
+    return when (this) {
+        RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
+        RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
+        RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
+        RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
+        else -> DateTimeUnit.MONTH
+    }
 }

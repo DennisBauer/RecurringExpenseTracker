@@ -27,6 +27,8 @@ fun Modifier.conditional(
 
 expect fun Instant.toLocaleString(): String
 
+expect fun LocalDate.toMonthYearStringUTC(): String
+
 suspend fun StringResource.asString(): String {
     return getString(this)
 }
