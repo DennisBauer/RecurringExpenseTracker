@@ -54,6 +54,7 @@
     <string name="settings_system_default">Systemstandard</string>
     <string name="settings_currency_exchange_info">Ausgaben in einer anderen Währung werden in diese Währung umgerechnet.\nDie Wechselkurse sind mit der App fest eingegeben, um zu verhindern, dass sie auf das Internet zugreifen muss.</string>
     <string name="settings_currency_exchange_last_update">Wechselkurse vom %1$s</string>
+    <string name="settings_show_converted_currency">Umgerechnete Währung anzeigen</string>
     <string name="settings_backup">Sicherung</string>
     <string name="settings_backup_create">Sicherung erstellen</string>
     <string name="settings_backup_restore">Sicherung Wiederherstellen</string>

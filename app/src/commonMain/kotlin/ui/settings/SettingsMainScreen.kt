@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.DateRange
@@ -50,6 +51,7 @@ import recurringexpensetracker.app.generated.resources.settings_notifications_sc
 import recurringexpensetracker.app.generated.resources.settings_notifications_subtitle
 import recurringexpensetracker.app.generated.resources.settings_notifications_upcoming
 import recurringexpensetracker.app.generated.resources.settings_security_biometric_lock
+import recurringexpensetracker.app.generated.resources.settings_show_converted_currency
 import recurringexpensetracker.app.generated.resources.settings_system_default
 import recurringexpensetracker.app.generated.resources.settings_title_security
 import ui.elements.TimePickerDialog
@@ -88,7 +90,13 @@ fun SettingsMainScreen(
                     stringResource(Res.string.settings_system_default)
                 },
             onClick = onClickDefaultCurrency,
+            icon = Icons.Rounded.AttachMoney,
+        )
+        SettingsClickableElementWithToggle(
+            title = stringResource(Res.string.settings_show_converted_currency),
+            checked = viewModel.showConvertedCurrency.collectAsState().value,
             icon = Icons.Rounded.CurrencyExchange,
+            onCheckedChange = viewModel::onShowConvertedCurrency,
         )
 
         if (canUseBiometric) {

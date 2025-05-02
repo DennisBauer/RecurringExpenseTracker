@@ -28,6 +28,7 @@ class SettingsViewModel(
         private set
     var exchangeRateLastUpdate by mutableStateOf("--")
         private set
+    val showConvertedCurrency = userPreferencesRepository.showConvertedCurrency
     val upcomingPaymentNotification = userPreferencesRepository.upcomingPaymentNotification
     var upcomingPaymentNotificationTime = userPreferencesRepository.upcomingPaymentNotificationTime
     var upcomingPaymentNotificationTimePickerDialog by mutableStateOf(false)
@@ -57,6 +58,12 @@ class SettingsViewModel(
     fun onCurrencySelected(currency: Currency?) {
         viewModelScope.launch {
             userPreferencesRepository.defaultCurrency.save(currency?.code ?: "")
+        }
+    }
+
+    fun onShowConvertedCurrency(convertExpenses: Boolean) {
+        viewModelScope.launch {
+            showConvertedCurrency.save(convertExpenses)
         }
     }
 
