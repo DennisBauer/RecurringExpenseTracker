@@ -168,15 +168,15 @@ private fun GridUpcomingPayment(
         ) {
             Text(
                 text = inDaysString,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
             )
             Text(
                 text = upcomingPaymentData.price.toCurrencyString(),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 text = upcomingPaymentData.name,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -213,7 +213,7 @@ private fun UpcomingPayment(
             ) {
                 Text(
                     text = upcomingPaymentData.name,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -227,7 +227,7 @@ private fun UpcomingPayment(
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = upcomingPaymentData.price.toCurrencyString(),
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Text(
                     text = inDaysString,

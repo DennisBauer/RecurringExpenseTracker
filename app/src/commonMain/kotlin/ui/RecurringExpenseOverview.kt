@@ -186,40 +186,38 @@ private fun GridRecurringExpense(
         ) {
             Text(
                 text = recurringExpenseData.name,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier =
-                    Modifier
-                        .align(Alignment.CenterHorizontally),
             )
-            Text(
-                text = recurringExpenseData.monthlyPrice.toCurrencyString(),
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier =
-                    Modifier
-                        .align(Alignment.End),
-            )
-            if (recurringExpenseData.recurrence != Recurrence.Monthly ||
-                recurringExpenseData.everyXRecurrence != 1
-            ) {
-                Text(
-                    text =
-                        "${recurringExpenseData.price.toCurrencyString()} / " +
-                            "${recurringExpenseData.everyXRecurrence} " +
-                            stringResource(recurringExpenseData.recurrence.shortStringRes),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier =
-                        Modifier
-                            .align(Alignment.End),
-                )
-            }
             if (recurringExpenseData.description.isNotBlank()) {
                 Text(
                     text = recurringExpenseData.description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.align(Alignment.End),
+            ) {
+                if (recurringExpenseData.recurrence != Recurrence.Monthly ||
+                    recurringExpenseData.everyXRecurrence != 1
+                ) {
+                    Text(
+                        text =
+                            "${recurringExpenseData.price.toCurrencyString()} / " +
+                                "${recurringExpenseData.everyXRecurrence} " +
+                                stringResource(recurringExpenseData.recurrence.shortStringRes),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Text(
+                    text = recurringExpenseData.monthlyPrice.toCurrencyString(),
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -248,7 +246,7 @@ private fun RecurringExpense(
             ) {
                 Text(
                     text = recurringExpenseData.name,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -264,7 +262,7 @@ private fun RecurringExpense(
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = recurringExpenseData.monthlyPrice.toCurrencyString(),
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 if (recurringExpenseData.recurrence != Recurrence.Monthly ||
                     recurringExpenseData.everyXRecurrence != 1
