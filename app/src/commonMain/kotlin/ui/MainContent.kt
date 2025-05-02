@@ -27,21 +27,17 @@ import data.EditExpensePane.Companion.getArgExpenseId
 import data.HomePane
 import data.SettingsPane
 import data.UpcomingPane
-import model.database.UserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinContext
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.home_title
 import recurringexpensetracker.app.generated.resources.upcoming_title
-import toCurrencyString
 import ui.editexpense.EditRecurringExpenseScreen
 import ui.settings.SettingsScreen
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.MainNavigationViewModel
-import viewmodel.RecurringExpenseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,12 +57,9 @@ fun MainContent(
     modifier: Modifier = Modifier,
     startRoute: String = HomePane.ROUTE,
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
-    recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
-    userPreferencesRepository: UserPreferencesRepository = koinInject(),
 ) {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
-    val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
 
     KoinContext {
         Scaffold(
@@ -119,21 +112,7 @@ fun MainContent(
                             )
                         }
 
-                        val weeklyExpense =
-                            recurringExpenseViewModel.currencyPrefix +
-                                recurringExpenseViewModel.weeklyExpense.toCurrencyString(currencyCode)
-                        val monthlyExpense =
-                            recurringExpenseViewModel.currencyPrefix +
-                                recurringExpenseViewModel.monthlyExpense.toCurrencyString(currencyCode)
-                        val yearlyExpense =
-                            recurringExpenseViewModel.currencyPrefix +
-                                recurringExpenseViewModel.yearlyExpense.toCurrencyString(currencyCode)
-
                         RecurringExpenseOverview(
-                            weeklyExpense = weeklyExpense,
-                            monthlyExpense = monthlyExpense,
-                            yearlyExpense = yearlyExpense,
-                            recurringExpenseData = recurringExpenseViewModel.recurringExpenseData,
                             isGridMode = isGridMode,
                             navController = navController,
                             contentPadding =
