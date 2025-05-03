@@ -25,28 +25,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import data.CurrencyValue
 import data.EditExpensePane
 import data.UpcomingPaymentData
-import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.upcoming_expenses_remaining_this_month
 import recurringexpensetracker.app.generated.resources.upcoming_placeholder_title
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_tomorrow
-import toLocaleString
-import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerTheme
+import viewmodel.UpcomingPayment
 import viewmodel.UpcomingPaymentsViewModel
 
 @Composable
@@ -60,7 +59,6 @@ fun UpcomingPaymentsScreen(
     if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
-            remainingExpenseThisMonth = upcomingPaymentsViewModel.remainingExpenseThisMonth,
             onClickItem = { expenseId ->
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
                     navController.navigate(EditExpensePane(expenseId).destination)
@@ -82,60 +80,84 @@ fun UpcomingPaymentsScreen(
 
 @Composable
 private fun UpcomingPaymentsOverview(
-    upcomingPaymentsData: List<UpcomingPaymentData>,
-    remainingExpenseThisMonth: String,
+    upcomingPaymentsData: List<UpcomingPayment>,
     onClickItem: (Int) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val listState = rememberLazyStaggeredGridState()
-    val gridState = rememberLazyStaggeredGridState()
 
-    LazyVerticalStaggeredGrid(
-        columns =
-            if (isGridMode) {
-                StaggeredGridCells.Adaptive(160.dp)
-            } else {
-                StaggeredGridCells.Fixed(1)
-            },
-        state = if (isGridMode) gridState else listState,
-        verticalItemSpacing = 8.dp,
-        horizontalArrangement =
-            Arrangement.spacedBy(8.dp),
-        contentPadding = contentPadding,
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        item(span = StaggeredGridItemSpan.FullLine) {
-            UpcomingPaymentsSummary(
-                remainingExpenseThisMonth = remainingExpenseThisMonth,
-            )
+    val firstVisibleItem by remember {
+        derivedStateOf {
+            upcomingPaymentsData[listState.firstVisibleItemIndex]
         }
-        items(items = upcomingPaymentsData) { upcomingPaymentData ->
-            if (isGridMode) {
-                GridUpcomingPayment(
-                    upcomingPaymentData = upcomingPaymentData,
-                    onClickItem = {
-                        onClickItem(upcomingPaymentData.id)
-                    },
-                )
-            } else {
-                UpcomingPayment(
-                    upcomingPaymentData = upcomingPaymentData,
-                    onClickItem = {
-                        onClickItem(upcomingPaymentData.id)
-                    },
+    }
+
+    Column(modifier = modifier) {
+        UpcomingPaymentsSummary(
+            month = firstVisibleItem.month,
+            remainingExpenseThisMonth = firstVisibleItem.paymentsSum,
+            scrolledDown = listState.canScrollBackward,
+        )
+        LazyVerticalStaggeredGrid(
+            columns =
+                if (isGridMode) {
+                    StaggeredGridCells.Adaptive(160.dp)
+                } else {
+                    StaggeredGridCells.Fixed(1)
+                },
+            state = listState,
+            verticalItemSpacing = 8.dp,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = contentPadding,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            items(
+                items = upcomingPaymentsData,
+                key = { entry ->
+                    "expense_${entry.month}_${entry.payment?.id}"
+                },
+                span = { entry ->
+                    if (entry.payment == null) {
+                        StaggeredGridItemSpan.FullLine
+                    } else {
+                        StaggeredGridItemSpan.SingleLane
+                    }
+                },
+            ) { entry ->
+                if (entry.payment == null) {
+                    Text(
+                        text = entry.month,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                } else {
+                    if (isGridMode) {
+                        GridUpcomingPayment(
+                            upcomingPaymentData = entry.payment,
+                            onClickItem = {
+                                onClickItem(entry.payment.id)
+                            },
+                        )
+                    } else {
+                        UpcomingPayment(
+                            upcomingPaymentData = entry.payment,
+                            onClickItem = {
+                                onClickItem(entry.payment.id)
+                            },
+                        )
+                    }
+                }
+            }
+
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Spacer(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(80.dp),
                 )
             }
-        }
-
-        item(span = StaggeredGridItemSpan.FullLine) {
-            Spacer(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(80.dp),
-            )
         }
     }
 }
@@ -157,24 +179,32 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
 
 @Composable
 private fun UpcomingPaymentsSummary(
+    month: String,
     remainingExpenseThisMonth: String,
+    scrolledDown: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+    val shadowElevation = if (scrolledDown) 4.dp else 0.dp
+    Surface(
+        shadowElevation = shadowElevation,
+        modifier = modifier,
     ) {
-        Text(
-            text = stringResource(Res.string.upcoming_expenses_remaining_this_month),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            text = remainingExpenseThisMonth,
-            style = MaterialTheme.typography.titleMedium,
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+        ) {
+            Text(
+                text = month,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                text = remainingExpenseThisMonth,
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
     }
 }
 
@@ -288,54 +318,54 @@ fun UpcomingPaymentsOverviewPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
-@Composable
-private fun UpcomingPaymentsOverviewPreview() {
-    val nextPaymentDays1 = 0
-    val nextPaymentDate1String = Clock.System.now().toLocaleString()
-    val nextPaymentDays2 = 1
-    val nextPaymentDate2String = Clock.System.now().toLocaleString()
-    val nextPaymentDays3 = 2
-    val nextPaymentDate3String = Clock.System.now().toLocaleString()
-
-    ExpenseTrackerTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            UpcomingPaymentsOverview(
-                upcomingPaymentsData =
-                    listOf(
-                        UpcomingPaymentData(
-                            id = 0,
-                            name = "Netflix",
-                            price = CurrencyValue(9.99f, "USD"),
-                            nextPaymentRemainingDays = nextPaymentDays1,
-                            nextPaymentDate = nextPaymentDate1String,
-                            color = ExpenseColor.Dynamic,
-                        ),
-                        UpcomingPaymentData(
-                            id = 1,
-                            name = "Disney Plus",
-                            price = CurrencyValue(5f, "USD"),
-                            nextPaymentRemainingDays = nextPaymentDays2,
-                            nextPaymentDate = nextPaymentDate2String,
-                            color = ExpenseColor.Green,
-                        ),
-                        UpcomingPaymentData(
-                            id = 2,
-                            name = "Amazon Prime with a long name",
-                            price = CurrencyValue(7.95f, "USD"),
-                            nextPaymentRemainingDays = nextPaymentDays3,
-                            nextPaymentDate = nextPaymentDate3String,
-                            color = ExpenseColor.Pink,
-                        ),
-                    ),
-                remainingExpenseThisMonth = "$100.00",
-                onClickItem = {},
-                contentPadding = PaddingValues(8.dp),
-                isGridMode = false,
-            )
-        }
-    }
-}
+// @Preview
+// @Composable
+// private fun UpcomingPaymentsOverviewPreview() {
+//    val nextPaymentDays1 = 0
+//    val nextPaymentDate1String = Clock.System.now().toLocaleString()
+//    val nextPaymentDays2 = 1
+//    val nextPaymentDate2String = Clock.System.now().toLocaleString()
+//    val nextPaymentDays3 = 2
+//    val nextPaymentDate3String = Clock.System.now().toLocaleString()
+//
+//    ExpenseTrackerTheme {
+//        Surface(modifier = Modifier.fillMaxSize()) {
+//            UpcomingPaymentsOverview(
+//                upcomingPaymentsData =
+//                    listOf(
+//                        UpcomingPaymentData(
+//                            id = 0,
+//                            name = "Netflix",
+//                            price = CurrencyValue(9.99f, "USD"),
+//                            nextPaymentRemainingDays = nextPaymentDays1,
+//                            nextPaymentDate = nextPaymentDate1String,
+//                            color = ExpenseColor.Dynamic,
+//                        ),
+//                        UpcomingPaymentData(
+//                            id = 1,
+//                            name = "Disney Plus",
+//                            price = CurrencyValue(5f, "USD"),
+//                            nextPaymentRemainingDays = nextPaymentDays2,
+//                            nextPaymentDate = nextPaymentDate2String,
+//                            color = ExpenseColor.Green,
+//                        ),
+//                        UpcomingPaymentData(
+//                            id = 2,
+//                            name = "Amazon Prime with a long name",
+//                            price = CurrencyValue(7.95f, "USD"),
+//                            nextPaymentRemainingDays = nextPaymentDays3,
+//                            nextPaymentDate = nextPaymentDate3String,
+//                            color = ExpenseColor.Pink,
+//                        ),
+//                    ),
+//                remainingExpenseThisMonth = "$100.00",
+//                onClickItem = {},
+//                contentPadding = PaddingValues(8.dp),
+//                isGridMode = false,
+//            )
+//        }
+//    }
+// }
 
 @Preview
 @Composable

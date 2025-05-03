@@ -1,10 +1,14 @@
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.ParseException
+import java.time.format.TextStyle
 import java.util.Currency
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 
 actual fun Float.toCurrencyString(currencyCode: String): String {
@@ -36,4 +40,13 @@ actual fun Instant.toLocaleString(): String {
         .apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }.format(Date(this.toEpochMilliseconds()))
+}
+
+actual fun LocalDate.toMonthYearStringUTC(): String {
+    val locale = Locale.getDefault()
+    val month =
+        Month
+            .of(monthNumber)
+            .getDisplayName(TextStyle.FULL, locale)
+    return "$month $year"
 }
