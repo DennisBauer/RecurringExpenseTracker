@@ -22,6 +22,7 @@ import androidx.compose.material.icons.rounded.Fingerprint
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Restore
+import androidx.compose.material.icons.rounded.Rocket
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
@@ -46,13 +47,17 @@ import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
+import recurringexpensetracker.app.generated.resources.bottom_nav_home
+import recurringexpensetracker.app.generated.resources.bottom_nav_upcoming
 import recurringexpensetracker.app.generated.resources.dialog_ok
 import recurringexpensetracker.app.generated.resources.settings_about
 import recurringexpensetracker.app.generated.resources.settings_about_app
 import recurringexpensetracker.app.generated.resources.settings_backup
 import recurringexpensetracker.app.generated.resources.settings_backup_create
 import recurringexpensetracker.app.generated.resources.settings_backup_restore
+import recurringexpensetracker.app.generated.resources.settings_currency
 import recurringexpensetracker.app.generated.resources.settings_default_currency
+import recurringexpensetracker.app.generated.resources.settings_default_tab
 import recurringexpensetracker.app.generated.resources.settings_general
 import recurringexpensetracker.app.generated.resources.settings_notifications
 import recurringexpensetracker.app.generated.resources.settings_notifications_missing_permission_subtitle
@@ -70,6 +75,7 @@ import recurringexpensetracker.app.generated.resources.settings_theme_mode_dark
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_follow_system
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_light
 import recurringexpensetracker.app.generated.resources.settings_title_security
+import ui.DefaultTab
 import ui.ThemeMode
 import ui.elements.TimePickerDialog
 import viewmodel.SettingsViewModel
@@ -111,6 +117,20 @@ fun SettingsMainScreen(
                 },
             onClick = viewModel::onClickThemeSelection,
             icon = Icons.Rounded.DarkMode,
+        )
+        val defaultTab by viewModel.selectedDefaultTab.collectAsState(DefaultTab.Home)
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_default_tab),
+            subtitle =
+                when (defaultTab) {
+                    DefaultTab.Home -> stringResource(Res.string.bottom_nav_home)
+                    DefaultTab.Upcoming -> stringResource(Res.string.bottom_nav_upcoming)
+                },
+            onClick = viewModel::onClickDefaultTabSelection,
+            icon = Icons.Rounded.Rocket,
+        )
+        SettingsHeaderElement(
+            header = Res.string.settings_currency,
         )
         SettingsClickableElement(
             title = stringResource(Res.string.settings_default_currency),
@@ -248,6 +268,32 @@ fun SettingsMainScreen(
                         text = stringResource(Res.string.settings_theme_mode_light),
                         checked = selectedTheme == ThemeMode.Light,
                         onClick = { viewModel.onSelectTheme(ThemeMode.Light) },
+                    )
+                }
+            },
+            confirmButton = {},
+        )
+    } else if (viewModel.showDefaultTabSelectionDialog) {
+        val defaultTab by viewModel.selectedDefaultTab.collectAsState(DefaultTab.Home)
+
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissDefaultTabSelectionDialog,
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = stringResource(Res.string.settings_default_tab),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    DialogCheckbox(
+                        text = stringResource(Res.string.bottom_nav_home),
+                        checked = defaultTab == DefaultTab.Home,
+                        onClick = { viewModel.onSelectDefaultTab(DefaultTab.Home) },
+                    )
+                    DialogCheckbox(
+                        text = stringResource(Res.string.bottom_nav_upcoming),
+                        checked = defaultTab == DefaultTab.Upcoming,
+                        onClick = { viewModel.onSelectDefaultTab(DefaultTab.Upcoming) },
                     )
                 }
             },
