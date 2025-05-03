@@ -47,7 +47,9 @@ import data.UpcomingPane
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import model.DatabaseBackupRestore
 import model.database.UserPreferencesRepository
 import model.notification.ExpenseNotificationManager
@@ -65,6 +67,7 @@ import recurringexpensetracker.app.generated.resources.settings_backup_not_resto
 import recurringexpensetracker.app.generated.resources.settings_backup_restored_toast
 import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
+import ui.DefaultTab
 import ui.MainContent
 import ui.ThemeMode
 import ui.theme.ExpenseTrackerTheme
@@ -147,9 +150,16 @@ class MainActivity : AppCompatActivity() {
 
         val canUseBiometric = biometricPromptManager.canUseAuthenticator()
 
+        val startRouteExtra = IntentCompat.getSerializableExtra(intent, EXTRA_START_ROUTE, StartRoute::class.java)
         val startRoute =
-            IntentCompat.getSerializableExtra(intent, EXTRA_START_ROUTE, StartRoute::class.java)?.destination
-                ?: StartRoute.Home.destination
+            startRouteExtra?.destination
+                ?: runBlocking {
+                    when (userPreferencesRepository.defaultTab.get().first()) {
+                        DefaultTab.Home.value -> StartRoute.Home.destination
+                        DefaultTab.Upcoming.value -> StartRoute.Upcoming.destination
+                        else -> StartRoute.Home.destination
+                    }
+                }
 
         val invalidExpenseId = -1
         val expenseId = intent.getIntExtra(EXTRA_EXPENSE_ID, invalidExpenseId)

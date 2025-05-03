@@ -14,6 +14,7 @@ import model.Currency
 import model.CurrencyProvider
 import model.ExchangeRateProvider
 import model.database.UserPreferencesRepository
+import ui.DefaultTab
 import ui.ThemeMode
 
 class SettingsViewModel(
@@ -24,6 +25,10 @@ class SettingsViewModel(
     var showThemeSelectionDialog by mutableStateOf(false)
         private set
     var selectedThemeMode = userPreferencesRepository.themeMode.get().map { ThemeMode.fromInt(it) }
+        private set
+    var showDefaultTabSelectionDialog by mutableStateOf(false)
+        private set
+    var selectedDefaultTab = userPreferencesRepository.defaultTab.get().map { DefaultTab.fromInt(it) }
         private set
     private val _availableCurrencies = mutableStateListOf<Currency>()
     val availableCurrencies: List<Currency>
@@ -73,6 +78,21 @@ class SettingsViewModel(
         viewModelScope.launch {
             userPreferencesRepository.themeMode.save(themeMode.value)
             onDismissThemeSelectionDialog()
+        }
+    }
+
+    fun onClickDefaultTabSelection() {
+        showDefaultTabSelectionDialog = true
+    }
+
+    fun onDismissDefaultTabSelectionDialog() {
+        showDefaultTabSelectionDialog = false
+    }
+
+    fun onSelectDefaultTab(defaultTab: DefaultTab) {
+        viewModelScope.launch {
+            userPreferencesRepository.defaultTab.save(defaultTab.value)
+            onDismissDefaultTabSelectionDialog()
         }
     }
 
