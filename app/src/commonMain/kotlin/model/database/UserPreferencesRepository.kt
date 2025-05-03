@@ -49,6 +49,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
     val showConvertedCurrency = Preference(booleanPreferencesKey("SHOW_CONVERTED_CURRENCY"), true)
     val upcomingPaymentNotification = Preference(booleanPreferencesKey("IS_UPCOMING_PAYMENT_NOTIFICATION"), false)
+    val themeMode = Preference(intPreferencesKey("THEME_MODE"), 0)
 
     // default: 8:00 in the morning
     val upcomingPaymentNotificationTime = Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_TIME"), 480)

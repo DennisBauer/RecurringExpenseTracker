@@ -8,17 +8,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import model.Currency
 import model.CurrencyProvider
 import model.ExchangeRateProvider
 import model.database.UserPreferencesRepository
+import ui.ThemeMode
 
 class SettingsViewModel(
     private val currencyProvider: CurrencyProvider,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
 ) : ViewModel() {
+    var showThemeSelectionDialog by mutableStateOf(false)
+        private set
+    var selectedThemeMode = userPreferencesRepository.themeMode.get().map { ThemeMode.fromInt(it) }
+        private set
     private val _availableCurrencies = mutableStateListOf<Currency>()
     val availableCurrencies: List<Currency>
         get() = _availableCurrencies
@@ -52,6 +58,21 @@ class SettingsViewModel(
                     selectedCurrencyCode = ""
                 }
             }
+        }
+    }
+
+    fun onClickThemeSelection() {
+        showThemeSelectionDialog = true
+    }
+
+    fun onDismissThemeSelectionDialog() {
+        showThemeSelectionDialog = false
+    }
+
+    fun onSelectTheme(themeMode: ThemeMode) {
+        viewModelScope.launch {
+            userPreferencesRepository.themeMode.save(themeMode.value)
+            onDismissThemeSelectionDialog()
         }
     }
 
