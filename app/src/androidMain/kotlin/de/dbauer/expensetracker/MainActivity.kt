@@ -16,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -62,6 +63,7 @@ import recurringexpensetracker.app.generated.resources.settings_backup_restored_
 import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.MainContent
+import ui.ThemeMode
 import ui.theme.ExpenseTrackerTheme
 import viewmodel.MainActivityViewModel
 import java.io.File
@@ -230,7 +232,15 @@ class MainActivity : AppCompatActivity() {
                 notificationPermissionGranted = notificationPermissionState.status.isGranted
             }
 
-            ExpenseTrackerTheme {
+            val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
+            val useDarkTheme =
+                when (selectedTheme) {
+                    ThemeMode.Dark.value -> true
+                    ThemeMode.Light.value -> false
+                    else -> isSystemInDarkTheme()
+                }
+
+            ExpenseTrackerTheme(darkTheme = useDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,

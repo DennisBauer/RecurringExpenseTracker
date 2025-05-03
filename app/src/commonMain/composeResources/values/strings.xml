@@ -51,6 +51,10 @@
     <!-- Settings Tab -->
     <string name="settings_title">Settings</string>
     <string name="settings_general">General</string>
+    <string name="settings_theme_mode">Theme mode</string>
+    <string name="settings_theme_mode_follow_system">Follow system</string>
+    <string name="settings_theme_mode_dark">Dark</string>
+    <string name="settings_theme_mode_light">Light</string>
     <string name="settings_default_currency">Default Currency</string>
     <string name="settings_choose_currency">Choose Currency</string>
     <string name="settings_system_default">System default</string>

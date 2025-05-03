@@ -49,6 +49,10 @@
     <!-- Settings Tab -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_general">Allgemein</string>
+    <string name="settings_theme_mode">Darstellungsmodus</string>
+    <string name="settings_theme_mode_follow_system">System folgen</string>
+    <string name="settings_theme_mode_dark">Dunkel</string>
+    <string name="settings_theme_mode_light">Hell</string>
     <string name="settings_default_currency">Standardwährung</string>
     <string name="settings_choose_currency">Währung auswählen</string>
     <string name="settings_system_default">Systemstandard</string>

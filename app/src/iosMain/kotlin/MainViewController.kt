@@ -1,3 +1,4 @@
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,6 +14,7 @@ import model.database.UserPreferencesRepository
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import ui.MainContent
+import ui.ThemeMode
 import ui.theme.ExpenseTrackerTheme
 
 fun MainViewController() =
@@ -20,7 +22,15 @@ fun MainViewController() =
         val userPreferencesRepository = koinInject<UserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
 
-        ExpenseTrackerTheme {
+        val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
+        val useDarkTheme =
+            when (selectedTheme) {
+                ThemeMode.Dark.value -> true
+                ThemeMode.Light.value -> false
+                else -> isSystemInDarkTheme()
+            }
+
+        ExpenseTrackerTheme(darkTheme = useDarkTheme) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background,
