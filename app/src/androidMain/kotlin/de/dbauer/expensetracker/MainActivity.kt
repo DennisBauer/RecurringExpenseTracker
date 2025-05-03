@@ -24,13 +24,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.core.content.IntentCompat
+import androidx.core.view.WindowCompat
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
 import asString
@@ -232,6 +235,7 @@ class MainActivity : AppCompatActivity() {
                 notificationPermissionGranted = notificationPermissionState.status.isGranted
             }
 
+            // Use theme based on user setting
             val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
             val useDarkTheme =
                 when (selectedTheme) {
@@ -239,6 +243,12 @@ class MainActivity : AppCompatActivity() {
                     ThemeMode.Light.value -> false
                     else -> isSystemInDarkTheme()
                 }
+            val view = LocalView.current
+            if (!view.isInEditMode) {
+                SideEffect {
+                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !useDarkTheme
+                }
+            }
 
             ExpenseTrackerTheme(darkTheme = useDarkTheme) {
                 Surface(
