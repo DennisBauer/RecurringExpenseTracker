@@ -1,0 +1,8 @@
+Changelog 0.17.0:
+* Add remaining expenses this month to upcoming payments screen
+* Overhaul Upcoming screen
+* Add setting to show original currency of expenses
+* Add option to choose theme in settings
+* Add setting to choose default tab opening on startup
+* Adjust expense font sizes and readjust Grid Layout
+* Update exchange rates
