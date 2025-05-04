@@ -104,8 +104,8 @@ android {
         applicationId = "de.dbauer.expensetracker"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 38
-        versionName = "0.16.0"
+        versionCode = 39
+        versionName = "0.17.0"
     }
     signingConfigs {
         create("release") {
