@@ -94,14 +94,14 @@ fun RecurringExpenseOverview(
                 GridRecurringExpense(
                     recurringExpenseData = recurringExpenseData,
                     onClickItem = {
-                        navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
+                        navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
                 )
             } else {
                 RecurringExpense(
                     recurringExpenseData = recurringExpenseData,
                     onClickItem = {
-                        navController.navigate(EditExpensePane(recurringExpenseData.id).destination)
+                        navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
                 )
             }

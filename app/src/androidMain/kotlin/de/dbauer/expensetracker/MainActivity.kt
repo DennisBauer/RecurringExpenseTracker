@@ -42,7 +42,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import data.HomePane
-import data.SettingsPane
+import data.MainNavRoute
 import data.UpcomingPane
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidget
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +50,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import model.DatabaseBackupRestore
 import model.database.UserPreferencesRepository
 import model.notification.ExpenseNotificationManager
@@ -149,15 +150,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         val canUseBiometric = biometricPromptManager.canUseAuthenticator()
-
-        val startRouteExtra = IntentCompat.getSerializableExtra(intent, EXTRA_START_ROUTE, StartRoute::class.java)
-        val startRoute =
-            startRouteExtra?.destination
+        val startRoute: MainNavRoute =
+            IntentCompat
+                .getSerializableExtra(intent, EXTRA_START_ROUTE, String::class.java)
+                ?.let { jsonString ->
+                    Json.decodeFromString(jsonString)
+                }
                 ?: runBlocking {
                     when (userPreferencesRepository.defaultTab.get().first()) {
-                        DefaultTab.Home.value -> StartRoute.Home.destination
-                        DefaultTab.Upcoming.value -> StartRoute.Upcoming.destination
-                        else -> StartRoute.Home.destination
+                        DefaultTab.Home.value -> HomePane
+                        DefaultTab.Upcoming.value -> UpcomingPane
+                        else -> HomePane
                     }
                 }
 
@@ -359,19 +362,13 @@ class MainActivity : AppCompatActivity() {
         fun newInstance(
             context: Context,
             expenseId: Int,
-            startRoute: StartRoute,
+            startRoute: MainNavRoute,
         ): Intent {
             return Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(EXTRA_EXPENSE_ID, expenseId)
-                putExtra(EXTRA_START_ROUTE, startRoute)
+                putExtra(EXTRA_START_ROUTE, Json.encodeToString(startRoute))
             }
         }
     }
-}
-
-enum class StartRoute(val destination: String) {
-    Home(HomePane.ROUTE),
-    Upcoming(UpcomingPane.ROUTE),
-    Settings(SettingsPane.ROUTE),
 }

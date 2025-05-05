@@ -54,10 +54,10 @@ fun SettingsScreen(
 
     NavHost(
         navController = settingsNavController,
-        startDestination = SettingsPane.ROUTE,
+        startDestination = SettingsPane,
         modifier = modifier,
     ) {
-        composable(SettingsPane.ROUTE) {
+        composable<SettingsPane> {
             setTopAppBar {
                 TopAppBar(
                     title = {
@@ -77,12 +77,12 @@ fun SettingsScreen(
                 onBiometricCheckedChange = onBiometricCheckedChange,
                 requestNotificationPermission = requestNotificationPermission,
                 navigateToPermissionsSettings = navigateToPermissionsSettings,
-                onClickDefaultCurrency = { settingsNavController.navigate(SettingsPaneDefaultCurrency.ROUTE) },
-                onClickAbout = { settingsNavController.navigate(SettingsPaneAbout.ROUTE) },
+                onClickDefaultCurrency = { settingsNavController.navigate(SettingsPaneDefaultCurrency) },
+                onClickAbout = { settingsNavController.navigate(SettingsPaneAbout) },
             )
         }
 
-        composable(SettingsPaneAbout.ROUTE) {
+        composable<SettingsPaneAbout> {
             setTopAppBar {
                 TopAppBar(
                     title = { Text(text = stringResource(Res.string.settings_about_app)) },
@@ -97,11 +97,11 @@ fun SettingsScreen(
                 )
             }
             AboutScreen(
-                onLibrariesClick = { settingsNavController.navigate(SettingsPaneLibraries.ROUTE) },
+                onLibrariesClick = { settingsNavController.navigate(SettingsPaneLibraries) },
             )
         }
 
-        composable(SettingsPaneLibraries.ROUTE) {
+        composable<SettingsPaneLibraries> {
             setTopAppBar {
                 TopAppBar(
                     title = { Text(text = stringResource(Res.string.settings_about_libraries)) },
@@ -118,7 +118,7 @@ fun SettingsScreen(
             AboutLibrariesScreen()
         }
 
-        composable(SettingsPaneDefaultCurrency.ROUTE) {
+        composable<SettingsPaneDefaultCurrency> {
             setTopAppBar {
                 TopAppBar(
                     title = { Text(text = stringResource(Res.string.settings_default_currency)) },

@@ -1,50 +1,41 @@
 package data
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.navArgument
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 
 data class BottomNavigation(
-    val route: String,
+    val route: Any,
     val name: StringResource,
     val icon: ImageVector,
 )
 
-object HomePane {
-    const val ROUTE: String = "Home"
-}
+@Serializable
+sealed interface MainNavRoute
 
-object UpcomingPane {
-    const val ROUTE: String = "Upcoming"
-}
+@Serializable
+object HomePane : MainNavRoute
 
-object SettingsPane {
-    const val ROUTE: String = "Settings"
-}
+@Serializable
+object UpcomingPane : MainNavRoute
 
-object SettingsPaneAbout {
-    const val ROUTE: String = "Settings_About"
-}
+@Serializable
+object SettingsPane : MainNavRoute
 
-object SettingsPaneLibraries {
-    const val ROUTE: String = "Settings_Libraries"
-}
+@Serializable
+object SettingsPaneAbout
 
-object SettingsPaneDefaultCurrency {
-    const val ROUTE: String = "Settings_Default_Currency"
-}
+@Serializable
+object SettingsPaneLibraries
 
-class EditExpensePane(expenseId: Int? = null) {
-    val destination: String = ROUTE.replace("{$ARG_EXPENSE_ID}", expenseId.toString())
+@Serializable
+object SettingsPaneDefaultCurrency
 
-    companion object {
-        const val ARG_EXPENSE_ID = "expenseId"
-        const val ROUTE: String = "EditExpense?$ARG_EXPENSE_ID={$ARG_EXPENSE_ID}"
-        val navArguments = listOf(navArgument(ARG_EXPENSE_ID) { nullable = true })
+@Serializable
+class EditExpensePane(val expenseId: Int? = null)
 
-        fun NavBackStackEntry.getArgExpenseId(): Int? {
-            return arguments?.getString(ARG_EXPENSE_ID)?.toInt()
-        }
-    }
+inline fun <reified T : Any> NavDestination?.isInRoute(vararg routes: T): Boolean {
+    return routes.any { route -> this?.hasRoute(route::class) == true }
 }
