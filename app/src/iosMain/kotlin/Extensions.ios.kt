@@ -52,6 +52,6 @@ actual fun LocalDate.toMonthYearStringUTC(): String {
     val date = calendar.dateFromComponents(comps)!!
 
     val dateFormatter = NSDateFormatter()
-    dateFormatter.dateFormat = "MMMM yyyy"
-    return dateFormatter.stringFromDate(date)
+    dateFormatter.dateFormat = "MMMM"
+    return "${dateFormatter.stringFromDate(date)} $year"
 }
