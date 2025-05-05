@@ -22,11 +22,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import data.EditExpensePane
-import data.EditExpensePane.Companion.getArgExpenseId
 import data.HomePane
+import data.MainNavRoute
 import data.SettingsPane
 import data.UpcomingPane
+import data.isInRoute
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,11 +57,11 @@ fun MainContent(
     onClickRestore: () -> Unit,
     updateWidget: () -> Unit,
     modifier: Modifier = Modifier,
-    startRoute: String = HomePane.ROUTE,
+    startRoute: MainNavRoute = HomePane,
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
 ) {
     val navController = rememberNavController()
-    val backStackEntry = navController.currentBackStackEntryAsState()
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
     KoinContext {
         Scaffold(
@@ -68,17 +70,15 @@ fun MainContent(
                 mainNavigationViewModel.topAppBar()
             },
             bottomBar = {
-                if (backStackEntry.value?.destination?.route in
-                    listOf(HomePane.ROUTE, UpcomingPane.ROUTE, SettingsPane.ROUTE)
-                ) {
+                if (backStackEntry?.destination?.isInRoute(HomePane, UpcomingPane, SettingsPane) == true) {
                     BottomNavBar(navController = navController)
                 }
             },
             floatingActionButton = {
-                if (backStackEntry.value?.destination?.route in listOf(HomePane.ROUTE, UpcomingPane.ROUTE)) {
+                if (backStackEntry?.destination?.isInRoute(HomePane, UpcomingPane) == true) {
                     FloatingActionButton(
                         onClick = {
-                            navController.navigate(EditExpensePane().destination)
+                            navController.navigate(EditExpensePane())
                         },
                     ) {
                         Icon(
@@ -95,7 +95,7 @@ fun MainContent(
                     startDestination = startRoute,
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    composable(HomePane.ROUTE) {
+                    composable<HomePane> {
                         mainNavigationViewModel.topAppBar = {
                             TopAppBar(
                                 title = {
@@ -124,7 +124,7 @@ fun MainContent(
                             modifier = Modifier.padding(paddingValues),
                         )
                     }
-                    composable(UpcomingPane.ROUTE) {
+                    composable<UpcomingPane> {
                         mainNavigationViewModel.topAppBar = {
                             TopAppBar(
                                 title = {
@@ -153,7 +153,7 @@ fun MainContent(
                             modifier = Modifier.padding(paddingValues),
                         )
                     }
-                    composable(SettingsPane.ROUTE) {
+                    composable<SettingsPane> {
                         var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
                         SettingsScreen(
                             biometricsChecked = biometricSecurity,
@@ -173,13 +173,11 @@ fun MainContent(
                         )
                         mainNavigationViewModel.topAppBar = topAppBar
                     }
-                    composable(
-                        route = EditExpensePane.ROUTE,
-                        arguments = EditExpensePane.navArguments,
-                    ) { backStackEntry ->
+                    composable<EditExpensePane> { backStackEntry ->
                         var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
+                        val editExpensePane = backStackEntry.toRoute<EditExpensePane>()
                         EditRecurringExpenseScreen(
-                            expenseId = backStackEntry.getArgExpenseId(),
+                            expenseId = editExpensePane.expenseId,
                             canUseNotifications = canUseNotifications,
                             onDismiss = {
                                 navController.navigateUp()

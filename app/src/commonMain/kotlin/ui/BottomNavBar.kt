@@ -9,8 +9,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import data.BottomNavigation
@@ -28,17 +30,17 @@ fun BottomNavBar(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-    val backStackEntry = navController.currentBackStackEntryAsState()
+    val backStackEntry by navController.currentBackStackEntryAsState()
     val bottomNavigationItems =
         listOf(
-            BottomNavigation(HomePane.ROUTE, Res.string.bottom_nav_home, Icons.Rounded.Home),
-            BottomNavigation(UpcomingPane.ROUTE, Res.string.bottom_nav_upcoming, Icons.Rounded.Payment),
-            BottomNavigation(SettingsPane.ROUTE, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
+            BottomNavigation(HomePane, Res.string.bottom_nav_home, Icons.Rounded.Home),
+            BottomNavigation(UpcomingPane, Res.string.bottom_nav_upcoming, Icons.Rounded.Payment),
+            BottomNavigation(SettingsPane, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
         )
 
     NavigationBar(modifier = modifier) {
         bottomNavigationItems.forEach { item ->
-            val selected = item.route == backStackEntry.value?.destination?.route
+            val selected = backStackEntry?.destination?.hasRoute(item.route::class) == true
 
             NavigationBarItem(
                 selected = selected,

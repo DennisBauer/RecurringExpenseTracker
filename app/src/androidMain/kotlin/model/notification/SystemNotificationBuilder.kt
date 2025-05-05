@@ -8,9 +8,9 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.CATEGORY_ALARM
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
+import data.UpcomingPane
 import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
-import de.dbauer.expensetracker.StartRoute
 import org.jetbrains.compose.resources.getString
 
 class SystemNotificationBuilder(
@@ -31,7 +31,7 @@ class SystemNotificationBuilder(
             PendingIntent.getActivity(
                 context,
                 data.id,
-                MainActivity.newInstance(context, data.id, StartRoute.Upcoming),
+                MainActivity.newInstance(context, data.id, UpcomingPane),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
             )
         val dismissIntent =

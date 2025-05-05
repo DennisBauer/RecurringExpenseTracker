@@ -61,7 +61,7 @@ fun UpcomingPaymentsScreen(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
             onClickItem = { expenseId ->
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
-                    navController.navigate(EditExpensePane(expenseId).destination)
+                    navController.navigate(EditExpensePane(expenseId))
                 }
             },
             isGridMode = isGridMode,
