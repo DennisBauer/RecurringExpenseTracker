@@ -1,4 +1,5 @@
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -11,6 +12,8 @@ import model.database.UserPreferencesRepository
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import ui.MainContent
+import ui.ThemeMode
+import ui.theme.ExpenseTrackerTheme
 
 fun main() =
     application {
@@ -25,23 +28,34 @@ fun main() =
             onCloseRequest = ::exitApplication,
             title = "RecurringExpenseTracker",
         ) {
-            MainContent(
-                isGridMode = isGridMode,
-                biometricSecurity = false,
-                canUseBiometric = false,
-                canUseNotifications = false,
-                hasNotificationPermission = true,
-                toggleGridMode = {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        userPreferencesRepository.gridMode.save(!isGridMode)
-                    }
-                },
-                onBiometricSecurityChange = {},
-                requestNotificationPermission = {},
-                navigateToPermissionsSettings = {},
-                onClickBackup = {},
-                onClickRestore = {},
-                updateWidget = {},
-            )
+            // Use theme based on user setting
+            val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
+            val useDarkTheme =
+                when (selectedTheme) {
+                    ThemeMode.Dark.value -> true
+                    ThemeMode.Light.value -> false
+                    else -> isSystemInDarkTheme()
+                }
+
+            ExpenseTrackerTheme(darkTheme = useDarkTheme) {
+                MainContent(
+                    isGridMode = isGridMode,
+                    biometricSecurity = false,
+                    canUseBiometric = false,
+                    canUseNotifications = false,
+                    hasNotificationPermission = true,
+                    toggleGridMode = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            userPreferencesRepository.gridMode.save(!isGridMode)
+                        }
+                    },
+                    onBiometricSecurityChange = {},
+                    requestNotificationPermission = {},
+                    navigateToPermissionsSettings = {},
+                    onClickBackup = {},
+                    onClickRestore = {},
+                    updateWidget = {},
+                )
+            }
         }
     }
