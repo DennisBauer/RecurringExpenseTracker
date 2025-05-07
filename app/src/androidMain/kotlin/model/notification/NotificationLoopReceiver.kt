@@ -16,7 +16,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import org.koin.java.KoinJavaComponent.inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -33,8 +33,8 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
         SystemNotificationBuilder::class.java,
     )
     private val notificationManager: NotificationManager by inject(NotificationManager::class.java)
-    private val userPreferencesRepository: UserPreferencesRepository by inject(
-        UserPreferencesRepository::class.java,
+    private val userPreferencesRepository: IUserPreferencesRepository by inject(
+        IUserPreferencesRepository::class.java,
     )
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

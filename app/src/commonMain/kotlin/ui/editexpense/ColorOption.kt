@@ -35,7 +35,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_color
 import ui.customizations.ExpenseColor
-import ui.theme.ExpenseTrackerTheme
+import ui.theme.ExpenseTrackerThemePreview
 
 @Composable
 fun ColorOption(
@@ -132,7 +132,7 @@ private fun getAvailableColors(): List<ExpenseColor> {
 @Preview
 @Composable
 private fun ColorOptionPreview() {
-    ExpenseTrackerTheme {
+    ExpenseTrackerThemePreview {
         Surface(
             color = MaterialTheme.colorScheme.background,
             modifier = Modifier.fillMaxWidth(),
@@ -148,7 +148,7 @@ private fun ColorOptionPreview() {
 @Preview
 @Composable
 private fun ColorPickerDialogPreview() {
-    ExpenseTrackerTheme {
+    ExpenseTrackerThemePreview {
         var selectedColor by remember { mutableStateOf(ExpenseColor.Green) }
         ColorPickerDialog(
             predefinedColors = getAvailableColors(),

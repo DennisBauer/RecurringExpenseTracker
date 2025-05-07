@@ -5,6 +5,8 @@ import model.ExchangeRateProvider
 import model.database.ExpenseRepository
 import model.database.RecurringExpenseDao
 import model.database.RecurringExpenseDatabase
+import model.datastore.FakeUserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import model.notification.ExpenseNotificationManager
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -36,4 +38,9 @@ val sharedModule =
         singleOf(::ExchangeRateProvider)
         singleOf(::ExpenseNotificationManager)
         viewModelOf(::MainNavigationViewModel)
+    }
+
+val previewModule =
+    module {
+        single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
     }

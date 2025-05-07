@@ -7,8 +7,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.room.RoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import model.database.RecurringExpenseDatabase
-import model.database.UserPreferencesRepository
 import model.database.getDatabaseBuilder
+import model.datastore.IUserPreferencesRepository
+import model.datastore.UserPreferencesRepository
 import okio.Path.Companion.toPath
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -36,5 +37,5 @@ actual val platformModule =
                     .toPath()
             }
         }
-        singleOf(::UserPreferencesRepository)
+        singleOf(::UserPreferencesRepository).bind<IUserPreferencesRepository>()
     }

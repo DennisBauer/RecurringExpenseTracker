@@ -14,13 +14,13 @@ import model.DateTimeCalculator
 import model.database.ExpenseRepository
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import toLocaleString
 import ui.customizations.ExpenseColor
 
 class UpcomingPaymentsWidgetModel(
     private val expenseRepository: ExpenseRepository,
-    userPreferencesRepository: UserPreferencesRepository,
+    userPreferencesRepository: IUserPreferencesRepository,
 ) {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPaymentData>()
     val upcomingPaymentsData: List<UpcomingPaymentData>

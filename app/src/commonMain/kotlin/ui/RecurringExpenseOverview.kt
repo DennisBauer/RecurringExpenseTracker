@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import data.EditExpensePane
 import data.Recurrence
 import data.RecurringExpenseData
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -48,7 +48,7 @@ fun RecurringExpenseOverview(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
-    userPreferencesRepository: UserPreferencesRepository = koinInject(),
+    userPreferencesRepository: IUserPreferencesRepository = koinInject(),
 ) {
     val listState = rememberLazyStaggeredGridState()
     val gridState = rememberLazyStaggeredGridState()

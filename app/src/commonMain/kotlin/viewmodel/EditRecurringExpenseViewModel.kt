@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import model.CurrencyProvider
 import model.database.ExpenseRepository
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 import org.jetbrains.compose.resources.getString
 import recurringexpensetracker.app.generated.resources.Res
@@ -28,7 +28,7 @@ class EditRecurringExpenseViewModel(
     private val expenseId: Int?,
     private val expenseRepository: ExpenseRepository,
     private val currencyProvider: CurrencyProvider,
-    userPreferencesRepository: UserPreferencesRepository,
+    userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     var nameState by mutableStateOf("")
     val nameInputError = mutableStateOf(false)

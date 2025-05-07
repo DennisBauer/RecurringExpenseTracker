@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import model.DatabaseBackupRestore
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import model.notification.ExpenseNotificationManager
 import model.notification.NotificationLoopReceiver
 import model.notification.startAlarmLooper
@@ -77,7 +77,7 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val databasePath by lazy { getDatabasePath(Constants.DATABASE_NAME).path }
-    private val userPreferencesRepository = get<UserPreferencesRepository>()
+    private val userPreferencesRepository = get<IUserPreferencesRepository>()
     private val expenseNotificationManager = get<ExpenseNotificationManager>()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 

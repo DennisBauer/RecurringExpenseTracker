@@ -8,7 +8,7 @@ import di.sharedModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import ui.MainContent
@@ -21,7 +21,7 @@ fun main() =
             modules(sharedModule, platformModule)
         }
 
-        val userPreferencesRepository = koinInject<UserPreferencesRepository>()
+        val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
 
         Window(

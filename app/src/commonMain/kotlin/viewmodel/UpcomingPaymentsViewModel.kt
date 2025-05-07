@@ -24,7 +24,7 @@ import kotlinx.datetime.toLocalDateTime
 import model.ExchangeRateProvider
 import model.database.ExpenseRepository
 import model.database.RecurringExpense
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 import toCurrencyString
 import toLocaleString
@@ -36,7 +36,7 @@ data class UpcomingPayment(val month: String, val paymentsSum: String, val payme
 class UpcomingPaymentsViewModel(
     private val expenseRepository: ExpenseRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
-    userPreferencesRepository: UserPreferencesRepository,
+    userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPayment>()
     val upcomingPaymentsData: List<UpcomingPayment>
