@@ -3,6 +3,7 @@ package di
 import model.CurrencyProvider
 import model.ExchangeRateProvider
 import model.database.ExpenseRepository
+import model.database.FakeExpenseRepository
 import model.database.IExpenseRepository
 import model.database.RecurringExpenseDao
 import model.database.RecurringExpenseDatabase
@@ -43,5 +44,6 @@ val sharedModule =
 
 val previewModule =
     module {
+        single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
     }
