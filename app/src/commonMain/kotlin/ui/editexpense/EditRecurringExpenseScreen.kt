@@ -39,7 +39,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.edit_expense_delete_dialog_text
 import recurringexpensetracker.app.generated.resources.edit_expense_title
 import recurringexpensetracker.app.generated.resources.save
-import ui.theme.ExpenseTrackerTheme
+import ui.theme.ExpenseTrackerThemePreview
 import viewmodel.EditRecurringExpenseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -209,12 +209,14 @@ fun EditRecurringExpenseScreen(
 @Preview
 @Composable
 private fun EditRecurringExpensePreview() {
-    ExpenseTrackerTheme {
+    ExpenseTrackerThemePreview {
         Surface(modifier = Modifier.fillMaxSize()) {
-//            EditRecurringExpenseInternal(
-//                onUpdateExpense = {},
-//                confirmButtonString = "Add Expense",
-//            )
+            EditRecurringExpenseScreen(
+                expenseId = 0,
+                canUseNotifications = true,
+                onDismiss = {},
+                setTopAppBar = {},
+            )
         }
     }
 }

@@ -12,13 +12,13 @@ import data.RecurringExpenseData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import model.ExchangeRateProvider
-import model.database.ExpenseRepository
+import model.database.IExpenseRepository
 import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 
 class RecurringExpenseViewModel(
-    private val expenseRepository: ExpenseRepository,
+    private val expenseRepository: IExpenseRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {

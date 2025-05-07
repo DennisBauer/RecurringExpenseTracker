@@ -3,6 +3,8 @@ package di
 import model.CurrencyProvider
 import model.ExchangeRateProvider
 import model.database.ExpenseRepository
+import model.database.FakeExpenseRepository
+import model.database.IExpenseRepository
 import model.database.RecurringExpenseDao
 import model.database.RecurringExpenseDatabase
 import model.datastore.FakeUserPreferencesRepository
@@ -24,7 +26,7 @@ expect val platformModule: Module
 
 val sharedModule =
     module {
-        singleOf(::ExpenseRepository)
+        singleOf(::ExpenseRepository).bind<IExpenseRepository>()
         single {
             RecurringExpenseDatabase.getRecurringExpenseDatabase(get()).recurringExpenseDao()
         }.bind<RecurringExpenseDao>()
@@ -42,5 +44,14 @@ val sharedModule =
 
 val previewModule =
     module {
+        viewModelOf(::RecurringExpenseViewModel)
+        viewModelOf(::SettingsViewModel)
+        viewModel { (expenseId: Int?) ->
+            EditRecurringExpenseViewModel(expenseId, get(), get(), get())
+        }
+        viewModelOf(::EditRecurringExpenseViewModel)
+        singleOf(::ExchangeRateProvider)
+        singleOf(::CurrencyProvider)
+        single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
     }

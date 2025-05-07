@@ -33,7 +33,7 @@ import recurringexpensetracker.app.generated.resources.settings_default_currency
 import recurringexpensetracker.app.generated.resources.settings_title
 import ui.about.AboutLibrariesScreen
 import ui.about.AboutScreen
-import ui.theme.ExpenseTrackerTheme
+import ui.theme.ExpenseTrackerThemePreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -151,7 +151,7 @@ private fun SettingsScreenPreview(
 ) {
     var checked by remember { mutableStateOf(false) }
 
-    ExpenseTrackerTheme {
+    ExpenseTrackerThemePreview {
         Surface(modifier = Modifier.fillMaxSize()) {
             SettingsScreen(
                 biometricsChecked = checked,

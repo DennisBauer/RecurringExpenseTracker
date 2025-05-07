@@ -11,7 +11,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import model.DateTimeCalculator
-import model.database.ExpenseRepository
+import model.database.IExpenseRepository
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
@@ -19,7 +19,7 @@ import toLocaleString
 import ui.customizations.ExpenseColor
 
 class UpcomingPaymentsWidgetModel(
-    private val expenseRepository: ExpenseRepository,
+    private val expenseRepository: IExpenseRepository,
     userPreferencesRepository: IUserPreferencesRepository,
 ) {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPaymentData>()

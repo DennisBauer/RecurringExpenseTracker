@@ -7,27 +7,27 @@ import kotlinx.coroutines.withContext
 
 class ExpenseRepository(
     private val recurringExpenseDao: RecurringExpenseDao,
-) {
-    val allRecurringExpenses: Flow<List<RecurringExpense>> = recurringExpenseDao.getAll()
-    val allRecurringExpensesByPrice: Flow<List<RecurringExpense>> =
+) : IExpenseRepository {
+    override val allRecurringExpenses: Flow<List<RecurringExpense>> = recurringExpenseDao.getAll()
+    override val allRecurringExpensesByPrice: Flow<List<RecurringExpense>> =
         recurringExpenseDao.getAllByPrice()
 
-    suspend fun getRecurringExpenseById(id: Int): RecurringExpense? =
+    override suspend fun getRecurringExpenseById(id: Int): RecurringExpense? =
         withContext(Dispatchers.IO) {
             return@withContext recurringExpenseDao.getById(id)
         }
 
-    suspend fun insert(recurringExpense: RecurringExpense) =
+    override suspend fun insert(recurringExpense: RecurringExpense) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.insert(recurringExpense)
         }
 
-    suspend fun update(recurringExpense: RecurringExpense) =
+    override suspend fun update(recurringExpense: RecurringExpense) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.update(recurringExpense)
         }
 
-    suspend fun delete(recurringExpense: RecurringExpense) =
+    override suspend fun delete(recurringExpense: RecurringExpense) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(recurringExpense)
         }

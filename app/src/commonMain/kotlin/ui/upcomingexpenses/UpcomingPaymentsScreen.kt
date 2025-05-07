@@ -34,8 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import data.CurrencyValue
 import data.EditExpensePane
 import data.UpcomingPaymentData
+import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,7 +46,9 @@ import recurringexpensetracker.app.generated.resources.upcoming_placeholder_titl
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_tomorrow
-import ui.theme.ExpenseTrackerTheme
+import toLocaleString
+import ui.customizations.ExpenseColor
+import ui.theme.ExpenseTrackerThemePreview
 import viewmodel.UpcomingPayment
 import viewmodel.UpcomingPaymentsViewModel
 
@@ -318,59 +322,78 @@ fun UpcomingPaymentsOverviewPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
-// @Preview
-// @Composable
-// private fun UpcomingPaymentsOverviewPreview() {
-//    val nextPaymentDays1 = 0
-//    val nextPaymentDate1String = Clock.System.now().toLocaleString()
-//    val nextPaymentDays2 = 1
-//    val nextPaymentDate2String = Clock.System.now().toLocaleString()
-//    val nextPaymentDays3 = 2
-//    val nextPaymentDate3String = Clock.System.now().toLocaleString()
-//
-//    ExpenseTrackerTheme {
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//            UpcomingPaymentsOverview(
-//                upcomingPaymentsData =
-//                    listOf(
-//                        UpcomingPaymentData(
-//                            id = 0,
-//                            name = "Netflix",
-//                            price = CurrencyValue(9.99f, "USD"),
-//                            nextPaymentRemainingDays = nextPaymentDays1,
-//                            nextPaymentDate = nextPaymentDate1String,
-//                            color = ExpenseColor.Dynamic,
-//                        ),
-//                        UpcomingPaymentData(
-//                            id = 1,
-//                            name = "Disney Plus",
-//                            price = CurrencyValue(5f, "USD"),
-//                            nextPaymentRemainingDays = nextPaymentDays2,
-//                            nextPaymentDate = nextPaymentDate2String,
-//                            color = ExpenseColor.Green,
-//                        ),
-//                        UpcomingPaymentData(
-//                            id = 2,
-//                            name = "Amazon Prime with a long name",
-//                            price = CurrencyValue(7.95f, "USD"),
-//                            nextPaymentRemainingDays = nextPaymentDays3,
-//                            nextPaymentDate = nextPaymentDate3String,
-//                            color = ExpenseColor.Pink,
-//                        ),
-//                    ),
-//                remainingExpenseThisMonth = "$100.00",
-//                onClickItem = {},
-//                contentPadding = PaddingValues(8.dp),
-//                isGridMode = false,
-//            )
-//        }
-//    }
-// }
+@Preview
+@Composable
+private fun UpcomingPaymentsOverviewPreview() {
+    val nextPaymentDays1 = 0
+    val nextPaymentDate1String = Clock.System.now().toLocaleString()
+    val nextPaymentDays2 = 1
+    val nextPaymentDate2String = Clock.System.now().toLocaleString()
+    val nextPaymentDays3 = 2
+    val nextPaymentDate3String = Clock.System.now().toLocaleString()
+
+    ExpenseTrackerThemePreview {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            UpcomingPaymentsOverview(
+                upcomingPaymentsData =
+                    listOf(
+                        UpcomingPayment(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                            payment = null,
+                        ),
+                        UpcomingPayment(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                            payment =
+                                UpcomingPaymentData(
+                                    id = 0,
+                                    name = "Netflix",
+                                    price = CurrencyValue(9.99f, "USD"),
+                                    nextPaymentRemainingDays = nextPaymentDays1,
+                                    nextPaymentDate = nextPaymentDate1String,
+                                    color = ExpenseColor.Dynamic,
+                                ),
+                        ),
+                        UpcomingPayment(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                            payment =
+                                UpcomingPaymentData(
+                                    id = 1,
+                                    name = "Disney Plus",
+                                    price = CurrencyValue(5f, "USD"),
+                                    nextPaymentRemainingDays = nextPaymentDays2,
+                                    nextPaymentDate = nextPaymentDate2String,
+                                    color = ExpenseColor.Green,
+                                ),
+                        ),
+                        UpcomingPayment(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                            payment =
+                                UpcomingPaymentData(
+                                    id = 2,
+                                    name = "Amazon Prime with a long name",
+                                    price = CurrencyValue(7.95f, "USD"),
+                                    nextPaymentRemainingDays = nextPaymentDays3,
+                                    nextPaymentDate = nextPaymentDate3String,
+                                    color = ExpenseColor.Blue,
+                                ),
+                        ),
+                    ),
+                onClickItem = {},
+                contentPadding = PaddingValues(8.dp),
+                isGridMode = false,
+            )
+        }
+    }
+}
 
 @Preview
 @Composable
 private fun UpcomingPaymentsOverviewPlaceholderPreview() {
-    ExpenseTrackerTheme {
+    ExpenseTrackerThemePreview {
         Surface(modifier = Modifier.fillMaxSize()) {
             UpcomingPaymentsOverviewPlaceholder()
         }

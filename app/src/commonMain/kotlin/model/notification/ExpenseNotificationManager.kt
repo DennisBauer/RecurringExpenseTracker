@@ -6,7 +6,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.daysUntil
 import model.DateTimeCalculator
-import model.database.ExpenseRepository
+import model.database.IExpenseRepository
 import model.datastore.IUserPreferencesRepository
 import org.jetbrains.compose.resources.getString
 import recurringexpensetracker.app.generated.resources.Res
@@ -15,7 +15,7 @@ import recurringexpensetracker.app.generated.resources.notification_expense_remi
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_tomorrow
 
 class ExpenseNotificationManager(
-    private val expenseRepository: ExpenseRepository,
+    private val expenseRepository: IExpenseRepository,
     private val userPreferencesRepository: IUserPreferencesRepository,
 ) {
     suspend fun getExpenseNotifications(): List<NotificationData> {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import model.CurrencyProvider
-import model.database.ExpenseRepository
+import model.database.IExpenseRepository
 import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 import org.jetbrains.compose.resources.getString
@@ -26,7 +26,7 @@ import ui.customizations.ExpenseColor
 
 class EditRecurringExpenseViewModel(
     private val expenseId: Int?,
-    private val expenseRepository: ExpenseRepository,
+    private val expenseRepository: IExpenseRepository,
     private val currencyProvider: CurrencyProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
