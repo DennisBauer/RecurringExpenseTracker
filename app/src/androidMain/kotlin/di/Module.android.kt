@@ -11,8 +11,9 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.RoomDatabase
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidgetModel
 import model.database.RecurringExpenseDatabase
-import model.database.UserPreferencesRepository
 import model.database.getDatabaseBuilder
+import model.datastore.IUserPreferencesRepository
+import model.datastore.UserPreferencesRepository
 import model.notification.SystemNotificationBuilder
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -27,7 +28,7 @@ actual val platformModule =
                 context.preferencesDataStoreFile(name = Constants.USER_PREFERENCES_DATA_STORE)
             }
         }
-        singleOf(::UserPreferencesRepository)
+        singleOf(::UserPreferencesRepository).bind<IUserPreferencesRepository>()
         singleOf(::UpcomingPaymentsWidgetModel)
         factory<AlarmManager> {
             val context = get<Context>()

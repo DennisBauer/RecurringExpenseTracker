@@ -29,7 +29,7 @@ import asString
 import data.UpcomingPaymentData
 import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import recurringexpensetracker.app.generated.resources.Res
@@ -38,7 +38,7 @@ import ui.theme.widget.ExpenseTrackerWidgetTheme
 
 class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
     private val upcomingPayment by inject<UpcomingPaymentsWidgetModel>()
-    private val preferences by inject<UserPreferencesRepository>()
+    private val preferences by inject<IUserPreferencesRepository>()
 
     override suspend fun provideGlance(
         context: Context,

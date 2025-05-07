@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
@@ -48,7 +48,7 @@ import ui.theme.ExpenseTrackerTheme
 
 class ConfigureWidgetActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val userPreferencesRepository = get<UserPreferencesRepository>()
+    private val userPreferencesRepository = get<IUserPreferencesRepository>()
     private val biometricPromptManager: BiometricPromptManager by lazy { BiometricPromptManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

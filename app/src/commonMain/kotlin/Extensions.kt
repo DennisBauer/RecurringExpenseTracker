@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,7 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import model.DateTimeCalculator
-import model.database.UserPreferencesRepository
+import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
@@ -49,7 +50,7 @@ suspend fun Flow<String>.getDefaultCurrencyCode(): String {
 
 @Composable
 fun useDarkTheme(): Boolean {
-    val userPreferencesRepository = koinInject<UserPreferencesRepository>()
+    val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
     val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
     return when (selectedTheme) {
         ThemeMode.Dark.value -> true

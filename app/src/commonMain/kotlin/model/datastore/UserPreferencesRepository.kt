@@ -1,4 +1,4 @@
-package model.database
+package model.datastore
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -16,19 +16,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
+class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) : IUserPreferencesRepository {
     inner class Preference<T>(
         private val key: Preferences.Key<T>,
         private val defaultValue: T,
-    ) {
-        suspend fun save(value: T) =
+    ) : IUserPreferencesRepository.IPreference<T> {
+        override suspend fun save(value: T): Unit =
             withContext(Dispatchers.IO) {
                 dataStore.edit { preferences ->
                     preferences[this@Preference.key] = value
                 }
             }
 
-        fun get(): Flow<T> {
+        override fun get(): Flow<T> {
             return dataStore.data
                 .map {
                     it[this.key] ?: this.defaultValue
@@ -36,7 +36,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         }
 
         @Composable
-        fun collectAsState(): State<T> {
+        override fun collectAsState(): State<T> {
             return dataStore.data
                 .map {
                     it[this.key] ?: this.defaultValue
@@ -44,18 +44,20 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    val gridMode = Preference(booleanPreferencesKey("IS_GRID_MODE"), false)
-    val biometricSecurity = Preference(booleanPreferencesKey("BIOMETRIC_SECURITY"), false)
-    val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
-    val showConvertedCurrency = Preference(booleanPreferencesKey("SHOW_CONVERTED_CURRENCY"), true)
-    val upcomingPaymentNotification = Preference(booleanPreferencesKey("IS_UPCOMING_PAYMENT_NOTIFICATION"), false)
-    val themeMode = Preference(intPreferencesKey("THEME_MODE"), 0)
-    val defaultTab = Preference(intPreferencesKey("DEFAULT_TAB"), 0)
+    override val gridMode = Preference(booleanPreferencesKey("IS_GRID_MODE"), false)
+    override val biometricSecurity = Preference(booleanPreferencesKey("BIOMETRIC_SECURITY"), false)
+    override val defaultCurrency = Preference(stringPreferencesKey("DEFAULT_CURRENCY"), "")
+    override val showConvertedCurrency = Preference(booleanPreferencesKey("SHOW_CONVERTED_CURRENCY"), true)
+    override val upcomingPaymentNotification =
+        Preference(booleanPreferencesKey("IS_UPCOMING_PAYMENT_NOTIFICATION"), false)
+    override val themeMode = Preference(intPreferencesKey("THEME_MODE"), 0)
+    override val defaultTab = Preference(intPreferencesKey("DEFAULT_TAB"), 0)
 
     // default: 8:00 in the morning
-    val upcomingPaymentNotificationTime = Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_TIME"), 480)
+    override val upcomingPaymentNotificationTime =
+        Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_TIME"), 480)
 
     // default: 3 days in advance
-    val upcomingPaymentNotificationDaysAdvance =
+    override val upcomingPaymentNotificationDaysAdvance =
         Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_DAYS_ADVANCE"), 3)
 }
