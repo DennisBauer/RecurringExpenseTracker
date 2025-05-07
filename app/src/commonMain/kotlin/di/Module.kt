@@ -44,6 +44,14 @@ val sharedModule =
 
 val previewModule =
     module {
+        viewModelOf(::RecurringExpenseViewModel)
+        viewModelOf(::SettingsViewModel)
+        viewModel { (expenseId: Int?) ->
+            EditRecurringExpenseViewModel(expenseId, get(), get(), get())
+        }
+        viewModelOf(::EditRecurringExpenseViewModel)
+        singleOf(::ExchangeRateProvider)
+        singleOf(::CurrencyProvider)
         single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
     }

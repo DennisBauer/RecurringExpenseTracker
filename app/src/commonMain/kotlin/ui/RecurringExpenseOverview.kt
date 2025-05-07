@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,11 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import data.EditExpensePane
 import data.Recurrence
 import data.RecurringExpenseData
 import model.datastore.IUserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
@@ -39,6 +44,7 @@ import recurringexpensetracker.app.generated.resources.home_summary_monthly
 import recurringexpensetracker.app.generated.resources.home_summary_weekly
 import recurringexpensetracker.app.generated.resources.home_summary_yearly
 import toCurrencyString
+import ui.theme.ExpenseTrackerThemePreview
 import viewmodel.RecurringExpenseViewModel
 
 @Composable
@@ -287,85 +293,21 @@ private fun RecurringExpense(
     }
 }
 
-// private class GridLayoutParameterProvider : PreviewParameterProvider<Boolean> {
-//    override val values = sequenceOf(false, true)
-// }
+private class GridLayoutParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(false, true)
+}
 
-// @Preview
-// @Composable
-// private fun RecurringExpenseOverviewPreview(
-//    @PreviewParameter(GridLayoutParameterProvider::class) isGridMode: Boolean,
-// ) {
-//    ExpenseTrackerTheme {
-//        Surface(modifier = Modifier.fillMaxWidth()) {
-//            RecurringExpenseOverview(
-//                weeklyExpense = "4,00 €",
-//                monthlyExpense = "16,00 €",
-//                yearlyExpense = "192,00 €",
-//                recurringExpenseData =
-//                    listOf(
-//                        RecurringExpenseData(
-//                            id = 0,
-//                            name = "Netflix",
-//                            description = "My Netflix description",
-//                            price = CurrencyValue(9.99f, "USD"),
-//                            monthlyPrice = CurrencyValue(9.99f, "USD"),
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            firstPayment = Clock.System.now(),
-//                            color = ExpenseColor.Dynamic,
-//                            notifyForExpense = true,
-//                            notifyXDaysBefore = null,
-//                            lastNotificationDate = null,
-//                        ),
-//                        RecurringExpenseData(
-//                            id = 1,
-//                            name = "Disney Plus",
-//                            description =
-//                                "My Disney Plus very very very very very " +
-//                                    "very very very very long description",
-//                            price = CurrencyValue(5f, "USD"),
-//                            monthlyPrice = CurrencyValue(5f, "USD"),
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            firstPayment = Clock.System.now(),
-//                            color = ExpenseColor.Orange,
-//                            notifyForExpense = true,
-//                            notifyXDaysBefore = null,
-//                            lastNotificationDate = null,
-//                        ),
-//                        RecurringExpenseData(
-//                            id = 2,
-//                            name = "Amazon Prime with a long name",
-//                            description = "",
-//                            price = CurrencyValue(7.95f, "USD"),
-//                            monthlyPrice = CurrencyValue(7.95f, "USD"),
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            firstPayment = Clock.System.now(),
-//                            color = ExpenseColor.Turquoise,
-//                            notifyForExpense = true,
-//                            notifyXDaysBefore = null,
-//                            lastNotificationDate = null,
-//                        ),
-//                        RecurringExpenseData(
-//                            id = 3,
-//                            name = "Yearly Test Subscription",
-//                            description = "Test Description with another very long name",
-//                            price = CurrencyValue(72f, "USD"),
-//                            monthlyPrice = CurrencyValue(6f, "USD"),
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Yearly,
-//                            firstPayment = Clock.System.now(),
-//                            color = ExpenseColor.Dynamic,
-//                            notifyForExpense = true,
-//                            notifyXDaysBefore = null,
-//                            lastNotificationDate = null,
-//                        ),
-//                    ),
-//                isGridMode = isGridMode,
-//                navController = rememberNavController(),
-//            )
-//        }
-//    }
-// }
+@Preview
+@Composable
+private fun RecurringExpenseOverviewPreview(
+    @PreviewParameter(GridLayoutParameterProvider::class) isGridMode: Boolean,
+) {
+    ExpenseTrackerThemePreview {
+        Surface(modifier = Modifier.fillMaxWidth()) {
+            RecurringExpenseOverview(
+                isGridMode = isGridMode,
+                navController = rememberNavController(),
+            )
+        }
+    }
+}

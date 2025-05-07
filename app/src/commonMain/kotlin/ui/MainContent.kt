@@ -8,7 +8,9 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import data.SettingsPane
 import data.UpcomingPane
 import data.isInRoute
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
@@ -38,6 +41,7 @@ import recurringexpensetracker.app.generated.resources.home_title
 import recurringexpensetracker.app.generated.resources.upcoming_title
 import ui.editexpense.EditRecurringExpenseScreen
 import ui.settings.SettingsScreen
+import ui.theme.ExpenseTrackerThemePreview
 import ui.upcomingexpenses.UpcomingPaymentsScreen
 import viewmodel.MainNavigationViewModel
 
@@ -197,68 +201,30 @@ fun MainContent(
     }
 }
 
-// @Preview
-// @Composable
-// private fun MainActivityContentPreview() {
-//    var isGridMode by remember { mutableStateOf(false) }
-//    var biometricSecurity by remember { mutableStateOf(false) }
-//    ExpenseTrackerTheme {
-//        Surface(
-//            modifier = Modifier.fillMaxSize(),
-//            color = MaterialTheme.colorScheme.background,
-//        ) {
-//            MainContent(
-//                weeklyExpense = "4,00 €",
-//                monthlyExpense = "16,00 €",
-//                yearlyExpense = "192,00 €",
-//                recurringExpenseData =
-//                    listOf(
-//                        RecurringExpenseData(
-//                            id = 0,
-//                            name = "Netflix",
-//                            description = "My Netflix description",
-//                            price = 9.99f,
-//                            monthlyPrice = 9.99f,
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            Clock.System.now(),
-//                            ExpenseColor.Dynamic,
-//                        ),
-//                        RecurringExpenseData(
-//                            id = 1,
-//                            name = "Disney Plus",
-//                            description = "My Disney Plus description",
-//                            price = 5f,
-//                            monthlyPrice = 5f,
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            Clock.System.now(),
-//                            ExpenseColor.Red,
-//                        ),
-//                        RecurringExpenseData(
-//                            id = 2,
-//                            name = "Amazon Prime",
-//                            description = "My Disney Plus description",
-//                            price = 7.95f,
-//                            monthlyPrice = 7.95f,
-//                            everyXRecurrence = 1,
-//                            recurrence = Recurrence.Monthly,
-//                            Clock.System.now(),
-//                            ExpenseColor.Blue,
-//                        ),
-//                    ),
-//                onRecurringExpenseAdd = {},
-//                onRecurringExpenseEdit = {},
-//                onRecurringExpenseDelete = {},
-//                onClickBackup = { },
-//                onClickRestore = { },
-//                upcomingPaymentsViewModel = UpcomingPaymentsViewModel(null),
-//                isGridMode = isGridMode,
-//                toggleGridMode = { isGridMode = !isGridMode },
-//                biometricSecurity = biometricSecurity,
-//                onBiometricSecurityChange = { biometricSecurity = it },
-//                canUseBiometric = true,
-//            )
-//        }
-//    }
-// }
+@Preview
+@Composable
+private fun MainActivityContentPreview() {
+    var isGridMode by remember { mutableStateOf(false) }
+    var biometricSecurity by remember { mutableStateOf(false) }
+    ExpenseTrackerThemePreview {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            MainContent(
+                isGridMode = isGridMode,
+                toggleGridMode = { isGridMode = !isGridMode },
+                biometricSecurity = biometricSecurity,
+                canUseBiometric = true,
+                canUseNotifications = true,
+                hasNotificationPermission = true,
+                onBiometricSecurityChange = { biometricSecurity = it },
+                requestNotificationPermission = {},
+                navigateToPermissionsSettings = {},
+                onClickBackup = {},
+                onClickRestore = {},
+                updateWidget = {},
+            )
+        }
+    }
+}
