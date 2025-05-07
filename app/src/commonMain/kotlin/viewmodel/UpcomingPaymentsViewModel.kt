@@ -22,7 +22,7 @@ import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import model.ExchangeRateProvider
-import model.database.ExpenseRepository
+import model.database.IExpenseRepository
 import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
@@ -34,7 +34,7 @@ import ui.customizations.ExpenseColor
 data class UpcomingPayment(val month: String, val paymentsSum: String, val payment: UpcomingPaymentData?)
 
 class UpcomingPaymentsViewModel(
-    private val expenseRepository: ExpenseRepository,
+    private val expenseRepository: IExpenseRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
