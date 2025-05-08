@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="bottom_nav_home">Ana Sayfa</string>
+    <string name="bottom_nav_upcoming">Yaklaşan</string>
+    <string name="bottom_nav_settings">Ayarlar</string>
+    <string name="home_summary_monthly">Aylik</string>
+    <string name="home_summary_weekly">Haftalik</string>
+    <string name="home_summary_yearly">Yillik</string>
+    <string name="edit_expense_title">Gideri düzenle</string>
+    <string name="edit_expense_button_add">Gider ekle</string>
+    <string name="edit_expense_description">Açıklama</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Izgara modunu aç</string>
+</resources>
