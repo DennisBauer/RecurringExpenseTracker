@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
@@ -79,33 +80,40 @@ class UpcomingPaymentsViewModel(
                 var paymentsSumThisMonth = 0f
                 var atLeastOneWasExchanged = false
                 recurringExpenses.forEach { expense ->
-                    expense.getNextPaymentDayAfter(yearMonth)?.let { nextPaymentDay ->
-                        if (nextPaymentDay.isSameMonth(yearMonth) && nextPaymentDay > now) {
-                            val nextPaymentRemainingDays = nextPaymentDay.getNextPaymentDays()
-                            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
-                            val currencyValue =
-                                CurrencyValue(
-                                    expense.price!!,
-                                    expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() },
-                                )
-                            paymentsThisMonth.add(
-                                UpcomingPaymentData(
-                                    id = expense.id,
-                                    name = expense.name!!,
-                                    price = currencyValue,
-                                    nextPaymentRemainingDays = nextPaymentRemainingDays,
-                                    nextPaymentDate = nextPaymentDate,
-                                    color = ExpenseColor.fromInt(expense.color),
-                                ),
+                    var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonth) ?: return@forEach
+                    while (nextPaymentDay < now) {
+                        nextPaymentDay =
+                            expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
+                                ?: return@forEach
+                    }
+                    while (nextPaymentDay.isSameMonth(yearMonth)) {
+                        val nextPaymentRemainingDays = nextPaymentDay.getNextPaymentDays()
+                        val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
+                        val currencyValue =
+                            CurrencyValue(
+                                expense.price!!,
+                                expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() },
                             )
+                        paymentsThisMonth.add(
+                            UpcomingPaymentData(
+                                id = expense.id,
+                                name = expense.name!!,
+                                price = currencyValue,
+                                nextPaymentRemainingDays = nextPaymentRemainingDays,
+                                nextPaymentDate = nextPaymentDate,
+                                color = ExpenseColor.fromInt(expense.color),
+                            ),
+                        )
 
-                            paymentsSumThisMonth += currencyValue.exchangeToDefaultCurrency()?.value ?: 0f
-                            val currencyCode =
-                                expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() }
-                            if (currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
-                                atLeastOneWasExchanged = true
-                            }
+                        paymentsSumThisMonth += currencyValue.exchangeToDefaultCurrency()?.value ?: 0f
+                        val currencyCode =
+                            expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() }
+                        if (currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
+                            atLeastOneWasExchanged = true
                         }
+                        nextPaymentDay =
+                            expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
+                                ?: return@forEach
                     }
                 }
                 if (paymentsThisMonth.isNotEmpty()) {

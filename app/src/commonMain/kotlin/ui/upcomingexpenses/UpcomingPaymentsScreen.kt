@@ -120,7 +120,7 @@ private fun UpcomingPaymentsOverview(
             items(
                 items = upcomingPaymentsData,
                 key = { entry ->
-                    "expense_${entry.month}_${entry.payment?.id}"
+                    "expense_${entry.month}_${entry.payment?.id}_${entry.payment?.nextPaymentDate}"
                 },
                 span = { entry ->
                     if (entry.payment == null) {
