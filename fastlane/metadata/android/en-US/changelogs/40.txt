@@ -1,0 +1,7 @@
+Changelog 0.17.1:
+* Fix a bug where upcoming expenses were only listed once each month
+* Added (Turkish) translation
+* Update (Russian) translation
+* Update exchange rates
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.1
