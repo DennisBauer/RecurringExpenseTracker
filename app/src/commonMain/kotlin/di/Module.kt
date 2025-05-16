@@ -49,7 +49,6 @@ val previewModule =
         viewModel { (expenseId: Int?) ->
             EditRecurringExpenseViewModel(expenseId, get(), get(), get())
         }
-        viewModelOf(::EditRecurringExpenseViewModel)
         singleOf(::ExchangeRateProvider)
         singleOf(::CurrencyProvider)
         single<IExpenseRepository> { FakeExpenseRepository() }
