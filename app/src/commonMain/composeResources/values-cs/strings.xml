@@ -3,7 +3,7 @@
     <string name="edit_expense_delete_dialog_text">Opravdu chcete odstranit tyto výdaje?</string>
     <string name="settings_about_support">Podpořte projekt</string>
     <string name="settings_backup_not_restored_toast">Zálohu nelze obnovit</string>
-    <string name="widget_configuration_biometric">Prosím deaktivovat Biometrické používat tento Widget</string>
+    <string name="widget_configuration_biometric">Prosím deaktivujte Biometrii, pokud chcete používat tento Widget</string>
     <string name="bottom_nav_settings">Nastavení</string>
     <string name="home_summary_monthly">Měsíčně</string>
     <string name="home_summary_weekly">Týdně</string>
@@ -55,7 +55,7 @@
     <string name="settings_theme_mode_follow_system">Stejné jako systém</string>
     <string name="settings_currency_exchange_last_update">Směnné kurzy z %1$s</string>
     <string name="settings_notifications_schedule_time">Čas upozornění</string>
-    <string name="settings_notifications_schedule_days">Dní před platbou/splatností</string>
+    <string name="settings_notifications_schedule_days">Dní před splatností</string>
     <string name="settings_notifications_schedule_days_subtitle">%1$d den(í) předem</string>
     <string name="settings_notifications_missing_permission_title">Chybějící povolení</string>
     <string name="settings_about">O nás</string>
@@ -79,4 +79,13 @@
     <string name="dialog_ok">OK</string>
     <string name="settings_notifications_subtitle">Zobrazit upozornění pro nadcházející platby</string>
     <string name="settings_about_libraries">Autorské práva knihoven</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Open Grid Mode</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Close Grid Mode</string>
+    <string name="edit_expense_notification_get_notified">Začněte být informován o připravovaných platbách. Stačí jít do nastavení a povolit upozornění.</string>
+    <string name="settings_theme_mode">Theme mode</string>
+    <string name="settings_system_default">System default</string>
+    <string name="settings_currency_exchange_info">Výdaje přidané v jiné měně budou převedeny na tuto měnu.\nSměnné kurzy jsou zafixovány v aplikaci, aby se zabránilo přístupu k Internetu.</string>
+    <string name="settings_about_developer">Developer</string>
+    <string name="settings_about_made_by">Made by</string>
+    <string name="widget_grid_mode">Grid Mode</string>
 </resources>
