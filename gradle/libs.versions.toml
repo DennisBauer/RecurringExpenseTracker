@@ -22,7 +22,7 @@ kotlinx-serialization-json = "1.8.1"
 ksp = "2.1.21-2.0.1"
 ktlint = "0.4.22"
 ktlint-plugin = "12.1.1"
-ktlint-version = "1.5.0"
+ktlint-version = "1.6.0"
 room = "2.7.1"
 sqlite = "2.5.1"
 
