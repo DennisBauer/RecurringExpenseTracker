@@ -3,6 +3,7 @@
   "labels": ["dependencies"],
   "extends": [
     "config:recommended",
+    "config:configMigration",
     ":disableDependencyDashboard",
     ":separatePatchReleases",
     ":separateMultipleMajorReleases"
@@ -11,9 +12,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "^.*.ya?ml$"
-      ],
+      "managerFilePatterns": ["/^.*.ya?ml$/"],
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?\"(?<currentValue>.*)\"\\s"
       ],
@@ -22,37 +21,33 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["com.google.devtools.ksp"],
+      "groupName": "kotlin",
       "versioning": "loose",
-      "groupName": "kotlin"
+      "matchPackageNames": ["com.google.devtools.ksp"]
     },
     {
-      "matchPackagePatterns": [
-        "org.jetbrains.kotlin.*"
-      ],
-      "groupName": "kotlin"
+      "groupName": "kotlin",
+      "matchPackageNames": ["/org.jetbrains.kotlin.*/"]
     },
     {
-      "matchPackagePatterns": [
-        "io.mockk"
-      ],
-      "groupName": "mockk"
+      "groupName": "mockk",
+      "matchPackageNames": ["/io.mockk/"]
     },
     {
-      "matchPackagePatterns": [
-        "com.pinterest.ktlint",
-        "org.jlleitschuh.gradle.ktlint"
-      ],
-      "groupName": "ktlint"
+      "groupName": "ktlint",
+      "matchPackageNames": [
+        "/com.pinterest.ktlint/",
+        "/org.jlleitschuh.gradle.ktlint/"
+      ]
     },
     {
-      "matchPackagePatterns": [
-        "com.android.library",
-        "com.android.application",
-        "gradle"
-      ],
       "groupName": "gradle",
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/com.android.library/",
+        "/com.android.application/",
+        "/gradle/"
+      ]
     }
   ]
 }
