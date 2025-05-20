@@ -22,9 +22,13 @@
   ],
   "packageRules": [
     {
+      "matchPackageNames": ["com.google.devtools.ksp"],
+      "versioning": "loose",
+      "groupName": "kotlin"
+    },
+    {
       "matchPackagePatterns": [
-        "org.jetbrains.kotlin.*",
-        "com.google.devtools.ksp"
+        "org.jetbrains.kotlin.*"
       ],
       "groupName": "kotlin"
     },
