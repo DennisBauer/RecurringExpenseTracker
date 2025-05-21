@@ -23,4 +23,3 @@
 -dontwarn kotlinx.serialization.internal.AbstractPolymorphicSerializer
 
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
--keep class androidx.datastore.*.** { *; }
