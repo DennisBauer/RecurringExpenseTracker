@@ -59,8 +59,8 @@
     <string name="settings_about_developer">Développeur</string>
     <string name="settings_about_version">Version</string>
     <string name="settings_about_made_by">Réalisé par</string>
-    <string name="settings_about_support">Supporter le projet</string>
-    <string name="settings_about_libraries">Libraires copyright</string>
+    <string name="settings_about_support">Soutenir le projet</string>
+    <string name="settings_about_libraries">Copyright des bibliothèques</string>
     <string name="notification_expense_reminder">Rappel des dépenses</string>
     <string name="notification_expense_reminder_message_today">Le prochain paiement est aujourd\'hui</string>
     <string name="notification_expense_reminder_message_tomorrow">Le prochain paiement est demain</string>
@@ -74,5 +74,18 @@
     <string name="settings_notifications_schedule_days_subtitle">%1$d jours à l\'avance</string>
     <string name="settings_notifications_missing_permission_title">Permission manquante</string>
     <string name="settings_notifications_missing_permission_subtitle">Absence de la permission de notification. Sans cette permission, l\'application ne peut pas vous notifier des paiements à venir. Veuillez cliquer ici et l\'accorder dans les paramètres.</string>
-    <string name="settings_notifications_schedule_time">Date de notification</string>
+    <string name="settings_notifications_schedule_time">Heure de notification</string>
+    <string name="settings_currency_exchange_last_update">Taux de change depuis %1$s</string>
+    <string name="settings_show_converted_currency">Afficher la devise convertie</string>
+    <string name="settings_theme_mode">Mode du thème</string>
+    <string name="settings_theme_mode_follow_system">Suivre le thème du système</string>
+    <string name="widget_grid_mode">Mode Grille</string>
+    <string name="settings_theme_mode_dark">Sombre</string>
+    <string name="settings_theme_mode_light">Clair</string>
+    <string name="settings_choose_currency">Choisissez une devise</string>
+    <string name="settings_default_tab">Onglet par défaut</string>
+    <string name="settings_currency">Devise</string>
+    <string name="widget_configuration_biometric">Veuillez désactiver la biométrie afin de pouvoir utiliser ce Gadget</string>
+    <string name="widget_configuration_biometric_deactivate">Désactiver la biométrie</string>
+    <string name="widget_configuration_title">Configurer le Gadget</string>
 </resources>
