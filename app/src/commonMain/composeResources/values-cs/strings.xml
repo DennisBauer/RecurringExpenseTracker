@@ -31,7 +31,7 @@
     <string name="edit_expense_recurrence_day_short">d</string>
     <string name="edit_expense_recurrence_week">Týden(y)</string>
     <string name="edit_expense_recurrence_week_short">t</string>
-    <string name="edit_expense_recurrence_month">Měsíc(y)</string>
+    <string name="edit_expense_recurrence_month">Měsíc(e)</string>
     <string name="edit_expense_recurrence_month_short">m</string>
     <string name="settings_general">Obecné</string>
     <string name="settings_theme_mode_dark">Tmavý</string>
@@ -52,7 +52,7 @@
     <string name="settings_notifications">Oznámení</string>
     <string name="settings_notifications_upcoming">Připomenutí nadcházející platby</string>
     <string name="upcoming_time_remaining_days">za %1$d dní</string>
-    <string name="settings_theme_mode_follow_system">Stejné jako systém</string>
+    <string name="settings_theme_mode_follow_system">Systémový motiv</string>
     <string name="settings_currency_exchange_last_update">Směnné kurzy z %1$s</string>
     <string name="settings_notifications_schedule_time">Čas upozornění</string>
     <string name="settings_notifications_schedule_days">Dní před splatností</string>
@@ -63,7 +63,7 @@
     <string name="settings_about_version">Verze</string>
     <string name="biometric_prompt_manager_title">Odemknout Expense Tracker</string>
     <string name="biometric_prompt_manager_unlock">Odemknout</string>
-    <string name="delete">Delete</string>
+    <string name="delete">Smazat</string>
     <string name="save">Uložit</string>
     <string name="notification_expense_reminder">Připomínka platby</string>
     <string name="notification_expense_reminder_message_today">Další platba je dnes</string>
@@ -79,13 +79,13 @@
     <string name="dialog_ok">OK</string>
     <string name="settings_notifications_subtitle">Zobrazit upozornění pro nadcházející platby</string>
     <string name="settings_about_libraries">Autorské práva knihoven</string>
-    <string name="top_app_bar_icon_button_grid_open_content_desc">Open Grid Mode</string>
-    <string name="top_app_bar_icon_button_grid_close_content_desc">Close Grid Mode</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Zobrazit dlaždice</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Zobrazit seznam</string>
     <string name="edit_expense_notification_get_notified">Začněte být informován o připravovaných platbách. Stačí jít do nastavení a povolit upozornění.</string>
-    <string name="settings_theme_mode">Theme mode</string>
-    <string name="settings_system_default">System default</string>
+    <string name="settings_theme_mode">Motiv</string>
+    <string name="settings_system_default">Podle systému</string>
     <string name="settings_currency_exchange_info">Výdaje přidané v jiné měně budou převedeny na tuto měnu.\nSměnné kurzy jsou zafixovány v aplikaci, aby se zabránilo přístupu k Internetu.</string>
     <string name="settings_about_developer">Developer</string>
-    <string name="settings_about_made_by">Made by</string>
-    <string name="widget_grid_mode">Grid Mode</string>
+    <string name="settings_about_made_by">Vyrobil</string>
+    <string name="widget_grid_mode">Dlaždice</string>
 </resources>
