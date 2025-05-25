@@ -23,4 +23,5 @@ interface IUserPreferencesRepository {
     val defaultTab: IPreference<Int>
     val upcomingPaymentNotificationTime: IPreference<Int>
     val upcomingPaymentNotificationDaysAdvance: IPreference<Int>
+    val widgetBackgroundTransparent: IPreference<Boolean>
 }
