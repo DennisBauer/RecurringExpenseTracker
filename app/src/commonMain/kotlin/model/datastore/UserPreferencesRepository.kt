@@ -60,4 +60,6 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) :
     // default: 3 days in advance
     override val upcomingPaymentNotificationDaysAdvance =
         Preference(intPreferencesKey("UPCOMING_PAYMENT_NOTIFICATION_DAYS_ADVANCE"), 3)
+    override val widgetBackgroundTransparent =
+        Preference(booleanPreferencesKey("WIDGET_BACKGROUND_TRANSPARENT"), false)
 }

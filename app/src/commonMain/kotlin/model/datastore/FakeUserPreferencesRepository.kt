@@ -35,4 +35,6 @@ class FakeUserPreferencesRepository() : IUserPreferencesRepository {
     override val upcomingPaymentNotificationTime: IUserPreferencesRepository.IPreference<Int> = FakePreference(900)
     override val upcomingPaymentNotificationDaysAdvance: IUserPreferencesRepository.IPreference<Int> =
         FakePreference(3)
+    override val widgetBackgroundTransparent: IUserPreferencesRepository.IPreference<Boolean> =
+        FakePreference(false)
 }
