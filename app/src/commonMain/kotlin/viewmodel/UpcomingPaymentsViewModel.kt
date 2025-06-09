@@ -22,7 +22,7 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
-import model.ExchangeRateProvider
+import model.IExchangeRateProvider
 import model.database.IExpenseRepository
 import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
@@ -36,7 +36,7 @@ data class UpcomingPayment(val month: String, val paymentsSum: String, val payme
 
 class UpcomingPaymentsViewModel(
     private val expenseRepository: IExpenseRepository,
-    private val exchangeRateProvider: ExchangeRateProvider,
+    private val exchangeRateProvider: IExchangeRateProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     private val _upcomingPaymentsData = mutableStateListOf<UpcomingPayment>()
