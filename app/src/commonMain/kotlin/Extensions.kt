@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import model.DateTimeCalculator
 import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
 import org.jetbrains.compose.resources.StringResource
@@ -38,10 +37,6 @@ expect fun LocalDate.toMonthYearStringUTC(): String
 
 suspend fun StringResource.asString(): String {
     return getString(this)
-}
-
-fun LocalDate.getNextPaymentDays(): Int {
-    return DateTimeCalculator.getDaysFromNowUntil(this)
 }
 
 suspend fun Flow<String>.getDefaultCurrencyCode(): String {

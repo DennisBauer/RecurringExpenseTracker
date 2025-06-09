@@ -7,7 +7,6 @@ import data.CurrencyValue
 import data.RecurringExpenseData
 import data.UpcomingPaymentData
 import getDefaultCurrencyCode
-import getNextPaymentDays
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
@@ -22,6 +21,7 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import model.DateTimeCalculator
 import model.IExchangeRateProvider
 import model.database.IExpenseRepository
 import model.database.RecurringExpense
@@ -65,29 +65,50 @@ class UpcomingPaymentsViewModel(
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) =
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+        _upcomingPaymentsData.clear()
+        val from =
+            Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .date
+        _upcomingPaymentsData.addAll(
+            createUpcomingPaymentData(
+                recurringExpenses = recurringExpenses,
+                from = from,
+                until = from.plus(DatePeriod(years = 10)),
+            ),
+        )
+    }
+
+    suspend fun createUpcomingPaymentData(
+        recurringExpenses: List<RecurringExpense>,
+        from: LocalDate,
+        until: LocalDate,
+    ): List<UpcomingPayment> =
         withContext(Dispatchers.IO) {
-            _upcomingPaymentsData.clear()
-            val now =
-                Clock.System
-                    .now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-            var yearMonth = LocalDate(now.year, now.monthNumber, 1)
-            val yearMonthUntil = yearMonth.plus(DatePeriod(years = 10))
+            var yearMonthIterator = LocalDate(from.year, from.monthNumber, 1)
+            var yearMonthUntil = LocalDate(until.year, until.monthNumber, 1)
+            if (yearMonthIterator >= yearMonthUntil) return@withContext emptyList()
+
+            val localUpcomingPaymentsData = mutableListOf<UpcomingPayment>()
             do {
                 val paymentsThisMonth = mutableListOf<UpcomingPaymentData>()
                 var paymentsSumThisMonth = 0f
                 var atLeastOneWasExchanged = false
                 recurringExpenses.forEach { expense ->
-                    var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonth) ?: return@forEach
-                    while (nextPaymentDay < now) {
+                    var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return@forEach
+                    while (nextPaymentDay < from) {
                         nextPaymentDay =
                             expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
                                 ?: return@forEach
                     }
-                    while (nextPaymentDay.isSameMonth(yearMonth)) {
-                        val nextPaymentRemainingDays = nextPaymentDay.getNextPaymentDays()
+                    while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
+                        val nextPaymentRemainingDays =
+                            DateTimeCalculator.getDaysFromUntil(
+                                from = yearMonthIterator,
+                                until = nextPaymentDay,
+                            )
                         val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
                         val currencyValue =
                             CurrencyValue(
@@ -124,20 +145,23 @@ class UpcomingPaymentsViewModel(
                         currencyPrefix + paymentsSumThisMonth.toCurrencyString(defaultCurrency.first())
 
                     // Header element for month
-                    _upcomingPaymentsData.add(UpcomingPayment(yearMonth.toMonthYearStringUTC(), paymentsSum, null))
+                    localUpcomingPaymentsData.add(
+                        UpcomingPayment(yearMonthIterator.toMonthYearStringUTC(), paymentsSum, null),
+                    )
 
                     paymentsThisMonth.forEach {
-                        _upcomingPaymentsData.add(
+                        localUpcomingPaymentsData.add(
                             UpcomingPayment(
-                                yearMonth.toMonthYearStringUTC(),
+                                yearMonthIterator.toMonthYearStringUTC(),
                                 paymentsSum,
                                 it,
                             ),
                         )
                     }
                 }
-                yearMonth = yearMonth.plus(DatePeriod(months = 1))
-            } while (yearMonth.monthsUntil(yearMonthUntil) > 0)
+                yearMonthIterator = yearMonthIterator.plus(DatePeriod(months = 1))
+            } while (yearMonthIterator.monthsUntil(yearMonthUntil) > 0)
+            return@withContext localUpcomingPaymentsData
         }
 
     private suspend fun CurrencyValue.exchangeToDefaultCurrency(): CurrencyValue? {
