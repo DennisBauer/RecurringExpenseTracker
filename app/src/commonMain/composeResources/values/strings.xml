@@ -111,5 +111,5 @@
     <string name="widget_configuration_biometric_deactivate">Deactivate Biometric</string>
     <string name="widget_grid_mode">Grid Mode</string>
     <string name="widget_configuration_title">Configure Widget</string>
-    <string name="widget_background_color">Transparent Background</string>
+    <string name="widget_transparent_background">Transparent Background</string>
 </resources>

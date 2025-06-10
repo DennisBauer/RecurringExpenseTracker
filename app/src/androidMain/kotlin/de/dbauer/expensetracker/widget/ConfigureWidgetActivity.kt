@@ -37,11 +37,11 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.biometric_prompt_manager_title
 import recurringexpensetracker.app.generated.resources.cancel
 import recurringexpensetracker.app.generated.resources.dialog_ok
-import recurringexpensetracker.app.generated.resources.widget_background_color
 import recurringexpensetracker.app.generated.resources.widget_configuration_biometric
 import recurringexpensetracker.app.generated.resources.widget_configuration_biometric_deactivate
 import recurringexpensetracker.app.generated.resources.widget_configuration_title
 import recurringexpensetracker.app.generated.resources.widget_grid_mode
+import recurringexpensetracker.app.generated.resources.widget_transparent_background
 import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.theme.ExpenseTrackerTheme
@@ -169,7 +169,7 @@ private fun ConfigurationContent(
                     onChange = onGridModeChange,
                 )
                 RowWithSwitch(
-                    title = stringResource(Res.string.widget_background_color),
+                    title = stringResource(Res.string.widget_transparent_background),
                     enabled = isWidgetBackgroundTransparent,
                     onChange = onWidgetBackgroundTransparentChange,
                 )
