@@ -11,7 +11,7 @@ import data.CurrencyValue
 import data.RecurringExpenseData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import model.ExchangeRateProvider
+import model.IExchangeRateProvider
 import model.database.IExpenseRepository
 import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
@@ -19,7 +19,7 @@ import model.getSystemCurrencyCode
 
 class RecurringExpenseViewModel(
     private val expenseRepository: IExpenseRepository,
-    private val exchangeRateProvider: ExchangeRateProvider,
+    private val exchangeRateProvider: IExchangeRateProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     private val _recurringExpenseData = mutableStateListOf<RecurringExpenseData>()

@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateListOf
 import data.CurrencyValue
 import data.UpcomingPaymentData
 import getDefaultCurrencyCode
-import getNextPaymentDays
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -40,7 +39,7 @@ class UpcomingPaymentsWidgetModel(
             expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) }?.let { firstPayment ->
                 val nextPaymentDay =
                     getNextPaymentDay(firstPayment, expense.everyXRecurrence!!, expense.recurrence!!)
-                val nextPaymentRemainingDays = nextPaymentDay.getNextPaymentDays()
+                val nextPaymentRemainingDays = DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
                 val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
                 _upcomingPaymentsData.add(
                     UpcomingPaymentData(

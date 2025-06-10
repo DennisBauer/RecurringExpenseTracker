@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import model.Currency
 import model.CurrencyProvider
-import model.ExchangeRateProvider
+import model.IExchangeRateProvider
 import model.datastore.IUserPreferencesRepository
 import ui.DefaultTab
 import ui.ThemeMode
@@ -20,7 +20,7 @@ import ui.ThemeMode
 class SettingsViewModel(
     private val currencyProvider: CurrencyProvider,
     private val userPreferencesRepository: IUserPreferencesRepository,
-    private val exchangeRateProvider: ExchangeRateProvider,
+    private val exchangeRateProvider: IExchangeRateProvider,
 ) : ViewModel() {
     var showThemeSelectionDialog by mutableStateOf(false)
         private set

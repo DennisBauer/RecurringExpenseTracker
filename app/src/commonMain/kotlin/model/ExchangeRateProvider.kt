@@ -13,30 +13,30 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import recurringexpensetracker.app.generated.resources.Res
 
 @Serializable
-data class ExchangeRates(
+private data class ExchangeRates(
     val meta: Meta,
     val data: Map<String, Rate>,
     val updateTime: String,
 )
 
 @Serializable
-data class Meta(
+private data class Meta(
     @SerialName("last_updated_at")
     val lastUpdatedAt: String,
 )
 
 @Serializable
-data class Rate(
+private data class Rate(
     val code: String,
     val value: Float,
 )
 
-class ExchangeRateProvider {
+class ExchangeRateProvider : IExchangeRateProvider {
     private val mutex = Mutex()
 
     private var exchangeRates: ExchangeRates? = null
 
-    suspend fun exchangeCurrencyValue(
+    override suspend fun exchangeCurrencyValue(
         from: CurrencyValue,
         toCurrencyCode: String,
     ): CurrencyValue? {
@@ -56,7 +56,7 @@ class ExchangeRateProvider {
         return null
     }
 
-    suspend fun getLastUpdateInfo(): String {
+    override suspend fun getLastUpdateInfo(): String {
         val exchangeRates =
             mutex.withLock {
                 exchangeRates ?: retrieveExchangeRates().apply {
