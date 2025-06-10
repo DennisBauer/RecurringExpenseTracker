@@ -73,7 +73,7 @@
     <string name="settings_notifications_schedule_days">Jours avant paiement</string>
     <string name="settings_notifications_schedule_days_subtitle">%1$d jours à l\'avance</string>
     <string name="settings_notifications_missing_permission_title">Permission manquante</string>
-    <string name="settings_notifications_missing_permission_subtitle">Absence de la permission de notification. Sans cette permission, l\'application ne peut pas vous notifier des paiements à venir. Veuillez cliquer ici et l\'accorder dans les paramètres.</string>
+    <string name="settings_notifications_missing_permission_subtitle">Les notifications n\'ont pas été permises. Sans cette permission, l\'application ne peut pas vous notifier des paiements à venir. Veuillez cliquer ici et l\'accorder dans les paramètres.</string>
     <string name="settings_notifications_schedule_time">Heure de notification</string>
     <string name="settings_currency_exchange_last_update">Taux de change depuis %1$s</string>
     <string name="settings_show_converted_currency">Afficher la devise convertie</string>
