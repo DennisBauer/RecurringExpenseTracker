@@ -106,7 +106,7 @@ class UpcomingPaymentsViewModel(
                     while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
                         val nextPaymentRemainingDays =
                             DateTimeCalculator.getDaysFromUntil(
-                                from = yearMonthIterator,
+                                from = from,
                                 until = nextPaymentDay,
                             )
                         val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
