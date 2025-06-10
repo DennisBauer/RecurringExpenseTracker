@@ -6,13 +6,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -42,6 +41,7 @@ import recurringexpensetracker.app.generated.resources.widget_configuration_biom
 import recurringexpensetracker.app.generated.resources.widget_configuration_biometric_deactivate
 import recurringexpensetracker.app.generated.resources.widget_configuration_title
 import recurringexpensetracker.app.generated.resources.widget_grid_mode
+import recurringexpensetracker.app.generated.resources.widget_transparent_background
 import security.BiometricPromptManager
 import security.BiometricPromptManager.BiometricResult
 import ui.theme.ExpenseTrackerTheme
@@ -93,6 +93,10 @@ class ConfigureWidgetActivity : AppCompatActivity() {
                 ConfigurationContent(
                     isBiometricEnabled = userPreferencesRepository.biometricSecurity.collectAsState().value,
                     isGridModeEnabled = userPreferencesRepository.gridMode.collectAsState().value,
+                    isWidgetBackgroundTransparent =
+                        userPreferencesRepository.widgetBackgroundTransparent
+                            .collectAsState()
+                            .value,
                     onShowBiometricPrompt = {
                         biometricPromptManager.showBiometricPrompt(
                             biometricPromptTitle,
@@ -102,6 +106,11 @@ class ConfigureWidgetActivity : AppCompatActivity() {
                     onGridModeChange = {
                         lifecycleScope.launch(Dispatchers.IO) {
                             userPreferencesRepository.gridMode.save(it)
+                        }
+                    },
+                    onWidgetBackgroundTransparentChange = {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            userPreferencesRepository.widgetBackgroundTransparent.save(it)
                         }
                     },
                     onConfirmClick = {
@@ -124,8 +133,10 @@ class ConfigureWidgetActivity : AppCompatActivity() {
 private fun ConfigurationContent(
     isBiometricEnabled: Boolean,
     isGridModeEnabled: Boolean,
+    isWidgetBackgroundTransparent: Boolean,
     onShowBiometricPrompt: () -> Unit,
     onGridModeChange: (Boolean) -> Unit,
+    onWidgetBackgroundTransparentChange: (Boolean) -> Unit,
     onConfirmClick: () -> Unit,
 ) {
     Scaffold(
@@ -144,14 +155,24 @@ private fun ConfigurationContent(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (isBiometricEnabled) {
                 BiometricSection(onShowBiometricPrompt)
             } else {
-                GridModeSection(isGridModeEnabled, onGridModeChange)
+                RowWithSwitch(
+                    title = stringResource(Res.string.widget_grid_mode),
+                    enabled = isGridModeEnabled,
+                    onChange = onGridModeChange,
+                )
+                RowWithSwitch(
+                    title = stringResource(Res.string.widget_transparent_background),
+                    enabled = isWidgetBackgroundTransparent,
+                    onChange = onWidgetBackgroundTransparentChange,
+                )
                 Button(onClick = onConfirmClick) {
                     Text(text = stringResource(Res.string.dialog_ok))
                 }
@@ -177,19 +198,25 @@ private fun BiometricSection(onShowBiometricPrompt: () -> Unit) {
 }
 
 @Composable
-private fun GridModeSection(
-    isGridModeEnabled: Boolean,
-    onGridModeChange: (Boolean) -> Unit,
+private fun RowWithSwitch(
+    title: String,
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
+        modifier =
+            modifier.clickable(onClick = { onChange(!enabled) }),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        Text(text = stringResource(Res.string.widget_grid_mode))
-        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = title,
+            modifier = Modifier.weight(1f),
+        )
         Switch(
-            checked = isGridModeEnabled,
-            onCheckedChange = onGridModeChange,
+            checked = enabled,
+            onCheckedChange = onChange,
         )
     }
 }
@@ -207,8 +234,10 @@ private fun ConfigurationContentPreview(
         ConfigurationContent(
             isBiometricEnabled = false,
             isGridModeEnabled = isGridModeEnabled,
+            isWidgetBackgroundTransparent = isGridModeEnabled,
             onShowBiometricPrompt = {},
             onGridModeChange = {},
+            onWidgetBackgroundTransparentChange = {},
             onConfirmClick = {},
         )
     }
@@ -221,8 +250,10 @@ private fun ConfigurationContentPreview3() {
         ConfigurationContent(
             isBiometricEnabled = true,
             isGridModeEnabled = true,
+            isWidgetBackgroundTransparent = true,
             onShowBiometricPrompt = {},
             onGridModeChange = {},
+            onWidgetBackgroundTransparentChange = {},
             onConfirmClick = {},
         )
     }
