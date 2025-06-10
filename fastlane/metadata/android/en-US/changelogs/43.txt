@@ -1,0 +1,14 @@
+Changelog 0.17.4:
+* Fix wrong days calculation for following months
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.4
+
+Changelog 0.17.3:
+* Add widget preview (Android >= 15) and allow transparent background
+* Fix empty upcoming payments tab on some time zones
+* Added (Czech) translation
+* Update (French) translation
+* Update (Czech) translation
+* Update exchange rates
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.3
