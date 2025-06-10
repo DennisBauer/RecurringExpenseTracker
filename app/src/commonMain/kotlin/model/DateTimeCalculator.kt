@@ -24,6 +24,14 @@ object DateTimeCalculator {
         return fromStartOfDay.daysUntil(until.atStartOfDayIn(TimeZone.UTC), TimeZone.UTC)
     }
 
+    fun getDaysFromUntil(
+        from: LocalDate,
+        until: LocalDate,
+    ): Int {
+        val fromStartOfDay = from.atStartOfDayIn(TimeZone.UTC)
+        return fromStartOfDay.daysUntil(until.atStartOfDayIn(TimeZone.UTC), TimeZone.UTC)
+    }
+
     fun getDayOfNextOccurrenceFromNow(
         from: Instant,
         everyXRecurrence: Int,

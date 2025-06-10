@@ -2,6 +2,8 @@ package di
 
 import model.CurrencyProvider
 import model.ExchangeRateProvider
+import model.FakeExchangeRateProvider
+import model.IExchangeRateProvider
 import model.database.ExpenseRepository
 import model.database.FakeExpenseRepository
 import model.database.IExpenseRepository
@@ -37,7 +39,7 @@ val sharedModule =
         }
         singleOf(::CurrencyProvider)
         viewModelOf(::SettingsViewModel)
-        singleOf(::ExchangeRateProvider)
+        single<IExchangeRateProvider> { ExchangeRateProvider() }
         singleOf(::ExpenseNotificationManager)
         viewModelOf(::MainNavigationViewModel)
     }
@@ -49,7 +51,7 @@ val previewModule =
         viewModel { (expenseId: Int?) ->
             EditRecurringExpenseViewModel(expenseId, get(), get(), get())
         }
-        singleOf(::ExchangeRateProvider)
+        single<IExchangeRateProvider> { FakeExchangeRateProvider() }
         singleOf(::CurrencyProvider)
         single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
