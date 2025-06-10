@@ -38,15 +38,6 @@
         "/com.pinterest.ktlint/",
         "/org.jlleitschuh.gradle.ktlint/"
       ]
-    },
-    {
-      "groupName": "gradle",
-      "enabled": false,
-      "matchPackageNames": [
-        "/com.android.library/",
-        "/com.android.application/",
-        "/gradle/"
-      ]
     }
   ]
 }
