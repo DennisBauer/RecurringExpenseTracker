@@ -6,8 +6,6 @@ import androidx.room.PrimaryKey
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import model.DateTimeCalculator
 
 @Entity(tableName = "recurring_expenses")
@@ -59,7 +57,7 @@ data class RecurringExpense(
         if (everyXRecurrence == null) return null
 
         return DateTimeCalculator.getDayOfNextOccurrence(
-            atPointInTime = afterDate.atStartOfDayIn(TimeZone.UTC),
+            afterDay = afterDate,
             first = Instant.fromEpochMilliseconds(firstPayment),
             everyXRecurrence = everyXRecurrence,
             recurrence = recurrence.toDateTimeUnit(),

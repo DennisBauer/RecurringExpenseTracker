@@ -1,5 +1,6 @@
 package model
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -12,16 +13,7 @@ import kotlinx.datetime.toLocalDateTime
 
 object DateTimeCalculator {
     fun getDaysFromNowUntil(until: LocalDate): Int {
-        return getDaysFromUntil(Clock.System.now(), until)
-    }
-
-    fun getDaysFromUntil(
-        from: Instant,
-        until: LocalDate,
-        fromTimeZone: TimeZone = TimeZone.currentSystemDefault(),
-    ): Int {
-        val fromStartOfDay = from.toLocalDateTime(fromTimeZone).date.atStartOfDayIn(TimeZone.UTC)
-        return fromStartOfDay.daysUntil(until.atStartOfDayIn(TimeZone.UTC), TimeZone.UTC)
+        return getDaysFromUntil(getCurrentLocalDate(), until)
     }
 
     fun getDaysFromUntil(
@@ -37,23 +29,28 @@ object DateTimeCalculator {
         everyXRecurrence: Int,
         recurrence: DateTimeUnit.DateBased,
     ): LocalDate {
-        return getDayOfNextOccurrence(Clock.System.now(), from, everyXRecurrence, recurrence)
+        return getDayOfNextOccurrence(getCurrentLocalDate(), from, everyXRecurrence, recurrence)
     }
 
     fun getDayOfNextOccurrence(
-        atPointInTime: Instant,
+        afterDay: LocalDate,
         first: Instant,
         everyXRecurrence: Int,
         recurrence: DateTimeUnit.DateBased,
-        atPointInTimeZone: TimeZone = TimeZone.currentSystemDefault(),
     ): LocalDate {
-        val pointInTime = atPointInTime.toLocalDateTime(atPointInTimeZone).date
         var nextOccurrence = first.toLocalDateTime(TimeZone.UTC).date
 
-        while (pointInTime.isInDaysAfter(nextOccurrence) && !pointInTime.isSameDay(nextOccurrence)) {
+        while (afterDay.isInDaysAfter(nextOccurrence) && !afterDay.isSameDay(nextOccurrence)) {
             nextOccurrence = nextOccurrence.plus(everyXRecurrence, recurrence)
         }
         return nextOccurrence
+    }
+
+    fun getCurrentLocalDate(
+        @VisibleForTesting
+        now: Instant = Clock.System.now(),
+    ): LocalDate {
+        return now.toLocalDateTime(TimeZone.currentSystemDefault()).date
     }
 
     private fun LocalDate.isSameDay(other: LocalDate): Boolean {
