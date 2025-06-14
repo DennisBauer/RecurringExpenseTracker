@@ -88,4 +88,5 @@
     <string name="settings_about_developer">Developer</string>
     <string name="settings_about_made_by">Vyrobil</string>
     <string name="widget_grid_mode">Dlaždice</string>
+    <string name="widget_transparent_background">Transparentní pozadí</string>
 </resources>
