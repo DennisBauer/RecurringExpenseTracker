@@ -88,4 +88,5 @@
     <string name="settings_about_libraries">Авторские права библиотек</string>
     <string name="widget_configuration_biometric_deactivate">Выключить Biometric</string>
     <string name="widget_grid_mode">Режим сетки</string>
+    <string name="widget_transparent_background">Прозрачный фон</string>
 </resources>
