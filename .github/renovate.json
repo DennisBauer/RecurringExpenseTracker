@@ -29,7 +29,7 @@
       "matchPackageNames": ["/org.jetbrains.kotlin.*/"]
     },
     {
-      "groupName": "mockk",
+      "groupName": "Room and SQLite",
       "matchPackageNames": [
         "/androidx.room/",
         "/androidx.sqlite/"
