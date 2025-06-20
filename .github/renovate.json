@@ -30,7 +30,10 @@
     },
     {
       "groupName": "mockk",
-      "matchPackageNames": ["/io.mockk/"]
+      "matchPackageNames": [
+        "/androidx.room/",
+        "/androidx.sqlite/"
+      ]
     },
     {
       "groupName": "ktlint",
