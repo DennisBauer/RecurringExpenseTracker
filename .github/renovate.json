@@ -26,7 +26,7 @@
     },
     {
       "groupName": "kotlin",
-      "matchPackageNames": ["/org.jetbrains.kotlin.*/"]
+      "matchPackageNames": ["/org.jetbrains.kotlin:.*/"]
     },
     {
       "groupName": "Room and SQLite",
