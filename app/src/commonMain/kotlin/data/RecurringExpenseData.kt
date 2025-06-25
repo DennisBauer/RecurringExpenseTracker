@@ -1,7 +1,6 @@
 package data
 
 import androidx.compose.runtime.Immutable
-import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.StringResource
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_recurrence_day
@@ -13,6 +12,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_recurrence_w
 import recurringexpensetracker.app.generated.resources.edit_expense_recurrence_year
 import recurringexpensetracker.app.generated.resources.edit_expense_recurrence_year_short
 import ui.customizations.ExpenseColor
+import kotlin.time.Instant
 
 enum class Recurrence(
     val fullStringRes: StringResource,

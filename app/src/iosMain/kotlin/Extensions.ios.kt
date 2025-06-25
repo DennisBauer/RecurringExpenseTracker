@@ -1,5 +1,5 @@
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
@@ -12,6 +12,7 @@ import platform.Foundation.NSNumberFormatterDecimalStyle
 import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.timeZoneWithAbbreviation
+import kotlin.time.Instant
 
 actual fun Float.toCurrencyString(currencyCode: String): String {
     val numberFormatter = NSNumberFormatter()
@@ -44,7 +45,7 @@ actual fun LocalDate.toMonthYearStringUTC(): String {
     val comps =
         NSDateComponents().apply {
             setYear(year)
-            setMonth(monthNumber.toLong())
+            setMonth(month.number.toLong())
             setDay(1)
             timeZone = NSTimeZone.timeZoneWithAbbreviation("UTC")
         }

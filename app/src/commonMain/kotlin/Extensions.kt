@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import model.datastore.IUserPreferencesRepository
 import model.getSystemCurrencyCode
@@ -13,6 +12,7 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.koinInject
 import ui.ThemeMode
+import kotlin.time.Instant
 
 expect fun Float.toCurrencyString(currencyCode: String): String
 

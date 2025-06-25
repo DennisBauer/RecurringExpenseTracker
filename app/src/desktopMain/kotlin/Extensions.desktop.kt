@@ -1,15 +1,16 @@
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.Month
+import kotlinx.datetime.number
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.ParseException
+import java.time.Month
 import java.time.format.TextStyle
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.time.Instant
 
 actual fun Float.toCurrencyString(currencyCode: String): String {
     val currencyInstance = NumberFormat.getCurrencyInstance()
@@ -46,7 +47,7 @@ actual fun LocalDate.toMonthYearStringUTC(): String {
     val locale = Locale.getDefault()
     val month =
         Month
-            .of(monthNumber)
+            .of(month.number)
             .getDisplayName(TextStyle.FULL, locale)
     return "$month $year"
 }

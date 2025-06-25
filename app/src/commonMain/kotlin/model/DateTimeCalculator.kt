@@ -1,15 +1,15 @@
 package model
 
 import androidx.annotation.VisibleForTesting
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 object DateTimeCalculator {
     fun getDaysFromNowUntil(until: LocalDate): Int {
@@ -56,7 +56,7 @@ object DateTimeCalculator {
     private fun LocalDate.isSameDay(other: LocalDate): Boolean {
         return this.year == other.year &&
             this.month == other.month &&
-            this.dayOfMonth == other.dayOfMonth
+            this.day == other.day
     }
 
     private fun LocalDate.isInDaysAfter(other: LocalDate): Boolean {
@@ -68,7 +68,7 @@ object DateTimeCalculator {
             return true
         } else if (this.year == other.year &&
             this.month == other.month &&
-            this.dayOfMonth > other.dayOfMonth
+            this.day > other.day
         ) {
             return true
         }

@@ -12,7 +12,6 @@ import data.Recurrence
 import data.RecurringExpenseData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import model.CurrencyProvider
 import model.database.IExpenseRepository
 import model.datastore.IUserPreferencesRepository
@@ -23,6 +22,7 @@ import recurringexpensetracker.app.generated.resources.edit_expense_notification
 import toFloatLocaleAware
 import toLocalString
 import ui.customizations.ExpenseColor
+import kotlin.time.Instant
 
 class EditRecurringExpenseViewModel(
     private val expenseId: Int?,
