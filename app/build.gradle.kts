@@ -44,6 +44,10 @@ kotlin {
     sourceSets {
         val desktopMain by getting
 
+        all {
+            languageSettings.optIn("kotlin.time.ExperimentalTime")
+        }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.accompanist.permissions)

@@ -12,7 +12,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -31,6 +30,7 @@ import toCurrencyString
 import toLocaleString
 import toMonthYearStringUTC
 import ui.customizations.ExpenseColor
+import kotlin.time.Clock
 
 data class UpcomingPayment(val month: String, val paymentsSum: String, val payment: UpcomingPaymentData?)
 
@@ -87,8 +87,8 @@ class UpcomingPaymentsViewModel(
         until: LocalDate,
     ): List<UpcomingPayment> =
         withContext(Dispatchers.IO) {
-            var yearMonthIterator = LocalDate(from.year, from.monthNumber, 1)
-            var yearMonthUntil = LocalDate(until.year, until.monthNumber, 1)
+            var yearMonthIterator = LocalDate(from.year, from.month, 1)
+            var yearMonthUntil = LocalDate(until.year, until.month, 1)
             if (yearMonthIterator >= yearMonthUntil) return@withContext emptyList()
 
             val localUpcomingPaymentsData = mutableListOf<UpcomingPayment>()
@@ -173,6 +173,6 @@ class UpcomingPaymentsViewModel(
     }
 
     private fun LocalDate.isSameMonth(other: LocalDate): Boolean {
-        return year == other.year && monthNumber == other.monthNumber
+        return year == other.year && month == other.month
     }
 }

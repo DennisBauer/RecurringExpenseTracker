@@ -1,7 +1,6 @@
 package model.notification
 
 import kotlinx.coroutines.flow.first
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.daysUntil
@@ -13,6 +12,7 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_days
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_today
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_tomorrow
+import kotlin.time.Instant
 
 class ExpenseNotificationManager(
     private val expenseRepository: IExpenseRepository,

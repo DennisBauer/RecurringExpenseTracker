@@ -5,7 +5,6 @@ import data.CurrencyValue
 import data.UpcomingPaymentData
 import getDefaultCurrencyCode
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
@@ -16,6 +15,7 @@ import model.database.RecurringExpense
 import model.datastore.IUserPreferencesRepository
 import toLocaleString
 import ui.customizations.ExpenseColor
+import kotlin.time.Instant
 
 class UpcomingPaymentsWidgetModel(
     private val expenseRepository: IExpenseRepository,

@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import model.DateTimeCalculator
+import kotlin.time.Instant
 
 @Entity(tableName = "recurring_expenses")
 data class RecurringExpense(

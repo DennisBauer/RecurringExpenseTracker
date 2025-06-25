@@ -37,7 +37,6 @@ import androidx.navigation.NavController
 import data.CurrencyValue
 import data.EditExpensePane
 import data.UpcomingPaymentData
-import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -51,6 +50,7 @@ import ui.customizations.ExpenseColor
 import ui.theme.ExpenseTrackerThemePreview
 import viewmodel.UpcomingPayment
 import viewmodel.UpcomingPaymentsViewModel
+import kotlin.time.Clock
 
 @Composable
 fun UpcomingPaymentsScreen(

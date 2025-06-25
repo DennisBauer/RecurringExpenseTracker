@@ -28,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -39,6 +37,8 @@ import recurringexpensetracker.app.generated.resources.dialog_ok
 import recurringexpensetracker.app.generated.resources.edit_expense_first_payment
 import recurringexpensetracker.app.generated.resources.edit_expense_first_payment_placeholder
 import toLocaleString
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

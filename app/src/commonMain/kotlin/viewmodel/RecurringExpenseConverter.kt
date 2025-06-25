@@ -3,10 +3,10 @@ package viewmodel
 import data.CurrencyValue
 import data.Recurrence
 import data.RecurringExpenseData
-import kotlinx.datetime.Instant
 import model.database.RecurrenceDatabase
 import model.database.RecurringExpense
 import ui.customizations.ExpenseColor
+import kotlin.time.Instant
 
 internal fun RecurringExpense.toFrontendType(defaultCurrencyCode: String): RecurringExpenseData {
     return RecurringExpenseData(
