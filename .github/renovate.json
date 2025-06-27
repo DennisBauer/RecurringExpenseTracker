@@ -22,27 +22,27 @@
     {
       "groupName": "kotlin",
       "versioning": "loose",
-      "matchPackageNames": ["com.google.devtools.ksp"]
+      "matchPackageNames": ["/com\\.google\\.devtools\\.ksp/"]
     },
     {
       "groupName": "kotlin",
       "matchPackageNames": [
-        "/org.jetbrains.kotlin:/",
-        "/org.jetbrains.kotlin\\./"
+        "/org\\.jetbrains\\.kotlin:/",
+        "/org\\.jetbrains\\.kotlin\\./"
       ]
     },
     {
       "groupName": "Room and SQLite",
       "matchPackageNames": [
-        "/androidx.room/",
-        "/androidx.sqlite/"
+        "/androidx\\.room/",
+        "/androidx\\.sqlite/"
       ]
     },
     {
       "groupName": "ktlint",
       "matchPackageNames": [
-        "/com.pinterest.ktlint/",
-        "/org.jlleitschuh.gradle.ktlint/"
+        "/com\\.pinterest\\.ktlint/",
+        "/org\\.jlleitschuh\\.gradle\\.ktlint/"
       ]
     }
   ]
