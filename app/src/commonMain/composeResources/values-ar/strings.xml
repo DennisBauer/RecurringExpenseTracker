@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_expense_price">السعر</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">أغلق وضع الشبكة</string>
+    <string name="edit_expense_recurrence">التكرار</string>
+    <string name="edit_expense_recurrence_day">يوم/أيام</string>
+    <string name="edit_expense_recurrence_day_short">ي</string>
+    <string name="edit_expense_recurrence_month">شهر/أشهر</string>
+    <string name="edit_expense_recurrence_year">سنة/سنيين</string>
+    <string name="edit_expense_recurrence_year_short">س</string>
+    <string name="edit_expense_first_payment">الدفعة الأولى (اختياري)</string>
+    <string name="edit_expense_first_payment_placeholder">اختر تاريخًا</string>
+    <string name="edit_expense_color">اللون</string>
+    <string name="edit_expense_notification_days_advance">%1$d (افتراضي)</string>
+    <string name="edit_expense_delete_dialog_text">هل تريد حقًا حذف هذه المصروفات؟</string>
+    <string name="upcoming_title">المدفوعات الآتية</string>
+    <string name="upcoming_placeholder_title">حدّد تاريخ الدفعة الأولى للمصروفات للاطلاع على نظرة عامة للمدفوعات الآتية</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">افتح وضع الشبكة</string>
+    <string name="bottom_nav_home">المنزل</string>
+    <string name="bottom_nav_upcoming">الآتية</string>
+    <string name="bottom_nav_settings">اﻹعدادات</string>
+    <string name="home_summary_yearly">سنويًا</string>
+    <string name="edit_expense_description">الوصف (اختياري)</string>
+    <string name="edit_expense_invalid_input">إدخال غير صحيح</string>
+    <string name="edit_expense_title">عدّل المصروفات</string>
+    <string name="edit_expense_button_add">أضف المصروفات</string>
+    <string name="edit_expense_description_placeholder">على سبيل المثال، اشتراك خاص</string>
+    <string name="edit_expense_name">اسم</string>
+    <string name="edit_expense_recurrence_week_short">أسب</string>
+    <string name="home_summary_monthly">شهريًا</string>
+    <string name="edit_expense_notification_get_notified">ابدأ بتلقي الإشعارات حول المدفوعات القادمة. ما عليك سوى الانتقال إلى الإعدادات وتمكين الإشعارات.</string>
+    <string name="home_summary_weekly">أسبوعيًا</string>
+    <string name="edit_expense_recurrence_week">اسبوع/أسابيع</string>
+    <string name="edit_expense_recurrence_month_short">ش</string>
+</resources>

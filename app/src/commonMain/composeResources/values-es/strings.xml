@@ -19,7 +19,7 @@
     <string name="top_app_bar_icon_button_grid_close_content_desc">Cerrar el modo cuadrícula</string>
     <string name="bottom_nav_upcoming">Próximamente</string>
     <string name="bottom_nav_settings">Configuración</string>
-    <string name="home_summary_monthly">Mensual</string>
+    <string name="home_summary_monthly">Mensualmente</string>
     <string name="home_summary_weekly">Semanalmente</string>
     <string name="home_summary_yearly">Anualmente</string>
     <string name="edit_expense_button_add">Añadir un gasto</string>
