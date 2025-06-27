@@ -23,7 +23,11 @@ kotlin {
 
     compilerOptions {
         // Common compiler options applied to all Kotlin source sets
-        freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs.addAll(
+            "-Xexpect-actual-classes",
+            "-Xjsr305=strict",
+        )
+        allWarningsAsErrors.set(true)
     }
 
     jvm("desktop")
