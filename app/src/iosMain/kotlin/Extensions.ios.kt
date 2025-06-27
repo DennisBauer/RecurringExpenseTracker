@@ -45,7 +45,7 @@ actual fun LocalDate.toMonthYearStringUTC(): String {
     val comps =
         NSDateComponents().apply {
             setYear(year)
-            setMonth(month.number.toLong())
+            setMonth(this@toMonthYearStringUTC.month.number.toLong())
             setDay(1)
             timeZone = NSTimeZone.timeZoneWithAbbreviation("UTC")
         }
