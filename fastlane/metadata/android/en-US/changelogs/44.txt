@@ -1,0 +1,7 @@
+Changelog 0.17.5:
+* Target Android 16
+* Update exchange rates
+* Update translations
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.5
