@@ -37,10 +37,8 @@ jobs:
         with:
           commit-message: "Update exchange rates"
           title: "Update exchange rates"
-          body: "Automated currency rate refresh."
           branch: "bot/update-exchange-rates"
           labels: |
-            automated
-            release
+            dependencies
           add-paths: |
             app/src/commonMain/composeResources/files/exchange_rates.json
