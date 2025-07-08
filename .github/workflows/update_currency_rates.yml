@@ -20,17 +20,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0      # full history → correct diff & tags
+          fetch-depth: 0
 
-      - name: Set up Python 3.12 with pip cache
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
-
-      # If your script has requirements, uncomment the next two lines
-      # - name: Install requirements
-      #   run: pip install -r .github/scripts/requirements.txt
 
       - name: Run update script
         run: python .github/scripts/update_exchange_rates.py
