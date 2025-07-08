@@ -1,0 +1,51 @@
+name: Currency – Update rates & PR
+
+permissions:
+  contents: write          # needed for pushing a branch & opening the PR
+  pull-requests: write     # so the action can label / comment
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: update-exchange-rates
+  cancel-in-progress: false   # allow multiple manual runs, but never in parallel
+
+jobs:
+  update-exchange-rates:
+    name: Update exchange rates & open PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # full history → correct diff & tags
+
+      - name: Set up Python 3.12 with pip cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      # If your script has requirements, uncomment the next two lines
+      # - name: Install requirements
+      #   run: pip install -r .github/scripts/requirements.txt
+
+      - name: Run update script
+        run: python .github/scripts/update_exchange_rates.py
+        env:
+          CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
+
+      - name: Create pull request if rates changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Update exchange rates"
+          title: "Update exchange rates"
+          body: "Automated currency rate refresh."
+          branch: "bot/update-exchange-rates"
+          labels: |
+            automated
+            release
+          add-paths: |
+            app/src/commonMain/composeResources/files/exchange_rates.json
