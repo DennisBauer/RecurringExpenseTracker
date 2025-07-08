@@ -37,7 +37,7 @@ jobs:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           ABOUT_LIBRARIES_TOKEN: ${{ secrets.ABOUT_LIBRARIES_TOKEN }}
       - name: Verify Signature
-        run: $ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
+        run: $ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
