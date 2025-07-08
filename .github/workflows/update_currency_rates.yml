@@ -33,7 +33,7 @@ jobs:
           CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
 
       - name: Create pull request if rates changed
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "Update exchange rates"
           title: "Update exchange rates"
