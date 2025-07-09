@@ -141,9 +141,7 @@ android {
                     }
                 }
             }
-            if (runsCIReleaseBuild) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
