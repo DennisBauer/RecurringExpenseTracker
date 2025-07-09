@@ -109,7 +109,7 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
-    val runsCIReleaseBuild = System.getenv("SIGNING_STORE_PASSWORD")?.toBoolean() == true
+    val runsCIReleaseBuild = System.getenv("SIGNING_STORE_PASSWORD") != null
 
     defaultConfig {
         applicationId = "de.dbauer.expensetracker"
@@ -141,7 +141,7 @@ android {
                     }
                 }
             }
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName(if (runsCIReleaseBuild) "release" else "debug")
         }
     }
     compileOptions {
