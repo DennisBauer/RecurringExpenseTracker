@@ -27,7 +27,25 @@
     <string name="edit_expense_first_payment_placeholder">Wybierz datę</string>
     <string name="edit_expense_color">Kolor</string>
     <string name="edit_expense_notification_days_advance">%1$d (domyślnie)</string>
-    <string name="edit_expense_notification_get_notified">Zacznij otrzymywać powiadomienia dotyczące nadchodzących płatności. Przejdź do ustawień, aby włączyć powiadomienia.</string>
+    <string name="edit_expense_notification_get_notified">Zacznij otrzymywać powiadomienia o nadchodzących płatnościach. Wystarczy przejść do ustawień, aby włączyć powiadomienia.</string>
     <string name="edit_expense_delete_dialog_text">Czy na pewno chcesz usunąć ten wydatek?</string>
     <string name="upcoming_title">Nadchodzące Płatności</string>
+    <string name="upcoming_time_remaining_days">w ciągu %1$d dni</string>
+    <string name="settings_title">Ustawienia</string>
+    <string name="settings_general">Ogólne</string>
+    <string name="settings_theme_mode">Tryb motywu</string>
+    <string name="settings_theme_mode_follow_system">Podążaj za systemowym</string>
+    <string name="settings_theme_mode_dark">Ciemny</string>
+    <string name="settings_theme_mode_light">Jasny</string>
+    <string name="settings_default_tab">Domyślna zakładka</string>
+    <string name="settings_currency">Waluta</string>
+    <string name="settings_default_currency">Domyślna Waluta</string>
+    <string name="settings_choose_currency">Wybierz Walutę</string>
+    <string name="settings_system_default">Wartość domyślna systemu</string>
+    <string name="settings_currency_exchange_info">Wydatki dodane w innej walucie zostaną przekonwertowane do tej waluty.\nKursy wymiany walut zostały dołączone do aplikacji, aby uniemożliwić jej dostęp do Internetu.</string>
+    <string name="settings_currency_exchange_last_update">Kurs wymiany walut z %1$s</string>
+    <string name="settings_show_converted_currency">Pokaż przekonwertowaną walutę</string>
+    <string name="settings_backup">Kopia zapasowa</string>
+    <string name="settings_backup_create">Stwórz kopię zapasową</string>
+    <string name="settings_backup_restore">Stwórz kopię zapasową</string>
 </resources>
