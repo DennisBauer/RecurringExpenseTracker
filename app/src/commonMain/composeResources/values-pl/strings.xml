@@ -79,5 +79,12 @@
     <string name="notification_expense_reminder_message_today">Dzisiaj jest następna płatność</string>
     <string name="notification_expense_reminder_message_tomorrow">Jutro jest następna płatność</string>
     <string name="notification_expense_reminder_message_days">Następna płatność jest za %1$d dni</string>
-    <string name="widget_configuration_biometric">Aby korzystać z tego Widżetu, należy zdezaktywować Blokowanie biometryczne w aplikacji.</string>
+    <string name="widget_configuration_biometric">Aby korzystać z tego Widżetu, należy zdezaktywować Blokowanie biometryczne w aplikacji</string>
+    <string name="widget_configuration_biometric_deactivate">Wyłącz Blokowanie biometryczne</string>
+    <string name="widget_grid_mode">Tryb Siatki</string>
+    <string name="widget_configuration_title">Skonfiguruj Widżet</string>
+    <string name="widget_transparent_background">Przezroczyste Tło</string>
+    <string name="top_app_bar_icon_button_grid_open_content_desc">Otwórz Tryb Siatki</string>
+    <string name="top_app_bar_icon_button_grid_close_content_desc">Zamknij Tryb Siatki</string>
+    <string name="upcoming_placeholder_title">Aby zobaczyć przegląd nadchodzących płatności, zdefiniuj pierwszy dzień płatności wydatku.</string>
 </resources>
