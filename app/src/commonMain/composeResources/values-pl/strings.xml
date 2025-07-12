@@ -86,5 +86,7 @@
     <string name="widget_transparent_background">Przezroczyste Tło</string>
     <string name="top_app_bar_icon_button_grid_open_content_desc">Otwórz Tryb Siatki</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Zamknij Tryb Siatki</string>
-    <string name="upcoming_placeholder_title">Aby zobaczyć przegląd nadchodzących płatności, zdefiniuj pierwszy dzień płatności wydatku.</string>
+    <string name="upcoming_placeholder_title">Aby zobaczyć przegląd nadchodzących płatności, zdefiniuj pierwszy dzień płatności wydatku</string>
+    <string name="upcoming_time_remaining_today">dzisiaj</string>
+    <string name="upcoming_time_remaining_tomorrow">jutro</string>
 </resources>
