@@ -1,3 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="bottom_nav_home">Strona główna</string>
+    <string name="bottom_nav_upcoming">Nadchodzące</string>
+    <string name="bottom_nav_settings">Ustawienia</string>
+    <string name="home_summary_monthly">Miesięcznie</string>
+    <string name="home_summary_weekly">Tygodniowo</string>
+    <string name="home_summary_yearly">Rocznie</string>
+    <string name="edit_expense_title">Edytuj Wydatek</string>
+    <string name="edit_expense_button_add">Dodaj Wydatek</string>
+    <string name="edit_expense_description">Opis (opcjonalnie)</string>
+    <string name="edit_expense_description_placeholder">np. specjalna subskrypcja</string>
+    <string name="edit_expense_invalid_input">Nieprawidłowe dane wejściowe</string>
+    <string name="edit_expense_name">Nazwa</string>
+    <string name="edit_expense_name_placeholder">np. Netflix</string>
+    <string name="edit_expense_price">Koszt</string>
+    <string name="edit_expense_recurrence">Powtarzalność</string>
+    <string name="edit_expense_recurrence_day">Dzień (dni)</string>
+    <string name="edit_expense_recurrence_day_short">D</string>
+    <string name="edit_expense_recurrence_week">Tydzień (tygodnie)</string>
+    <string name="edit_expense_recurrence_week_short">W</string>
+    <string name="edit_expense_recurrence_month">Miesiąc (miesiące)</string>
+    <string name="edit_expense_recurrence_month_short">M</string>
+    <string name="edit_expense_recurrence_year">Rok (lata)</string>
+    <string name="edit_expense_recurrence_year_short">Y</string>
+    <string name="edit_expense_first_payment">Pierwsza płatność (opcjonalnie)</string>
+    <string name="edit_expense_first_payment_placeholder">Wybierz datę</string>
+    <string name="edit_expense_color">Kolor</string>
+    <string name="edit_expense_notification_days_advance">%1$d (domyślnie)</string>
+    <string name="edit_expense_notification_get_notified">Zacznij otrzymywać powiadomienia dotyczące nadchodzących płatności. Przejdź do ustawień, aby włączyć powiadomienia.</string>
+    <string name="edit_expense_delete_dialog_text">Czy na pewno chcesz usunąć ten wydatek?</string>
+    <string name="upcoming_title">Nadchodzące Płatności</string>
 </resources>
