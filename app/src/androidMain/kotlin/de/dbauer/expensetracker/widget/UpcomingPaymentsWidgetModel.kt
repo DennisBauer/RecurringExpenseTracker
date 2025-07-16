@@ -1,20 +1,20 @@
 package de.dbauer.expensetracker.widget
 
 import androidx.compose.runtime.mutableStateListOf
-import data.CurrencyValue
-import data.UpcomingPaymentData
-import getDefaultCurrencyCode
+import de.dbauer.expensetracker.data.CurrencyValue
+import de.dbauer.expensetracker.data.UpcomingPaymentData
+import de.dbauer.expensetracker.getDefaultCurrencyCode
+import de.dbauer.expensetracker.model.DateTimeCalculator
+import de.dbauer.expensetracker.model.database.IExpenseRepository
+import de.dbauer.expensetracker.model.database.RecurrenceDatabase
+import de.dbauer.expensetracker.model.database.RecurringExpense
+import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.toLocaleString
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
-import model.DateTimeCalculator
-import model.database.IExpenseRepository
-import model.database.RecurrenceDatabase
-import model.database.RecurringExpense
-import model.datastore.IUserPreferencesRepository
-import toLocaleString
-import ui.customizations.ExpenseColor
 import kotlin.time.Instant
 
 class UpcomingPaymentsWidgetModel(

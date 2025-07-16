@@ -28,18 +28,18 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import asString
-import data.CurrencyValue
-import data.UpcomingPaymentData
 import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
-import model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.asString
+import de.dbauer.expensetracker.data.CurrencyValue
+import de.dbauer.expensetracker.data.UpcomingPaymentData
+import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.ui.customizations.ExpenseColor
+import de.dbauer.expensetracker.ui.theme.widget.ExpenseTrackerWidgetTheme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.upcoming_title
-import ui.customizations.ExpenseColor
-import ui.theme.widget.ExpenseTrackerWidgetTheme
 
 class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
     private val upcomingPayment by inject<UpcomingPaymentsWidgetModel>()

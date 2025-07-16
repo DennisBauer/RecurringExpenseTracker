@@ -3,9 +3,9 @@ package de.dbauer.expensetracker
 import android.app.Application
 import android.os.Build
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import de.dbauer.expensetracker.di.platformModule
+import de.dbauer.expensetracker.di.sharedModule
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidgetReceiver
-import di.platformModule
-import di.sharedModule
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
