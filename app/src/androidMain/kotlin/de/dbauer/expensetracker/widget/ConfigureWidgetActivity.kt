@@ -27,10 +27,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.security.BiometricPromptManager
+import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
+import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import model.datastore.IUserPreferencesRepository
 import org.jetbrains.compose.resources.stringResource
 import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
@@ -42,9 +45,6 @@ import recurringexpensetracker.app.generated.resources.widget_configuration_biom
 import recurringexpensetracker.app.generated.resources.widget_configuration_title
 import recurringexpensetracker.app.generated.resources.widget_grid_mode
 import recurringexpensetracker.app.generated.resources.widget_transparent_background
-import security.BiometricPromptManager
-import security.BiometricPromptManager.BiometricResult
-import ui.theme.ExpenseTrackerTheme
 
 class ConfigureWidgetActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID

@@ -36,14 +36,25 @@ import androidx.core.content.IntentCompat
 import androidx.core.view.WindowCompat
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
-import asString
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import data.HomePane
-import data.MainNavRoute
-import data.UpcomingPane
+import de.dbauer.expensetracker.data.HomePane
+import de.dbauer.expensetracker.data.MainNavRoute
+import de.dbauer.expensetracker.data.UpcomingPane
+import de.dbauer.expensetracker.model.DatabaseBackupRestore
+import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.model.notification.ExpenseNotificationManager
+import de.dbauer.expensetracker.model.notification.NotificationLoopReceiver
+import de.dbauer.expensetracker.model.notification.startAlarmLooper
+import de.dbauer.expensetracker.security.BiometricPromptManager
+import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
+import de.dbauer.expensetracker.ui.DefaultTab
+import de.dbauer.expensetracker.ui.MainContent
+import de.dbauer.expensetracker.ui.ThemeMode
+import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
+import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -51,11 +62,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import model.DatabaseBackupRestore
-import model.datastore.IUserPreferencesRepository
-import model.notification.ExpenseNotificationManager
-import model.notification.NotificationLoopReceiver
-import model.notification.startAlarmLooper
 import org.jetbrains.compose.resources.stringResource
 import org.koin.android.ext.android.get
 import recurringexpensetracker.app.generated.resources.Res
@@ -66,13 +72,6 @@ import recurringexpensetracker.app.generated.resources.settings_backup_created_t
 import recurringexpensetracker.app.generated.resources.settings_backup_not_created_toast
 import recurringexpensetracker.app.generated.resources.settings_backup_not_restored_toast
 import recurringexpensetracker.app.generated.resources.settings_backup_restored_toast
-import security.BiometricPromptManager
-import security.BiometricPromptManager.BiometricResult
-import ui.DefaultTab
-import ui.MainContent
-import ui.ThemeMode
-import ui.theme.ExpenseTrackerTheme
-import viewmodel.MainActivityViewModel
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
