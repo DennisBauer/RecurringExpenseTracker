@@ -22,7 +22,8 @@
     {
       "groupName": "kotlin",
       "versioning": "loose",
-      "matchPackageNames": ["/com\\.google\\.devtools\\.ksp/"]
+      "matchPackageNames": ["/com\\.google\\.devtools\\.ksp/"],
+      "allowedVersions": "^(?!.*[-.]?(alpha|beta|rc)[-\\d.]?).*$"
     },
     {
       "groupName": "kotlin",
