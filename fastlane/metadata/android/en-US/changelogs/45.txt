@@ -1,0 +1,8 @@
+Changelog 0.17.6:
+* Update exchange rates
+* Updated (Tamil) translation
+* Added (Polish) translation
+* Update dependencies
+
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.6
