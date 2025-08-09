@@ -1,25 +1,27 @@
 package de.dbauer.expensetracker.model.database
 
+import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.data.Tag
 import kotlinx.coroutines.flow.Flow
 
 interface IExpenseRepository {
-    val allRecurringExpenses: Flow<List<EntryRecurringExpense>>
-    val allRecurringExpensesByPrice: Flow<List<EntryRecurringExpense>>
-    val allTags: Flow<List<EntryTag>>
+    val allRecurringExpenses: Flow<List<RecurringExpenseData>>
+    val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
+    val allTags: Flow<List<Tag>>
 
-    suspend fun getRecurringExpenseById(id: Int): EntryRecurringExpense?
+    suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData?
 
     suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags?
 
-    suspend fun insert(recurringExpense: EntryRecurringExpense)
+    suspend fun insert(recurringExpense: RecurringExpenseData)
 
-    suspend fun update(recurringExpense: EntryRecurringExpense)
+    suspend fun update(recurringExpense: RecurringExpenseData)
 
-    suspend fun delete(recurringExpense: EntryRecurringExpense)
+    suspend fun delete(recurringExpense: RecurringExpenseData)
 
-    suspend fun insert(tag: EntryTag)
+    suspend fun insert(tag: Tag)
 
-    suspend fun update(tag: EntryTag)
+    suspend fun update(tag: Tag)
 
-    suspend fun delete(tag: EntryTag)
+    suspend fun delete(tag: Tag)
 }

@@ -66,7 +66,6 @@ class EditRecurringExpenseViewModel(
             if (expenseId != null) {
                 expenseRepository
                     .getRecurringExpenseById(expenseId)
-                    ?.toFrontendType(getDefaultCurrencyCode())
                     ?.let { expense ->
                         nameState = expense.name
                         descriptionState = expense.description
@@ -104,7 +103,7 @@ class EditRecurringExpenseViewModel(
                     addExpense()
                 } else {
                     val recurringExpense = createRecurringExpenseData()
-                    expenseRepository.update(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+                    expenseRepository.update(recurringExpense)
                 }
             }
         }
@@ -125,13 +124,13 @@ class EditRecurringExpenseViewModel(
         showDeleteConfirmDialog = false
         viewModelScope.launch {
             val recurringExpense = createRecurringExpenseData()
-            expenseRepository.delete(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+            expenseRepository.delete(recurringExpense)
         }
     }
 
     private suspend fun addExpense() {
         val recurringExpense = createRecurringExpenseData()
-        expenseRepository.insert(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+        expenseRepository.insert(recurringExpense)
     }
 
     private fun createRecurringExpenseData(): RecurringExpenseData {

@@ -1,13 +1,11 @@
-package de.dbauer.expensetracker.viewmodel
+package de.dbauer.expensetracker.model.database
 
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
-import de.dbauer.expensetracker.model.database.EntryRecurringExpense
-import de.dbauer.expensetracker.model.database.RecurrenceDatabase
 import kotlin.time.Instant
 
-internal fun EntryRecurringExpense.toFrontendType(defaultCurrencyCode: String): RecurringExpenseData {
+internal fun EntryRecurringExpense.toRecurringExpenseData(defaultCurrencyCode: String): RecurringExpenseData {
     return RecurringExpenseData(
         id = this.id,
         name = this.name!!,
@@ -23,7 +21,7 @@ internal fun EntryRecurringExpense.toFrontendType(defaultCurrencyCode: String): 
     )
 }
 
-internal fun RecurringExpenseData.toBackendType(defaultCurrencyCode: String): EntryRecurringExpense {
+internal fun RecurringExpenseData.toEntryRecurringExpense(defaultCurrencyCode: String): EntryRecurringExpense {
     return EntryRecurringExpense(
         id = this.id,
         name = this.name,

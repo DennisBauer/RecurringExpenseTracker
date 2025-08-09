@@ -1,51 +1,54 @@
 package de.dbauer.expensetracker.model.database
 
+import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.Recurrence
+import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.data.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeExpenseRepository : IExpenseRepository {
     private val fakeExpense =
-        EntryRecurringExpense(
+        RecurringExpenseData(
             id = 0,
             name = "name",
             description = "description",
-            price = 10f,
+            price = CurrencyValue(10f, "EUR"),
+            monthlyPrice = CurrencyValue(10f, "EUR"),
             everyXRecurrence = 1,
-            recurrence = Recurrence.Monthly.ordinal,
+            recurrence = Recurrence.Monthly,
             firstPayment = null,
-            currencyCode = "EUR",
             notifyForExpense = true,
             notifyXDaysBefore = null,
             lastNotificationDate = null,
         )
     private val fakeTags =
         listOf(
-            EntryTag(id = 0, title = "TagTitle1", color = "0xFF00658F"),
-            EntryTag(id = 0, title = "TagTitle1", color = "0xFF4F616E"),
+            Tag(title = "TagTitle1", color = "0xFF00658F"),
+            Tag(title = "TagTitle1", color = "0xFF4F616E"),
         )
 
-    override val allRecurringExpenses: Flow<List<EntryRecurringExpense>> = flowOf(listOf(fakeExpense))
-    override val allRecurringExpensesByPrice: Flow<List<EntryRecurringExpense>> = flowOf(listOf(fakeExpense))
-    override val allTags: Flow<List<EntryTag>> = flowOf(fakeTags)
+    override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
+    override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
+    override val allTags: Flow<List<Tag>> = flowOf(fakeTags)
 
-    override suspend fun getRecurringExpenseById(id: Int): EntryRecurringExpense? {
+    override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
         return fakeExpense
     }
 
     override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? {
-        return RecurringExpenseWithTags(fakeExpense, fakeTags)
+        return null
     }
 
-    override suspend fun insert(recurringExpense: EntryRecurringExpense) {}
+    override suspend fun insert(recurringExpense: RecurringExpenseData) {}
 
-    override suspend fun update(recurringExpense: EntryRecurringExpense) {}
+    override suspend fun update(recurringExpense: RecurringExpenseData) {}
 
-    override suspend fun delete(recurringExpense: EntryRecurringExpense) {}
+    override suspend fun delete(recurringExpense: RecurringExpenseData) {}
 
-    override suspend fun insert(tag: EntryTag) {}
+    override suspend fun insert(tag: Tag) {}
 
-    override suspend fun update(tag: EntryTag) {}
+    override suspend fun update(tag: Tag) {}
 
-    override suspend fun delete(tag: EntryTag) {}
+    override suspend fun delete(tag: Tag) {}
 }

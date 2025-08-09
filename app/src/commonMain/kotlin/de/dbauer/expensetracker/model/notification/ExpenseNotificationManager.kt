@@ -12,7 +12,6 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_days
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_today
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_tomorrow
-import kotlin.time.Instant
 
 class ExpenseNotificationManager(
     private val expenseRepository: IExpenseRepository,
@@ -30,7 +29,6 @@ class ExpenseNotificationManager(
                             ?: userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.get().first()
                     val notifyForExpense =
                         expense.lastNotificationDate
-                            ?.let { Instant.fromEpochMilliseconds(it) }
                             ?.let { lastDateNotifiedForInstant ->
                                 val nextPaymentInstant = nextPaymentDay.atStartOfDayIn(TimeZone.UTC)
                                 lastDateNotifiedForInstant.daysUntil(nextPaymentInstant, TimeZone.UTC) > 0
@@ -39,7 +37,7 @@ class ExpenseNotificationManager(
                         notifications.add(
                             NotificationData(
                                 id = expense.id,
-                                title = expense.name ?: "",
+                                title = expense.name,
                                 description = getNotificationDescription(daysToNextPayment),
                                 channel = NotificationChannel.ExpenseReminder,
                             ),
@@ -56,11 +54,7 @@ class ExpenseNotificationManager(
             expense.getNextPaymentDay()?.let { test ->
                 expenseRepository.update(
                     expense.copy(
-                        lastNotificationDate =
-                            expense
-                                .getNextPaymentDay()
-                                ?.atStartOfDayIn(TimeZone.UTC)
-                                ?.toEpochMilliseconds(),
+                        lastNotificationDate = expense.getNextPaymentDay()?.atStartOfDayIn(TimeZone.UTC),
                     ),
                 )
             }
