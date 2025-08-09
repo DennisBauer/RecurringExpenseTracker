@@ -1,7 +1,6 @@
 package de.dbauer.expensetracker.data
 
 import androidx.compose.runtime.Immutable
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import org.jetbrains.compose.resources.StringResource
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_recurrence_day
@@ -34,7 +33,6 @@ data class RecurringExpenseData(
     val everyXRecurrence: Int,
     val recurrence: Recurrence,
     val firstPayment: Instant?,
-    val color: ExpenseColor,
     val notifyForExpense: Boolean,
     val notifyXDaysBefore: Int?,
     val lastNotificationDate: Instant?,

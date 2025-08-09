@@ -17,7 +17,6 @@ data class RecurringExpense(
     @ColumnInfo(name = "everyXRecurrence") val everyXRecurrence: Int?,
     @ColumnInfo(name = "recurrence") val recurrence: Int?,
     @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
-    @ColumnInfo(name = "color") val color: Int?,
     @ColumnInfo(name = "currencyCode") val currencyCode: String,
     @ColumnInfo(name = "notifyForExpense") val notifyForExpense: Boolean,
     @ColumnInfo(name = "notifyXDaysBefore") val notifyXDaysBefore: Int?,
