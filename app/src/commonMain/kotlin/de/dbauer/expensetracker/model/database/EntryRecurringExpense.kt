@@ -3,10 +3,6 @@ package de.dbauer.expensetracker.model.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import de.dbauer.expensetracker.model.DateTimeCalculator
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlin.time.Instant
 
 @Entity(tableName = "recurring_expenses")
 data class EntryRecurringExpense(
@@ -39,46 +35,13 @@ data class EntryRecurringExpense(
             else -> 0f
         }
     }
-
-    fun getNextPaymentDay(): LocalDate? {
-        if (firstPayment == null) return null
-        if (everyXRecurrence == null) return null
-
-        return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
-            from = Instant.fromEpochMilliseconds(firstPayment),
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence.toDateTimeUnit(),
-        )
-    }
-
-    fun getNextPaymentDayAfter(afterDate: LocalDate): LocalDate? {
-        if (firstPayment == null) return null
-        if (everyXRecurrence == null) return null
-
-        return DateTimeCalculator.getDayOfNextOccurrence(
-            afterDay = afterDate,
-            first = Instant.fromEpochMilliseconds(firstPayment),
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence.toDateTimeUnit(),
-        )
-    }
 }
 
-enum class RecurrenceDatabase(
+internal enum class RecurrenceDatabase(
     val value: Int,
 ) {
     Daily(1),
     Weekly(2),
     Monthly(3),
     Yearly(4),
-}
-
-private fun Int?.toDateTimeUnit(): DateTimeUnit.DateBased {
-    return when (this) {
-        RecurrenceDatabase.Daily.value -> DateTimeUnit.DAY
-        RecurrenceDatabase.Weekly.value -> DateTimeUnit.WEEK
-        RecurrenceDatabase.Monthly.value -> DateTimeUnit.MONTH
-        RecurrenceDatabase.Yearly.value -> DateTimeUnit.YEAR
-        else -> DateTimeUnit.MONTH
-    }
 }
