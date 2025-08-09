@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeExpenseRepository : IExpenseRepository {
     private val fakeExpense =
-        RecurringExpense(
+        EntryRecurringExpense(
             id = 0,
             name = "name",
             description = "description",
@@ -21,15 +21,15 @@ class FakeExpenseRepository : IExpenseRepository {
         )
     private val fakeTags =
         listOf(
-            Tag(id = 0, title = "TagTitle1", color = "0xFF00658F"),
-            Tag(id = 0, title = "TagTitle1", color = "0xFF4F616E"),
+            EntryTag(id = 0, title = "TagTitle1", color = "0xFF00658F"),
+            EntryTag(id = 0, title = "TagTitle1", color = "0xFF4F616E"),
         )
 
-    override val allRecurringExpenses: Flow<List<RecurringExpense>> = flowOf(listOf(fakeExpense))
-    override val allRecurringExpensesByPrice: Flow<List<RecurringExpense>> = flowOf(listOf(fakeExpense))
-    override val allTags: Flow<List<Tag>> = flowOf(fakeTags)
+    override val allRecurringExpenses: Flow<List<EntryRecurringExpense>> = flowOf(listOf(fakeExpense))
+    override val allRecurringExpensesByPrice: Flow<List<EntryRecurringExpense>> = flowOf(listOf(fakeExpense))
+    override val allTags: Flow<List<EntryTag>> = flowOf(fakeTags)
 
-    override suspend fun getRecurringExpenseById(id: Int): RecurringExpense? {
+    override suspend fun getRecurringExpenseById(id: Int): EntryRecurringExpense? {
         return fakeExpense
     }
 
@@ -37,15 +37,15 @@ class FakeExpenseRepository : IExpenseRepository {
         return RecurringExpenseWithTags(fakeExpense, fakeTags)
     }
 
-    override suspend fun insert(recurringExpense: RecurringExpense) {}
+    override suspend fun insert(recurringExpense: EntryRecurringExpense) {}
 
-    override suspend fun update(recurringExpense: RecurringExpense) {}
+    override suspend fun update(recurringExpense: EntryRecurringExpense) {}
 
-    override suspend fun delete(recurringExpense: RecurringExpense) {}
+    override suspend fun delete(recurringExpense: EntryRecurringExpense) {}
 
-    override suspend fun insert(tag: Tag) {}
+    override suspend fun insert(tag: EntryTag) {}
 
-    override suspend fun update(tag: Tag) {}
+    override suspend fun update(tag: EntryTag) {}
 
-    override suspend fun delete(tag: Tag) {}
+    override suspend fun delete(tag: EntryTag) {}
 }

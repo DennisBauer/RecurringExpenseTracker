@@ -9,7 +9,7 @@ import kotlinx.datetime.LocalDate
 import kotlin.time.Instant
 
 @Entity(tableName = "recurring_expenses")
-data class RecurringExpense(
+data class EntryRecurringExpense(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "description") val description: String?,

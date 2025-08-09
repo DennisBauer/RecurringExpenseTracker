@@ -1,11 +1,11 @@
 package de.dbauer.expensetracker.viewmodel
 
 import de.dbauer.expensetracker.model.FakeExchangeRateProvider
+import de.dbauer.expensetracker.model.database.EntryRecurringExpense
+import de.dbauer.expensetracker.model.database.EntryTag
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.database.RecurringExpenseWithTags
-import de.dbauer.expensetracker.model.database.Tag
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -25,38 +25,38 @@ class UpcomingPaymentsViewModelTest {
     private val defaultCurrencyCode = "EUR"
     val expenseRepository =
         object : IExpenseRepository {
-            var expenses: Flow<List<RecurringExpense>> = emptyFlow()
-            var tags: Flow<List<Tag>> = emptyFlow()
+            var expenses: Flow<List<EntryRecurringExpense>> = emptyFlow()
+            var tags: Flow<List<EntryTag>> = emptyFlow()
 
-            override val allRecurringExpenses: Flow<List<RecurringExpense>>
+            override val allRecurringExpenses: Flow<List<EntryRecurringExpense>>
                 get() = expenses
-            override val allRecurringExpensesByPrice: Flow<List<RecurringExpense>>
+            override val allRecurringExpensesByPrice: Flow<List<EntryRecurringExpense>>
                 get() = expenses
-            override val allTags: Flow<List<Tag>>
+            override val allTags: Flow<List<EntryTag>>
                 get() = tags
 
-            override suspend fun getRecurringExpenseById(id: Int): RecurringExpense? {
+            override suspend fun getRecurringExpenseById(id: Int): EntryRecurringExpense? {
                 return expenses.first().find { it.id == id }
             }
 
             override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? {
                 return RecurringExpenseWithTags(
                     expenses.first().first { it.id == id },
-                    listOf(Tag(title = "TestTag", color = "0xFFFFFF")),
+                    listOf(EntryTag(title = "TestTag", color = "0xFFFFFF")),
                 )
             }
 
-            override suspend fun insert(recurringExpense: RecurringExpense) {}
+            override suspend fun insert(recurringExpense: EntryRecurringExpense) {}
 
-            override suspend fun update(recurringExpense: RecurringExpense) {}
+            override suspend fun update(recurringExpense: EntryRecurringExpense) {}
 
-            override suspend fun delete(recurringExpense: RecurringExpense) {}
+            override suspend fun delete(recurringExpense: EntryRecurringExpense) {}
 
-            override suspend fun insert(tag: Tag) {}
+            override suspend fun insert(tag: EntryTag) {}
 
-            override suspend fun update(tag: Tag) {}
+            override suspend fun update(tag: EntryTag) {}
 
-            override suspend fun delete(tag: Tag) {}
+            override suspend fun delete(tag: EntryTag) {}
         }
 
     private lateinit var viewModel: UpcomingPaymentsViewModel
@@ -237,8 +237,8 @@ class UpcomingPaymentsViewModelTest {
         everyXRecurrence: Int? = null,
         recurrence: RecurrenceDatabase? = null,
         firstPayment: Instant? = null,
-    ): RecurringExpense {
-        return RecurringExpense(
+    ): EntryRecurringExpense {
+        return EntryRecurringExpense(
             id = name.hashCode() + price.hashCode(),
             name = name,
             description = null,
