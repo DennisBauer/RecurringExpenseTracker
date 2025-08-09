@@ -11,9 +11,17 @@ data class EntryTag(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "color") val color: String,
 ) {
+    fun toTag(): Tag {
+        return Tag(title, color, id)
+    }
+
     companion object {
         fun fromTag(tag: Tag): EntryTag = EntryTag(title = tag.title, color = tag.color)
 
-        fun Tag.toEntryTag(): EntryTag = EntryTag.fromTag(this)
+        fun Tag.toEntryTag(): EntryTag = fromTag(this)
+
+        fun List<Tag>.toEntryTags(): List<EntryTag> = map { fromTag(it) }
+
+        fun List<EntryTag>.toTags(): List<Tag> = map { it.toTag() }
     }
 }
