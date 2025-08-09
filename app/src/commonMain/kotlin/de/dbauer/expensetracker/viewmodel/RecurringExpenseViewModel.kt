@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.model.IExchangeRateProvider
+import de.dbauer.expensetracker.model.database.EntryRecurringExpense
 import de.dbauer.expensetracker.model.database.IExpenseRepository
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import kotlinx.coroutines.flow.first
@@ -60,7 +60,7 @@ class RecurringExpenseViewModel(
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<EntryRecurringExpense>) {
         _recurringExpenseData.clear()
         val defaultCurrency = getDefaultCurrencyCode()
         var atLeastOneWasExchanged = false
