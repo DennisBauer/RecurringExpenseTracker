@@ -3,21 +3,31 @@ package de.dbauer.expensetracker.model.database
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.model.database.EntryTag.Companion.toTags
 import kotlin.time.Instant
 
-internal fun EntryRecurringExpense.toRecurringExpenseData(defaultCurrencyCode: String): RecurringExpenseData {
+internal fun EntryRecurringExpenseWithTags.toRecurringExpenseData(
+    defaultCurrencyCode: String,
+): RecurringExpenseData {
     return RecurringExpenseData(
-        id = this.id,
-        name = this.name!!,
-        description = this.description!!,
-        price = CurrencyValue(this.price!!, this.currencyCode.ifBlank { defaultCurrencyCode }),
-        monthlyPrice = CurrencyValue(this.getMonthlyPrice(), this.currencyCode.ifBlank { defaultCurrencyCode }),
-        everyXRecurrence = this.everyXRecurrence!!,
-        recurrence = getRecurrenceFromDatabaseInt(this.recurrence!!),
-        firstPayment = this.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
-        notifyForExpense = this.notifyForExpense,
-        notifyXDaysBefore = this.notifyXDaysBefore,
-        lastNotificationDate = this.lastNotificationDate?.let { Instant.fromEpochMilliseconds(it) },
+        id = this.expense.id,
+        name = this.expense.name!!,
+        description = this.expense.description!!,
+        price = CurrencyValue(this.expense.price!!, this.expense.currencyCode.ifBlank { defaultCurrencyCode }),
+        monthlyPrice =
+            CurrencyValue(
+                this.expense.getMonthlyPrice(),
+                this.expense.currencyCode.ifBlank {
+                    defaultCurrencyCode
+                },
+            ),
+        everyXRecurrence = this.expense.everyXRecurrence!!,
+        recurrence = getRecurrenceFromDatabaseInt(this.expense.recurrence!!),
+        tags = this.tags.toTags(),
+        firstPayment = this.expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
+        notifyForExpense = this.expense.notifyForExpense,
+        notifyXDaysBefore = this.expense.notifyXDaysBefore,
+        lastNotificationDate = this.expense.lastNotificationDate?.let { Instant.fromEpochMilliseconds(it) },
     )
 }
 

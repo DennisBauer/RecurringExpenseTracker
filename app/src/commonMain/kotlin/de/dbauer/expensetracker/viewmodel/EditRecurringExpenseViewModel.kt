@@ -150,6 +150,7 @@ class EditRecurringExpenseViewModel(
                 ),
             everyXRecurrence = everyXRecurrenceState.toIntOrNull() ?: 1,
             recurrence = selectedRecurrence,
+            tags = emptyList(), // TODO: to be implemented
             firstPayment = firstPaymentDate,
             notifyForExpense = notifyForExpense,
             notifyXDaysBefore = notifyXDaysBefore.takeIf { it.isNotBlank() && notifyForExpense }?.toIntOrNull(),

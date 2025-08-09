@@ -11,8 +11,6 @@ interface IExpenseRepository {
 
     suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData?
 
-    suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags?
-
     suspend fun insert(recurringExpense: RecurringExpenseData)
 
     suspend fun update(recurringExpense: RecurringExpenseData)
