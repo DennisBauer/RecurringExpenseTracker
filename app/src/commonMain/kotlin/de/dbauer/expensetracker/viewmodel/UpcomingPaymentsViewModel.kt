@@ -9,8 +9,8 @@ import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.getDefaultCurrencyCode
 import de.dbauer.expensetracker.model.DateTimeCalculator
 import de.dbauer.expensetracker.model.IExchangeRateProvider
+import de.dbauer.expensetracker.model.database.EntryRecurringExpense
 import de.dbauer.expensetracker.model.database.IExpenseRepository
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.toCurrencyString
@@ -64,7 +64,7 @@ class UpcomingPaymentsViewModel(
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<EntryRecurringExpense>) {
         _upcomingPaymentsData.clear()
         val from =
             Clock.System
@@ -81,7 +81,7 @@ class UpcomingPaymentsViewModel(
     }
 
     suspend fun createUpcomingPaymentData(
-        recurringExpenses: List<RecurringExpense>,
+        recurringExpenses: List<EntryRecurringExpense>,
         from: LocalDate,
         until: LocalDate,
     ): List<UpcomingPayment> =

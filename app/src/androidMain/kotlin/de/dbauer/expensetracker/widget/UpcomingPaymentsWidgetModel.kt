@@ -5,9 +5,9 @@ import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.getDefaultCurrencyCode
 import de.dbauer.expensetracker.model.DateTimeCalculator
+import de.dbauer.expensetracker.model.database.EntryRecurringExpense
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.toLocaleString
 import kotlinx.datetime.DateTimeUnit
@@ -32,7 +32,7 @@ class UpcomingPaymentsWidgetModel(
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<EntryRecurringExpense>) {
         _upcomingPaymentsData.clear()
         recurringExpenses.forEach { expense ->
             expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) }?.let { firstPayment ->
