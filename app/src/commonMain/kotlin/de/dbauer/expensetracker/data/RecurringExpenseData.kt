@@ -33,6 +33,7 @@ data class RecurringExpenseData(
     val monthlyPrice: CurrencyValue,
     val everyXRecurrence: Int,
     val recurrence: Recurrence,
+    val tags: List<Tag>,
     val firstPayment: Instant?,
     val notifyForExpense: Boolean,
     val notifyXDaysBefore: Int?,

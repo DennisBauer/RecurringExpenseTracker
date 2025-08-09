@@ -3,6 +3,7 @@ package de.dbauer.expensetracker.model.database
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.database.EntryTag.Companion.toEntryTag
+import de.dbauer.expensetracker.model.database.EntryTag.Companion.toTags
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +26,7 @@ class ExpenseRepository(
             expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
         }
     override val allTags: Flow<List<Tag>> =
-        recurringExpenseDao.getAllTags().map { tags ->
-            tags.map { Tag(it.title, it.color, it.id) }
-        }
+        recurringExpenseDao.getAllTags().map { tags -> tags.toTags() }
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
 
@@ -36,11 +35,6 @@ class ExpenseRepository(
             return@withContext recurringExpenseDao
                 .getExpenseById(id)
                 ?.toRecurringExpenseData(getDefaultCurrencyCode())
-        }
-
-    override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? =
-        withContext(Dispatchers.IO) {
-            return@withContext recurringExpenseDao.getExpenseWithTagsById(id)
         }
 
     override suspend fun insert(recurringExpense: RecurringExpenseData) =

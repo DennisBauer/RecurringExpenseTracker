@@ -4,9 +4,9 @@ import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.FakeExchangeRateProvider
 import de.dbauer.expensetracker.model.database.EntryRecurringExpense
+import de.dbauer.expensetracker.model.database.EntryRecurringExpenseWithTags
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
-import de.dbauer.expensetracker.model.database.RecurringExpenseWithTags
 import de.dbauer.expensetracker.model.database.toRecurringExpenseData
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -39,10 +39,6 @@ class UpcomingPaymentsViewModelTest {
 
             override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
                 return expenses.first().find { it.id == id }
-            }
-
-            override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? {
-                return null
             }
 
             override suspend fun insert(recurringExpense: RecurringExpenseData) {}
@@ -237,18 +233,22 @@ class UpcomingPaymentsViewModelTest {
         recurrence: RecurrenceDatabase = RecurrenceDatabase.Monthly,
         firstPayment: Instant? = null,
     ): RecurringExpenseData {
-        return EntryRecurringExpense(
-            id = name.hashCode() + price.hashCode(),
-            name = name,
-            description = "",
-            price = price,
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence?.value,
-            firstPayment = firstPayment?.toEpochMilliseconds(),
-            currencyCode = currencyCode,
-            notifyForExpense = false,
-            notifyXDaysBefore = null,
-            lastNotificationDate = null,
+        return EntryRecurringExpenseWithTags(
+            expense =
+                EntryRecurringExpense(
+                    id = name.hashCode() + price.hashCode(),
+                    name = name,
+                    description = "",
+                    price = price,
+                    everyXRecurrence = everyXRecurrence,
+                    recurrence = recurrence.value,
+                    firstPayment = firstPayment?.toEpochMilliseconds(),
+                    currencyCode = currencyCode,
+                    notifyForExpense = false,
+                    notifyXDaysBefore = null,
+                    lastNotificationDate = null,
+                ),
+            tags = emptyList(),
         ).toRecurringExpenseData(defaultCurrencyCode)
     }
 }

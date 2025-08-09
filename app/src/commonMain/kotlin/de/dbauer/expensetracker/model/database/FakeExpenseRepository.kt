@@ -8,6 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeExpenseRepository : IExpenseRepository {
+    private val fakeTags =
+        listOf(
+            Tag(title = "TagTitle1", color = "0xFF00658F"),
+            Tag(title = "TagTitle1", color = "0xFF4F616E"),
+        )
     private val fakeExpense =
         RecurringExpenseData(
             id = 0,
@@ -17,15 +22,11 @@ class FakeExpenseRepository : IExpenseRepository {
             monthlyPrice = CurrencyValue(10f, "EUR"),
             everyXRecurrence = 1,
             recurrence = Recurrence.Monthly,
+            tags = fakeTags,
             firstPayment = null,
             notifyForExpense = true,
             notifyXDaysBefore = null,
             lastNotificationDate = null,
-        )
-    private val fakeTags =
-        listOf(
-            Tag(title = "TagTitle1", color = "0xFF00658F"),
-            Tag(title = "TagTitle1", color = "0xFF4F616E"),
         )
 
     override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
@@ -34,10 +35,6 @@ class FakeExpenseRepository : IExpenseRepository {
 
     override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
         return fakeExpense
-    }
-
-    override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? {
-        return null
     }
 
     override suspend fun insert(recurringExpense: RecurringExpenseData) {}

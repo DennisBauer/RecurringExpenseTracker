@@ -12,19 +12,15 @@ import kotlinx.coroutines.flow.Flow
 interface RecurringExpenseDao {
     @Transaction
     @Query("SELECT * FROM recurring_expenses")
-    fun getAllExpenses(): Flow<List<EntryRecurringExpense>>
+    fun getAllExpenses(): Flow<List<EntryRecurringExpenseWithTags>>
 
     @Transaction
     @Query("SELECT * FROM recurring_expenses ORDER BY price DESC")
-    fun getAllExpensesByPrice(): Flow<List<EntryRecurringExpense>>
+    fun getAllExpensesByPrice(): Flow<List<EntryRecurringExpenseWithTags>>
 
     @Transaction
     @Query("SELECT * FROM recurring_expenses WHERE id = :id")
-    suspend fun getExpenseById(id: Int): EntryRecurringExpense?
-
-    @Transaction
-    @Query("SELECT * FROM recurring_expenses WHERE id = :id")
-    suspend fun getExpenseWithTagsById(id: Int): RecurringExpenseWithTags?
+    suspend fun getExpenseById(id: Int): EntryRecurringExpenseWithTags?
 
     @Transaction
     @Query("SELECT * FROM tags")
