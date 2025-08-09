@@ -93,10 +93,6 @@ fun EditRecurringExpenseScreen(
             date = viewModel.firstPaymentDate,
             onSelectDate = { viewModel.firstPaymentDate = it },
         )
-        ColorOption(
-            expenseColor = viewModel.expenseColor,
-            onSelectExpenseColor = { viewModel.expenseColor = it },
-        )
         if (canUseNotifications) {
             NotificationOption(
                 expenseNotificationEnabledGlobally =

@@ -10,7 +10,6 @@ import de.dbauer.expensetracker.model.database.RecurrenceDatabase
 import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.toLocaleString
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -52,7 +51,6 @@ class UpcomingPaymentsWidgetModel(
                             ),
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
                         nextPaymentDate = nextPaymentDate,
-                        color = ExpenseColor.fromInt(expense.color),
                     ),
                 )
             }

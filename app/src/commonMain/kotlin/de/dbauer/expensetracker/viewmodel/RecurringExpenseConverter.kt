@@ -5,7 +5,6 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
 import de.dbauer.expensetracker.model.database.RecurringExpense
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlin.time.Instant
 
 internal fun RecurringExpense.toFrontendType(defaultCurrencyCode: String): RecurringExpenseData {
@@ -18,7 +17,6 @@ internal fun RecurringExpense.toFrontendType(defaultCurrencyCode: String): Recur
         everyXRecurrence = this.everyXRecurrence!!,
         recurrence = getRecurrenceFromDatabaseInt(this.recurrence!!),
         firstPayment = this.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
-        color = ExpenseColor.fromInt(this.color),
         notifyForExpense = this.notifyForExpense,
         notifyXDaysBefore = this.notifyXDaysBefore,
         lastNotificationDate = this.lastNotificationDate?.let { Instant.fromEpochMilliseconds(it) },
@@ -34,7 +32,6 @@ internal fun RecurringExpenseData.toBackendType(defaultCurrencyCode: String): Re
         everyXRecurrence = this.everyXRecurrence,
         recurrence = getRecurrenceIntFromUIRecurrence(this.recurrence),
         firstPayment = this.firstPayment?.toEpochMilliseconds(),
-        color = this.color.toInt(),
         currencyCode = if (defaultCurrencyCode != this.price.currencyCode) this.price.currencyCode else "",
         notifyForExpense = this.notifyForExpense,
         notifyXDaysBefore = this.notifyXDaysBefore,

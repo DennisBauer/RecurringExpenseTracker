@@ -16,7 +16,6 @@ import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.toFloatLocaleAware
 import de.dbauer.expensetracker.toLocalString
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -43,7 +42,6 @@ class EditRecurringExpenseViewModel(
         private set
     var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
     var firstPaymentDate: Instant? by mutableStateOf(null)
-    var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
     var expenseNotificationEnabledGlobally = userPreferencesRepository.upcomingPaymentNotification
     var notifyForExpense by mutableStateOf(true)
     var notifyXDaysBefore by mutableStateOf("")
@@ -76,7 +74,6 @@ class EditRecurringExpenseViewModel(
                         everyXRecurrenceState = expense.everyXRecurrence.toString()
                         selectedRecurrence = expense.recurrence
                         firstPaymentDate = expense.firstPayment
-                        expenseColor = expense.color
                         notifyForExpense = expense.notifyForExpense
                         notifyXDaysBefore = expense.notifyXDaysBefore?.toString() ?: ""
                         lastNotificationDate = expense.lastNotificationDate
@@ -155,7 +152,6 @@ class EditRecurringExpenseViewModel(
             everyXRecurrence = everyXRecurrenceState.toIntOrNull() ?: 1,
             recurrence = selectedRecurrence,
             firstPayment = firstPaymentDate,
-            color = expenseColor,
             notifyForExpense = notifyForExpense,
             notifyXDaysBefore = notifyXDaysBefore.takeIf { it.isNotBlank() && notifyForExpense }?.toIntOrNull(),
             lastNotificationDate = lastNotificationDate,

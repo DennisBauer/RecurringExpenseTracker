@@ -1,9 +1,12 @@
 package de.dbauer.expensetracker.model.database
 
+import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
+import androidx.room.DeleteColumn
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -17,10 +20,23 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
     override fun initialize(): RecurringExpenseDatabase
 }
 
-@Database(entities = [RecurringExpense::class], version = 7)
+@Database(
+    entities = [
+        RecurringExpense::class,
+        Tag::class,
+        ExpenseTagCrossRef::class,
+    ],
+    version = 8,
+    autoMigrations = [
+        AutoMigration(from = 7, to = 8, spec = RecurringExpenseDatabase.AutoMigrate7To8::class),
+    ],
+)
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
     abstract fun recurringExpenseDao(): RecurringExpenseDao
+
+    @DeleteColumn(tableName = "recurring_expenses", columnName = "color")
+    class AutoMigrate7To8 : AutoMigrationSpec
 
     companion object {
         fun getRecurringExpenseDatabase(builder: Builder<RecurringExpenseDatabase>): RecurringExpenseDatabase {

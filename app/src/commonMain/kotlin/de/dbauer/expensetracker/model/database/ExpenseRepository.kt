@@ -8,13 +8,19 @@ import kotlinx.coroutines.withContext
 class ExpenseRepository(
     private val recurringExpenseDao: RecurringExpenseDao,
 ) : IExpenseRepository {
-    override val allRecurringExpenses: Flow<List<RecurringExpense>> = recurringExpenseDao.getAll()
+    override val allRecurringExpenses: Flow<List<RecurringExpense>> = recurringExpenseDao.getAllExpenses()
     override val allRecurringExpensesByPrice: Flow<List<RecurringExpense>> =
-        recurringExpenseDao.getAllByPrice()
+        recurringExpenseDao.getAllExpensesByPrice()
+    override val allTags: Flow<List<Tag>> = recurringExpenseDao.getAllTags()
 
     override suspend fun getRecurringExpenseById(id: Int): RecurringExpense? =
         withContext(Dispatchers.IO) {
-            return@withContext recurringExpenseDao.getById(id)
+            return@withContext recurringExpenseDao.getExpenseById(id)
+        }
+
+    override suspend fun getRecurringExpenseWithTagsById(id: Int): RecurringExpenseWithTags? =
+        withContext(Dispatchers.IO) {
+            return@withContext recurringExpenseDao.getExpenseWithTagsById(id)
         }
 
     override suspend fun insert(recurringExpense: RecurringExpense) =
@@ -30,5 +36,20 @@ class ExpenseRepository(
     override suspend fun delete(recurringExpense: RecurringExpense) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(recurringExpense)
+        }
+
+    override suspend fun insert(tag: Tag) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.insert(tag)
+        }
+
+    override suspend fun update(tag: Tag) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.update(tag)
+        }
+
+    override suspend fun delete(tag: Tag) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.delete(tag)
         }
 }
