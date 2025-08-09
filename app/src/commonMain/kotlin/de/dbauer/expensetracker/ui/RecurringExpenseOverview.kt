@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -186,7 +185,6 @@ private fun GridRecurringExpense(
 ) {
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Column(
             modifier =
@@ -244,7 +242,6 @@ private fun RecurringExpense(
 ) {
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

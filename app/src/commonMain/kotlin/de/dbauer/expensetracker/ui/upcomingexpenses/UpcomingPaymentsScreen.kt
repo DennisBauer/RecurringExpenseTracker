@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,7 +37,6 @@ import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.EditExpensePane
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.toLocaleString
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.viewmodel.UpcomingPayment
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
@@ -221,7 +219,6 @@ private fun GridUpcomingPayment(
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Column(
             modifier =
@@ -264,7 +261,6 @@ private fun UpcomingPayment(
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -352,7 +348,6 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(9.99f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays1,
                                     nextPaymentDate = nextPaymentDate1String,
-                                    color = ExpenseColor.Dynamic,
                                 ),
                         ),
                         UpcomingPayment(
@@ -365,7 +360,6 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(5f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays2,
                                     nextPaymentDate = nextPaymentDate2String,
-                                    color = ExpenseColor.Green,
                                 ),
                         ),
                         UpcomingPayment(
@@ -378,7 +372,6 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(7.95f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays3,
                                     nextPaymentDate = nextPaymentDate3String,
-                                    color = ExpenseColor.Blue,
                                 ),
                         ),
                     ),

@@ -34,7 +34,6 @@ import de.dbauer.expensetracker.asString
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.widget.ExpenseTrackerWidgetTheme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -80,7 +79,6 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
                         ),
                     nextPaymentRemainingDays = 20,
                     nextPaymentDate = "2025-06-06",
-                    color = ExpenseColor.Red,
                 ),
                 UpcomingPaymentData(
                     id = 1,
@@ -93,7 +91,6 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
                         ),
                     nextPaymentRemainingDays = 20,
                     nextPaymentDate = "2025-06-06",
-                    color = ExpenseColor.Red,
                 ),
             )
         val gridMode = false

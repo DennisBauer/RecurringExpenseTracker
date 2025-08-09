@@ -16,7 +16,6 @@ import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.toLocaleString
 import de.dbauer.expensetracker.toMonthYearStringUTC
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
@@ -122,7 +121,6 @@ class UpcomingPaymentsViewModel(
                                 price = currencyValue,
                                 nextPaymentRemainingDays = nextPaymentRemainingDays,
                                 nextPaymentDate = nextPaymentDate,
-                                color = ExpenseColor.fromInt(expense.color),
                             ),
                         )
 
