@@ -3,10 +3,10 @@ package de.dbauer.expensetracker.viewmodel
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.FakeExchangeRateProvider
-import de.dbauer.expensetracker.model.database.EntryRecurringExpense
-import de.dbauer.expensetracker.model.database.EntryRecurringExpenseWithTags
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
+import de.dbauer.expensetracker.model.database.RecurringExpenseEntry
+import de.dbauer.expensetracker.model.database.RecurringExpenseWithTagsEntry
 import de.dbauer.expensetracker.model.database.toRecurringExpenseData
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -233,9 +233,9 @@ class UpcomingPaymentsViewModelTest {
         recurrence: RecurrenceDatabase = RecurrenceDatabase.Monthly,
         firstPayment: Instant? = null,
     ): RecurringExpenseData {
-        return EntryRecurringExpenseWithTags(
+        return RecurringExpenseWithTagsEntry(
             expense =
-                EntryRecurringExpense(
+                RecurringExpenseEntry(
                     id = name.hashCode() + price.hashCode(),
                     name = name,
                     description = "",

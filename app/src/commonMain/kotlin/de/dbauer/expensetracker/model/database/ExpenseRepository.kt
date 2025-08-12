@@ -2,8 +2,6 @@ package de.dbauer.expensetracker.model.database
 
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.Tag
-import de.dbauer.expensetracker.model.database.EntryTag.Companion.toEntryTag
-import de.dbauer.expensetracker.model.database.EntryTag.Companion.toTags
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import kotlinx.coroutines.Dispatchers
@@ -54,17 +52,17 @@ class ExpenseRepository(
 
     override suspend fun insert(tag: Tag) =
         withContext(Dispatchers.IO) {
-            recurringExpenseDao.insert(tag.toEntryTag())
+            recurringExpenseDao.insert(tag.toTagEntry())
         }
 
     override suspend fun update(tag: Tag) =
         withContext(Dispatchers.IO) {
-            recurringExpenseDao.update(tag.toEntryTag())
+            recurringExpenseDao.update(tag.toTagEntry())
         }
 
     override suspend fun delete(tag: Tag) =
         withContext(Dispatchers.IO) {
-            recurringExpenseDao.delete(tag.toEntryTag())
+            recurringExpenseDao.delete(tag.toTagEntry())
         }
 
     private suspend fun getDefaultCurrencyCode(): String {

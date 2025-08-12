@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "b2b3fd6e6d0e7fc51760f0d2732748f5",
+    "identityHash": "075b3f5688d817b5904f732001f72784",
     "entities": [
       {
         "tableName": "recurring_expenses",
@@ -76,7 +76,7 @@
       },
       {
         "tableName": "tags",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `color` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `color` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -93,7 +93,7 @@
           {
             "fieldPath": "color",
             "columnName": "color",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -132,7 +132,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b2b3fd6e6d0e7fc51760f0d2732748f5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '075b3f5688d817b5904f732001f72784')"
     ]
   }
 }
