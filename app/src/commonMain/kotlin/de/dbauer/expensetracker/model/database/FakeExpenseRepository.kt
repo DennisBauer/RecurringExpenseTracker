@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.flowOf
 class FakeExpenseRepository : IExpenseRepository {
     private val fakeTags =
         listOf(
-            Tag(title = "TagTitle1", color = "0xFF00658F"),
-            Tag(title = "TagTitle1", color = "0xFF4F616E"),
+            Tag(title = "TagTitle1", color = 0xFF00658F),
+            Tag(title = "TagTitle1", color = 0xFF4F616E),
         )
     private val fakeExpense =
         RecurringExpenseData(

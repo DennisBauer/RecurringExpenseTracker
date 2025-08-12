@@ -4,17 +4,17 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class EntryRecurringExpenseWithTags(
-    @Embedded val expense: EntryRecurringExpense,
+data class RecurringExpenseWithTagsEntry(
+    @Embedded val expense: RecurringExpenseEntry,
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
         associateBy =
             Junction(
-                value = EntryExpenseTagCrossRef::class,
+                value = ExpenseTagCrossRefEntry::class,
                 parentColumn = "expenseId",
                 entityColumn = "tagId",
             ),
     )
-    val tags: List<EntryTag>,
+    val tags: List<TagEntry>,
 )

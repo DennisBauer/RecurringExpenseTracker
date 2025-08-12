@@ -22,9 +22,9 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
 
 @Database(
     entities = [
-        EntryRecurringExpense::class,
-        EntryTag::class,
-        EntryExpenseTagCrossRef::class,
+        RecurringExpenseEntry::class,
+        TagEntry::class,
+        ExpenseTagCrossRefEntry::class,
     ],
     version = 8,
     autoMigrations = [

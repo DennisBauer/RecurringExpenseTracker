@@ -7,7 +7,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingDailyRecurrence_onceADay() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -27,7 +27,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingDailyRecurrence_everyFewDays() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -47,7 +47,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingWeeklyRecurrence_onceAWeek() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -67,7 +67,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingWeeklyRecurrence_everyFewWeeks() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -87,7 +87,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingMonthlyRecurrence_onceAMonth() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -107,7 +107,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingMonthlyRecurrence_everyFewMonths() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -127,7 +127,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingYearlyRecurrence_onceAYear() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
@@ -147,7 +147,7 @@ class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingYearlyRecurrence_everyFewYears() {
         val expense =
-            EntryRecurringExpense(
+            RecurringExpenseEntry(
                 id = 1,
                 name = null,
                 description = null,
