@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "075b3f5688d817b5904f732001f72784",
+    "identityHash": "4220cd25ac9f1580a0811d67d2637bfb",
     "entities": [
       {
         "tableName": "recurring_expenses",
@@ -127,12 +127,32 @@
             "expenseId",
             "tagId"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_ExpenseTagCrossRef_tagId",
+            "unique": false,
+            "columnNames": [
+              "tagId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ExpenseTagCrossRef_tagId` ON `${TABLE_NAME}` (`tagId`)"
+          },
+          {
+            "name": "index_ExpenseTagCrossRef_expenseId",
+            "unique": false,
+            "columnNames": [
+              "expenseId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ExpenseTagCrossRef_expenseId` ON `${TABLE_NAME}` (`expenseId`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '075b3f5688d817b5904f732001f72784')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4220cd25ac9f1580a0811d67d2637bfb')"
     ]
   }
 }

@@ -38,16 +38,34 @@ class ExpenseRepository(
     override suspend fun insert(recurringExpense: RecurringExpenseData) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.insert(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
+            recurringExpense.tags.forEach {
+                recurringExpenseDao.upsert(ExpenseTagCrossRefEntry(recurringExpense.id, it.id))
+            }
         }
 
     override suspend fun update(recurringExpense: RecurringExpenseData) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.update(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
+
+            // Get current tags for the expense
+            val currentTags = recurringExpenseDao.getExpenseById(recurringExpense.id)?.tags ?: emptyList()
+            val currentTagIds = currentTags.map { it.id }.toSet()
+            val newTagIds = recurringExpense.tags.map { it.id }.toSet()
+
+            // Tags to add
+            recurringExpense.tags.filterNot { it.id in currentTagIds }.forEach { newTag ->
+                recurringExpenseDao.upsert(ExpenseTagCrossRefEntry(recurringExpense.id, newTag.id))
+            }
+            // Tags to remove
+            currentTags.filterNot { it.id in newTagIds }.forEach { oldTag ->
+                recurringExpenseDao.delete(ExpenseTagCrossRefEntry(recurringExpense.id, oldTag.id))
+            }
         }
 
     override suspend fun delete(recurringExpense: RecurringExpenseData) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
+            recurringExpenseDao.deleteAllCrossRefForExpenseId(recurringExpense.id)
         }
 
     override suspend fun insert(tag: Tag) =
@@ -63,6 +81,7 @@ class ExpenseRepository(
     override suspend fun delete(tag: Tag) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(tag.toTagEntry())
+            recurringExpenseDao.deleteAllCrossRefForTagId(tag.id)
         }
 
     private suspend fun getDefaultCurrencyCode(): String {
