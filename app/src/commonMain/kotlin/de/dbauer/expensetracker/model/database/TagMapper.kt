@@ -7,7 +7,7 @@ internal fun TagEntry.toTag(): Tag {
 }
 
 internal fun Tag.toTagEntry(): TagEntry {
-    return TagEntry(title = title, color = color)
+    return TagEntry(id = id, title = title, color = color)
 }
 
 internal fun List<Tag>.toTagEntries(): List<TagEntry> = map { it.toTagEntry() }

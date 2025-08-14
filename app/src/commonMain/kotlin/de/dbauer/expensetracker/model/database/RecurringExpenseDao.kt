@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -47,4 +48,16 @@ interface RecurringExpenseDao {
 
     @Delete
     suspend fun delete(tag: TagEntry)
+
+    @Upsert()
+    suspend fun upsert(expenseTagCrossRef: ExpenseTagCrossRefEntry)
+
+    @Delete
+    suspend fun delete(expenseTagCrossRef: ExpenseTagCrossRefEntry)
+
+    @Query("DELETE FROM ExpenseTagCrossRef WHERE tagId = :tagId")
+    suspend fun deleteAllCrossRefForTagId(tagId: Int)
+
+    @Query("DELETE FROM ExpenseTagCrossRef WHERE expenseId = :expenseId")
+    suspend fun deleteAllCrossRefForExpenseId(expenseId: Int)
 }
