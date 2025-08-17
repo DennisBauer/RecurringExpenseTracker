@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -102,27 +102,25 @@ private fun TagsList(
     modifier: Modifier = Modifier,
 ) {
     FlowRow(
-        modifier =
-            modifier
-                .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         tags.forEach { (tag, selected) ->
             key(tag.id) {
                 if (tagsExpanded || selected) {
-                    InputChip(
+                    FilterChip(
                         selected = selected,
                         onClick = { onTagClick(tag) },
                         label = { Text(text = tag.title) },
                         colors =
                             InputChipDefaults.inputChipColors().copy(
+                                containerColor = Color(tag.color).copy(alpha = 0.2f),
                                 selectedContainerColor = Color(tag.color),
                             ),
-                        trailingIcon = {
+                        leadingIcon = {
                             if (selected) {
                                 Icon(
-                                    Icons.Default.Close,
+                                    Icons.Default.Check,
                                     contentDescription = "Localized description",
                                     Modifier.size(InputChipDefaults.AvatarSize),
                                 )
