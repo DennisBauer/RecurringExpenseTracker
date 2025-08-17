@@ -6,12 +6,15 @@ import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.data.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class FakeExpenseRepository : IExpenseRepository {
+    @OptIn(ExperimentalUuidApi::class)
     private val fakeTags =
         listOf(
-            Tag(title = "TagTitle1", color = 0xFF00658F),
-            Tag(title = "TagTitle1", color = 0xFF4F616E),
+            Tag(title = "TagTitle1", color = 0xFF00658F, id = Uuid.random().hashCode()),
+            Tag(title = "TagTitle1", color = 0xFF4F616E, id = Uuid.random().hashCode()),
         )
     private val fakeExpense =
         RecurringExpenseData(

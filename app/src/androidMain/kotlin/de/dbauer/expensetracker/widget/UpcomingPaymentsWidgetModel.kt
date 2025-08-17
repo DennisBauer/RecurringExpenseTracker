@@ -41,6 +41,7 @@ class UpcomingPaymentsWidgetModel(
                         price = expense.price,
                         nextPaymentRemainingDays = nextPaymentRemainingDays,
                         nextPaymentDate = nextPaymentDate,
+                        tags = expense.tags,
                     ),
                 )
             }

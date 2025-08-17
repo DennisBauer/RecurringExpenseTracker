@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.ui.home
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -15,10 +16,12 @@ import de.dbauer.expensetracker.ui.elements.HorizontalLazyRowWithGradient
 fun HorizontalAssignedTagColorsList(
     tags: List<Tag>,
     modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(4.dp),
     gradientColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
 ) {
     HorizontalLazyRowWithGradient(
         gradientColor = gradientColor,
+        horizontalArrangement = horizontalArrangement,
         modifier = modifier,
     ) {
         items(tags) {

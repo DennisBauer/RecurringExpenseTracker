@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 fun HorizontalLazyRowWithGradient(
     gradientColor: Color,
     modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
     content: LazyListScope.() -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
@@ -37,7 +38,7 @@ fun HorizontalLazyRowWithGradient(
 
     LazyRow(
         state = lazyListState,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = horizontalArrangement,
         modifier =
             modifier
                 .fillMaxWidth()

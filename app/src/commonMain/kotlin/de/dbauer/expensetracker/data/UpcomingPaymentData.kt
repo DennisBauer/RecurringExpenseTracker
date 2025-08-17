@@ -6,4 +6,5 @@ data class UpcomingPaymentData(
     val price: CurrencyValue,
     val nextPaymentRemainingDays: Int,
     val nextPaymentDate: String,
+    val tags: List<Tag>,
 )
