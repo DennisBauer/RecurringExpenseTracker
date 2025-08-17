@@ -185,6 +185,9 @@ fun MainContent(
                             navController.navigateUp()
                             updateWidget()
                         },
+                        onEditTagsClick = {
+                            // TODO: Implement
+                        },
                         setTopAppBar = {
                             mainNavigationViewModel.topAppBar = it
                             topAppBar = it
