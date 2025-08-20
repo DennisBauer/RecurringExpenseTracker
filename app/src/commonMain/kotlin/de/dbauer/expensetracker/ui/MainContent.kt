@@ -10,6 +10,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -29,10 +32,12 @@ import de.dbauer.expensetracker.data.EditExpensePane
 import de.dbauer.expensetracker.data.HomePane
 import de.dbauer.expensetracker.data.MainNavRoute
 import de.dbauer.expensetracker.data.SettingsPane
+import de.dbauer.expensetracker.data.TagsPane
 import de.dbauer.expensetracker.data.UpcomingPane
 import de.dbauer.expensetracker.data.isInRoute
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpenseScreen
 import de.dbauer.expensetracker.ui.settings.SettingsScreen
+import de.dbauer.expensetracker.ui.tags.TagsScreen
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
 import de.dbauer.expensetracker.viewmodel.MainNavigationViewModel
@@ -65,11 +70,17 @@ fun MainContent(
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = modifier,
         topBar = {
             mainNavigationViewModel.topAppBar()
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) {
+                Snackbar(it)
+            }
         },
         bottomBar = {
             if (backStackEntry?.destination?.isInRoute(HomePane, UpcomingPane, SettingsPane) == true) {
@@ -186,12 +197,27 @@ fun MainContent(
                             updateWidget()
                         },
                         onEditTagsClick = {
-                            // TODO: Implement
+                            navController.navigate(TagsPane)
                         },
                         setTopAppBar = {
                             mainNavigationViewModel.topAppBar = it
                             topAppBar = it
                         },
+                        modifier = Modifier.padding(paddingValues),
+                    )
+                    mainNavigationViewModel.topAppBar = topAppBar
+                }
+                composable<TagsPane> {
+                    var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
+                    TagsScreen(
+                        onNavigateBack = {
+                            navController.navigateUp()
+                        },
+                        setTopAppBar = {
+                            mainNavigationViewModel.topAppBar = it
+                            topAppBar = it
+                        },
+                        snackbarHostState = snackbarHostState,
                         modifier = Modifier.padding(paddingValues),
                     )
                     mainNavigationViewModel.topAppBar = topAppBar

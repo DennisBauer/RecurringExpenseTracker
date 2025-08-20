@@ -36,6 +36,9 @@ object SettingsPaneDefaultCurrency
 @Serializable
 class EditExpensePane(val expenseId: Int? = null)
 
+@Serializable
+object TagsPane
+
 inline fun <reified T : Any> NavDestination?.isInRoute(vararg routes: T): Boolean {
     return routes.any { route -> this?.hasRoute(route::class) == true }
 }

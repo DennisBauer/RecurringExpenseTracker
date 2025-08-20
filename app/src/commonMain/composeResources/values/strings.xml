@@ -36,13 +36,19 @@
     <string name="edit_expense_recurrence_year_short">Y</string>
     <string name="edit_expense_first_payment">First Payment (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Pick a Date</string>
-    <string name="edit_expense_color">Color</string>
     <string name="edit_expense_tags">Add Tags</string>
-    <string name="edit_expense_tags_create">Create new tag</string>
-    <string name="edit_expense_tags_create_name">Name</string>
     <string name="edit_expense_notification_days_advance">%1$d (default)</string>
     <string name="edit_expense_notification_get_notified">Start getting notified about upcoming payments. Just go to the settings and enable notifications.</string>
     <string name="edit_expense_delete_dialog_text">Do you really want to delete this expense?</string>
+
+    <string name="tags_screen_title">Tags</string>
+    <string name="tags_add_new">Add new Tag</string>
+    <string name="tags_edit">Edit Tag</string>
+    <string name="tags_title">Title</string>
+    <string name="tags_color">Color</string>
+    <string name="tags_title_empty">Tag title cannot be empty</string>
+    <string name="tags_deleted">Tag deleted</string>
+    <string name="tags_delete_undo">Undo</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Upcoming Payments</string>
