@@ -8,16 +8,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
 import de.dbauer.expensetracker.di.platformModule
+import de.dbauer.expensetracker.di.sharedModule
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
+import de.dbauer.expensetracker.ui.MainContent
 import de.dbauer.expensetracker.ui.ThemeMode
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerTheme
-import di.sharedModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
-import ui.MainContent
 
 fun MainViewController() =
     ComposeUIViewController {
