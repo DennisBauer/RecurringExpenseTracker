@@ -25,12 +25,11 @@ kotlin {
         // Common compiler options applied to all Kotlin source sets
         freeCompilerArgs.addAll(
             "-Xexpect-actual-classes",
-            "-Xjsr305=strict",
         )
         allWarningsAsErrors.set(true)
     }
 
-    jvm("desktop")
+    jvm()
 
     listOf(
         iosX64(),
@@ -46,8 +45,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-
         all {
             languageSettings.optIn("kotlin.time.ExperimentalTime")
         }
@@ -89,7 +86,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
         }
-        desktopMain.dependencies {
+        jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
@@ -163,9 +160,6 @@ android {
         // Disables dependency metadata when building Android App Bundles.
         includeInBundle = false
     }
-    dependencies {
-        debugImplementation(compose.uiTooling)
-    }
 }
 
 compose {
@@ -174,7 +168,7 @@ compose {
     }
     desktop {
         application {
-            mainClass = "MainKt"
+            mainClass = "de.dbauer.expensetracker.MainKt"
 
             nativeDistributions {
                 targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
@@ -202,12 +196,14 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
 dependencies {
     add("kspAndroid", libs.room.compiler)
-    add("kspDesktop", libs.room.compiler)
+    add("kspJvm", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
 
     ktlintRuleset(libs.ktlint)
+
+    debugImplementation(compose.uiTooling)
 }
 
 aboutLibraries {
