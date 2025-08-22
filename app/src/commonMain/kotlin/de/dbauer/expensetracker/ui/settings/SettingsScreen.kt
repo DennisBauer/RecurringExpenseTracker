@@ -38,6 +38,7 @@ import recurringexpensetracker.app.generated.resources.settings_title
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    onClickTags: () -> Unit,
     biometricsChecked: Boolean,
     canUseBiometric: Boolean,
     canUseNotifications: Boolean,
@@ -68,6 +69,7 @@ fun SettingsScreen(
                 )
             }
             SettingsMainScreen(
+                onClickTags = onClickTags,
                 biometricsChecked = biometricsChecked,
                 canUseBiometric = canUseBiometric,
                 canUseNotifications = canUseNotifications,
@@ -154,6 +156,7 @@ private fun SettingsScreenPreview(
     ExpenseTrackerThemePreview {
         Surface(modifier = Modifier.fillMaxSize()) {
             SettingsScreen(
+                onClickTags = {},
                 biometricsChecked = checked,
                 canUseBiometric = canUseBiometric,
                 canUseNotifications = true,

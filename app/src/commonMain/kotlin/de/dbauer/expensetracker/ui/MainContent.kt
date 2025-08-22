@@ -169,6 +169,7 @@ fun MainContent(
                 composable<SettingsPane> {
                     var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
                     SettingsScreen(
+                        onClickTags = { navController.navigate(TagsPane) },
                         biometricsChecked = biometricSecurity,
                         onClickBackup = onClickBackup,
                         onClickRestore = onClickRestore,
