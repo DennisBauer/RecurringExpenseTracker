@@ -1,7 +1,11 @@
 package de.dbauer.expensetracker.ui.editexpense
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,25 +23,33 @@ import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.ui.animatePlacement
+import de.dbauer.expensetracker.ui.tags.AddTagDialog
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
+import de.dbauer.expensetracker.viewmodel.TagsScreenViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_tags
+import recurringexpensetracker.app.generated.resources.tags_show_more
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -48,9 +59,8 @@ fun TagsOption(
     onTagClick: (Tag) -> Unit,
     onEditTagsClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: TagsScreenViewModel = koinViewModel<TagsScreenViewModel>(),
 ) {
-    var tagsExpanded by rememberSaveable { mutableStateOf(false) }
-
     Column(
         modifier =
             modifier
@@ -73,15 +83,10 @@ fun TagsOption(
                 )
             }
             IconButton(
-                onClick = { tagsExpanded = !tagsExpanded },
+                onClick = viewModel::onAddNewTag,
             ) {
                 Icon(
-                    imageVector =
-                        if (tagsExpanded) {
-                            Icons.Default.KeyboardArrowUp
-                        } else {
-                            Icons.Default.KeyboardArrowDown
-                        },
+                    imageVector = Icons.Default.Add,
                     contentDescription = null,
                 )
             }
@@ -89,48 +94,115 @@ fun TagsOption(
         TagsList(
             tags = tags,
             onTagClick = onTagClick,
-            tagsExpanded = tagsExpanded,
+        )
+    }
+    if (viewModel.showAddOrEditTagDialog) {
+        AddTagDialog(
+            isNewTag = viewModel.isNewTag,
+            tagTitle = viewModel.tagTitle,
+            tagTitleError = viewModel.tagTitleError,
+            onTagTitleChange = viewModel::onTagTitleChange,
+            tagColor = viewModel.tagColor,
+            tagColorError = viewModel.tagColorError,
+            onTagColorChange = viewModel::onTagColorChange,
+            onConfirmAddNewTag = viewModel::onConfirmAddNewTag,
+            onDismissAddNewTagDialog = viewModel::onDismissAddNewTagDialog,
         )
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TagsList(
     tags: List<Pair<Tag, Boolean>>,
     onTagClick: (Tag) -> Unit,
-    tagsExpanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        tags.forEach { (tag, selected) ->
-            key(tag.id) {
-                if (tagsExpanded || selected) {
+    var isExpanded by remember { mutableStateOf(false) }
+    var collapsedSize by remember { mutableStateOf(IntSize.Zero) }
+    var fullSize by remember { mutableStateOf(IntSize.Zero) }
+    val hasOverflow by remember(collapsedSize, fullSize) {
+        derivedStateOf {
+            fullSize.height > 0 && collapsedSize.height > 0 && fullSize.height > collapsedSize.height
+        }
+    }
+
+    Column(modifier = modifier) {
+        Box {
+            FlowRow(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .animateContentSize()
+                        .onSizeChanged { collapsedSize = it },
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                maxLines = if (isExpanded) Int.MAX_VALUE else 2,
+            ) {
+                tags.forEach { (tag, selected) ->
+                    key(tag.id) {
+                        FilterChip(
+                            selected = selected,
+                            onClick = { onTagClick(tag) },
+                            label = { Text(text = tag.title) },
+                            colors =
+                                InputChipDefaults.inputChipColors().copy(
+                                    containerColor = Color(tag.color).copy(alpha = 0.2f),
+                                    selectedContainerColor = Color(tag.color),
+                                ),
+                            leadingIcon = {
+                                if (selected) {
+                                    Icon(
+                                        Icons.Default.Check,
+                                        contentDescription = null,
+                                        Modifier.size(InputChipDefaults.AvatarSize),
+                                    )
+                                }
+                            },
+                            modifier =
+                                Modifier
+                                    .animatePlacement(),
+                        )
+                    }
+                }
+            }
+
+            FlowRow(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .layout { measurable, constraints ->
+                            val placeable = measurable.measure(constraints)
+                            fullSize = IntSize(placeable.width, placeable.height)
+                            layout(0, 0) {}
+                        },
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                tags.forEach { (tag, selected) ->
                     FilterChip(
                         selected = selected,
-                        onClick = { onTagClick(tag) },
+                        onClick = { },
                         label = { Text(text = tag.title) },
-                        colors =
-                            InputChipDefaults.inputChipColors().copy(
-                                containerColor = Color(tag.color).copy(alpha = 0.2f),
-                                selectedContainerColor = Color(tag.color),
-                            ),
                         leadingIcon = {
                             if (selected) {
                                 Icon(
                                     Icons.Default.Check,
-                                    contentDescription = "Localized description",
+                                    contentDescription = null,
                                     Modifier.size(InputChipDefaults.AvatarSize),
                                 )
                             }
                         },
-                        modifier =
-                            Modifier
-                                .animatePlacement(),
                     )
                 }
+            }
+        }
+
+        if (hasOverflow) {
+            TextButton(
+                onClick = { isExpanded = true },
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+                modifier = Modifier.align(Alignment.End),
+            ) {
+                Text(text = stringResource(Res.string.tags_show_more))
             }
         }
     }

@@ -70,7 +70,7 @@ class TagsScreenViewModel(
         tagColorError = false
     }
 
-    fun createNewTag() {
+    fun onConfirmAddNewTag() {
         tagTitleError = tagTitle.isBlank()
         tagColorError = tagColor == 0L
         if (!tagTitleError && !tagColorError) {

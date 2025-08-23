@@ -2,32 +2,23 @@ package de.dbauer.expensetracker.ui.tags
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.rounded.Error
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,8 +30,6 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
@@ -49,26 +38,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import de.dbauer.expensetracker.conditional
 import de.dbauer.expensetracker.data.Tag
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.viewmodel.TagsScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.cancel
-import recurringexpensetracker.app.generated.resources.save
 import recurringexpensetracker.app.generated.resources.tags_add_new
 import recurringexpensetracker.app.generated.resources.tags_delete_undo
 import recurringexpensetracker.app.generated.resources.tags_deleted
-import recurringexpensetracker.app.generated.resources.tags_edit
 import recurringexpensetracker.app.generated.resources.tags_screen_title
-import recurringexpensetracker.app.generated.resources.tags_title
-import recurringexpensetracker.app.generated.resources.tags_title_empty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,113 +90,16 @@ fun TagsScreen(
         }
     }
     if (viewModel.showAddOrEditTagDialog) {
-        val gridState = rememberLazyGridState()
-        AlertDialog(
-            onDismissRequest = viewModel::onDismissAddNewTagDialog,
-            text = {
-                Column {
-                    Text(
-                        text =
-                            if (viewModel.isNewTag) {
-                                stringResource(Res.string.tags_add_new)
-                            } else {
-                                stringResource(Res.string.tags_edit)
-                            },
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Text(
-                        text = stringResource(Res.string.tags_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    val supportingText: (@Composable () -> Unit)? =
-                        if (viewModel.tagTitleError) {
-                            {
-                                Text(
-                                    text = stringResource(Res.string.tags_title_empty),
-                                    color = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        } else {
-                            null
-                        }
-                    val trailingIcon: (@Composable () -> Unit)? =
-                        if (viewModel.tagTitleError) {
-                            {
-                                Icon(
-                                    imageVector = Icons.Rounded.Error,
-                                    contentDescription = "",
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        } else {
-                            null
-                        }
-                    TextField(
-                        value = viewModel.tagTitle,
-                        onValueChange = viewModel::onTagTitleChange,
-                        singleLine = true,
-                        isError = viewModel.tagTitleError,
-                        maxLines = 1,
-                        supportingText = supportingText,
-                        trailingIcon = trailingIcon,
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                    val errorBorderColor = MaterialTheme.colorScheme.error
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(48.dp),
-                        state = gridState,
-                        modifier =
-                            Modifier.conditional(viewModel.tagColorError) {
-                                Modifier.border(
-                                    width = 1.dp,
-                                    color = errorBorderColor,
-                                    shape = RoundedCornerShape(8.dp),
-                                )
-                            },
-                    ) {
-                        items(ExpenseColor.entries) { color ->
-                            val outlineColor = MaterialTheme.colorScheme.onSurface
-                            val colorLong = color.getColor().toArgb().toLong()
-
-                            Canvas(
-                                modifier =
-                                    Modifier
-                                        .padding(16.dp)
-                                        .clip(RoundedCornerShape(50))
-                                        .conditional(viewModel.tagColor == colorLong) {
-                                            border(
-                                                width = 2.dp,
-                                                color = outlineColor,
-                                                shape = RoundedCornerShape(50),
-                                            )
-                                        }.background(color.getColor())
-                                        .requiredSize(48.dp)
-                                        .clickable {
-                                            viewModel.onTagColorChange(colorLong)
-                                        },
-                            ) {
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.createNewTag()
-                    },
-                ) {
-                    Text(text = stringResource(Res.string.save))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = viewModel::onDismissAddNewTagDialog,
-                ) {
-                    Text(text = stringResource(Res.string.cancel))
-                }
-            },
+        AddTagDialog(
+            isNewTag = viewModel.isNewTag,
+            tagTitle = viewModel.tagTitle,
+            tagTitleError = viewModel.tagTitleError,
+            onTagTitleChange = viewModel::onTagTitleChange,
+            tagColor = viewModel.tagColor,
+            tagColorError = viewModel.tagColorError,
+            onTagColorChange = viewModel::onTagColorChange,
+            onConfirmAddNewTag = viewModel::onConfirmAddNewTag,
+            onDismissAddNewTagDialog = viewModel::onDismissAddNewTagDialog,
         )
     }
     setTopAppBar {
