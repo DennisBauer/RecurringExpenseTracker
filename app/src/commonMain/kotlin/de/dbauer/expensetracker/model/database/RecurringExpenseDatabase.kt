@@ -136,7 +136,6 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     // ----------------------------------------------------------
                     //
                     // Mapping used (light-theme hex -> decimal):
-                    //   1 (Dynamic)  -> 0
                     //   2 (Red)      -> 0x80990000  = 2157510656
                     //   3 (Orange)   -> 0x80994d00  = 2157530368
                     //   4 (Yellow)   -> 0x80999900  = 2157549824
@@ -154,7 +153,6 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         INSERT INTO tags (title, color)
                         SELECT 'Untitled',
                           CASE color
-                            WHEN 1 THEN 0
                             WHEN 2 THEN 2157510656
                             WHEN 3 THEN 2157530368
                             WHEN 4 THEN 2157549824
@@ -171,7 +169,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         FROM (
                           SELECT DISTINCT color
                           FROM recurring_expenses
-                          WHERE color IS NOT NULL
+                          WHERE color IS NOT NULL AND color != 1
                         )
                         """.trimIndent(),
                     )
@@ -187,7 +185,6 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         FROM recurring_expenses r
                         JOIN tags t ON t.color =
                           (CASE r.color
-                            WHEN 1 THEN 0
                             WHEN 2 THEN 2157510656
                             WHEN 3 THEN 2157530368
                             WHEN 4 THEN 2157549824
@@ -201,7 +198,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                             WHEN 12 THEN 2157510733
                             ELSE 0
                           END)
-                        WHERE r.color IS NOT NULL
+                        WHERE r.color IS NOT NULL AND r.color != 1
                         """.trimIndent(),
                     )
 
