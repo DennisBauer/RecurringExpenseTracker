@@ -1,0 +1,7 @@
+Changelog 0.17.7:
+* Update exchange rates
+* Updated (Spanish) translation
+* Added (Portuguese) translation
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.17.7
