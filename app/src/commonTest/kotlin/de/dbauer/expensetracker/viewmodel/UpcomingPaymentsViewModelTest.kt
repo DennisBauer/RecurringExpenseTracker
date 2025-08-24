@@ -1,9 +1,13 @@
 package de.dbauer.expensetracker.viewmodel
 
+import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.FakeExchangeRateProvider
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurrenceDatabase
-import de.dbauer.expensetracker.model.database.RecurringExpense
+import de.dbauer.expensetracker.model.database.RecurringExpenseEntry
+import de.dbauer.expensetracker.model.database.RecurringExpenseWithTagsEntry
+import de.dbauer.expensetracker.model.database.toRecurringExpenseData
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -23,22 +27,31 @@ class UpcomingPaymentsViewModelTest {
     private val defaultCurrencyCode = "EUR"
     val expenseRepository =
         object : IExpenseRepository {
-            var expenses: Flow<List<RecurringExpense>> = emptyFlow()
+            var expenses: Flow<List<RecurringExpenseData>> = emptyFlow()
+            var tags: Flow<List<Tag>> = emptyFlow()
 
-            override val allRecurringExpenses: Flow<List<RecurringExpense>>
+            override val allRecurringExpenses: Flow<List<RecurringExpenseData>>
                 get() = expenses
-            override val allRecurringExpensesByPrice: Flow<List<RecurringExpense>>
+            override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
                 get() = expenses
+            override val allTags: Flow<List<Tag>>
+                get() = tags
 
-            override suspend fun getRecurringExpenseById(id: Int): RecurringExpense? {
+            override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
                 return expenses.first().find { it.id == id }
             }
 
-            override suspend fun insert(recurringExpense: RecurringExpense) {}
+            override suspend fun insert(recurringExpense: RecurringExpenseData) {}
 
-            override suspend fun update(recurringExpense: RecurringExpense) {}
+            override suspend fun update(recurringExpense: RecurringExpenseData) {}
 
-            override suspend fun delete(recurringExpense: RecurringExpense) {}
+            override suspend fun delete(recurringExpense: RecurringExpenseData) {}
+
+            override suspend fun insert(tag: Tag) {}
+
+            override suspend fun update(tag: Tag) {}
+
+            override suspend fun delete(tag: Tag) {}
         }
 
     private lateinit var viewModel: UpcomingPaymentsViewModel
@@ -216,23 +229,26 @@ class UpcomingPaymentsViewModelTest {
         name: String,
         price: Float,
         currencyCode: String,
-        everyXRecurrence: Int? = null,
-        recurrence: RecurrenceDatabase? = null,
+        everyXRecurrence: Int = 1,
+        recurrence: RecurrenceDatabase = RecurrenceDatabase.Monthly,
         firstPayment: Instant? = null,
-    ): RecurringExpense {
-        return RecurringExpense(
-            id = name.hashCode() + price.hashCode(),
-            name = name,
-            description = null,
-            price = price,
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence?.value,
-            firstPayment = firstPayment?.toEpochMilliseconds(),
-            color = null,
-            currencyCode = currencyCode,
-            notifyForExpense = false,
-            notifyXDaysBefore = null,
-            lastNotificationDate = null,
-        )
+    ): RecurringExpenseData {
+        return RecurringExpenseWithTagsEntry(
+            expense =
+                RecurringExpenseEntry(
+                    id = name.hashCode() + price.hashCode(),
+                    name = name,
+                    description = "",
+                    price = price,
+                    everyXRecurrence = everyXRecurrence,
+                    recurrence = recurrence.value,
+                    firstPayment = firstPayment?.toEpochMilliseconds(),
+                    currencyCode = currencyCode,
+                    notifyForExpense = false,
+                    notifyXDaysBefore = null,
+                    lastNotificationDate = null,
+                ),
+            tags = emptyList(),
+        ).toRecurringExpenseData(defaultCurrencyCode)
     }
 }

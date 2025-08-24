@@ -32,14 +32,16 @@ import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
 import de.dbauer.expensetracker.asString
 import de.dbauer.expensetracker.data.CurrencyValue
+import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import de.dbauer.expensetracker.ui.theme.widget.ExpenseTrackerWidgetTheme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.upcoming_title
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
     private val upcomingPayment by inject<UpcomingPaymentsWidgetModel>()
@@ -63,6 +65,7 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     override suspend fun providePreview(
         context: Context,
         widgetCategory: Int,
@@ -80,7 +83,12 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
                         ),
                     nextPaymentRemainingDays = 20,
                     nextPaymentDate = "2025-06-06",
-                    color = ExpenseColor.Red,
+                    tags =
+                        listOf(
+                            Tag("Tag 1", 0x80990000, id = Uuid.random().hashCode()),
+                            Tag("Tag 2", 0x80009999, id = Uuid.random().hashCode()),
+                            Tag("Tag 3", 0x804c0099, id = Uuid.random().hashCode()),
+                        ),
                 ),
                 UpcomingPaymentData(
                     id = 1,
@@ -93,7 +101,10 @@ class UpcomingPaymentsWidget : GlanceAppWidget(), KoinComponent {
                         ),
                     nextPaymentRemainingDays = 20,
                     nextPaymentDate = "2025-06-06",
-                    color = ExpenseColor.Red,
+                    tags =
+                        listOf(
+                            Tag("Tag 1", 0x80990000, id = Uuid.random().hashCode()),
+                        ),
                 ),
             )
         val gridMode = false

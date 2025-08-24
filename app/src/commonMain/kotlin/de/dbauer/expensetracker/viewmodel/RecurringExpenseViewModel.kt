@@ -11,7 +11,6 @@ import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.model.IExchangeRateProvider
 import de.dbauer.expensetracker.model.database.IExpenseRepository
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import kotlinx.coroutines.flow.first
@@ -60,12 +59,12 @@ class RecurringExpenseViewModel(
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpenseData>) {
         _recurringExpenseData.clear()
         val defaultCurrency = getDefaultCurrencyCode()
         var atLeastOneWasExchanged = false
         recurringExpenses.forEach {
-            var expense = it.toFrontendType(getDefaultCurrencyCode())
+            var expense = it
             if (expense.price.currencyCode != defaultCurrency) {
                 val newPrice = expense.price.currencyValueBasedOnSetting()
                 val newMonthlyPrice = expense.monthlyPrice.currencyValueBasedOnSetting()

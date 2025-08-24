@@ -48,6 +48,7 @@ fun EditRecurringExpenseScreen(
     expenseId: Int?,
     canUseNotifications: Boolean,
     onDismiss: () -> Unit,
+    onEditTagsClick: () -> Unit,
     setTopAppBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
@@ -93,9 +94,10 @@ fun EditRecurringExpenseScreen(
             date = viewModel.firstPaymentDate,
             onSelectDate = { viewModel.firstPaymentDate = it },
         )
-        ColorOption(
-            expenseColor = viewModel.expenseColor,
-            onSelectExpenseColor = { viewModel.expenseColor = it },
+        TagsOption(
+            tags = viewModel.tags,
+            onTagClick = viewModel::onTagClick,
+            onEditTagsClick = onEditTagsClick,
         )
         if (canUseNotifications) {
             NotificationOption(
@@ -215,6 +217,7 @@ private fun EditRecurringExpensePreview() {
                 expenseId = 0,
                 canUseNotifications = true,
                 onDismiss = {},
+                onEditTagsClick = {},
                 setTopAppBar = {},
             )
         }

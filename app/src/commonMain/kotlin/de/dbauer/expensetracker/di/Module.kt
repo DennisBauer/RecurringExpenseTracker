@@ -16,6 +16,7 @@ import de.dbauer.expensetracker.viewmodel.EditRecurringExpenseViewModel
 import de.dbauer.expensetracker.viewmodel.MainNavigationViewModel
 import de.dbauer.expensetracker.viewmodel.RecurringExpenseViewModel
 import de.dbauer.expensetracker.viewmodel.SettingsViewModel
+import de.dbauer.expensetracker.viewmodel.TagsScreenViewModel
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -42,6 +43,7 @@ val sharedModule =
         single<IExchangeRateProvider> { ExchangeRateProvider() }
         singleOf(::ExpenseNotificationManager)
         viewModelOf(::MainNavigationViewModel)
+        viewModelOf(::TagsScreenViewModel)
     }
 
 val previewModule =
@@ -55,4 +57,5 @@ val previewModule =
         singleOf(::CurrencyProvider)
         single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
+        viewModelOf(::TagsScreenViewModel)
     }

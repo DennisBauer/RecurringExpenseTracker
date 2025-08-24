@@ -2,6 +2,7 @@ package de.dbauer.expensetracker.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -10,13 +11,13 @@ import de.dbauer.expensetracker.data.CurrencyOption
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.CurrencyProvider
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.toFloatLocaleAware
 import de.dbauer.expensetracker.toLocalString
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -43,7 +44,13 @@ class EditRecurringExpenseViewModel(
         private set
     var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
     var firstPaymentDate: Instant? by mutableStateOf(null)
-    var expenseColor by mutableStateOf(ExpenseColor.Dynamic)
+    private var _tags = mutableStateMapOf<Tag, Boolean>()
+    val tags: List<Pair<Tag, Boolean>>
+        get() =
+            _tags.toList().sortedWith(
+                compareByDescending<Pair<Tag, Boolean>> { it.second }.thenBy { it.first.title },
+            )
+
     var expenseNotificationEnabledGlobally = userPreferencesRepository.upcomingPaymentNotification
     var notifyForExpense by mutableStateOf(true)
     var notifyXDaysBefore by mutableStateOf("")
@@ -68,7 +75,6 @@ class EditRecurringExpenseViewModel(
             if (expenseId != null) {
                 expenseRepository
                     .getRecurringExpenseById(expenseId)
-                    ?.toFrontendType(getDefaultCurrencyCode())
                     ?.let { expense ->
                         nameState = expense.name
                         descriptionState = expense.description
@@ -76,7 +82,9 @@ class EditRecurringExpenseViewModel(
                         everyXRecurrenceState = expense.everyXRecurrence.toString()
                         selectedRecurrence = expense.recurrence
                         firstPaymentDate = expense.firstPayment
-                        expenseColor = expense.color
+                        expense.tags.forEach {
+                            _tags[it] = true
+                        }
                         notifyForExpense = expense.notifyForExpense
                         notifyXDaysBefore = expense.notifyXDaysBefore?.toString() ?: ""
                         lastNotificationDate = expense.lastNotificationDate
@@ -96,6 +104,22 @@ class EditRecurringExpenseViewModel(
                 defaultXDaysPlaceholder = getString(Res.string.edit_expense_notification_days_advance, it)
             }
         }
+        viewModelScope.launch {
+            expenseRepository.allTags.collect { newTags ->
+                newTags.forEach { tag ->
+                    _tags.getOrPut(tag) { false }
+                }
+                val tagsToRemove = _tags.keys.filter { it !in newTags }
+                tagsToRemove.forEach {
+                    _tags.remove(it)
+                }
+            }
+        }
+    }
+
+    fun onTagClick(tag: Tag) {
+        val existingState = _tags[tag] ?: false
+        _tags[tag] = !existingState
     }
 
     fun updateExpense(response: (successful: Boolean) -> Unit) {
@@ -107,7 +131,7 @@ class EditRecurringExpenseViewModel(
                     addExpense()
                 } else {
                     val recurringExpense = createRecurringExpenseData()
-                    expenseRepository.update(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+                    expenseRepository.update(recurringExpense)
                 }
             }
         }
@@ -128,13 +152,13 @@ class EditRecurringExpenseViewModel(
         showDeleteConfirmDialog = false
         viewModelScope.launch {
             val recurringExpense = createRecurringExpenseData()
-            expenseRepository.delete(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+            expenseRepository.delete(recurringExpense)
         }
     }
 
     private suspend fun addExpense() {
         val recurringExpense = createRecurringExpenseData()
-        expenseRepository.insert(recurringExpense.toBackendType(getDefaultCurrencyCode()))
+        expenseRepository.insert(recurringExpense)
     }
 
     private fun createRecurringExpenseData(): RecurringExpenseData {
@@ -154,8 +178,8 @@ class EditRecurringExpenseViewModel(
                 ),
             everyXRecurrence = everyXRecurrenceState.toIntOrNull() ?: 1,
             recurrence = selectedRecurrence,
+            tags = tags.filter { it.second }.map { it.first },
             firstPayment = firstPaymentDate,
-            color = expenseColor,
             notifyForExpense = notifyForExpense,
             notifyXDaysBefore = notifyXDaysBefore.takeIf { it.isNotBlank() && notifyForExpense }?.toIntOrNull(),
             lastNotificationDate = lastNotificationDate,

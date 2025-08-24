@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,6 +33,8 @@ import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.toCurrencyString
+import de.dbauer.expensetracker.ui.home.HorizontalAssignedTagColorsList
+import de.dbauer.expensetracker.ui.home.HorizontalAssignedTagList
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.viewmodel.RecurringExpenseViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -186,7 +187,6 @@ private fun GridRecurringExpense(
 ) {
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Column(
             modifier =
@@ -210,20 +210,30 @@ private fun GridRecurringExpense(
             }
             Row(
                 horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.align(Alignment.End),
             ) {
-                if (recurringExpenseData.recurrence != Recurrence.Monthly ||
-                    recurringExpenseData.everyXRecurrence != 1
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(end = 4.dp),
                 ) {
-                    Text(
-                        text =
-                            "${recurringExpenseData.price.toCurrencyString()} / " +
-                                "${recurringExpenseData.everyXRecurrence} " +
-                                stringResource(recurringExpenseData.recurrence.shortStringRes),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.align(Alignment.CenterVertically),
+                    if (recurringExpenseData.recurrence != Recurrence.Monthly ||
+                        recurringExpenseData.everyXRecurrence != 1
+                    ) {
+                        Text(
+                            text =
+                                "${recurringExpenseData.price.toCurrencyString()} / " +
+                                    "${recurringExpenseData.everyXRecurrence} " +
+                                    stringResource(recurringExpenseData.recurrence.shortStringRes),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        Spacer(modifier = Modifier.size(4.dp))
+                    }
+                    HorizontalAssignedTagColorsList(
+                        tags = recurringExpenseData.tags,
                     )
-                    Spacer(modifier = Modifier.weight(1f))
                 }
                 Text(
                     text = recurringExpenseData.monthlyPrice.toCurrencyString(),
@@ -244,11 +254,14 @@ private fun RecurringExpense(
 ) {
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = recurringExpenseData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    // The conditional padding needed to work around the inner padding of the FilterChip of the tag
+                    .padding(top = 16.dp, bottom = if (recurringExpenseData.tags.isEmpty()) 16.dp else 8.dp),
         ) {
             Column(
                 modifier =
@@ -270,8 +283,18 @@ private fun RecurringExpense(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+                HorizontalAssignedTagList(
+                    tags = recurringExpenseData.tags,
+                    onTagClick = { onClickItem() },
+                )
             }
-            Column(horizontalAlignment = Alignment.End) {
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier =
+                    Modifier
+                        // The conditional padding needed to work around the inner padding of the FilterChip of the tag
+                        .padding(bottom = if (recurringExpenseData.tags.isEmpty()) 0.dp else 8.dp),
+            ) {
                 Text(
                     text = recurringExpenseData.monthlyPrice.toCurrencyString(),
                     style = MaterialTheme.typography.titleLarge,

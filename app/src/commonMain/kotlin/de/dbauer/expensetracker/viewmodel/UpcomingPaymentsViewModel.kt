@@ -10,13 +10,11 @@ import de.dbauer.expensetracker.getDefaultCurrencyCode
 import de.dbauer.expensetracker.model.DateTimeCalculator
 import de.dbauer.expensetracker.model.IExchangeRateProvider
 import de.dbauer.expensetracker.model.database.IExpenseRepository
-import de.dbauer.expensetracker.model.database.RecurringExpense
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.toCurrencyString
 import de.dbauer.expensetracker.toLocaleString
 import de.dbauer.expensetracker.toMonthYearStringUTC
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
@@ -58,14 +56,13 @@ class UpcomingPaymentsViewModel(
         onItemClicked: (RecurringExpenseData) -> Unit,
     ) {
         viewModelScope.launch {
-            expenseRepository.getRecurringExpenseById(expenseId)?.let {
-                val recurringExpenseData = it.toFrontendType(defaultCurrency.getDefaultCurrencyCode())
-                onItemClicked(recurringExpenseData)
+            expenseRepository.getRecurringExpenseById(expenseId)?.let { recurringExpense ->
+                onItemClicked(recurringExpense)
             }
         }
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpense>) {
+    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpenseData>) {
         _upcomingPaymentsData.clear()
         val from =
             Clock.System
@@ -82,13 +79,13 @@ class UpcomingPaymentsViewModel(
     }
 
     suspend fun createUpcomingPaymentData(
-        recurringExpenses: List<RecurringExpense>,
+        recurringExpenses: List<RecurringExpenseData>,
         from: LocalDate,
         until: LocalDate,
     ): List<UpcomingPayment> =
         withContext(Dispatchers.IO) {
             var yearMonthIterator = LocalDate(from.year, from.month, 1)
-            var yearMonthUntil = LocalDate(until.year, until.month, 1)
+            val yearMonthUntil = LocalDate(until.year, until.month, 1)
             if (yearMonthIterator >= yearMonthUntil) return@withContext emptyList()
 
             val localUpcomingPaymentsData = mutableListOf<UpcomingPayment>()
@@ -110,26 +107,19 @@ class UpcomingPaymentsViewModel(
                                 until = nextPaymentDay,
                             )
                         val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
-                        val currencyValue =
-                            CurrencyValue(
-                                expense.price!!,
-                                expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() },
-                            )
                         paymentsThisMonth.add(
                             UpcomingPaymentData(
                                 id = expense.id,
-                                name = expense.name!!,
-                                price = currencyValue,
+                                name = expense.name,
+                                price = expense.price,
                                 nextPaymentRemainingDays = nextPaymentRemainingDays,
                                 nextPaymentDate = nextPaymentDate,
-                                color = ExpenseColor.fromInt(expense.color),
+                                tags = expense.tags,
                             ),
                         )
 
-                        paymentsSumThisMonth += currencyValue.exchangeToDefaultCurrency()?.value ?: 0f
-                        val currencyCode =
-                            expense.currencyCode.ifBlank { defaultCurrency.getDefaultCurrencyCode() }
-                        if (currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
+                        paymentsSumThisMonth += expense.price.exchangeToDefaultCurrency()?.value ?: 0f
+                        if (expense.price.currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
                             atLeastOneWasExchanged = true
                         }
                         nextPaymentDay =

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Rocket
 import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.Tag
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -79,10 +80,12 @@ import recurringexpensetracker.app.generated.resources.settings_theme_mode_dark
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_follow_system
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_light
 import recurringexpensetracker.app.generated.resources.settings_title_security
+import recurringexpensetracker.app.generated.resources.tags_screen_title
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsMainScreen(
+    onClickTags: () -> Unit,
     biometricsChecked: Boolean,
     canUseBiometric: Boolean,
     canUseNotifications: Boolean,
@@ -128,6 +131,11 @@ fun SettingsMainScreen(
                 },
             onClick = viewModel::onClickDefaultTabSelection,
             icon = Icons.Rounded.Rocket,
+        )
+        SettingsClickableElement(
+            title = stringResource(Res.string.tags_screen_title),
+            onClick = onClickTags,
+            icon = Icons.Rounded.Tag,
         )
         SettingsHeaderElement(
             header = Res.string.settings_currency,

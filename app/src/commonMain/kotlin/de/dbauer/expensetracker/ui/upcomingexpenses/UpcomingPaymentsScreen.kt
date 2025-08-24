@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -36,9 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.EditExpensePane
+import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.data.UpcomingPaymentData
 import de.dbauer.expensetracker.toLocaleString
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
+import de.dbauer.expensetracker.ui.home.HorizontalAssignedTagColorsList
+import de.dbauer.expensetracker.ui.home.HorizontalAssignedTagList
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.viewmodel.UpcomingPayment
 import de.dbauer.expensetracker.viewmodel.UpcomingPaymentsViewModel
@@ -51,6 +52,8 @@ import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_d
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.app.generated.resources.upcoming_time_remaining_tomorrow
 import kotlin.time.Clock
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Composable
 fun UpcomingPaymentsScreen(
@@ -221,7 +224,6 @@ private fun GridUpcomingPayment(
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Column(
             modifier =
@@ -231,10 +233,20 @@ private fun GridUpcomingPayment(
                     .align(Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
-            Text(
-                text = inDaysString,
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = inDaysString,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                HorizontalAssignedTagColorsList(
+                    tags = upcomingPaymentData.tags,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+                    modifier =
+                        Modifier
+                            .padding(start = 4.dp)
+                            .weight(1f),
+                )
+            }
             Text(
                 text = upcomingPaymentData.price.toCurrencyString(),
                 style = MaterialTheme.typography.titleMedium,
@@ -264,11 +276,14 @@ private fun UpcomingPayment(
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
         modifier = modifier.clickable { onClickItem() },
-        colors = CardDefaults.cardColors(containerColor = upcomingPaymentData.color.getColor()),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    // The conditional padding needed to work around the inner padding of the FilterChip of the tag
+                    .padding(top = 16.dp, bottom = if (upcomingPaymentData.tags.isEmpty()) 16.dp else 8.dp),
         ) {
             Column(
                 modifier =
@@ -288,8 +303,18 @@ private fun UpcomingPayment(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
+                HorizontalAssignedTagList(
+                    tags = upcomingPaymentData.tags,
+                    onTagClick = { onClickItem() },
+                )
             }
-            Column(horizontalAlignment = Alignment.End) {
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier =
+                    Modifier
+                        // The conditional padding needed to work around the inner padding of the FilterChip of the tag
+                        .padding(bottom = if (upcomingPaymentData.tags.isEmpty()) 0.dp else 8.dp),
+            ) {
                 Text(
                     text = upcomingPaymentData.price.toCurrencyString(),
                     style = MaterialTheme.typography.titleLarge,
@@ -322,6 +347,7 @@ fun UpcomingPaymentsOverviewPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalUuidApi::class)
 @Preview
 @Composable
 private fun UpcomingPaymentsOverviewPreview() {
@@ -352,7 +378,12 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(9.99f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays1,
                                     nextPaymentDate = nextPaymentDate1String,
-                                    color = ExpenseColor.Dynamic,
+                                    tags =
+                                        listOf(
+                                            Tag("Tag 1", 0xFFFF00FF, id = Uuid.random().hashCode()),
+                                            Tag("Tag 2", 0xFFFF00F0, id = Uuid.random().hashCode()),
+                                            Tag("Tag 3", 0xFF80FF80, id = Uuid.random().hashCode()),
+                                        ),
                                 ),
                         ),
                         UpcomingPayment(
@@ -365,7 +396,10 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(5f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays2,
                                     nextPaymentDate = nextPaymentDate2String,
-                                    color = ExpenseColor.Green,
+                                    tags =
+                                        listOf(
+                                            Tag("Tag 2", 0xFFFF00F0, id = Uuid.random().hashCode()),
+                                        ),
                                 ),
                         ),
                         UpcomingPayment(
@@ -378,7 +412,10 @@ private fun UpcomingPaymentsOverviewPreview() {
                                     price = CurrencyValue(7.95f, "USD"),
                                     nextPaymentRemainingDays = nextPaymentDays3,
                                     nextPaymentDate = nextPaymentDate3String,
-                                    color = ExpenseColor.Blue,
+                                    tags =
+                                        listOf(
+                                            Tag("Tag 3", 0xFF80FF80, id = Uuid.random().hashCode()),
+                                        ),
                                 ),
                         ),
                     ),
