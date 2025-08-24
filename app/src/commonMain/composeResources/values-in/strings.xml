@@ -26,7 +26,6 @@
     <string name="edit_expense_recurrence_year_short">y</string>
     <string name="edit_expense_first_payment">Pembayaran Pertama (Opsional)</string>
     <string name="edit_expense_first_payment_placeholder">Pilih Tanggal</string>
-    <string name="edit_expense_color">Warna</string>
     <string name="upcoming_title">Pembayaran yang akan datang</string>
     <string name="upcoming_placeholder_title">Tentukan tanggal pembayaran pertama untuk pengeluaran untuk melihat ikhtisar pembayaran yang akan datang</string>
     <string name="upcoming_time_remaining_today">Hari ini</string>

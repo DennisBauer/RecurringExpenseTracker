@@ -17,7 +17,6 @@
     <string name="settings_backup_restore">Back-up terugzetten</string>
     <string name="edit_expense_first_payment">Eerste betaling (optioneel)</string>
     <string name="edit_expense_first_payment_placeholder">Kies een datum</string>
-    <string name="edit_expense_color">Kleur</string>
     <string name="edit_expense_delete_dialog_text">Weet je zeker dat je deze uitgave wil verwijderen?</string>
     <string name="upcoming_placeholder_title">Geef een eerste betalingsdatum op voor uitgaven om een overzicht van geplande betalingen te zien</string>
     <string name="upcoming_time_remaining_tomorrow">morgen</string>

@@ -3,17 +3,14 @@
     <!-- TopAppBar -->
     <string name="top_app_bar_icon_button_grid_open_content_desc">Raster Modus öffnen</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Raster Modus schließen</string>
-
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Start</string>
     <string name="bottom_nav_upcoming">Bevorstehend</string>
     <string name="bottom_nav_settings">Einstellungen</string>
-
     <!-- Home Tab -->
     <string name="home_summary_monthly">Monatlich</string>
     <string name="home_summary_weekly">Wöchentlich</string>
     <string name="home_summary_yearly">Jährlich</string>
-
     <!-- Edit expense -->
     <string name="edit_expense_title">Ausgabe Bearbeiten</string>
     <string name="edit_expense_button_add">Ausgabe hinzufügen</string>
@@ -34,18 +31,15 @@
     <string name="edit_expense_recurrence_year_short">J</string>
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Datum auswählen</string>
-    <string name="edit_expense_color">Farbe</string>
     <string name="edit_expense_notification_days_advance">%1$d (Standard)</string>
     <string name="edit_expense_notification_get_notified">Lass dich über bevorstehende Zahlungen benachrichtigen. Gehe dazu zu den Einstellungen und aktiviere die Benachrichtigungen.</string>
     <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
-
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Bevorstehende Zahlungen</string>
     <string name="upcoming_placeholder_title">Definiere ein Datum für die erste Zahlung einer Ausgabe um eine Übersicht der anstehenden Zahlungen zu erhalten</string>
     <string name="upcoming_time_remaining_today">heute</string>
     <string name="upcoming_time_remaining_tomorrow">morgen</string>
     <string name="upcoming_time_remaining_days">in %1$d Tagen</string>
-
     <!-- Settings Tab -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_general">Allgemein</string>
@@ -78,7 +72,6 @@
     <string name="settings_notifications_schedule_days_subtitle">%1$d Tage im Voraus</string>
     <string name="settings_notifications_missing_permission_title">Fehlende Berechtigung</string>
     <string name="settings_notifications_missing_permission_subtitle">Die Benachrichtigungsberechtigung fehlt. Ohne diese Berechtigung kann die App keine Benachrichtigungen für bevorstehende Zahlungen anzeigen. Bitte klicke hier und erteile sie in den Einstellungen.</string>
-
     <!-- About section -->
     <string name="settings_about">Über</string>
     <string name="settings_about_app">Über die App</string>
@@ -87,23 +80,19 @@
     <string name="settings_about_made_by">Erstellt von</string>
     <string name="settings_about_support">Projekt unterstützen</string>
     <string name="settings_about_libraries">Urheberrecht der Bibliotheken</string>
-
     <!-- BiometricPromptManager -->
     <string name="biometric_prompt_manager_title">Entsperre Expense Tracker</string>
     <string name="biometric_prompt_manager_unlock">Entsperren</string>
-
     <!-- General -->
     <string name="dialog_ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
-
     <!-- Notifications -->
     <string name="notification_expense_reminder">Ausgabenerinnerung</string>
     <string name="notification_expense_reminder_message_today">Die nächste Zahlung ist heute</string>
     <string name="notification_expense_reminder_message_tomorrow">Die nächste Zahlung ist morgen</string>
     <string name="notification_expense_reminder_message_days">Die nächste Zahlung ist in %1$d Tagen</string>
-
     <!-- Widget -->
     <string name="widget_configuration_biometric">Bitte deaktivieren Sie die Biometrie, um dieses Widget zu verwenden</string>
     <string name="widget_configuration_biometric_deactivate">Biometrie deaktivieren</string>

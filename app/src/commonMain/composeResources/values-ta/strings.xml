@@ -2,7 +2,6 @@
 <resources>
     <string name="top_app_bar_icon_button_grid_open_content_desc">பிரிட் பயன்முறையைத் திறக்கவும்</string>
     <string name="edit_expense_first_payment_placeholder">ஒரு தேதியைத் தேர்ந்தெடுங்கள்</string>
-    <string name="edit_expense_color">நிறம்</string>
     <string name="upcoming_title">வரவிருக்கும் கொடுப்பனவுகள்</string>
     <string name="settings_backup_restored_toast">காப்புப்பிரதி மீட்டெடுக்கப்பட்டது</string>
     <string name="settings_backup_not_restored_toast">காப்புப்பிரதியை மீட்டெடுக்க முடியவில்லை</string>

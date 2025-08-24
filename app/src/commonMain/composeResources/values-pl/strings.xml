@@ -25,7 +25,6 @@
     <string name="edit_expense_recurrence_year_short">Y</string>
     <string name="edit_expense_first_payment">Pierwsza płatność (opcjonalnie)</string>
     <string name="edit_expense_first_payment_placeholder">Wybierz datę</string>
-    <string name="edit_expense_color">Kolor</string>
     <string name="edit_expense_notification_days_advance">%1$d (domyślnie)</string>
     <string name="edit_expense_notification_get_notified">Zacznij otrzymywać powiadomienia o nadchodzących płatnościach. Wystarczy przejść do ustawień, aby włączyć powiadomienia.</string>
     <string name="edit_expense_delete_dialog_text">Czy na pewno chcesz usunąć ten wydatek?</string>

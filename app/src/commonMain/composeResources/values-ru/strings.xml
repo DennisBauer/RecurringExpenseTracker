@@ -49,7 +49,6 @@
     <string name="edit_expense_first_payment">Первый платеж (необязательно)</string>
     <string name="edit_expense_first_payment_placeholder">Выберите дату</string>
     <string name="edit_expense_delete_dialog_text">Вы действительно хотите удалить этот расход?</string>
-    <string name="edit_expense_color">Цвет</string>
     <string name="upcoming_title">Предстоящие платежи</string>
     <string name="settings_backup_created_toast">Бекап успешен</string>
     <string name="settings_backup_not_created_toast">Бекап не удался</string>

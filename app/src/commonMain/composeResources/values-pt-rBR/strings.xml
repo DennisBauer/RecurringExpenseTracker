@@ -27,7 +27,6 @@
     <string name="edit_expense_recurrence_year_short">A</string>
     <string name="edit_expense_first_payment">Primeiro pagamento (Opcional)</string>
     <string name="edit_expense_first_payment_placeholder">Escolha uma data</string>
-    <string name="edit_expense_color">Cor</string>
     <string name="edit_expense_delete_dialog_text">Você realmente quer apagar essa despesa?</string>
     <string name="upcoming_title">Pagamentos futuros</string>
     <string name="upcoming_time_remaining_today">hoje</string>

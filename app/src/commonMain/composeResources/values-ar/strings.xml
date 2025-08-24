@@ -10,7 +10,6 @@
     <string name="edit_expense_recurrence_year_short">س</string>
     <string name="edit_expense_first_payment">الدفعة الأولى (اختياري)</string>
     <string name="edit_expense_first_payment_placeholder">اختر تاريخًا</string>
-    <string name="edit_expense_color">اللون</string>
     <string name="edit_expense_notification_days_advance">%1$d (افتراضي)</string>
     <string name="edit_expense_delete_dialog_text">هل تريد حقًا حذف هذه المصروفات؟</string>
     <string name="upcoming_title">المدفوعات الآتية</string>
