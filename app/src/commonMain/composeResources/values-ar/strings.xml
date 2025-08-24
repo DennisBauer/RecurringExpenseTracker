@@ -13,11 +13,11 @@
     <string name="tags_color">اللون</string>
     <string name="edit_expense_notification_days_advance">%1$d (افتراضي)</string>
     <string name="edit_expense_delete_dialog_text">هل تريد حقًا حذف هذه المصروفات؟</string>
-    <string name="upcoming_title">المدفوعات الآتية</string>
-    <string name="upcoming_placeholder_title">حدّد تاريخ الدفعة الأولى للمصروفات للاطلاع على نظرة عامة للمدفوعات الآتية</string>
+    <string name="upcoming_title">المدفوعات القادمة</string>
+    <string name="upcoming_placeholder_title">حدّد تاريخ الدفعة الأولى للمصروفات للاطلاع على نظرة عامة للمدفوعات القادمة</string>
     <string name="top_app_bar_icon_button_grid_open_content_desc">افتح وضع الشبكة</string>
-    <string name="bottom_nav_home">المنزل</string>
-    <string name="bottom_nav_upcoming">الآتية</string>
+    <string name="bottom_nav_home">الرئيسية</string>
+    <string name="bottom_nav_upcoming">القادمة</string>
     <string name="bottom_nav_settings">اﻹعدادات</string>
     <string name="home_summary_yearly">سنويًا</string>
     <string name="edit_expense_description">الوصف (اختياري)</string>
@@ -37,8 +37,8 @@
     <string name="upcoming_time_remaining_tomorrow">غدًا</string>
     <string name="upcoming_time_remaining_days">بعد %1$d يومًا</string>
     <string name="settings_title">الإعدادات</string>
-    <string name="settings_general">عـام</string>
-    <string name="settings_theme_mode">وضـع السمة</string>
+    <string name="settings_general">عام</string>
+    <string name="settings_theme_mode">وضع السمة</string>
     <string name="settings_theme_mode_follow_system">تبـعًا للنظام</string>
     <string name="settings_theme_mode_dark">داكـنة</string>
     <string name="settings_theme_mode_light">فاتحة</string>
@@ -89,4 +89,13 @@
     <string name="biometric_prompt_manager_title">فتح أداة تتبع النفقات</string>
     <string name="biometric_prompt_manager_unlock">فتح</string>
     <string name="notification_expense_reminder">تذكير المصروفات</string>
+    <string name="edit_expense_tags">إضافة فئات</string>
+    <string name="tags_screen_title">فئة</string>
+    <string name="tags_add_new">إضافة فئة جديدة</string>
+    <string name="tags_edit">تعديل الفئة</string>
+    <string name="tags_title">العنوان</string>
+    <string name="tags_title_empty">لا تترك عنوان الفئة فارغًا</string>
+    <string name="tags_deleted">حُذفت الفئة</string>
+    <string name="tags_delete_undo">تراجع</string>
+    <string name="tags_show_more">عرض المزيد</string>
 </resources>
