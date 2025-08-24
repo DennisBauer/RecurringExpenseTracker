@@ -1,14 +1,20 @@
 package de.dbauer.expensetracker.ui.tags
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
@@ -29,11 +35,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.github.skydoves.colorpicker.compose.BrightnessSlider
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import de.dbauer.expensetracker.conditional
 import de.dbauer.expensetracker.ui.customizations.tagColorFamilies
 import de.dbauer.expensetracker.ui.elements.HorizontalLazyRowWithGradient
@@ -43,6 +54,8 @@ import recurringexpensetracker.app.generated.resources.cancel
 import recurringexpensetracker.app.generated.resources.save
 import recurringexpensetracker.app.generated.resources.tags_add_new
 import recurringexpensetracker.app.generated.resources.tags_color
+import recurringexpensetracker.app.generated.resources.tags_color_custom
+import recurringexpensetracker.app.generated.resources.tags_color_simple
 import recurringexpensetracker.app.generated.resources.tags_edit
 import recurringexpensetracker.app.generated.resources.tags_title
 import recurringexpensetracker.app.generated.resources.tags_title_empty
@@ -61,7 +74,7 @@ fun AddTagDialog(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
-    var selectedBaseColor by remember { mutableStateOf(tagColorFamilies.first()) }
+    var showSimpleColorPicker by rememberSaveable { mutableStateOf(true) }
     AlertDialog(
         onDismissRequest = onDismissAddNewTagDialog,
         text = {
@@ -113,85 +126,52 @@ fun AddTagDialog(
                     trailingIcon = trailingIcon,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
-                    text = stringResource(Res.string.tags_color),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.tags_color),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    TextButton(
+                        onClick = { showSimpleColorPicker = !showSimpleColorPicker },
+                        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+                    ) {
+                        Text(
+                            text =
+                                if (showSimpleColorPicker) {
+                                    stringResource(Res.string.tags_color_custom)
+                                } else {
+                                    stringResource(Res.string.tags_color_simple)
+                                },
+                        )
+                    }
+                }
                 val errorBorderColor = MaterialTheme.colorScheme.error
                 Column(
                     modifier =
-                        Modifier.conditional(tagColorError) {
-                            Modifier.border(
-                                width = 1.dp,
-                                color = errorBorderColor,
-                                shape = RoundedCornerShape(8.dp),
-                            )
-                        },
+                        Modifier
+                            .fillMaxWidth()
+                            .conditional(tagColorError) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = errorBorderColor,
+                                    shape = RoundedCornerShape(8.dp),
+                                )
+                            },
                 ) {
-                    val outlineColor = MaterialTheme.colorScheme.onSurface
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.padding(vertical = 16.dp),
-                    ) {
-                        tagColorFamilies.forEach { tagColorFamily ->
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .requiredSize(48.dp)
-                                        .clip(CircleShape)
-                                        .then(
-                                            if (selectedBaseColor == tagColorFamily) {
-                                                Modifier
-                                                    .border(
-                                                        width = 2.dp,
-                                                        color = outlineColor,
-                                                        shape = CircleShape,
-                                                    ).padding(4.dp)
-                                            } else {
-                                                Modifier
-                                            },
-                                        ).background(
-                                            color = Color(tagColorFamily.base),
-                                            shape = CircleShape,
-                                        ).clickable {
-                                            if (selectedBaseColor != tagColorFamily) {
-                                                onTagColorChange(0L)
-                                            }
-                                            selectedBaseColor = tagColorFamily
-                                        },
-                            )
-                        }
-                    }
-                    HorizontalDivider()
-                    HorizontalLazyRowWithGradient(
-                        gradientColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.padding(vertical = 16.dp),
-                    ) {
-                        items(selectedBaseColor.palette) { color ->
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .requiredSize(48.dp)
-                                        .clip(CircleShape)
-                                        .then(
-                                            if (tagColor == color) {
-                                                Modifier
-                                                    .border(
-                                                        width = 2.dp,
-                                                        color = outlineColor,
-                                                        shape = CircleShape,
-                                                    ).padding(4.dp)
-                                            } else {
-                                                Modifier
-                                            },
-                                        ).background(
-                                            color = Color(color),
-                                            shape = CircleShape,
-                                        ).clickable { onTagColorChange(color) },
-                            )
-                        }
+                    if (showSimpleColorPicker) {
+                        SimpleColorPicker(
+                            tagColor = tagColor,
+                            onTagColorChange = onTagColorChange,
+                        )
+                    } else {
+                        CustomColorPicker(
+                            tagColor = tagColor,
+                            onTagColorChange = onTagColorChange,
+                        )
                     }
                 }
             }
@@ -211,5 +191,121 @@ fun AddTagDialog(
             }
         },
         modifier = modifier,
+    )
+}
+
+@Composable
+private fun ColumnScope.SimpleColorPicker(
+    tagColor: Long,
+    onTagColorChange: (Long) -> Unit,
+) {
+    var selectedBaseColor by remember {
+        mutableStateOf(tagColorFamilies.firstOrNull { it.palette.contains(tagColor) } ?: tagColorFamilies.first())
+    }
+    val outlineColor = MaterialTheme.colorScheme.onSurface
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(vertical = 16.dp),
+    ) {
+        tagColorFamilies.forEach { tagColorFamily ->
+            Box(
+                modifier =
+                    Modifier
+                        .requiredSize(48.dp)
+                        .clip(CircleShape)
+                        .then(
+                            if (selectedBaseColor == tagColorFamily) {
+                                Modifier
+                                    .border(
+                                        width = 2.dp,
+                                        color = outlineColor,
+                                        shape = CircleShape,
+                                    ).padding(4.dp)
+                            } else {
+                                Modifier
+                            },
+                        ).background(
+                            color = Color(tagColorFamily.base),
+                            shape = CircleShape,
+                        ).clickable {
+                            if (selectedBaseColor != tagColorFamily) {
+                                onTagColorChange(0L)
+                            }
+                            selectedBaseColor = tagColorFamily
+                        },
+            )
+        }
+    }
+    HorizontalDivider()
+    HorizontalLazyRowWithGradient(
+        gradientColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(vertical = 16.dp),
+    ) {
+        items(selectedBaseColor.palette) { color ->
+            Box(
+                modifier =
+                    Modifier
+                        .requiredSize(48.dp)
+                        .clip(CircleShape)
+                        .then(
+                            if (tagColor == color) {
+                                Modifier
+                                    .border(
+                                        width = 2.dp,
+                                        color = outlineColor,
+                                        shape = CircleShape,
+                                    ).padding(4.dp)
+                            } else {
+                                Modifier
+                            },
+                        ).background(
+                            color = Color(color),
+                            shape = CircleShape,
+                        ).clickable { onTagColorChange(color) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.CustomColorPicker(
+    tagColor: Long,
+    onTagColorChange: (Long) -> Unit,
+) {
+    val controller = rememberColorPickerController()
+
+    Box(
+        modifier =
+            Modifier
+                .requiredHeight(48.dp)
+                .fillMaxWidth()
+                .background(
+                    color = Color(tagColor),
+                    shape = RoundedCornerShape(8.dp),
+                ),
+    )
+    Spacer(modifier = Modifier.size(8.dp))
+    HsvColorPicker(
+        modifier =
+            Modifier
+                .size(250.dp)
+                .align(Alignment.CenterHorizontally),
+        controller = controller,
+        initialColor = Color(tagColor),
+        onColorChanged = {
+            if (it.fromUser) {
+                onTagColorChange(it.hexCode.toLong(16))
+            }
+        },
+    )
+    Spacer(modifier = Modifier.size(8.dp))
+    BrightnessSlider(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(35.dp),
+        controller = controller,
     )
 }

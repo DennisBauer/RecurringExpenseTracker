@@ -50,6 +50,8 @@
     <string name="tags_deleted">Tag deleted</string>
     <string name="tags_delete_undo">Undo</string>
     <string name="tags_show_more">Show More</string>
+    <string name="tags_color_simple">Simple</string>
+    <string name="tags_color_custom">Custom</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Upcoming Payments</string>
