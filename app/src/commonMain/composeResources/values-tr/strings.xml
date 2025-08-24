@@ -73,7 +73,7 @@
     <string name="widget_configuration_title">Widget\'ı Yapılandır</string>
     <string name="edit_expense_description_placeholder">ör. özel abonelik</string>
     <string name="settings_backup_not_restored_toast">Yedek geri yüklenirken hata oluştu</string>
-    <string name="edit_expense_color">Renk</string>
+    <string name="tags_color">Renk</string>
     <string name="settings_theme_mode_follow_system">Sistemi takip et</string>
     <string name="edit_expense_recurrence_day_short">D</string>
     <string name="edit_expense_recurrence_year_short">Y</string>

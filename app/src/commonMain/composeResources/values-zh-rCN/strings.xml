@@ -19,7 +19,7 @@
     <string name="edit_expense_recurrence_month_short">月</string>
     <string name="edit_expense_recurrence_year_short">年</string>
     <string name="edit_expense_first_payment_placeholder">选择日期</string>
-    <string name="edit_expense_color">颜色</string>
+    <string name="tags_color">颜色</string>
     <string name="upcoming_title">即将付款</string>
     <string name="upcoming_time_remaining_tomorrow">明天</string>
     <string name="upcoming_time_remaining_days">%1$d 天后</string>

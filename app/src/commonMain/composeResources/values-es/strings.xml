@@ -6,7 +6,7 @@
     <string name="edit_expense_recurrence">Repetición</string>
     <string name="edit_expense_recurrence_month">Mes(es)</string>
     <string name="edit_expense_recurrence_year_short">A</string>
-    <string name="edit_expense_color">Color</string>
+    <string name="tags_color">Color</string>
     <string name="edit_expense_delete_dialog_text">¿Realmente quieres eliminar este gasto?</string>
     <string name="upcoming_title">Próximos gastos</string>
     <string name="settings_backup">Copia de seguridad</string>
