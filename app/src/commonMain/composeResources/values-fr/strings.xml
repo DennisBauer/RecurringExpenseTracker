@@ -13,7 +13,7 @@
     <string name="edit_expense_recurrence_month">Mois</string>
     <string name="edit_expense_recurrence_year">Année(s)</string>
     <string name="edit_expense_recurrence_year_short">Y</string>
-    <string name="edit_expense_color">Couleur</string>
+    <string name="tags_color">Couleur</string>
     <string name="upcoming_title">Paiements à venir</string>
     <string name="upcoming_time_remaining_today">aujourd\'hui</string>
     <string name="settings_title">Paramètres</string>

@@ -34,10 +34,20 @@
     <string name="edit_expense_recurrence_year_short">J</string>
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Datum auswählen</string>
-    <string name="edit_expense_color">Farbe</string>
+    <string name="edit_expense_tags">Tags hinzufügen</string>
     <string name="edit_expense_notification_days_advance">%1$d (Standard)</string>
     <string name="edit_expense_notification_get_notified">Lass dich über bevorstehende Zahlungen benachrichtigen. Gehe dazu zu den Einstellungen und aktiviere die Benachrichtigungen.</string>
     <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
+
+    <string name="tags_screen_title">Tags</string>
+    <string name="tags_add_new">Neuen Tag erstellen</string>
+    <string name="tags_edit">Tag bearbeiten</string>
+    <string name="tags_title">Titel</string>
+    <string name="tags_color">Farbe</string>
+    <string name="tags_title_empty">Der Titel des Tags darf nicht leer sein</string>
+    <string name="tags_deleted">Tag gelöscht</string>
+    <string name="tags_delete_undo">Rückgängig</string>
+    <string name="tags_show_more">Weitere anzeigen</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Bevorstehende Zahlungen</string>

@@ -16,7 +16,7 @@
     <string name="edit_expense_recurrence_year_short">R</string>
     <string name="edit_expense_first_payment">První platba (volitelně)</string>
     <string name="edit_expense_first_payment_placeholder">Vyberte datum</string>
-    <string name="edit_expense_color">Barva</string>
+    <string name="tags_color">Barva</string>
     <string name="edit_expense_notification_days_advance">%1$d (výchozí)</string>
     <string name="upcoming_title">Nadcházející platby</string>
     <string name="upcoming_placeholder_title">Vyberte datum první platby, abyste viděli přehled budoucích plateb</string>
