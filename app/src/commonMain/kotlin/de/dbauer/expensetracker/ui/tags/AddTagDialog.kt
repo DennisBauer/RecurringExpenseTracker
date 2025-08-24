@@ -1,39 +1,48 @@
 package de.dbauer.expensetracker.ui.tags
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.conditional
-import de.dbauer.expensetracker.ui.customizations.ExpenseColor
+import de.dbauer.expensetracker.ui.customizations.tagColorFamilies
+import de.dbauer.expensetracker.ui.elements.HorizontalLazyRowWithGradient
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.cancel
 import recurringexpensetracker.app.generated.resources.save
 import recurringexpensetracker.app.generated.resources.tags_add_new
+import recurringexpensetracker.app.generated.resources.tags_color
 import recurringexpensetracker.app.generated.resources.tags_edit
 import recurringexpensetracker.app.generated.resources.tags_title
 import recurringexpensetracker.app.generated.resources.tags_title_empty
@@ -51,11 +60,12 @@ fun AddTagDialog(
     onDismissAddNewTagDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val gridState = rememberLazyGridState()
+    val scrollState = rememberScrollState()
+    var selectedBaseColor by remember { mutableStateOf(tagColorFamilies.first()) }
     AlertDialog(
         onDismissRequest = onDismissAddNewTagDialog,
         text = {
-            Column {
+            Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Text(
                     text =
                         if (isNewTag) {
@@ -103,10 +113,12 @@ fun AddTagDialog(
                     trailingIcon = trailingIcon,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    text = stringResource(Res.string.tags_color),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
                 val errorBorderColor = MaterialTheme.colorScheme.error
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(48.dp),
-                    state = gridState,
+                Column(
                     modifier =
                         Modifier.conditional(tagColorError) {
                             Modifier.border(
@@ -116,27 +128,69 @@ fun AddTagDialog(
                             )
                         },
                 ) {
-                    items(ExpenseColor.entries) { color ->
-                        val outlineColor = MaterialTheme.colorScheme.onSurface
-                        val colorLong = color.getColor().toArgb().toLong()
-
-                        Canvas(
-                            modifier =
-                                Modifier
-                                    .padding(16.dp)
-                                    .clip(RoundedCornerShape(50))
-                                    .conditional(tagColor == colorLong) {
-                                        border(
-                                            width = 2.dp,
-                                            color = outlineColor,
-                                            shape = RoundedCornerShape(50),
-                                        )
-                                    }.background(color.getColor())
-                                    .requiredSize(48.dp)
-                                    .clickable {
-                                        onTagColorChange(colorLong)
-                                    },
-                        ) {
+                    val outlineColor = MaterialTheme.colorScheme.onSurface
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(vertical = 16.dp),
+                    ) {
+                        tagColorFamilies.forEach { tagColorFamily ->
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .requiredSize(48.dp)
+                                        .clip(CircleShape)
+                                        .then(
+                                            if (selectedBaseColor == tagColorFamily) {
+                                                Modifier
+                                                    .border(
+                                                        width = 2.dp,
+                                                        color = outlineColor,
+                                                        shape = CircleShape,
+                                                    ).padding(4.dp)
+                                            } else {
+                                                Modifier
+                                            },
+                                        ).background(
+                                            color = Color(tagColorFamily.base),
+                                            shape = CircleShape,
+                                        ).clickable {
+                                            if (selectedBaseColor != tagColorFamily) {
+                                                onTagColorChange(0L)
+                                            }
+                                            selectedBaseColor = tagColorFamily
+                                        },
+                            )
+                        }
+                    }
+                    HorizontalDivider()
+                    HorizontalLazyRowWithGradient(
+                        gradientColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(vertical = 16.dp),
+                    ) {
+                        items(selectedBaseColor.palette) { color ->
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .requiredSize(48.dp)
+                                        .clip(CircleShape)
+                                        .then(
+                                            if (tagColor == color) {
+                                                Modifier
+                                                    .border(
+                                                        width = 2.dp,
+                                                        color = outlineColor,
+                                                        shape = CircleShape,
+                                                    ).padding(4.dp)
+                                            } else {
+                                                Modifier
+                                            },
+                                        ).background(
+                                            color = Color(color),
+                                            shape = CircleShape,
+                                        ).clickable { onTagColorChange(color) },
+                            )
                         }
                     }
                 }
