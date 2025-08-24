@@ -30,7 +30,7 @@ jobs:
       - id: get_version
         uses: battila7/get-version-action@v2
       - name: Build APK
-        run: ./gradlew :app:assembleRelease -x test
+        run: ./gradlew :app:assembleRelease --no-daemon --no-configuration-cache --no-build-cache -x test
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
@@ -61,7 +61,7 @@ jobs:
           fileDir: '/home/runner/work/RecurringExpenseTracker/RecurringExpenseTracker/app/keystore/'
           encodedString: ${{ secrets.KEYSTORE_PLAY_STORE }}
       - name: Build AppBundle
-        run: ./gradlew :app:bundleRelease -x test
+        run: ./gradlew :app:bundleRelease --no-daemon --no-configuration-cache --no-build-cache -x test
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_PLAY_STORE_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PLAY_STORE_PASSWORD }}
