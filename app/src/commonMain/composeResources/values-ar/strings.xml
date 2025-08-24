@@ -38,7 +38,7 @@
     <string name="upcoming_time_remaining_days">بعد %1$d يومًا</string>
     <string name="settings_title">الإعدادات</string>
     <string name="settings_general">عام</string>
-    <string name="settings_theme_mode">Theme mode</string>
+    <string name="settings_theme_mode">وضع السمة</string>
     <string name="settings_theme_mode_follow_system">تبـعًا للنظام</string>
     <string name="settings_theme_mode_dark">داكـنة</string>
     <string name="settings_theme_mode_light">فاتحة</string>
