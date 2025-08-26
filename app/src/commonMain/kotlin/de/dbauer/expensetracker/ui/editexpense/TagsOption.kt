@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.ui.animatePlacement
+import de.dbauer.expensetracker.ui.elements.tagChipColorDefaults
 import de.dbauer.expensetracker.ui.tags.AddTagDialog
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.viewmodel.TagsScreenViewModel
@@ -144,11 +145,7 @@ private fun TagsList(
                             selected = selected,
                             onClick = { onTagClick(tag) },
                             label = { Text(text = tag.title) },
-                            colors =
-                                InputChipDefaults.inputChipColors().copy(
-                                    containerColor = Color(tag.color).copy(alpha = 0.2f),
-                                    selectedContainerColor = Color(tag.color),
-                                ),
+                            colors = tagChipColorDefaults(Color(tag.color)),
                             leadingIcon = {
                                 if (selected) {
                                     Icon(
