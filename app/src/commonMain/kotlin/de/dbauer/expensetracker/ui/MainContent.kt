@@ -17,12 +17,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,20 +36,24 @@ import de.dbauer.expensetracker.data.MainNavRoute
 import de.dbauer.expensetracker.data.SettingsPane
 import de.dbauer.expensetracker.data.TagsPane
 import de.dbauer.expensetracker.data.UpcomingPane
+import de.dbauer.expensetracker.data.WhatsNew
 import de.dbauer.expensetracker.data.isInRoute
 import de.dbauer.expensetracker.ui.editexpense.EditRecurringExpenseScreen
 import de.dbauer.expensetracker.ui.settings.SettingsScreen
 import de.dbauer.expensetracker.ui.tags.TagsScreen
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.ui.upcomingexpenses.UpcomingPaymentsScreen
+import de.dbauer.expensetracker.ui.whatsnew.IWhatsNew
 import de.dbauer.expensetracker.viewmodel.MainNavigationViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.home_title
 import recurringexpensetracker.app.generated.resources.upcoming_title
+import recurringexpensetracker.app.generated.resources.whats_new_title
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +73,7 @@ fun MainContent(
     modifier: Modifier = Modifier,
     startRoute: MainNavRoute = HomePane,
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
+    whatsNew: IWhatsNew = koinInject<IWhatsNew>(),
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -136,6 +143,15 @@ fun MainContent(
                             ),
                         modifier = Modifier.padding(paddingValues),
                     )
+
+                    LaunchedEffect(mainNavigationViewModel.shouldShowWhatsNew) {
+                        if (mainNavigationViewModel.shouldShowWhatsNew &&
+                            backStackEntry?.destination?.hasRoute(WhatsNew::class) == false
+                        ) {
+                            navController.navigate(WhatsNew)
+                            mainNavigationViewModel.onWhatsNewShown()
+                        }
+                    }
                 }
                 composable<UpcomingPane> {
                     mainNavigationViewModel.topAppBar = {
@@ -222,6 +238,24 @@ fun MainContent(
                         modifier = Modifier.padding(paddingValues),
                     )
                     mainNavigationViewModel.topAppBar = topAppBar
+                }
+                composable<WhatsNew> {
+                    mainNavigationViewModel.topAppBar = {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(Res.string.whats_new_title),
+                                )
+                            },
+                        )
+                    }
+                    whatsNew.WhatsNewUI(
+                        onDismissRequest = {
+                            mainNavigationViewModel.onWhatsNewShown()
+                            navController.navigateUp()
+                        },
+                        modifier = Modifier.padding(paddingValues),
+                    )
                 }
             }
         },

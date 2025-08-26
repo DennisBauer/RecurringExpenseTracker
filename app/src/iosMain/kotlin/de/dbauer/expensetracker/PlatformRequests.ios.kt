@@ -7,3 +7,8 @@ actual fun getAppVersion(): String {
     val version = infoDictionary?.get("CFBundleShortVersionString") as? String
     return version ?: "Unknown"
 }
+
+actual fun getAppVersionCode(): Int {
+    val versionString = NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleVersion") as? String
+    return versionString?.toIntOrNull() ?: -1
+}
