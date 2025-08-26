@@ -5,76 +5,46 @@ import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring.StiffnessMediumLow
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.offset
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.composed
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.node.GlobalPositionAwareModifierNode
-import androidx.compose.ui.node.LayoutModifierNode
-import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.round
 import kotlinx.coroutines.launch
 
-fun Modifier.animatePlacement(): Modifier = this.then(AnimatePlacementElement)
-
-private object AnimatePlacementElement : ModifierNodeElement<AnimatePlacementNode>() {
-    override fun create(): AnimatePlacementNode = AnimatePlacementNode()
-
-    override fun update(node: AnimatePlacementNode) {}
-
-    override fun InspectorInfo.inspectableProperties() {
-        name = "animatePlacement"
-    }
-
-    override fun hashCode(): Int = "animatePlacement".hashCode()
-
-    override fun equals(other: Any?): Boolean = (other === this)
-}
-
-private class AnimatePlacementNode :
-    Modifier.Node(),
-    LayoutModifierNode,
-    GlobalPositionAwareModifierNode {
-    private var isInitiallyPlaced = false
-    private var targetOffset: IntOffset = IntOffset.Zero
-    private var animatable: Animatable<IntOffset, AnimationVector2D>? = null
-
-    override fun onGloballyPositioned(coordinates: LayoutCoordinates) {
-        val newOffset = coordinates.positionInParent().round()
-
-        if (!isInitiallyPlaced) {
-            targetOffset = newOffset
-            isInitiallyPlaced = true
-        } else if (newOffset != targetOffset) {
-            val previousOffset = targetOffset
-            targetOffset = newOffset
-
-            val anim =
-                animatable ?: Animatable(previousOffset, IntOffset.VectorConverter).also {
-                    animatable = it
+@Suppress("ktlint:compose:modifier-composed-check")
+fun Modifier.animatePlacement(): Modifier =
+    composed {
+        val scope = rememberCoroutineScope()
+        var targetOffset by remember { mutableStateOf(IntOffset.Zero) }
+        var animatable by remember {
+            mutableStateOf<Animatable<IntOffset, AnimationVector2D>?>(null)
+        }
+        this
+            .onPlaced {
+                // Calculate the position in the parent layout
+                targetOffset = it.positionInParent().round()
+            }.offset {
+                // Animate to the new target offset when alignment changes.
+                val anim =
+                    animatable
+                        ?: Animatable(targetOffset, IntOffset.VectorConverter).also {
+                            animatable = it
+                        }
+                if (anim.targetValue != targetOffset) {
+                    scope.launch {
+                        anim.animateTo(targetOffset, spring(stiffness = StiffnessMediumLow))
+                    }
                 }
-
-            coroutineScope.launch {
-                anim.snapTo(previousOffset)
-                anim.animateTo(targetOffset, spring(stiffness = StiffnessMediumLow))
+                // Offset the child in the opposite direction to the targetOffset, and slowly catch
+                // up to zero offset via an animation to achieve an overall animated movement.
+                animatable?.let { it.value - targetOffset } ?: IntOffset.Zero
             }
-        }
     }
-
-    override fun MeasureScope.measure(
-        measurable: Measurable,
-        constraints: Constraints,
-    ): MeasureResult {
-        val placeable = measurable.measure(constraints)
-        val offset = animatable?.let { it.value - targetOffset } ?: IntOffset.Zero
-
-        return layout(placeable.width, placeable.height) {
-            placeable.placeRelative(offset)
-        }
-    }
-}
