@@ -124,4 +124,11 @@
     <string name="widget_grid_mode">Grid Mode</string>
     <string name="widget_configuration_title">Configure Widget</string>
     <string name="widget_transparent_background">Transparent Background</string>
+
+    <!-- WhatsNew -->
+    <string name="whats_new_title">Whats new?</string>
+    <string name="whats_new_1_title" translatable="false">Introducing Tags!</string>
+    <string name="whats_new_1_description" translatable="false">• Organize your expenses with customizable tags.\n• Your existing colors have been automatically converted to tags.\n• Create and manage tags from Settings or while editing an expense.</string>
+    <string name="whats_new_2_title" translatable="false">More Colors, More Options!</string>
+    <string name="whats_new_2_description" translatable="false">Choose from a wider range of predefined colors, or create your own with the new custom color picker.</string>
 </resources>

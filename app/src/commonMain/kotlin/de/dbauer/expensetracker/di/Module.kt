@@ -12,6 +12,9 @@ import de.dbauer.expensetracker.model.database.RecurringExpenseDatabase
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.model.notification.ExpenseNotificationManager
+import de.dbauer.expensetracker.ui.whatsnew.FakeWhatsNew
+import de.dbauer.expensetracker.ui.whatsnew.IWhatsNew
+import de.dbauer.expensetracker.ui.whatsnew.WhatsNew
 import de.dbauer.expensetracker.viewmodel.EditRecurringExpenseViewModel
 import de.dbauer.expensetracker.viewmodel.MainNavigationViewModel
 import de.dbauer.expensetracker.viewmodel.RecurringExpenseViewModel
@@ -44,6 +47,7 @@ val sharedModule =
         singleOf(::ExpenseNotificationManager)
         viewModelOf(::MainNavigationViewModel)
         viewModelOf(::TagsScreenViewModel)
+        single<IWhatsNew> { WhatsNew(get()) }
     }
 
 val previewModule =
@@ -58,4 +62,5 @@ val previewModule =
         single<IExpenseRepository> { FakeExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
         viewModelOf(::TagsScreenViewModel)
+        single<IWhatsNew> { FakeWhatsNew() }
     }

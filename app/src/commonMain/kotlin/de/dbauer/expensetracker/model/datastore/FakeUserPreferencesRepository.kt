@@ -37,4 +37,6 @@ class FakeUserPreferencesRepository() : IUserPreferencesRepository {
         FakePreference(3)
     override val widgetBackgroundTransparent: IUserPreferencesRepository.IPreference<Boolean> =
         FakePreference(false)
+    override val whatsNewVersionShown: IUserPreferencesRepository.IPreference<Int>
+        get() = FakePreference(0)
 }

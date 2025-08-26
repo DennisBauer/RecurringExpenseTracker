@@ -120,4 +120,7 @@
     <string name="widget_grid_mode">Raster Modus</string>
     <string name="widget_configuration_title">Widget konfigurieren</string>
     <string name="widget_transparent_background">Transparenter Hintergrund</string>
+
+    <!-- WhatsNew -->
+    <string name="whats_new_title">Was ist neu?</string>
 </resources>

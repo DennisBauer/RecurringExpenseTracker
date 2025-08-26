@@ -24,4 +24,5 @@ interface IUserPreferencesRepository {
     val upcomingPaymentNotificationTime: IPreference<Int>
     val upcomingPaymentNotificationDaysAdvance: IPreference<Int>
     val widgetBackgroundTransparent: IPreference<Boolean>
+    val whatsNewVersionShown: IPreference<Int>
 }

@@ -39,6 +39,9 @@ class EditExpensePane(val expenseId: Int? = null)
 @Serializable
 object TagsPane
 
+@Serializable
+object WhatsNew
+
 inline fun <reified T : Any> NavDestination?.isInRoute(vararg routes: T): Boolean {
     return routes.any { route -> this?.hasRoute(route::class) == true }
 }
