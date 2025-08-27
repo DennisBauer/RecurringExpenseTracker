@@ -89,4 +89,16 @@
     <string name="widget_configuration_biometric_deactivate">Выключить Biometric</string>
     <string name="widget_grid_mode">Режим сетки</string>
     <string name="widget_transparent_background">Прозрачный фон</string>
+    <string name="edit_expense_tags">Добавить метки</string>
+    <string name="tags_screen_title">Метки</string>
+    <string name="tags_add_new">Новая метка</string>
+    <string name="tags_edit">Изменить метку</string>
+    <string name="tags_title">Название</string>
+    <string name="tags_title_empty">Название метки не может быть пустым</string>
+    <string name="tags_deleted">Метка удалена</string>
+    <string name="tags_delete_undo">Откатить</string>
+    <string name="tags_show_more">Больше</string>
+    <string name="tags_color_simple">Простой</string>
+    <string name="tags_color_custom">Свой</string>
+    <string name="whats_new_title">Что нового-то?</string>
 </resources>
