@@ -21,18 +21,18 @@ data class WhatsNewSlide(
     val description: StringResource,
 )
 
-const val WHATS_NEW_VERSION_CODE = 48
+const val WHATS_NEW_VERSION = 1
 
 class WhatsNew(
     private val userPreferencesRepository: IUserPreferencesRepository,
 ) : IWhatsNew {
     override suspend fun shouldShowWhatsNew(): Boolean {
         val lastWhatsNewVersionShown = userPreferencesRepository.whatsNewVersionShown.get().first()
-        return lastWhatsNewVersionShown < WHATS_NEW_VERSION_CODE
+        return lastWhatsNewVersionShown < WHATS_NEW_VERSION
     }
 
     override suspend fun markAsShown() {
-        userPreferencesRepository.whatsNewVersionShown.save(WHATS_NEW_VERSION_CODE)
+        userPreferencesRepository.whatsNewVersionShown.save(WHATS_NEW_VERSION)
     }
 
     @Composable
