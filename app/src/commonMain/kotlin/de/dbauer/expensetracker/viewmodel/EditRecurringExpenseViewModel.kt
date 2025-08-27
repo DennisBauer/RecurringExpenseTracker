@@ -107,7 +107,7 @@ class EditRecurringExpenseViewModel(
         viewModelScope.launch {
             expenseRepository.allTags.collect { newTags ->
                 newTags.forEach { tag ->
-                    _tags.getOrPut(tag) { false }
+                    _tags.getOrPut(tag) { _tags.entries.firstOrNull { it.key.id == tag.id }?.value ?: false }
                 }
                 val tagsToRemove = _tags.keys.filter { it !in newTags }
                 tagsToRemove.forEach {
