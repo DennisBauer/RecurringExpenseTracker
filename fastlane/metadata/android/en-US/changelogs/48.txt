@@ -1,0 +1,7 @@
+Changelog 0.18.0:
+* Introducing Tags! A new way to organize your expenses
+* Your existing category colors have been automatically converted to tags
+* Customize tags with an expanded color palette and a new custom color picker
+* Updated translations
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.18.0
