@@ -22,7 +22,7 @@ internal fun RecurringExpenseWithTagsEntry.toRecurringExpenseData(
             ),
         everyXRecurrence = this.expense.everyXRecurrence!!,
         recurrence = getRecurrenceFromDatabaseInt(this.expense.recurrence!!),
-        tags = this.tags.toTags(),
+        tags = this.tags.toTags().sortedBy { it.title },
         firstPayment = this.expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
         notifyForExpense = this.expense.notifyForExpense,
         notifyXDaysBefore = this.expense.notifyXDaysBefore,
