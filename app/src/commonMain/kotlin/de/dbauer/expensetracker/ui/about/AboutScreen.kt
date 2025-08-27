@@ -3,7 +3,6 @@ package de.dbauer.expensetracker.ui.about
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,6 +24,7 @@ import recurringexpensetracker.app.generated.resources.ic_launcher
 import recurringexpensetracker.app.generated.resources.liberapay
 import recurringexpensetracker.app.generated.resources.settings_about_libraries
 import recurringexpensetracker.app.generated.resources.settings_about_made_by
+import recurringexpensetracker.app.generated.resources.settings_about_suggest_or_report
 import recurringexpensetracker.app.generated.resources.settings_about_support
 import recurringexpensetracker.app.generated.resources.settings_about_version
 
@@ -78,13 +78,27 @@ fun AboutScreen(
                 Text(text = stringResource(Res.string.settings_about_made_by) + " DennisBauer")
             },
             trailingContent = {
-                Row {
-                    Image(
-                        painter = painterResource(Res.drawable.github),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
+                Image(
+                    painter = painterResource(Res.drawable.github),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+        )
+        ListItem(
+            modifier =
+                Modifier.clickable {
+                    uriHandler.openUri("https://github.com/DennisBauer/RecurringExpenseTracker/issues")
+                },
+            headlineContent = {
+                Text(text = stringResource(Res.string.settings_about_suggest_or_report))
+            },
+            trailingContent = {
+                Image(
+                    painter = painterResource(Res.drawable.github),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                )
             },
         )
         ListItem(
@@ -96,13 +110,11 @@ fun AboutScreen(
                 Text(text = stringResource(Res.string.settings_about_support))
             },
             trailingContent = {
-                Row {
-                    Image(
-                        painter = painterResource(Res.drawable.liberapay),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
+                Image(
+                    painter = painterResource(Res.drawable.liberapay),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                )
             },
         )
         ListItem(

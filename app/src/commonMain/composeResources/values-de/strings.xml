@@ -94,6 +94,7 @@
     <string name="settings_about_app">Über die App</string>
     <string name="settings_about_developer">Entwickler</string>
     <string name="settings_about_version">Version</string>
+    <string name="settings_about_suggest_or_report">Eine Idee vorschlagen oder ein Problem melden</string>
     <string name="settings_about_made_by">Erstellt von</string>
     <string name="settings_about_support">Projekt unterstützen</string>
     <string name="settings_about_libraries">Urheberrecht der Bibliotheken</string>
