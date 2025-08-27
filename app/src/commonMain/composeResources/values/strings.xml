@@ -98,6 +98,7 @@
     <string name="settings_about_app">About app</string>
     <string name="settings_about_developer">Developer</string>
     <string name="settings_about_version">Version</string>
+    <string name="settings_about_suggest_or_report">Contribute an idea or report an issue</string>
     <string name="settings_about_made_by">Made by</string>
     <string name="settings_about_support">Support the project</string>
     <string name="settings_about_libraries">Libraries copyright</string>
