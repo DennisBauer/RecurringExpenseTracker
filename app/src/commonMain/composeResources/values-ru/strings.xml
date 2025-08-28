@@ -101,4 +101,5 @@
     <string name="tags_color_simple">Простой</string>
     <string name="tags_color_custom">Свой</string>
     <string name="whats_new_title">Что нового-то?</string>
+    <string name="settings_about_suggest_or_report">Предложить идею или сообщить про ошибку</string>
 </resources>
