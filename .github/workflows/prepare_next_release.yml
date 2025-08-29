@@ -1,0 +1,71 @@
+name: Prepare next release
+
+permissions:
+  contents: write          # needed for pushing a branch & opening the PR
+  pull-requests: write     # so the action can label / comment
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: prepare-next-release
+  cancel-in-progress: false   # allow multiple manual runs, but never in parallel
+
+jobs:
+  prepare-next-release:
+    name: Update exchange rates and license file & open PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Use Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run update script
+        run: python .github/scripts/update_exchange_rates.py
+        env:
+          CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
+
+      - name: Update About Libraries json
+        run: ./gradlew :app:exportLibraryDefinitions --no-daemon --no-configuration-cache --no-build-cache
+        env:
+          ABOUT_LIBRARIES_TOKEN: ${{ secrets.ABOUT_LIBRARIES_TOKEN }}
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Commit exchange rates
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email '37552885+DennisBauer@users.noreply.github.com'
+          git add app/src/commonMain/composeResources/files/exchange_rates.json
+          git commit -S -m "Update exchange rates"
+
+      - name: Commit library licenses
+        run: |
+          git add app/src/commonMain/composeResources/files/aboutlibraries.json
+          git commit -S -m "Update library licenses"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: "Update exchange rates and licenses"
+          body: "Automated update of exchange rates and library licenses"
+          branch: "bot/update-exchange-rates-and-licenses"
+          labels: |
+            dependencies
