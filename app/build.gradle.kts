@@ -217,18 +217,6 @@ aboutLibraries {
     collect.gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
 }
 
-tasks.named("copyNonXmlValueResourcesForCommonMain") {
-    mustRunAfter("exportLibraryDefinitions")
-}
-
-android.applicationVariants.configureEach {
-    if (buildType.name == "release") {
-        preBuildProvider.configure {
-            dependsOn("exportLibraryDefinitions")
-        }
-    }
-}
-
 // Make sure Coroutines can be debugged properly
 tasks.withType<KotlinCompile> {
     if (project.gradle.startParameter.taskNames.any { it.contains("Debug") }) {

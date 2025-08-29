@@ -35,7 +35,6 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          ABOUT_LIBRARIES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify Signature
         run: $ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
       - name: Upload APK
@@ -66,7 +65,6 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_PLAY_STORE_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PLAY_STORE_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PLAY_STORE_PASSWORD }}
-          ABOUT_LIBRARIES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload AppBundle
         uses: actions/upload-artifact@v4
         with:
