@@ -48,6 +48,8 @@
     <string name="tags_deleted">Tag gelöscht</string>
     <string name="tags_delete_undo">Rückgängig</string>
     <string name="tags_show_more">Weitere anzeigen</string>
+    <string name="tags_color_simple">Einfach</string>
+    <string name="tags_color_custom">Benutzerdefiniert</string>
 
     <!-- Upcoming Payments Tab -->
     <string name="upcoming_title">Bevorstehende Zahlungen</string>
