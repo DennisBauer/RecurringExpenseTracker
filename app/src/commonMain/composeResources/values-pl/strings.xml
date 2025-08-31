@@ -89,4 +89,17 @@
     <string name="upcoming_placeholder_title">Aby zobaczyć przegląd nadchodzących płatności, zdefiniuj pierwszy dzień płatności wydatku</string>
     <string name="upcoming_time_remaining_today">dzisiaj</string>
     <string name="upcoming_time_remaining_tomorrow">jutro</string>
+    <string name="edit_expense_tags">Dodaj tagi</string>
+    <string name="tags_screen_title">Tagi</string>
+    <string name="tags_add_new">Dodaj nowy tag</string>
+    <string name="tags_edit">Edytuj tag</string>
+    <string name="tags_title">Tytuł</string>
+    <string name="tags_title_empty">Tytuł tagu nie może być pusty</string>
+    <string name="tags_deleted">Usunięto tag</string>
+    <string name="tags_delete_undo">Cofnij</string>
+    <string name="tags_show_more">Pokaż więcej</string>
+    <string name="tags_color_simple">Prosty</string>
+    <string name="tags_color_custom">Niestandardowy</string>
+    <string name="settings_about_suggest_or_report">Zaproponuj swój pomysł lub zgłoś błąd</string>
+    <string name="whats_new_title">Co nowego?</string>
 </resources>
