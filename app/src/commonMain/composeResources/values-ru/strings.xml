@@ -61,7 +61,7 @@
     <string name="notification_expense_reminder_message_tomorrow">Следующий платеж будет завтра</string>
     <string name="notification_expense_reminder_message_days">Следующий платеж через %1$d дней</string>
     <string name="settings_notifications_missing_permission_title">Отсутствует разрешение</string>
-    <string name="notification_expense_reminder">Напоминание о платеже</string>
+    <string name="notification_expense_reminder">Напоминания</string>
     <string name="settings_notifications_subtitle">Показывайте уведомления о предстоящих платежах</string>
     <string name="settings_notifications_schedule_time">Время уведомления</string>
     <string name="edit_expense_notification_get_notified">Начните получать уведомления о предстоящих платежах. Просто зайдите в настройки и включите уведомления.</string>
@@ -74,7 +74,7 @@
     <string name="settings_about_version">Версия</string>
     <string name="settings_currency">Валюта</string>
     <string name="settings_about">О приложении</string>
-    <string name="widget_configuration_biometric">Пожалуйста отключите Biometric для использования этого виджета</string>
+    <string name="widget_configuration_biometric">Пожалуйста, отключите биометрию для использования этого виджета</string>
     <string name="settings_theme_mode">Тема оформления</string>
     <string name="settings_theme_mode_follow_system">Как в системе</string>
     <string name="settings_theme_mode_dark">Тёмная</string>
@@ -86,7 +86,7 @@
     <string name="settings_about_made_by">Сделано</string>
     <string name="settings_about_support">Поддержать проект</string>
     <string name="settings_about_libraries">Авторские права библиотек</string>
-    <string name="widget_configuration_biometric_deactivate">Выключить Biometric</string>
+    <string name="widget_configuration_biometric_deactivate">Выключить биометрию</string>
     <string name="widget_grid_mode">Режим сетки</string>
     <string name="widget_transparent_background">Прозрачный фон</string>
     <string name="edit_expense_tags">Добавить метки</string>
