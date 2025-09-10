@@ -6,7 +6,6 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -40,7 +39,6 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_6_7)
                 .addMigrations(migration_7_8)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
-                .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
         }

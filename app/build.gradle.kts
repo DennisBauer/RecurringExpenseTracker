@@ -81,7 +81,6 @@ kotlin {
 
             implementation(libs.aboutlibraries.compose.m3)
             implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
@@ -91,6 +90,10 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.sqlite.bundled)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqlite.bundled)
         }
 
         commonTest.dependencies {
