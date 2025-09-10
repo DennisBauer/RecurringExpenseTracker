@@ -90,12 +90,15 @@ fun MainContent(
             }
         },
         bottomBar = {
-            if (backStackEntry?.destination?.isInRoute(HomePane, UpcomingPane, SettingsPane) == true) {
+            if (backStackEntry
+                    ?.destination
+                    ?.isInRoute<MainNavRoute>(HomePane, UpcomingPane, SettingsPane) == true
+            ) {
                 BottomNavBar(navController = navController)
             }
         },
         floatingActionButton = {
-            if (backStackEntry?.destination?.isInRoute(HomePane, UpcomingPane) == true) {
+            if (backStackEntry?.destination?.isInRoute<MainNavRoute>(HomePane, UpcomingPane) == true) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(EditExpensePane())
