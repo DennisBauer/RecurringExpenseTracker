@@ -25,8 +25,8 @@ ksp = "2.2.10-2.0.2"
 ktlint = "0.4.27"
 ktlint-plugin = "13.1.0"
 ktlint-version = "1.7.1"
-room = "2.7.2"
-sqlite = "2.5.2"
+room = "2.8.0"
+sqlite = "2.6.0"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
