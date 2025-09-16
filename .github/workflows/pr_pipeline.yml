@@ -69,6 +69,12 @@ jobs:
             echo "✅ The number of warnings is exactly as expected."
           fi
 
+      - name: Upload Lint SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/lint-results-debug.sarif
+          category: lint
+
 #      - name: Upload Test Reports
 #        uses: actions/upload-artifact@v4
 #        with:
