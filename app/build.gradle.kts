@@ -199,6 +199,9 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
             path.contains("\\generated\\") || path.contains("/generated/")
         }
     }
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.SARIF)
+    }
 }
 
 dependencies {

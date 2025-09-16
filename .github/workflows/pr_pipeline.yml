@@ -30,6 +30,18 @@ jobs:
       - name: Check Code Format
         run: ./gradlew ktlintCheck --no-daemon --no-configuration-cache --no-build-cache
 
+      - name: Merge SARIF files
+        uses: microsoft/sarif-actions/merge@v0.1
+        with:
+          inputs: app/build/reports/ktlint/**/*.sarif
+          output: app/build/reports/ktlint/ktlint-merged.sarif
+
+      - name: Upload ktlint SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlint-merged.sarif
+          category: ktlint
+
   build_android:
     name: Build Android app and Desktop
     runs-on: ubuntu-latest
