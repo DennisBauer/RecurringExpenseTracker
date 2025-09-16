@@ -144,7 +144,7 @@ class UpcomingPaymentsViewModelTest {
         }
 
     @Test
-    fun `expenses with foreign currency prefix sum with ~`() =
+    fun `expenses with foreign currency prefix sum with about symbol`() =
         runTest {
             val name = "My Expense"
             val from = LocalDate(2025, 6, 1)
@@ -168,7 +168,7 @@ class UpcomingPaymentsViewModelTest {
         }
 
     @Test
-    fun `expenses with no foreign currency do not prefix sum with ~`() =
+    fun `expenses with no foreign currency do not prefix sum with about symbol`() =
         runTest {
             val name = "My Expense"
             val from = LocalDate(2025, 6, 1)
