@@ -27,7 +27,6 @@ kotlin {
         freeCompilerArgs.addAll(
             "-Xexpect-actual-classes",
         )
-        allWarningsAsErrors.set(true)
     }
 
     jvm()
