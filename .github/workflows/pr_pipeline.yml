@@ -30,6 +30,42 @@ jobs:
       - name: Check Code Format
         run: ./gradlew ktlintCheck --no-daemon --no-configuration-cache --no-build-cache
 
+      - name: Upload ktlintAndroidMainSourceSetCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintAndroidMainSourceSetCheck/ktlintAndroidMainSourceSetCheck.sarif
+          category: ktlintAndroidMainSourceSetCheck
+
+      - name: Upload ktlintCommonMainSourceSetCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintCommonMainSourceSetCheck/ktlintCommonMainSourceSetCheck.sarif
+          category: ktlintCommonMainSourceSetCheck
+
+      - name: Upload ktlintCommonTestSourceSetCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintCommonTestSourceSetCheck/ktlintCommonTestSourceSetCheck.sarif
+          category: ktlintCommonTestSourceSetCheck
+
+      - name: Upload ktlintIosMainSourceSetCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintIosMainSourceSetCheck/ktlintIosMainSourceSetCheck.sarif
+          category: ktlintIosMainSourceSetCheck
+
+      - name: Upload ktlintJvmMainSourceSetCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintJvmMainSourceSetCheck/ktlintJvmMainSourceSetCheck.sarif
+          category: ktlintJvmMainSourceSetCheck
+
+      - name: Upload ktlintKotlinScriptCheck SARIF reports
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports/ktlint/ktlintKotlinScriptCheck/ktlintKotlinScriptCheck.sarif
+          category: ktlintKotlinScriptCheck
+
   build_android:
     name: Build Android app and Desktop
     runs-on: ubuntu-latest
