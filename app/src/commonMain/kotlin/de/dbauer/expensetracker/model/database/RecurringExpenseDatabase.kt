@@ -46,9 +46,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
         private val migration_1_2 =
             object : Migration(1, 2) {
                 override fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
-                        "ALTER TABLE recurring_expenses ADD COLUMN everyXRecurrence INTEGER DEFAULT 1",
-                    )
+                    connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN everyXRecurrence INTEGER DEFAULT 1")
                     connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN recurrence INTEGER DEFAULT 3")
                 }
             }
