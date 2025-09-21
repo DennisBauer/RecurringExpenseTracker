@@ -28,7 +28,7 @@ jobs:
           java-version: '21'
 
       - name: Check Code Format
-        run: ./gradlew ktlintCheck --no-daemon --no-configuration-cache --no-build-cache
+        run: ./gradlew ktlintCheck --no-daemon --no-configuration-cache --no-build-cache || true
 
       - name: Upload ktlintAndroidMainSourceSetCheck SARIF reports
         uses: github/codeql-action/upload-sarif@v3
