@@ -29,6 +29,7 @@ class EditRecurringExpenseViewModel(
     private val expenseId: Int?,
     private val expenseRepository: IExpenseRepository,
     private val currencyProvider: CurrencyProvider,
+    private val topAppBarMediator: TopAppBarMediator,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     var nameState by mutableStateOf("")
@@ -56,15 +57,15 @@ class EditRecurringExpenseViewModel(
     var notifyXDaysBefore by mutableStateOf("")
     var defaultXDaysPlaceholder by mutableStateOf("")
 
-    var showDeleteConfirmDialog by mutableStateOf(false)
+    val showDeleteConfirmDialog get() = topAppBarMediator.showDeleteExpenseConfirmDialog
 
     val isNewExpense = expenseId == null
-    val showDeleteButton = !isNewExpense
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private var lastNotificationDate: Instant? = null
 
     init {
+        topAppBarMediator.showDeleteExpenseButton.value = !isNewExpense
         viewModelScope.launch {
             val availableCurrencies =
                 currencyProvider.retrieveCurrencies().map {
@@ -137,19 +138,15 @@ class EditRecurringExpenseViewModel(
         }
     }
 
-    fun onDeleteClick() {
-        showDeleteConfirmDialog = true
-    }
-
     fun onDismissDeleteDialog() {
-        showDeleteConfirmDialog = false
+        topAppBarMediator.showDeleteExpenseConfirmDialog = false
     }
 
     fun deleteExpense() {
         if (expenseId == null) {
             throw IllegalStateException("Deleting an new expense not created yet is not allowed")
         }
-        showDeleteConfirmDialog = false
+        topAppBarMediator.showDeleteExpenseConfirmDialog = false
         viewModelScope.launch {
             val recurringExpense = createRecurringExpenseData()
             expenseRepository.delete(recurringExpense)

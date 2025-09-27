@@ -85,6 +85,7 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation("org.jetbrains.androidx.navigation3:navigation3-ui:1.0.0+dev2987")
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -49,7 +49,6 @@ fun EditRecurringExpenseScreen(
     canUseNotifications: Boolean,
     onDismiss: () -> Unit,
     onEditTagsClick: () -> Unit,
-    setTopAppBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
 ) {
@@ -175,37 +174,6 @@ fun EditRecurringExpenseScreen(
             },
         )
     }
-    setTopAppBar {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(Res.string.edit_expense_title),
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = onDismiss,
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                    )
-                }
-            },
-            actions = {
-                if (viewModel.showDeleteButton) {
-                    IconButton(
-                        onClick = viewModel::onDeleteClick,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = stringResource(Res.string.delete),
-                        )
-                    }
-                }
-            },
-        )
-    }
 }
 
 @Preview
@@ -218,7 +186,6 @@ private fun EditRecurringExpensePreview() {
                 canUseNotifications = true,
                 onDismiss = {},
                 onEditTagsClick = {},
-                setTopAppBar = {},
             )
         }
     }

@@ -26,9 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import de.dbauer.expensetracker.data.EditExpensePane
+import de.dbauer.expensetracker.data.NavRoute
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
@@ -51,7 +51,7 @@ import recurringexpensetracker.app.generated.resources.home_summary_yearly
 @Composable
 fun RecurringExpenseOverview(
     isGridMode: Boolean,
-    navController: NavController,
+    navigateTo: (NavRoute) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
@@ -101,14 +101,14 @@ fun RecurringExpenseOverview(
                 GridRecurringExpense(
                     recurringExpenseData = recurringExpenseData,
                     onClickItem = {
-                        navController.navigate(EditExpensePane(recurringExpenseData.id))
+                        navigateTo(NavRoute.EditExpensePane(recurringExpenseData.id))
                     },
                 )
             } else {
                 RecurringExpense(
                     recurringExpenseData = recurringExpenseData,
                     onClickItem = {
-                        navController.navigate(EditExpensePane(recurringExpenseData.id))
+                        navigateTo(NavRoute.EditExpensePane(recurringExpenseData.id))
                     },
                 )
             }
@@ -329,7 +329,7 @@ private fun RecurringExpenseOverviewPreview(
         Surface(modifier = Modifier.fillMaxWidth()) {
             RecurringExpenseOverview(
                 isGridMode = isGridMode,
-                navController = rememberNavController(),
+                navigateTo = {},
             )
         }
     }

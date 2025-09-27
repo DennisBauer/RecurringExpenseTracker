@@ -1,3 +1,5 @@
+import java.net.URI
+
 rootProject.name = "RecurringExpenseTracker"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -25,6 +27,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven {
+            url = URI("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        }
     }
 }
 

@@ -54,8 +54,6 @@ import recurringexpensetracker.app.generated.resources.tags_screen_title
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagsScreen(
-    setTopAppBar: (@Composable () -> Unit) -> Unit,
-    onNavigateBack: () -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: TagsScreenViewModel = koinViewModel<TagsScreenViewModel>(),
@@ -100,35 +98,6 @@ fun TagsScreen(
             onTagColorChange = viewModel::onTagColorChange,
             onConfirmAddNewTag = viewModel::onConfirmAddNewTag,
             onDismissAddNewTagDialog = viewModel::onDismissAddNewTagDialog,
-        )
-    }
-    setTopAppBar {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(Res.string.tags_screen_title),
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = onNavigateBack,
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = viewModel::onAddNewTag,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(Res.string.tags_add_new),
-                    )
-                }
-            },
         )
     }
 }

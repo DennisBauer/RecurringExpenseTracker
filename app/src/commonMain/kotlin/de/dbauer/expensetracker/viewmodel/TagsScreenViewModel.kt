@@ -18,12 +18,12 @@ import kotlinx.coroutines.launch
 
 class TagsScreenViewModel(
     private val expenseRepository: IExpenseRepository,
+    private val topAppBarMediator: TopAppBarMediator,
 ) : ViewModel() {
     private var _tags = mutableStateListOf<Tag>()
     val tags: List<Tag>
         get() = _tags.sortedBy { it.title }
-    var showAddOrEditTagDialog by mutableStateOf(false)
-        private set
+    val showAddOrEditTagDialog get() = topAppBarMediator.showAddOrEditTagDialog
     private var tagToEdit by mutableStateOf<Tag?>(null)
     val isNewTag: Boolean
         get() = tagToEdit == null
@@ -48,11 +48,11 @@ class TagsScreenViewModel(
     }
 
     fun onAddNewTag() {
-        showAddOrEditTagDialog = true
+        topAppBarMediator.showAddOrEditTagDialog = true
     }
 
     fun onDismissAddNewTagDialog() {
-        showAddOrEditTagDialog = false
+        topAppBarMediator.showAddOrEditTagDialog = false
         tagTitle = ""
         tagTitleError = false
         tagColor = 0L
@@ -92,7 +92,7 @@ class TagsScreenViewModel(
         tagTitle = tag.title
         tagColor = tag.color
         tagToEdit = tag
-        showAddOrEditTagDialog = true
+        topAppBarMediator.showAddOrEditTagDialog = true
     }
 
     fun onDeleteTag(tag: Tag) {
