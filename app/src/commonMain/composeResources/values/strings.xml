@@ -67,7 +67,7 @@
     <string name="settings_theme_mode_follow_system">Follow system</string>
     <string name="settings_theme_mode_dark">Dark</string>
     <string name="settings_theme_mode_light">Light</string>
-    <string name="settings_theme_mode_amoled">Amoled</string>
+    <string name="settings_theme_mode_amoled">AMOLED</string>
     <string name="settings_default_tab">Default tab</string>
     <string name="settings_currency">Currency</string>
     <string name="settings_default_currency">Default Currency</string>
