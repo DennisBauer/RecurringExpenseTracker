@@ -1,9 +1,11 @@
 package de.dbauer.expensetracker.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import de.dbauer.expensetracker.ui.ThemeMode
 
 val lightColorScheme =
     lightColorScheme(
@@ -73,7 +75,31 @@ val darkColorScheme =
 
 @Composable
 expect fun ExpenseTrackerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    themeMode: ThemeMode = ThemeMode.FollowSystem,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 )
+
+fun ColorScheme.toAmoledColorScheme(): ColorScheme {
+    return copy(
+        background = Color.Black,
+        surface = Color.Black,
+        surfaceVariant = surfaceVariant.darken(),
+        surfaceContainer = surfaceContainer.darken(),
+        surfaceContainerLow = surfaceContainerLow.darken(),
+        surfaceContainerHigh = surfaceContainerHigh.darken(),
+        surfaceContainerLowest = surfaceContainerLowest.darken(),
+        surfaceContainerHighest = surfaceContainerHighest.darken(),
+        primaryContainer = primaryContainer.darken(),
+        secondaryContainer = secondaryContainer.darken(),
+        tertiaryContainer = tertiaryContainer.darken(),
+    )
+}
+
+private fun Color.darken(factor: Float = 0.25f): Color {
+    return this.copy(
+        red = this.red * factor,
+        green = this.green * factor,
+        blue = this.blue * factor,
+    )
+}

@@ -251,7 +251,7 @@ class MainActivity : AppCompatActivity() {
             val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
             val useDarkTheme =
                 when (selectedTheme) {
-                    ThemeMode.Dark.value -> true
+                    ThemeMode.Dark.value, ThemeMode.Amoled.value -> true
                     ThemeMode.Light.value -> false
                     else -> isSystemInDarkTheme()
                 }
@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            ExpenseTrackerTheme(darkTheme = useDarkTheme) {
+            ExpenseTrackerTheme(themeMode = ThemeMode.fromInt(selectedTheme)) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,

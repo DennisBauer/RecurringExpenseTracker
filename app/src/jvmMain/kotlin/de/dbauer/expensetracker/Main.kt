@@ -1,6 +1,5 @@
 package de.dbauer.expensetracker
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -31,14 +30,8 @@ fun main() =
         ) {
             // Use theme based on user setting
             val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
-            val useDarkTheme =
-                when (selectedTheme) {
-                    ThemeMode.Dark.value -> true
-                    ThemeMode.Light.value -> false
-                    else -> isSystemInDarkTheme()
-                }
 
-            ExpenseTrackerTheme(darkTheme = useDarkTheme) {
+            ExpenseTrackerTheme(themeMode = ThemeMode.fromInt(selectedTheme)) {
                 MainContent(
                     isGridMode = isGridMode,
                     biometricSecurity = false,
