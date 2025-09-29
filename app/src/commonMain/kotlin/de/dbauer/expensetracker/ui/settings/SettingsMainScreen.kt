@@ -76,6 +76,7 @@ import recurringexpensetracker.app.generated.resources.settings_security_biometr
 import recurringexpensetracker.app.generated.resources.settings_show_converted_currency
 import recurringexpensetracker.app.generated.resources.settings_system_default
 import recurringexpensetracker.app.generated.resources.settings_theme_mode
+import recurringexpensetracker.app.generated.resources.settings_theme_mode_amoled
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_dark
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_follow_system
 import recurringexpensetracker.app.generated.resources.settings_theme_mode_light
@@ -117,6 +118,7 @@ fun SettingsMainScreen(
                     ThemeMode.FollowSystem -> stringResource(Res.string.settings_theme_mode_follow_system)
                     ThemeMode.Dark -> stringResource(Res.string.settings_theme_mode_dark)
                     ThemeMode.Light -> stringResource(Res.string.settings_theme_mode_light)
+                    ThemeMode.Amoled -> stringResource(Res.string.settings_theme_mode_amoled)
                 },
             onClick = viewModel::onClickThemeSelection,
             icon = Icons.Rounded.DarkMode,
@@ -276,6 +278,11 @@ fun SettingsMainScreen(
                         text = stringResource(Res.string.settings_theme_mode_light),
                         checked = selectedTheme == ThemeMode.Light,
                         onClick = { viewModel.onSelectTheme(ThemeMode.Light) },
+                    )
+                    DialogCheckbox(
+                        text = stringResource(Res.string.settings_theme_mode_amoled),
+                        checked = selectedTheme == ThemeMode.Amoled,
+                        onClick = { viewModel.onSelectTheme(ThemeMode.Amoled) },
                     )
                 }
             },

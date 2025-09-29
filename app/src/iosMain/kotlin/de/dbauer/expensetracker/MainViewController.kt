@@ -1,6 +1,5 @@
 package de.dbauer.expensetracker
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,16 +22,9 @@ fun MainViewController() =
     ComposeUIViewController {
         val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
-
         val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
-        val useDarkTheme =
-            when (selectedTheme) {
-                ThemeMode.Dark.value -> true
-                ThemeMode.Light.value -> false
-                else -> isSystemInDarkTheme()
-            }
 
-        ExpenseTrackerTheme(darkTheme = useDarkTheme) {
+        ExpenseTrackerTheme(themeMode = ThemeMode.fromInt(selectedTheme)) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background,

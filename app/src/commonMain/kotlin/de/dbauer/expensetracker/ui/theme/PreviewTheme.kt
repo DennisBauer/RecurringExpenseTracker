@@ -1,13 +1,13 @@
 package de.dbauer.expensetracker.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import de.dbauer.expensetracker.di.previewModule
+import de.dbauer.expensetracker.ui.ThemeMode
 import org.koin.compose.KoinApplication
 
 @Composable
 fun ExpenseTrackerThemePreview(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    themeMode: ThemeMode = ThemeMode.FollowSystem,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
@@ -16,7 +16,7 @@ fun ExpenseTrackerThemePreview(
         modules(previewModule)
     }) {
         ExpenseTrackerTheme(
-            darkTheme = darkTheme,
+            themeMode = themeMode,
             dynamicColor = dynamicColor,
             content = content,
         )
