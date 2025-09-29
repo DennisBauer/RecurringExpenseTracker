@@ -1,0 +1,11 @@
+Changelog 0.18.2:
+* Add Amoled theme
+* Reduced app size, achieving a 66% reduction by removing SQLiteBundled as a dependency for the Android target
+* Update exchange rates
+* (German) translation updated
+* (Polish) translation updated
+* (Russian) translation updated
+* (French) translation updated
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.18.2
