@@ -64,6 +64,7 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.PREPARE_RELEASE_WORKFLOW_TOKEN }}
           title: "Update exchange rates and licenses"
           body: "Automated update of exchange rates and library licenses"
           branch: "bot/update-exchange-rates-and-licenses"
