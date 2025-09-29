@@ -65,7 +65,7 @@
     <string name="settings_theme_mode_follow_system">System folgen</string>
     <string name="settings_theme_mode_dark">Dunkel</string>
     <string name="settings_theme_mode_light">Hell</string>
-    <string name="settings_theme_mode_amoled">Amoled</string>
+    <string name="settings_theme_mode_amoled">AMOLED</string>
     <string name="settings_default_tab">Standard Tab</string>
     <string name="settings_currency">Währung</string>
     <string name="settings_default_currency">Standardwährung</string>
