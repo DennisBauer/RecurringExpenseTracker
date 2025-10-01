@@ -1,0 +1,5 @@
+Changelog 0.18.3:
+* Fix F-Droid build
+* (Portuguese (Brazil)) translation updated
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.18.3
