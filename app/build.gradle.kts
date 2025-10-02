@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.swiftexport.ExperimentalSwiftExportDsl
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -31,17 +32,32 @@ kotlin {
 
     jvm()
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "App"
-            isStatic = true
-            // Required when using NativeSQLiteDriver
-            linkerOpts.add("-lsqlite3")
-        }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64(),
+//    ).forEach { iosTarget ->
+//        iosTarget.binaries.framework {
+//            baseName = "App"
+//            isStatic = true
+//            // Required when using NativeSQLiteDriver
+//            linkerOpts.add("-lsqlite3")
+//        }
+//    }
+
+    // https://kotlinlang.org/docs/whatsnew-eap.html#swift-export-available-by-default
+    // https://github.com/Kotlin/swift-export-sample/blob/master/shared/build.gradle.kts
+    // https://youtrack.jetbrains.com/issue/KT-80347/Swift-Export-IllegalArgumentException-Collection-contains-more-than-one-matching-element
+    @OptIn(ExperimentalSwiftExportDsl::class)
+    swiftExport {
+        // Root module name
+        moduleName = "App"
+
+        flattenPackage = "de.dbauer.expensetracker"
     }
 
     sourceSets {
