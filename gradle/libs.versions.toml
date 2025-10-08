@@ -25,7 +25,7 @@ ksp = "2.2.20-2.0.2"
 ktlint = "0.4.27"
 ktlint-plugin = "13.1.0"
 ktlint-version = "1.7.1"
-room = "2.8.1"
+room = "2.8.2"
 sqlite = "2.6.1"
 
 [libraries]
