@@ -5,7 +5,7 @@ import de.dbauer.expensetracker.model.ExchangeRateProvider
 import de.dbauer.expensetracker.model.FakeExchangeRateProvider
 import de.dbauer.expensetracker.model.IExchangeRateProvider
 import de.dbauer.expensetracker.model.database.ExpenseRepository
-import de.dbauer.expensetracker.model.database.FakeExpenseRepository
+import de.dbauer.expensetracker.model.database.FakePreviewExpenseRepository
 import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.database.RecurringExpenseDao
 import de.dbauer.expensetracker.model.database.RecurringExpenseDatabase
@@ -59,7 +59,7 @@ val previewModule =
         }
         single<IExchangeRateProvider> { FakeExchangeRateProvider() }
         singleOf(::CurrencyProvider)
-        single<IExpenseRepository> { FakeExpenseRepository() }
+        single<IExpenseRepository> { FakePreviewExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
         viewModelOf(::TagsScreenViewModel)
         single<IWhatsNew> { FakeWhatsNew() }

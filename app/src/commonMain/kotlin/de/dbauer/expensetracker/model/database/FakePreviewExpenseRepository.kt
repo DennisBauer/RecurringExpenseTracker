@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class FakeExpenseRepository : IExpenseRepository {
+class FakePreviewExpenseRepository : IExpenseRepository {
     @OptIn(ExperimentalUuidApi::class)
     private val fakeTags =
         listOf(

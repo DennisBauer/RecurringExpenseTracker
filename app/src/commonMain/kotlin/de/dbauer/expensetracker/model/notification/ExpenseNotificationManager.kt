@@ -14,7 +14,7 @@ import recurringexpensetracker.app.generated.resources.notification_expense_remi
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_today
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_tomorrow
 
-class ExpenseNotificationManager(
+open class ExpenseNotificationManager(
     private val expenseRepository: IExpenseRepository,
     private val userPreferencesRepository: IUserPreferencesRepository,
 ) {
@@ -109,7 +109,7 @@ class ExpenseNotificationManager(
         }
     }
 
-    private suspend fun getNotificationDescription(daysToNextPayment: Int): String {
+    protected open suspend fun getNotificationDescription(daysToNextPayment: Int): String {
         return when (daysToNextPayment) {
             0 -> getString(Res.string.notification_expense_reminder_message_today)
             1 -> getString(Res.string.notification_expense_reminder_message_tomorrow)
