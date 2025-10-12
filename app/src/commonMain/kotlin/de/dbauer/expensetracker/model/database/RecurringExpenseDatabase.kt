@@ -21,8 +21,9 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
         RecurringExpenseEntry::class,
         TagEntry::class,
         ExpenseTagCrossRefEntry::class,
+        ReminderEntry::class,
     ],
-    version = 8,
+    version = 9,
 )
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
@@ -38,6 +39,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_5_6)
                 .addMigrations(migration_6_7)
                 .addMigrations(migration_7_8)
+                .addMigrations(migration_8_9)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -229,6 +231,70 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         INSERT INTO recurring_expenses_new
                         (id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense, notifyXDaysBefore, lastNotificationDate)
                         SELECT id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense, notifyXDaysBefore, lastNotificationDate
+                        FROM recurring_expenses
+                        """.trimIndent(),
+                    )
+
+                    connection.execSQL("DROP TABLE IF EXISTS recurring_expenses")
+                    connection.execSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
+
+                    connection.execSQL("PRAGMA foreign_keys=ON")
+                }
+            }
+        val migration_8_9 =
+            object : Migration(8, 9) {
+                override fun migrate(connection: SQLiteConnection) {
+                    // 1) Create reminders table
+                    connection.execSQL(
+                        """
+                        CREATE TABLE IF NOT EXISTS `reminders` (
+                            `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            `expenseId` INTEGER NOT NULL,
+                            `daysBeforePayment` INTEGER NOT NULL,
+                            `lastNotificationDate` INTEGER,
+                            FOREIGN KEY(`expenseId`) REFERENCES `recurring_expenses`(`id`) ON DELETE CASCADE
+                        )
+                        """.trimIndent(),
+                    )
+
+                    connection.execSQL(
+                        "CREATE INDEX IF NOT EXISTS `index_reminders_expenseId` ON `reminders` (`expenseId`)",
+                    )
+
+                    // 2) Migrate existing notifyXDaysBefore values to the reminders table
+                    connection.execSQL(
+                        """
+                        INSERT INTO reminders (expenseId, daysBeforePayment, lastNotificationDate)
+                        SELECT id, notifyXDaysBefore, lastNotificationDate
+                        FROM recurring_expenses
+                        WHERE notifyXDaysBefore IS NOT NULL
+                        """.trimIndent(),
+                    )
+
+                    // 3) Remove old notification columns from recurring_expenses
+                    connection.execSQL("PRAGMA foreign_keys=OFF")
+
+                    connection.execSQL(
+                        """
+                        CREATE TABLE IF NOT EXISTS `recurring_expenses_new` (
+                          `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          `name` TEXT,
+                          `description` TEXT,
+                          `price` REAL,
+                          `everyXRecurrence` INTEGER,
+                          `recurrence` INTEGER,
+                          `firstPayment` INTEGER,
+                          `currencyCode` TEXT NOT NULL,
+                          `notifyForExpense` INTEGER NOT NULL
+                        )
+                        """.trimIndent(),
+                    )
+
+                    connection.execSQL(
+                        """
+                        INSERT INTO recurring_expenses_new
+                        (id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense)
+                        SELECT id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense
                         FROM recurring_expenses
                         """.trimIndent(),
                     )

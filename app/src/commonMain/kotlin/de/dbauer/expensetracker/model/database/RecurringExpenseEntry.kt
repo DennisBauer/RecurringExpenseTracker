@@ -15,8 +15,6 @@ data class RecurringExpenseEntry(
     @ColumnInfo(name = "firstPayment") val firstPayment: Long?,
     @ColumnInfo(name = "currencyCode") val currencyCode: String,
     @ColumnInfo(name = "notifyForExpense") val notifyForExpense: Boolean,
-    @ColumnInfo(name = "notifyXDaysBefore") val notifyXDaysBefore: Int?,
-    @ColumnInfo(name = "lastNotificationDate") val lastNotificationDate: Long?,
 ) {
     fun getMonthlyPrice(): Float {
         return when (recurrence) {

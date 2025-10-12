@@ -28,8 +28,7 @@ class FakeExpenseRepository : IExpenseRepository {
             tags = fakeTags,
             firstPayment = null,
             notifyForExpense = true,
-            notifyXDaysBefore = null,
-            lastNotificationDate = null,
+            reminders = emptyList(),
         )
 
     override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))

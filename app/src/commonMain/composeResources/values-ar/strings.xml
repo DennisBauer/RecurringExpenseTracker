@@ -11,7 +11,6 @@
     <string name="edit_expense_first_payment">الدفعة الأولى (اختياري)</string>
     <string name="edit_expense_first_payment_placeholder">اختر تاريخًا</string>
     <string name="tags_color">اللون</string>
-    <string name="edit_expense_notification_days_advance">%1$d (افتراضي)</string>
     <string name="edit_expense_delete_dialog_text">هل تريد حقًا حذف هذه المصروفات؟</string>
     <string name="upcoming_title">المدفوعات القادمة</string>
     <string name="upcoming_placeholder_title">حدّد تاريخ الدفعة الأولى للمصروفات للاطلاع على نظرة عامة للمدفوعات القادمة</string>

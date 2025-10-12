@@ -88,5 +88,4 @@
     <string name="widget_grid_mode">Modo de rejilla</string>
     <string name="widget_configuration_title">Configurar Widget</string>
     <string name="widget_transparent_background">Fondo transparente</string>
-    <string name="edit_expense_notification_days_advance">%1$d (por defecto)</string>
 </resources>

@@ -58,7 +58,6 @@
     <string name="edit_expense_notification_get_notified">开始接收即将付款的通知。只需前往设置并启用通知功能。</string>
     <string name="settings_notifications_schedule_time">通知时间</string>
     <string name="notification_expense_reminder_message_today">下次付款是今天</string>
-    <string name="edit_expense_notification_days_advance">%1$d(默认)</string>
     <string name="notification_expense_reminder">支出提醒</string>
     <string name="settings_notifications">通知</string>
     <string name="settings_notifications_upcoming">即将付款提醒</string>

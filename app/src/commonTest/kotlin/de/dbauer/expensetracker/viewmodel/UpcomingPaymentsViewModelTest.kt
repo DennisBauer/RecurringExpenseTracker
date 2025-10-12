@@ -245,10 +245,9 @@ class UpcomingPaymentsViewModelTest {
                     firstPayment = firstPayment?.toEpochMilliseconds(),
                     currencyCode = currencyCode,
                     notifyForExpense = false,
-                    notifyXDaysBefore = null,
-                    lastNotificationDate = null,
                 ),
             tags = emptyList(),
+            reminders = emptyList(),
         ).toRecurringExpenseData(defaultCurrencyCode)
     }
 }
