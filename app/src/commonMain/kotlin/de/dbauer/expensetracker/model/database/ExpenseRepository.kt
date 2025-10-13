@@ -41,6 +41,9 @@ class ExpenseRepository(
             recurringExpense.tags.forEach {
                 recurringExpenseDao.upsert(ExpenseTagCrossRefEntry(recurringExpense.id, it.id))
             }
+            recurringExpense.reminders.forEach { reminder ->
+                recurringExpenseDao.insertReminder(reminder.toReminderEntry(recurringExpense.id))
+            }
         }
 
     override suspend fun update(recurringExpense: RecurringExpenseData) =
@@ -60,12 +63,31 @@ class ExpenseRepository(
             currentTags.filterNot { it.id in newTagIds }.forEach { oldTag ->
                 recurringExpenseDao.delete(ExpenseTagCrossRefEntry(recurringExpense.id, oldTag.id))
             }
+
+            // Handle reminders
+            val currentReminders = recurringExpenseDao.getRemindersForExpense(recurringExpense.id)
+            val currentReminderIds = currentReminders.map { it.id }.toSet()
+            val newReminderIds = recurringExpense.reminders.map { it.id }.toSet()
+
+            // Reminders to add
+            recurringExpense.reminders.filter { it.id == 0 }.forEach { newReminder ->
+                recurringExpenseDao.insertReminder(newReminder.toReminderEntry(recurringExpense.id))
+            }
+            // Reminders to update
+            recurringExpense.reminders.filter { it.id != 0 && it.id in currentReminderIds }.forEach { reminder ->
+                recurringExpenseDao.updateReminder(reminder.toReminderEntry(recurringExpense.id))
+            }
+            // Reminders to remove
+            currentReminders.filterNot { it.id in newReminderIds }.forEach { oldReminder ->
+                recurringExpenseDao.deleteReminder(oldReminder)
+            }
         }
 
     override suspend fun delete(recurringExpense: RecurringExpenseData) =
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
             recurringExpenseDao.deleteAllCrossRefForExpenseId(recurringExpense.id)
+            recurringExpenseDao.deleteAllRemindersForExpenseId(recurringExpense.id)
         }
 
     override suspend fun insert(tag: Tag) =

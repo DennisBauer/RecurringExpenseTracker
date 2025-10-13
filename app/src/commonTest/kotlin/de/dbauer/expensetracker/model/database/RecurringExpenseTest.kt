@@ -17,8 +17,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(152.08333f, expense.getMonthlyPrice())
@@ -37,8 +35,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(26.614582f, expense.getMonthlyPrice())
@@ -57,8 +53,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(43.333336f, expense.getMonthlyPrice())
@@ -77,8 +71,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(8.666667f, expense.getMonthlyPrice())
@@ -97,8 +89,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(10f, expense.getMonthlyPrice())
@@ -117,8 +107,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(2.0f, expense.getMonthlyPrice())
@@ -137,8 +125,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(0.8333333f, expense.getMonthlyPrice())
@@ -157,8 +143,6 @@ class RecurringExpenseTest {
                 firstPayment = null,
                 currencyCode = "USD",
                 notifyForExpense = true,
-                notifyXDaysBefore = null,
-                lastNotificationDate = null,
             )
 
         assertEquals(0.16666667f, expense.getMonthlyPrice())

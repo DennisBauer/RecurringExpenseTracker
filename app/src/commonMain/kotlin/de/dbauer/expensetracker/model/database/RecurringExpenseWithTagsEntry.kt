@@ -17,4 +17,9 @@ data class RecurringExpenseWithTagsEntry(
             ),
     )
     val tags: List<TagEntry>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "expenseId",
+    )
+    val reminders: List<ReminderEntry> = emptyList(),
 )

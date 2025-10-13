@@ -42,7 +42,6 @@
     <string name="settings_backup_create">Buat cadangan</string>
     <string name="notification_expense_reminder">Pengingat pengeluaran</string>
     <string name="notification_expense_reminder_message_today">Pembayaran berikutnya adalah hari ini</string>
-    <string name="edit_expense_notification_days_advance">%1$d (bawaan)</string>
     <string name="settings_general">Umum</string>
     <string name="settings_default_currency">Pembayaran bawaan</string>
     <string name="settings_currency_exchange_last_update">Tarif perubahan dari %1$s</string>

@@ -32,9 +32,9 @@ data class Currency(
 @Serializable
 private data class CurrencyWrapper(val data: Map<String, Currency>)
 
-class CurrencyProvider {
+open class CurrencyProvider {
     @OptIn(ExperimentalResourceApi::class)
-    suspend fun retrieveCurrencies(): List<Currency> =
+    open suspend fun retrieveCurrencies(): List<Currency> =
         withContext(Dispatchers.IO) {
             val currenciesFile = Res.readBytes("files/currencies.json")
             return@withContext Json

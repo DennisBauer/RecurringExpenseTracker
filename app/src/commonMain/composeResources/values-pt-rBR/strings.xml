@@ -56,7 +56,6 @@
     <string name="upcoming_placeholder_title">Definir uma data do primeiro pagamento das despesas para ver um resumo dos próximos pagamentos</string>
     <string name="settings_currency_exchange_info">As despesas adicionadas numa moeda diferente serão convertidas para essa moeda.\nAs taxas de câmbio são integradas no aplicativo para evitar acessar à Internet.</string>
     <string name="edit_expense_tags">Adicionar Tags</string>
-    <string name="edit_expense_notification_days_advance">%1$d (padrão)</string>
     <string name="edit_expense_notification_get_notified">Receba notificações sobre gastos futuros. Basta ir nas configurações e ativar as notificações.</string>
     <string name="tags_screen_title">Etiquetas</string>
     <string name="tags_add_new">Adicionar nova etiqueta</string>

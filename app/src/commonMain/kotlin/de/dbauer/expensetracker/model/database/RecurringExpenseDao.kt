@@ -60,4 +60,19 @@ interface RecurringExpenseDao {
 
     @Query("DELETE FROM ExpenseTagCrossRef WHERE expenseId = :expenseId")
     suspend fun deleteAllCrossRefForExpenseId(expenseId: Int)
+
+    @Insert
+    suspend fun insertReminder(reminder: ReminderEntry): Long
+
+    @Update
+    suspend fun updateReminder(reminder: ReminderEntry)
+
+    @Delete
+    suspend fun deleteReminder(reminder: ReminderEntry)
+
+    @Query("DELETE FROM reminders WHERE expenseId = :expenseId")
+    suspend fun deleteAllRemindersForExpenseId(expenseId: Int)
+
+    @Query("SELECT * FROM reminders WHERE expenseId = :expenseId")
+    suspend fun getRemindersForExpense(expenseId: Int): List<ReminderEntry>
 }

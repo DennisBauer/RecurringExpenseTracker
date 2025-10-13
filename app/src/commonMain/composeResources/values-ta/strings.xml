@@ -55,7 +55,6 @@
     <string name="delete">நீக்கு</string>
     <string name="save">சேமி</string>
     <string name="edit_expense_recurrence">மறுநிகழ்வு</string>
-    <string name="edit_expense_notification_days_advance">%1$d (இயல்புநிலை)</string>
     <string name="edit_expense_notification_get_notified">வரவிருக்கும் கொடுப்பனவுகள் குறித்து அறிவிக்கப்படத் தொடங்குங்கள். அமைப்புகளுக்குச் சென்று அறிவிப்புகளை இயக்கவும்.</string>
     <string name="settings_theme_mode">கருப்பொருள் பயன்முறை</string>
     <string name="settings_theme_mode_follow_system">அமைப்பைப் பின்தொடரவும்</string>

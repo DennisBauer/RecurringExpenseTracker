@@ -35,8 +35,11 @@
     <string name="edit_expense_first_payment">Erste Zahlung (optional)</string>
     <string name="edit_expense_first_payment_placeholder">Datum auswählen</string>
     <string name="edit_expense_tags">Tags hinzufügen</string>
-    <string name="edit_expense_notification_days_advance">%1$d (Standard)</string>
     <string name="edit_expense_notification_get_notified">Lass dich über bevorstehende Zahlungen benachrichtigen. Gehe dazu zu den Einstellungen und aktiviere die Benachrichtigungen.</string>
+    <string name="edit_expense_notification_add_reminder">Hinzufügen</string>
+    <string name="edit_expense_notification_add_reminder_content_desc">Erinnerung hinzufügen</string>
+    <string name="edit_expense_notification_remove_reminder_content_desc">Erinnerung entfernen</string>
+    <string name="edit_expense_notification_days_before_payment">%1$s Tage vor der Zahlung</string>
     <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
 
     <string name="tags_screen_title">Tags</string>

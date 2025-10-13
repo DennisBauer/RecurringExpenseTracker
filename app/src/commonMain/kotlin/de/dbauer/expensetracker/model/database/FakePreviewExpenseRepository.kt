@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class FakeExpenseRepository : IExpenseRepository {
+class FakePreviewExpenseRepository : IExpenseRepository {
     @OptIn(ExperimentalUuidApi::class)
     private val fakeTags =
         listOf(
@@ -28,8 +28,7 @@ class FakeExpenseRepository : IExpenseRepository {
             tags = fakeTags,
             firstPayment = null,
             notifyForExpense = true,
-            notifyXDaysBefore = null,
-            lastNotificationDate = null,
+            reminders = emptyList(),
         )
 
     override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))

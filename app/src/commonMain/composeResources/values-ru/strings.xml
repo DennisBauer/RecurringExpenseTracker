@@ -55,7 +55,6 @@
     <string name="settings_backup_not_created_toast">Бекап не удался</string>
     <string name="settings_backup_restored_toast">Бекап восстановлен</string>
     <string name="settings_backup_not_restored_toast">Бекап не может быть восстановлен</string>
-    <string name="edit_expense_notification_days_advance">%1$d (по умолчанию)</string>
     <string name="settings_notifications">Уведомления</string>
     <string name="settings_notifications_upcoming">Напоминание о предстоящем платеже</string>
     <string name="notification_expense_reminder_message_tomorrow">Следующий платеж будет завтра</string>

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.VisualTransformation
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_invalid_input
@@ -22,6 +23,7 @@ fun ExpenseTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions(
             capitalization = KeyboardCapitalization.Words,
@@ -60,6 +62,7 @@ fun ExpenseTextField(
         value = value,
         onValueChange = onValueChange,
         placeholder = { Text(text = placeholder) },
+        visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,

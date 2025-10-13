@@ -25,8 +25,7 @@ internal fun RecurringExpenseWithTagsEntry.toRecurringExpenseData(
         tags = this.tags.toTags().sortedBy { it.title },
         firstPayment = this.expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
         notifyForExpense = this.expense.notifyForExpense,
-        notifyXDaysBefore = this.expense.notifyXDaysBefore,
-        lastNotificationDate = this.expense.lastNotificationDate?.let { Instant.fromEpochMilliseconds(it) },
+        reminders = this.reminders.toReminders(),
     )
 }
 

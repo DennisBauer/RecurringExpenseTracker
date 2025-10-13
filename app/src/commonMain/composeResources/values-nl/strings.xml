@@ -63,7 +63,6 @@
     <string name="cancel">Annuleren</string>
     <string name="settings_backup_not_restored_toast">Back-up kon niet worden teruggezet</string>
     <string name="edit_expense_recurrence_day">Dag(en)</string>
-    <string name="edit_expense_notification_days_advance">%1$d (standaard)</string>
     <string name="home_summary_yearly">Jaarlijks</string>
     <string name="settings_default_currency">Standaardvaluta</string>
     <string name="settings_title_security">Beveiliging</string>

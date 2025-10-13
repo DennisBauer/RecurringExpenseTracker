@@ -100,18 +100,19 @@ fun EditRecurringExpenseScreen(
             onEditTagsClick = onEditTagsClick,
         )
         if (canUseNotifications) {
-            NotificationOption(
+            MultipleRemindersOption(
                 expenseNotificationEnabledGlobally =
                     viewModel.expenseNotificationEnabledGlobally
                         .collectAsState()
                         .value,
                 notifyForExpense = viewModel.notifyForExpense,
-                onNotifyForExpenseChange = { viewModel.notifyForExpense = it },
-                notifyXDaysBefore = viewModel.notifyXDaysBefore,
-                defaultXDaysPlaceholder = viewModel.defaultXDaysPlaceholder,
-                onNotifyXDaysBeforeChange = { viewModel.notifyXDaysBefore = it },
-                notifyXDaysBeforeInputError = false,
-                onNext = { localFocusManager.clearFocus() },
+                onNotifyForExpenseChange = viewModel::onNotifyForExpenseChange,
+                reminders = viewModel.reminders,
+                onAddReminder = viewModel::addReminder,
+                onUpdateReminder = viewModel::updateReminder,
+                onRemoveReminder = viewModel::removeReminder,
+                isReminderDuplicate = viewModel::isReminderDuplicate,
+                isNewReminderDuplicate = viewModel::isNewReminderDuplicate,
             )
         }
         Row(

@@ -24,7 +24,6 @@
     <string name="edit_expense_recurrence_year">Yıl(lar)</string>
     <string name="edit_expense_first_payment">İlk Ödeme (isteğe bağlı)</string>
     <string name="edit_expense_first_payment_placeholder">Bir Tarih Seçin</string>
-    <string name="edit_expense_notification_days_advance">%1$d (varsayılan)</string>
     <string name="edit_expense_delete_dialog_text">Bu harcamayı silmek istediğinizden emin misiniz?</string>
     <string name="upcoming_title">Yaklaşan Ödemeler</string>
     <string name="upcoming_time_remaining_today">bugün</string>

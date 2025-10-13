@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.viewmodel
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,7 @@ import de.dbauer.expensetracker.data.CurrencyOption
 import de.dbauer.expensetracker.data.CurrencyValue
 import de.dbauer.expensetracker.data.Recurrence
 import de.dbauer.expensetracker.data.RecurringExpenseData
+import de.dbauer.expensetracker.data.Reminder
 import de.dbauer.expensetracker.data.Tag
 import de.dbauer.expensetracker.model.CurrencyProvider
 import de.dbauer.expensetracker.model.database.IExpenseRepository
@@ -20,9 +22,6 @@ import de.dbauer.expensetracker.toFloatLocaleAware
 import de.dbauer.expensetracker.toLocalString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.getString
-import recurringexpensetracker.app.generated.resources.Res
-import recurringexpensetracker.app.generated.resources.edit_expense_notification_days_advance
 import kotlin.time.Instant
 
 class EditRecurringExpenseViewModel(
@@ -53,8 +52,12 @@ class EditRecurringExpenseViewModel(
 
     var expenseNotificationEnabledGlobally = userPreferencesRepository.upcomingPaymentNotification
     var notifyForExpense by mutableStateOf(true)
-    var notifyXDaysBefore by mutableStateOf("")
-    var defaultXDaysPlaceholder by mutableStateOf("")
+
+    var reminders = mutableStateListOf<Reminder>()
+        private set
+
+    // Store the last reminder configuration before disabling
+    private var lastRemindersBeforeDisabling = mutableListOf<Reminder>()
 
     var showDeleteConfirmDialog by mutableStateOf(false)
 
@@ -62,7 +65,7 @@ class EditRecurringExpenseViewModel(
     val showDeleteButton = !isNewExpense
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
-    private var lastNotificationDate: Instant? = null
+    private var defaultReminderDays by mutableIntStateOf(0)
 
     init {
         viewModelScope.launch {
@@ -71,6 +74,8 @@ class EditRecurringExpenseViewModel(
                     CurrencyOption(it.code, "${it.name} (${it.symbol})")
                 }
             availableCurrencyOptions.addAll(availableCurrencies)
+
+            defaultReminderDays = userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.get().first()
 
             if (expenseId != null) {
                 expenseRepository
@@ -86,8 +91,20 @@ class EditRecurringExpenseViewModel(
                             _tags[it] = true
                         }
                         notifyForExpense = expense.notifyForExpense
-                        notifyXDaysBefore = expense.notifyXDaysBefore?.toString() ?: ""
-                        lastNotificationDate = expense.lastNotificationDate
+                        reminders.clear()
+
+                        // If no custom reminders exist but notifications are enabled, show global default
+                        if (expense.reminders.isEmpty() && expense.notifyForExpense) {
+                            reminders.add(
+                                Reminder(
+                                    id = 0,
+                                    daysBeforePayment = defaultReminderDays,
+                                ),
+                            )
+                        } else {
+                            // Sort reminders initially when loading from database
+                            reminders.addAll(expense.reminders.sortedBy { it.daysBeforePayment })
+                        }
 
                         availableCurrencies.firstOrNull { it.currencyCode == expense.price.currencyCode }?.let {
                             selectedCurrencyOption = it
@@ -97,11 +114,9 @@ class EditRecurringExpenseViewModel(
                 availableCurrencies.firstOrNull { it.currencyCode == getDefaultCurrencyCode() }?.let {
                     selectedCurrencyOption = it
                 }
-            }
-        }
-        viewModelScope.launch {
-            userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.get().collect {
-                defaultXDaysPlaceholder = getString(Res.string.edit_expense_notification_days_advance, it)
+                if (notifyForExpense) {
+                    reminders.add(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
+                }
             }
         }
         viewModelScope.launch {
@@ -120,6 +135,104 @@ class EditRecurringExpenseViewModel(
     fun onTagClick(tag: Tag) {
         val existingState = _tags[tag] ?: false
         _tags[tag] = !existingState
+    }
+
+    fun onNotifyForExpenseChange(enabled: Boolean) {
+        notifyForExpense = enabled
+
+        if (enabled) {
+            // If we have stored reminders from before disabling, restore them
+            if (lastRemindersBeforeDisabling.isNotEmpty()) {
+                reminders.clear()
+                reminders.addAll(lastRemindersBeforeDisabling)
+                lastRemindersBeforeDisabling.clear()
+            } else if (reminders.isEmpty()) {
+                // Otherwise add a default reminder if none exist
+                reminders.add(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
+            }
+        } else {
+            if (reminders.isNotEmpty()) {
+                lastRemindersBeforeDisabling.clear()
+                lastRemindersBeforeDisabling.addAll(reminders)
+            }
+            reminders.clear()
+        }
+    }
+
+    fun addReminder(daysBeforePayment: Int) {
+        // Prevent adding duplicate reminders with the same days before payment
+        if (reminders.none { it.daysBeforePayment == daysBeforePayment }) {
+            reminders.add(Reminder(id = 0, daysBeforePayment = daysBeforePayment))
+        }
+    }
+
+    fun updateReminder(
+        index: Int,
+        daysBeforePayment: Int,
+    ) {
+        val sortedReminders = reminders
+        if (index in sortedReminders.indices) {
+            val reminderToUpdate = sortedReminders[index]
+
+            // Check if another reminder already has this daysBeforePayment value
+            val duplicateExists =
+                reminders.any {
+                    it.daysBeforePayment == daysBeforePayment &&
+                        (
+                            it.id != reminderToUpdate.id ||
+                                it.daysBeforePayment != reminderToUpdate.daysBeforePayment
+                        )
+                }
+
+            if (duplicateExists) {
+                return // Don't update if it would create a duplicate
+            }
+
+            val actualIndex =
+                reminders.indexOfFirst {
+                    it.id == reminderToUpdate.id && it.daysBeforePayment == reminderToUpdate.daysBeforePayment
+                }
+            if (actualIndex != -1) {
+                reminders[actualIndex] = reminders[actualIndex].copy(daysBeforePayment = daysBeforePayment)
+            }
+        }
+    }
+
+    fun removeReminder(index: Int) {
+        val sortedReminders = reminders
+        if (index in sortedReminders.indices) {
+            val reminderToRemove = sortedReminders[index]
+            val actualIndex =
+                reminders.indexOfFirst {
+                    it.id == reminderToRemove.id && it.daysBeforePayment == reminderToRemove.daysBeforePayment
+                }
+            if (actualIndex != -1) {
+                reminders.removeAt(actualIndex)
+
+                if (reminders.isEmpty()) {
+                    notifyForExpense = false
+                }
+            }
+        }
+    }
+
+    fun isReminderDuplicate(
+        index: Int,
+        daysBeforePayment: Int,
+    ): Boolean {
+        val sortedReminders = reminders
+        if (index !in sortedReminders.indices) return false
+
+        val reminderToCheck = sortedReminders[index]
+
+        return reminders.any {
+            it.daysBeforePayment == daysBeforePayment &&
+                (it.id != reminderToCheck.id || it.daysBeforePayment != reminderToCheck.daysBeforePayment)
+        }
+    }
+
+    fun isNewReminderDuplicate(daysBeforePayment: Int): Boolean {
+        return reminders.any { it.daysBeforePayment == daysBeforePayment }
     }
 
     fun updateExpense(response: (successful: Boolean) -> Unit) {
@@ -181,8 +294,7 @@ class EditRecurringExpenseViewModel(
             tags = tags.filter { it.second }.map { it.first },
             firstPayment = firstPaymentDate,
             notifyForExpense = notifyForExpense,
-            notifyXDaysBefore = notifyXDaysBefore.takeIf { it.isNotBlank() && notifyForExpense }?.toIntOrNull(),
-            lastNotificationDate = lastNotificationDate,
+            reminders = reminders.sortedBy { it.daysBeforePayment },
         )
     }
 
