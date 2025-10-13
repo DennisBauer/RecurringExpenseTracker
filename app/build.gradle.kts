@@ -214,7 +214,6 @@ dependencies {
 }
 
 aboutLibraries {
-    android.registerAndroidTasks = false
     export {
         prettyPrint = true
         exportVariant = "release"
