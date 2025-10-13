@@ -10,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
-import com.mikepenz.aboutlibraries.ui.compose.rememberLibraries
+import com.mikepenz.aboutlibraries.ui.compose.produceLibraries
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import recurringexpensetracker.app.generated.resources.Res
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AboutLibrariesScreen(modifier: Modifier = Modifier) {
-    val libraries by rememberLibraries {
+    val libraries by produceLibraries {
         Res.readBytes("files/aboutlibraries.json").decodeToString()
     }
     val hasLibraries = libraries?.libraries?.isNotEmpty() == true
