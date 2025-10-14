@@ -33,7 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -140,22 +142,27 @@ private fun EditTagEntry(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val currentOnDelete = rememberUpdatedState(onDelete)
     val dismissState =
         rememberSwipeToDismissBoxState(
-            confirmValueChange = {
-                when (it) {
-                    SwipeToDismissBoxValue.StartToEnd,
-                    SwipeToDismissBoxValue.EndToStart,
-                    -> {
-                        onDelete()
-                        return@rememberSwipeToDismissBoxState true
-                    }
-                    SwipeToDismissBoxValue.Settled -> {}
-                }
-                return@rememberSwipeToDismissBoxState false
-            },
             positionalThreshold = { it * .25f },
         )
+
+    LaunchedEffect(dismissState.targetValue) {
+        when (dismissState.targetValue) {
+            SwipeToDismissBoxValue.StartToEnd,
+            SwipeToDismissBoxValue.EndToStart,
+            -> {
+                currentOnDelete.value()
+                delay(200) // Small delay to allow swipe animation to complete
+
+                // Reset the state back to Settled to prevent re-triggering on undo
+                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+            }
+            SwipeToDismissBoxValue.Settled -> {}
+        }
+    }
+
     SwipeToDismissBox(
         state = dismissState,
         modifier = modifier.clickable { onClick() },
