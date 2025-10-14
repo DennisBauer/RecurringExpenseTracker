@@ -3,6 +3,7 @@
     <!-- TopAppBar -->
     <string name="top_app_bar_icon_button_grid_open_content_desc">Raster Modus öffnen</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Raster Modus schließen</string>
+    <string name="top_app_bar_navigate_up_content_desc">Zurück navigieren</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Start</string>
@@ -74,6 +75,10 @@
     <string name="settings_default_currency">Standardwährung</string>
     <string name="settings_choose_currency">Währung auswählen</string>
     <string name="settings_system_default">Systemstandard</string>
+    <string name="settings_currency_search_placeholder">Währungen suchen...</string>
+    <string name="settings_currency_search_content_desc">Währungen suchen</string>
+    <string name="settings_currency_close_search_content_desc">Suche schließen</string>
+    <string name="settings_currency_clear_search_content_desc">Suche löschen</string>
     <string name="settings_currency_exchange_info">Ausgaben in einer anderen Währung werden in diese Währung umgerechnet.\nDie Wechselkurse sind mit der App fest eingegeben, um zu verhindern, dass sie auf das Internet zugreifen muss.</string>
     <string name="settings_currency_exchange_last_update">Wechselkurse vom %1$s</string>
     <string name="settings_show_converted_currency">Umgerechnete Währung anzeigen</string>
