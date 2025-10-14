@@ -4,6 +4,7 @@
     <!-- TopAppBar -->
     <string name="top_app_bar_icon_button_grid_open_content_desc">Open Grid Mode</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Close Grid Mode</string>
+    <string name="top_app_bar_navigate_up_content_desc">Navigate back</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Home</string>
@@ -76,6 +77,10 @@
     <string name="settings_default_currency">Default Currency</string>
     <string name="settings_choose_currency">Choose Currency</string>
     <string name="settings_system_default">System default</string>
+    <string name="settings_currency_search_placeholder">Search currencies...</string>
+    <string name="settings_currency_search_content_desc">Search currencies</string>
+    <string name="settings_currency_close_search_content_desc">Close search</string>
+    <string name="settings_currency_clear_search_content_desc">Clear search</string>
     <string name="settings_currency_exchange_info">Expenses added in a different currency will be converted to that currency.\nThe exchange rates are bundled with the app to prevent it from accessing the Internet.</string>
     <string name="settings_currency_exchange_last_update">Change rates from %1$s</string>
     <string name="settings_show_converted_currency">Show converted currency</string>

@@ -1,20 +1,30 @@
 package de.dbauer.expensetracker.ui.settings
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,15 +35,22 @@ import de.dbauer.expensetracker.data.SettingsPaneLibraries
 import de.dbauer.expensetracker.ui.about.AboutLibrariesScreen
 import de.dbauer.expensetracker.ui.about.AboutScreen
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
+import de.dbauer.expensetracker.viewmodel.SettingsViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
+import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.settings_about_app
 import recurringexpensetracker.app.generated.resources.settings_about_libraries
+import recurringexpensetracker.app.generated.resources.settings_currency_clear_search_content_desc
+import recurringexpensetracker.app.generated.resources.settings_currency_close_search_content_desc
+import recurringexpensetracker.app.generated.resources.settings_currency_search_content_desc
+import recurringexpensetracker.app.generated.resources.settings_currency_search_placeholder
 import recurringexpensetracker.app.generated.resources.settings_default_currency
 import recurringexpensetracker.app.generated.resources.settings_title
+import recurringexpensetracker.app.generated.resources.top_app_bar_navigate_up_content_desc
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +109,8 @@ fun SettingsScreen(
                         IconButton(onClick = { settingsNavController.navigateUp() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Navigate back",
+                                contentDescription =
+                                    stringResource(Res.string.top_app_bar_navigate_up_content_desc),
                             )
                         }
                     },
@@ -121,21 +139,96 @@ fun SettingsScreen(
         }
 
         composable<SettingsPaneDefaultCurrency> {
+            val viewModel = koinViewModel<SettingsViewModel>()
+            var searchActive by rememberSaveable { mutableStateOf(false) }
+            val focusRequester = remember { FocusRequester() }
+
+            LaunchedEffect(searchActive) {
+                if (searchActive) {
+                    focusRequester.requestFocus()
+                }
+            }
+
             setTopAppBar {
                 TopAppBar(
-                    title = { Text(text = stringResource(Res.string.settings_default_currency)) },
+                    title = {
+                        if (searchActive) {
+                            TextField(
+                                value = viewModel.currencySearchQuery,
+                                onValueChange = viewModel::onCurrencySearchQueryChange,
+                                placeholder = {
+                                    Text(
+                                        stringResource(Res.string.settings_currency_search_placeholder),
+                                    )
+                                },
+                                singleLine = true,
+                                colors =
+                                    TextFieldDefaults.colors(
+                                        focusedContainerColor = Color.Transparent,
+                                        unfocusedContainerColor = Color.Transparent,
+                                        disabledContainerColor = Color.Transparent,
+                                        focusedIndicatorColor = Color.Transparent,
+                                        unfocusedIndicatorColor = Color.Transparent,
+                                    ),
+                                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+                            )
+                        } else {
+                            Text(text = stringResource(Res.string.settings_default_currency))
+                        }
+                    },
                     navigationIcon = {
-                        IconButton(onClick = { settingsNavController.navigateUp() }) {
+                        IconButton(onClick = {
+                            if (searchActive) {
+                                searchActive = false
+                                viewModel.clearCurrencySearch()
+                            } else {
+                                settingsNavController.navigateUp()
+                            }
+                        }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null,
+                                contentDescription =
+                                    if (searchActive) {
+                                        stringResource(Res.string.settings_currency_close_search_content_desc)
+                                    } else {
+                                        stringResource(Res.string.top_app_bar_navigate_up_content_desc)
+                                    },
                             )
+                        }
+                    },
+                    actions = {
+                        if (!searchActive) {
+                            IconButton(onClick = { searchActive = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription =
+                                        stringResource(
+                                            Res.string.settings_currency_search_content_desc,
+                                        ),
+                                )
+                            }
+                        } else if (viewModel.currencySearchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.clearCurrencySearch() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription =
+                                        stringResource(
+                                            Res.string.settings_currency_clear_search_content_desc,
+                                        ),
+                                )
+                            }
                         }
                     },
                 )
             }
+
             SettingsDefaultCurrencyScreen(
-                onNavigateBack = { settingsNavController.navigateUp() },
+                onNavigateBack = {
+                    searchActive = false
+                    viewModel.clearCurrencySearch()
+                    settingsNavController.navigateUp()
+                },
+                viewModel = viewModel,
             )
         }
     }

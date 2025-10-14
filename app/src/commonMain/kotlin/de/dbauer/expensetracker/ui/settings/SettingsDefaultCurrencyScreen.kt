@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.ui.settings
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,8 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.model.Currency
+import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.viewmodel.SettingsViewModel
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.settings_choose_currency
@@ -69,7 +72,7 @@ fun SettingsDefaultCurrencyScreen(
                 },
             )
         }
-        items(viewModel.availableCurrencies) { currency ->
+        items(viewModel.filteredCurrencies) { currency ->
             val selected = viewModel.selectedCurrencyCode == currency.code
             CurrencyItem(
                 currency = currency,
@@ -107,5 +110,18 @@ private fun CurrencyItem(
             fontWeight = FontWeight.Bold.takeIf { selected },
             modifier = Modifier.fillMaxWidth().padding(16.dp),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsDefaultCurrencyScreenPreview() {
+    ExpenseTrackerThemePreview {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            SettingsDefaultCurrencyScreen(
+                onNavigateBack = {},
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }

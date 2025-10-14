@@ -48,6 +48,22 @@ class SettingsViewModel(
     var upcomingPaymentNotificationDaysAdvanceDialog by mutableStateOf(false)
         private set
 
+    var currencySearchQuery by mutableStateOf("")
+        private set
+
+    val filteredCurrencies: List<Currency>
+        get() =
+            if (currencySearchQuery.isBlank()) {
+                _availableCurrencies
+            } else {
+                val query = currencySearchQuery.lowercase()
+                _availableCurrencies.filter { currency ->
+                    currency.name.lowercase().contains(query) ||
+                        currency.code.lowercase().contains(query) ||
+                        currency.symbol.lowercase().contains(query)
+                }
+            }
+
     init {
         viewModelScope.launch {
             val currenciesList = currencyProvider.retrieveCurrencies()
@@ -145,6 +161,14 @@ class SettingsViewModel(
             userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.save(days)
         }
         upcomingPaymentNotificationDaysAdvanceDialog = false
+    }
+
+    fun onCurrencySearchQueryChange(query: String) {
+        currencySearchQuery = query
+    }
+
+    fun clearCurrencySearch() {
+        currencySearchQuery = ""
     }
 }
 
