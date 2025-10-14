@@ -13,12 +13,12 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuBoxScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -177,6 +177,6 @@ private fun ExposedDropdownMenuBoxScope.CurrencyTextField(
             ),
         keyboardActions =
             KeyboardActions(onNext = onNext),
-        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable),
+        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
     )
 }
