@@ -44,7 +44,7 @@ val sharedModule =
         singleOf(::CurrencyProvider)
         viewModelOf(::SettingsViewModel)
         single<IExchangeRateProvider> { ExchangeRateProvider() }
-        singleOf(::ExpenseNotificationManager)
+        single { ExpenseNotificationManager(get(), get()) }
         viewModelOf(::MainNavigationViewModel)
         viewModelOf(::TagsScreenViewModel)
         single<IWhatsNew> { WhatsNew(get()) }

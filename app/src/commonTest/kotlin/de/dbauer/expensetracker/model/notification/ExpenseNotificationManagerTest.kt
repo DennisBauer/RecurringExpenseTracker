@@ -20,10 +20,14 @@ import kotlin.test.assertTrue
 import kotlin.time.Instant
 
 class ExpenseNotificationManagerTest {
+    // Fixed test time: October 15, 2025 at 00:00:00 UTC
+    private val testCurrentTime = LocalDateTime(2025, 10, 15, 0, 0, 0, 0).toInstant(TimeZone.UTC)
+
     private class TestableExpenseNotificationManager(
         expenseRepository: IExpenseRepository,
         userPreferencesRepository: IUserPreferencesRepository,
-    ) : ExpenseNotificationManager(expenseRepository, userPreferencesRepository) {
+        currentTimeProvider: () -> Instant,
+    ) : ExpenseNotificationManager(expenseRepository, userPreferencesRepository, currentTimeProvider) {
         // Override to provide test descriptions without needing resources
         override suspend fun getNotificationDescription(daysToNextPayment: Int): String {
             return when (daysToNextPayment) {
@@ -61,7 +65,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val expense =
                 createTestExpense(
@@ -79,7 +83,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val expense =
                 createTestExpense(
@@ -98,7 +102,7 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             // Create expense with payment 2 days from now (within 3-day window)
             val expense =
@@ -123,7 +127,7 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             // Create expense with payment 10 days from now (outside 3-day window)
             val expense =
@@ -142,7 +146,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val reminder =
                 Reminder(
@@ -172,7 +176,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val reminders =
                 listOf(
@@ -201,7 +205,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val nextPaymentDate = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC)
             val reminder =
@@ -228,7 +232,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val reminder =
                 Reminder(
@@ -258,7 +262,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val reminders =
                 listOf(
@@ -271,7 +275,7 @@ class ExpenseNotificationManagerTest {
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = LocalDateTime(2025, 10, 18, 0, 0, 0, 0).toInstant(TimeZone.UTC),
                     reminders = reminders,
                 )
             repository.insert(expense)
@@ -294,7 +298,7 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val expense =
                 createTestExpense(
@@ -319,7 +323,7 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
 
             val expense1 =
                 createTestExpense(
