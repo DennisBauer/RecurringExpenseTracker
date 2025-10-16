@@ -510,9 +510,12 @@ class EditRecurringExpenseViewModelTest {
             advanceUntilIdle()
 
             viewModel.nameState = "Changed Name"
-            viewModel.onBackPressed()
+            
+            var navigatedBack = false
+            viewModel.onBackPressed { navigatedBack = true }
 
             assertTrue(viewModel.showUnsavedChangesDialog)
+            assertFalse(navigatedBack)
 
             var dismissed = false
             viewModel.onDiscardChanges { dismissed = true }
