@@ -455,6 +455,74 @@ class EditRecurringExpenseViewModelTest {
         }
 
     @Test
+    fun `hasUnsavedChanges returns false when editing existing expense without changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Test Expense",
+                    description = "Test Description",
+                    price = CurrencyValue(100f, "USD"),
+                    monthlyPrice = CurrencyValue(100f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 5)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            assertFalse(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
+    fun `hasUnsavedChanges returns true when editing existing expense name`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Test Expense",
+                    description = "Test Description",
+                    price = CurrencyValue(100f, "USD"),
+                    monthlyPrice = CurrencyValue(100f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = false,
+                    reminders = emptyList(),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Modified Name"
+
+            assertTrue(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
     fun `onBackPressed shows dialog when changes exist`() =
         runTest {
             val viewModel =

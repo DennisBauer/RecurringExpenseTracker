@@ -68,17 +68,8 @@ class EditRecurringExpenseViewModel(
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private var defaultReminderDays by mutableIntStateOf(0)
 
-    // Store initial values to detect changes
-    private var initialNameState by mutableStateOf("")
-    private var initialDescriptionState by mutableStateOf("")
-    private var initialPriceState by mutableStateOf("")
-    private var initialSelectedCurrencyOption by mutableStateOf(CurrencyOption("", ""))
-    private var initialEveryXRecurrenceState by mutableStateOf("")
-    private var initialSelectedRecurrence by mutableStateOf(Recurrence.Monthly)
-    private var initialFirstPaymentDate: Instant? by mutableStateOf(null)
-    private var initialTags = mutableStateMapOf<Tag, Boolean>()
-    private var initialNotifyForExpense by mutableStateOf(true)
-    private var initialReminders = mutableListOf<Reminder>()
+    // Store the original database expense for change detection
+    private var originalExpense: RecurringExpenseData? = null
 
     init {
         viewModelScope.launch {
@@ -94,6 +85,9 @@ class EditRecurringExpenseViewModel(
                 expenseRepository
                     .getRecurringExpenseById(expenseId)
                     ?.let { expense ->
+                        // Store the original expense for change detection
+                        originalExpense = expense
+                        
                         nameState = expense.name
                         descriptionState = expense.description
                         priceState = expense.price.value.toLocalString()
@@ -122,19 +116,15 @@ class EditRecurringExpenseViewModel(
                         availableCurrencies.firstOrNull { it.currencyCode == expense.price.currencyCode }?.let {
                             selectedCurrencyOption = it
                         }
-
-                        // Store initial values after loading
-                        storeInitialValues()
                     }
             } else {
+                // For new expenses, originalExpense remains null
                 availableCurrencies.firstOrNull { it.currencyCode == getDefaultCurrencyCode() }?.let {
                     selectedCurrencyOption = it
                 }
                 if (notifyForExpense) {
                     reminders.add(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
                 }
-                // Store initial values for new expense
-                storeInitialValues()
             }
         }
         viewModelScope.launch {
@@ -363,45 +353,64 @@ class EditRecurringExpenseViewModel(
         return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
     }
 
-    private fun storeInitialValues() {
-        initialNameState = nameState
-        initialDescriptionState = descriptionState
-        initialPriceState = priceState
-        initialSelectedCurrencyOption = selectedCurrencyOption
-        initialEveryXRecurrenceState = everyXRecurrenceState
-        initialSelectedRecurrence = selectedRecurrence
-        initialFirstPaymentDate = firstPaymentDate
-        initialTags.clear()
-        initialTags.putAll(_tags)
-        initialNotifyForExpense = notifyForExpense
-        initialReminders.clear()
-        initialReminders.addAll(reminders)
-    }
-
     fun hasUnsavedChanges(): Boolean {
-        // Compare current state with initial state
-        if (nameState != initialNameState) return true
-        if (descriptionState != initialDescriptionState) return true
-        if (priceState != initialPriceState) return true
-        if (selectedCurrencyOption != initialSelectedCurrencyOption) return true
-        if (everyXRecurrenceState != initialEveryXRecurrenceState) return true
-        if (selectedRecurrence != initialSelectedRecurrence) return true
-        if (firstPaymentDate != initialFirstPaymentDate) return true
-        if (notifyForExpense != initialNotifyForExpense) return true
-        
-        // Compare tags
-        if (_tags.size != initialTags.size) return true
-        if (_tags.any { (tag, selected) -> initialTags[tag] != selected }) return true
-        
-        // Compare reminders (compare sorted lists)
-        val currentRemindersSorted = reminders.sortedBy { it.daysBeforePayment }
-        val initialRemindersSorted = initialReminders.sortedBy { it.daysBeforePayment }
-        if (currentRemindersSorted.size != initialRemindersSorted.size) return true
-        if (currentRemindersSorted.zip(initialRemindersSorted).any { (current, initial) ->
-                current.daysBeforePayment != initial.daysBeforePayment
+        if (originalExpense != null) {
+            // Editing existing expense - compare with database entry
+            val expense = originalExpense!!
+            
+            if (nameState != expense.name) return true
+            if (descriptionState != expense.description) return true
+            if (priceState != expense.price.value.toLocalString()) return true
+            if (selectedCurrencyOption.currencyCode != expense.price.currencyCode) return true
+            if (everyXRecurrenceState != expense.everyXRecurrence.toString()) return true
+            if (selectedRecurrence != expense.recurrence) return true
+            if (firstPaymentDate != expense.firstPayment) return true
+            if (notifyForExpense != expense.notifyForExpense) return true
+            
+            // Compare tags
+            val originalSelectedTags = expense.tags.toSet()
+            val currentSelectedTags = _tags.filter { it.value }.keys.toSet()
+            if (originalSelectedTags != currentSelectedTags) return true
+            
+            // Compare reminders
+            val currentRemindersSorted = reminders.sortedBy { it.daysBeforePayment }
+            val originalRemindersSorted = if (expense.reminders.isEmpty() && expense.notifyForExpense) {
+                // If original had no reminders but notifications enabled, it would show default
+                listOf(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
+            } else {
+                expense.reminders.sortedBy { it.daysBeforePayment }
             }
-        ) {
-            return true
+            
+            if (currentRemindersSorted.size != originalRemindersSorted.size) return true
+            if (currentRemindersSorted.zip(originalRemindersSorted).any { (current, original) ->
+                    current.daysBeforePayment != original.daysBeforePayment
+                }
+            ) {
+                return true
+            }
+        } else {
+            // New expense - compare with default/empty values
+            if (nameState.isNotEmpty()) return true
+            if (descriptionState.isNotEmpty()) return true
+            if (priceState.isNotEmpty()) return true
+            if (everyXRecurrenceState.isNotEmpty()) return true
+            if (selectedRecurrence != Recurrence.Monthly) return true
+            if (firstPaymentDate != null) return true
+            
+            // Check if any tags are selected
+            if (_tags.any { it.value }) return true
+            
+            // For new expense with notifications enabled, check if reminders differ from default
+            if (!notifyForExpense) return true // notifications are disabled by default, so this is a change
+            val currentRemindersSorted = reminders.sortedBy { it.daysBeforePayment }
+            val defaultReminders = listOf(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
+            if (currentRemindersSorted.size != defaultReminders.size) return true
+            if (currentRemindersSorted.zip(defaultReminders).any { (current, default) ->
+                    current.daysBeforePayment != default.daysBeforePayment
+                }
+            ) {
+                return true
+            }
         }
         
         return false
