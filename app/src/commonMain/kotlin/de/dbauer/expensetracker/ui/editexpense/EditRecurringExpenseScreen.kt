@@ -227,10 +227,7 @@ fun EditRecurringExpenseScreen(
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        viewModel.onBackPressed()
-                        if (!viewModel.showUnsavedChangesDialog) {
-                            onDismiss()
-                        }
+                        viewModel.onBackPressed(onDismiss)
                     },
                 ) {
                     Icon(

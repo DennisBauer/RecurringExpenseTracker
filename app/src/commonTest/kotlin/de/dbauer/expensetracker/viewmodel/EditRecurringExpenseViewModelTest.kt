@@ -468,13 +468,16 @@ class EditRecurringExpenseViewModelTest {
             advanceUntilIdle()
 
             viewModel.nameState = "Changed Name"
-            viewModel.onBackPressed()
+            
+            var navigatedBack = false
+            viewModel.onBackPressed { navigatedBack = true }
 
             assertTrue(viewModel.showUnsavedChangesDialog)
+            assertFalse(navigatedBack)
         }
 
     @Test
-    fun `onBackPressed does not show dialog when no changes exist`() =
+    fun `onBackPressed navigates back when no changes exist`() =
         runTest {
             val viewModel =
                 EditRecurringExpenseViewModel(
@@ -486,9 +489,11 @@ class EditRecurringExpenseViewModelTest {
 
             advanceUntilIdle()
 
-            viewModel.onBackPressed()
+            var navigatedBack = false
+            viewModel.onBackPressed { navigatedBack = true }
 
             assertFalse(viewModel.showUnsavedChangesDialog)
+            assertTrue(navigatedBack)
         }
 
     @Test
@@ -531,9 +536,12 @@ class EditRecurringExpenseViewModelTest {
 
             viewModel.nameState = "New Expense"
             viewModel.priceState = "100"
-            viewModel.onBackPressed()
+            
+            var navigatedBack = false
+            viewModel.onBackPressed { navigatedBack = true }
 
             assertTrue(viewModel.showUnsavedChangesDialog)
+            assertFalse(navigatedBack)
 
             var dismissed = false
             viewModel.onSaveChanges { dismissed = true }
@@ -546,5 +554,40 @@ class EditRecurringExpenseViewModelTest {
             val expenses = expenseRepository.allRecurringExpenses.first()
             assertEquals(1, expenses.size)
             assertEquals("New Expense", expenses[0].name)
+        }
+
+    @Test
+    fun `onSaveChanges keeps dialog open when input invalid`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            // Set invalid input (empty name)
+            viewModel.nameState = ""
+            viewModel.priceState = "100"
+            
+            var navigatedBack = false
+            viewModel.onBackPressed { navigatedBack = true }
+
+            assertTrue(viewModel.showUnsavedChangesDialog)
+
+            var dismissed = false
+            viewModel.onSaveChanges { dismissed = true }
+            advanceUntilIdle()
+
+            // Dialog should remain open because save failed
+            assertTrue(viewModel.showUnsavedChangesDialog)
+            assertFalse(dismissed)
+
+            // Verify no expense was saved
+            val expenses = expenseRepository.allRecurringExpenses.first()
+            assertEquals(0, expenses.size)
         }
 }

@@ -407,9 +407,11 @@ class EditRecurringExpenseViewModel(
         return false
     }
 
-    fun onBackPressed() {
+    fun onBackPressed(onNavigateBack: () -> Unit) {
         if (hasUnsavedChanges()) {
             showUnsavedChangesDialog = true
+        } else {
+            onNavigateBack()
         }
     }
 
@@ -423,11 +425,12 @@ class EditRecurringExpenseViewModel(
     }
 
     fun onSaveChanges(onDismiss: () -> Unit) {
-        showUnsavedChangesDialog = false
         updateExpense { successful ->
             if (successful) {
+                showUnsavedChangesDialog = false
                 onDismiss()
             }
+            // If not successful, dialog remains open and validation errors are shown
         }
     }
 }
