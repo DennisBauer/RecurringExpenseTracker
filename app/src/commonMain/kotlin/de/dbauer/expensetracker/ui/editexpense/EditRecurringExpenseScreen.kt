@@ -40,6 +40,11 @@ import recurringexpensetracker.app.generated.resources.delete
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.edit_expense_delete_dialog_text
 import recurringexpensetracker.app.generated.resources.edit_expense_title
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_cancel
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_dialog_text
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_dialog_title
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_discard
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_save
 import recurringexpensetracker.app.generated.resources.save
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -176,6 +181,42 @@ fun EditRecurringExpenseScreen(
             },
         )
     }
+    if (viewModel.showUnsavedChangesDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissUnsavedChangesDialog,
+            title = {
+                Text(text = stringResource(Res.string.edit_expense_unsaved_changes_dialog_title))
+            },
+            text = {
+                Text(text = stringResource(Res.string.edit_expense_unsaved_changes_dialog_text))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onSaveChanges(onDismiss)
+                    },
+                ) {
+                    Text(text = stringResource(Res.string.edit_expense_unsaved_changes_save))
+                }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(
+                        onClick = {
+                            viewModel.onDiscardChanges(onDismiss)
+                        },
+                    ) {
+                        Text(text = stringResource(Res.string.edit_expense_unsaved_changes_discard))
+                    }
+                    TextButton(
+                        onClick = viewModel::onDismissUnsavedChangesDialog,
+                    ) {
+                        Text(text = stringResource(Res.string.edit_expense_unsaved_changes_cancel))
+                    }
+                }
+            },
+        )
+    }
     setTopAppBar {
         TopAppBar(
             title = {
@@ -185,7 +226,12 @@ fun EditRecurringExpenseScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onDismiss,
+                    onClick = {
+                        viewModel.onBackPressed()
+                        if (!viewModel.showUnsavedChangesDialog) {
+                            onDismiss()
+                        }
+                    },
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

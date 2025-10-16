@@ -44,6 +44,11 @@
     <string name="edit_expense_notification_remove_reminder_content_desc">Remove reminder</string>
     <string name="edit_expense_notification_days_before_payment">%1$s days before payment</string>
     <string name="edit_expense_delete_dialog_text">Do you really want to delete this expense?</string>
+    <string name="edit_expense_unsaved_changes_dialog_title">Unsaved Changes</string>
+    <string name="edit_expense_unsaved_changes_dialog_text">You have unsaved changes. What would you like to do?</string>
+    <string name="edit_expense_unsaved_changes_save">Save</string>
+    <string name="edit_expense_unsaved_changes_discard">Discard</string>
+    <string name="edit_expense_unsaved_changes_cancel">Cancel</string>
 
     <string name="tags_screen_title">Tags</string>
     <string name="tags_add_new">Add new Tag</string>

@@ -383,4 +383,168 @@ class EditRecurringExpenseViewModelTest {
             assertEquals(0, viewModel.reminders.size)
             assertFalse(viewModel.notifyForExpense)
         }
+
+    @Test
+    fun `hasUnsavedChanges returns false when no changes made`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            assertFalse(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
+    fun `hasUnsavedChanges returns true when name changed`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "New Name"
+
+            assertTrue(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
+    fun `hasUnsavedChanges returns true when price changed`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.priceState = "50"
+
+            assertTrue(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
+    fun `hasUnsavedChanges returns true when reminder added`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.addReminder(7)
+
+            assertTrue(viewModel.hasUnsavedChanges())
+        }
+
+    @Test
+    fun `onBackPressed shows dialog when changes exist`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Changed Name"
+            viewModel.onBackPressed()
+
+            assertTrue(viewModel.showUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `onBackPressed does not show dialog when no changes exist`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.onBackPressed()
+
+            assertFalse(viewModel.showUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `onDiscardChanges dismisses dialog`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Changed Name"
+            viewModel.onBackPressed()
+
+            assertTrue(viewModel.showUnsavedChangesDialog)
+
+            var dismissed = false
+            viewModel.onDiscardChanges { dismissed = true }
+
+            assertFalse(viewModel.showUnsavedChangesDialog)
+            assertTrue(dismissed)
+        }
+
+    @Test
+    fun `onSaveChanges saves and dismisses when input valid`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "New Expense"
+            viewModel.priceState = "100"
+            viewModel.onBackPressed()
+
+            assertTrue(viewModel.showUnsavedChangesDialog)
+
+            var dismissed = false
+            viewModel.onSaveChanges { dismissed = true }
+            advanceUntilIdle()
+
+            assertFalse(viewModel.showUnsavedChangesDialog)
+            assertTrue(dismissed)
+
+            // Verify expense was saved
+            val expenses = expenseRepository.allRecurringExpenses.first()
+            assertEquals(1, expenses.size)
+            assertEquals("New Expense", expenses[0].name)
+        }
 }

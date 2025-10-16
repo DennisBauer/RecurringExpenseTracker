@@ -60,12 +60,25 @@ class EditRecurringExpenseViewModel(
     private var lastRemindersBeforeDisabling = mutableListOf<Reminder>()
 
     var showDeleteConfirmDialog by mutableStateOf(false)
+    var showUnsavedChangesDialog by mutableStateOf(false)
 
     val isNewExpense = expenseId == null
     val showDeleteButton = !isNewExpense
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private var defaultReminderDays by mutableIntStateOf(0)
+
+    // Store initial values to detect changes
+    private var initialNameState by mutableStateOf("")
+    private var initialDescriptionState by mutableStateOf("")
+    private var initialPriceState by mutableStateOf("")
+    private var initialSelectedCurrencyOption by mutableStateOf(CurrencyOption("", ""))
+    private var initialEveryXRecurrenceState by mutableStateOf("")
+    private var initialSelectedRecurrence by mutableStateOf(Recurrence.Monthly)
+    private var initialFirstPaymentDate: Instant? by mutableStateOf(null)
+    private var initialTags = mutableStateMapOf<Tag, Boolean>()
+    private var initialNotifyForExpense by mutableStateOf(true)
+    private var initialReminders = mutableListOf<Reminder>()
 
     init {
         viewModelScope.launch {
@@ -109,6 +122,9 @@ class EditRecurringExpenseViewModel(
                         availableCurrencies.firstOrNull { it.currencyCode == expense.price.currencyCode }?.let {
                             selectedCurrencyOption = it
                         }
+
+                        // Store initial values after loading
+                        storeInitialValues()
                     }
             } else {
                 availableCurrencies.firstOrNull { it.currencyCode == getDefaultCurrencyCode() }?.let {
@@ -117,6 +133,8 @@ class EditRecurringExpenseViewModel(
                 if (notifyForExpense) {
                     reminders.add(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
                 }
+                // Store initial values for new expense
+                storeInitialValues()
             }
         }
         viewModelScope.launch {
@@ -343,5 +361,73 @@ class EditRecurringExpenseViewModel(
 
     private suspend fun getDefaultCurrencyCode(): String {
         return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
+    }
+
+    private fun storeInitialValues() {
+        initialNameState = nameState
+        initialDescriptionState = descriptionState
+        initialPriceState = priceState
+        initialSelectedCurrencyOption = selectedCurrencyOption
+        initialEveryXRecurrenceState = everyXRecurrenceState
+        initialSelectedRecurrence = selectedRecurrence
+        initialFirstPaymentDate = firstPaymentDate
+        initialTags.clear()
+        initialTags.putAll(_tags)
+        initialNotifyForExpense = notifyForExpense
+        initialReminders.clear()
+        initialReminders.addAll(reminders)
+    }
+
+    fun hasUnsavedChanges(): Boolean {
+        // Compare current state with initial state
+        if (nameState != initialNameState) return true
+        if (descriptionState != initialDescriptionState) return true
+        if (priceState != initialPriceState) return true
+        if (selectedCurrencyOption != initialSelectedCurrencyOption) return true
+        if (everyXRecurrenceState != initialEveryXRecurrenceState) return true
+        if (selectedRecurrence != initialSelectedRecurrence) return true
+        if (firstPaymentDate != initialFirstPaymentDate) return true
+        if (notifyForExpense != initialNotifyForExpense) return true
+        
+        // Compare tags
+        if (_tags.size != initialTags.size) return true
+        if (_tags.any { (tag, selected) -> initialTags[tag] != selected }) return true
+        
+        // Compare reminders (compare sorted lists)
+        val currentRemindersSorted = reminders.sortedBy { it.daysBeforePayment }
+        val initialRemindersSorted = initialReminders.sortedBy { it.daysBeforePayment }
+        if (currentRemindersSorted.size != initialRemindersSorted.size) return true
+        if (currentRemindersSorted.zip(initialRemindersSorted).any { (current, initial) ->
+                current.daysBeforePayment != initial.daysBeforePayment
+            }
+        ) {
+            return true
+        }
+        
+        return false
+    }
+
+    fun onBackPressed() {
+        if (hasUnsavedChanges()) {
+            showUnsavedChangesDialog = true
+        }
+    }
+
+    fun onDismissUnsavedChangesDialog() {
+        showUnsavedChangesDialog = false
+    }
+
+    fun onDiscardChanges(onDismiss: () -> Unit) {
+        showUnsavedChangesDialog = false
+        onDismiss()
+    }
+
+    fun onSaveChanges(onDismiss: () -> Unit) {
+        showUnsavedChangesDialog = false
+        updateExpense { successful ->
+            if (successful) {
+                onDismiss()
+            }
+        }
     }
 }
