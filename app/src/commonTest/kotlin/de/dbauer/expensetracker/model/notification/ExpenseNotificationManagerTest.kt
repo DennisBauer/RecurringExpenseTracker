@@ -9,25 +9,26 @@ import de.dbauer.expensetracker.model.database.IExpenseRepository
 import de.dbauer.expensetracker.model.datastore.FakeUserPreferencesRepository
 import de.dbauer.expensetracker.model.datastore.IUserPreferencesRepository
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Instant
 
 class ExpenseNotificationManagerTest {
-    // Fixed test time: October 15, 2025 at 00:00:00 UTC
-    private val testCurrentTime = LocalDateTime(2025, 10, 15, 0, 0, 0, 0).toInstant(TimeZone.UTC)
-
     private class TestableExpenseNotificationManager(
         expenseRepository: IExpenseRepository,
         userPreferencesRepository: IUserPreferencesRepository,
-        currentTimeProvider: () -> Instant,
-    ) : ExpenseNotificationManager(expenseRepository, userPreferencesRepository, currentTimeProvider) {
+    ) : ExpenseNotificationManager(expenseRepository, userPreferencesRepository) {
         // Override to provide test descriptions without needing resources
         override suspend fun getNotificationDescription(daysToNextPayment: Int): String {
             return when (daysToNextPayment) {
@@ -38,12 +39,31 @@ class ExpenseNotificationManagerTest {
         }
     }
 
+    // Helper to get today's date
+    private fun getTodayLocalDate(): LocalDate {
+        return Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+    }
+
+    // Helper to create a date offset from today
+    private fun getDateOffsetFromToday(days: Int): LocalDate {
+        val today = getTodayLocalDate()
+        return if (days >= 0) {
+            today.plus(days, DateTimeUnit.DAY)
+        } else {
+            today.minus(-days, DateTimeUnit.DAY)
+        }
+    }
+
     private fun createTestExpense(
         id: Int,
         name: String = "Test Expense",
         notifyForExpense: Boolean = true,
-        firstPayment: Instant? = LocalDateTime(2025, 1, 1, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+        firstPayment: Instant? = null,
         reminders: List<Reminder> = emptyList(),
+        recurrence: Recurrence = Recurrence.Monthly,
     ): RecurringExpenseData {
         return RecurringExpenseData(
             id = id,
@@ -52,7 +72,7 @@ class ExpenseNotificationManagerTest {
             price = CurrencyValue(10f, "EUR"),
             monthlyPrice = CurrencyValue(10f, "EUR"),
             everyXRecurrence = 1,
-            recurrence = Recurrence.Monthly,
+            recurrence = recurrence,
             tags = emptyList(),
             firstPayment = firstPayment,
             notifyForExpense = notifyForExpense,
@@ -65,12 +85,15 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
+            // Set first payment to 2 days from now
+            val firstPaymentDate = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
                     notifyForExpense = false,
+                    firstPayment = firstPaymentDate,
                 )
             repository.insert(expense)
 
@@ -83,7 +106,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             val expense =
                 createTestExpense(
@@ -102,14 +125,17 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             // Create expense with payment 2 days from now (within 3-day window)
+            // Use daily recurrence and set first payment to 2 days from now
+            val firstPaymentDate = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
                     name = "Netflix Subscription",
-                    firstPayment = LocalDateTime(2025, 10, 15, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Daily, // Use daily to ensure next payment is exactly where we want
                 )
             repository.insert(expense)
 
@@ -118,7 +144,6 @@ class ExpenseNotificationManagerTest {
             assertEquals(1, notifications[0].id)
             assertEquals("Netflix Subscription", notifications[0].title)
             assertEquals(NotificationChannel.ExpenseReminder, notifications[0].channel)
-            // Description is set but the exact text can not be verified the without mocking resources
         }
 
     @Test
@@ -127,13 +152,15 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             // Create expense with payment 10 days from now (outside 3-day window)
+            val firstPaymentDate = getDateOffsetFromToday(10).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 23, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -146,7 +173,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             val reminder =
                 Reminder(
@@ -155,13 +182,15 @@ class ExpenseNotificationManagerTest {
                     lastNotificationDate = null,
                 )
 
-            // Create expense with payment 3 days from now (within 5-day reminder window)
+            // Create expense with payment 5 days from now (exactly at 5-day reminder window)
+            val firstPaymentDate = getDateOffsetFromToday(5).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
                     name = "Rent Payment",
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
                     reminders = listOf(reminder),
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -176,7 +205,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             val reminders =
                 listOf(
@@ -186,11 +215,13 @@ class ExpenseNotificationManagerTest {
                 )
 
             // Create expense with payment 5 days from now (matches reminders with 7 and 3 days)
+            val firstPaymentDate = getDateOffsetFromToday(5).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 18, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
                     reminders = reminders,
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -205,9 +236,9 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
-            val nextPaymentDate = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC)
+            val nextPaymentDate = getDateOffsetFromToday(5).atStartOfDayIn(TimeZone.UTC)
             val reminder =
                 Reminder(
                     id = 1,
@@ -218,8 +249,9 @@ class ExpenseNotificationManagerTest {
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = nextPaymentDate,
                     reminders = listOf(reminder),
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -232,7 +264,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             val reminder =
                 Reminder(
@@ -241,11 +273,13 @@ class ExpenseNotificationManagerTest {
                     lastNotificationDate = null,
                 )
 
+            val firstPaymentDate = getDateOffsetFromToday(5).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
                     reminders = listOf(reminder),
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -262,7 +296,7 @@ class ExpenseNotificationManagerTest {
         runTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
             val reminders =
                 listOf(
@@ -272,11 +306,13 @@ class ExpenseNotificationManagerTest {
                 )
 
             // Payment is 3 days away, so reminders with 7 and 3 days should be marked as shown
+            val firstPaymentDate = getDateOffsetFromToday(3).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 18, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
                     reminders = reminders,
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -298,13 +334,15 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
 
+            val firstPaymentDate = getDateOffsetFromToday(3).atStartOfDayIn(TimeZone.UTC)
             val expense =
                 createTestExpense(
                     id = 1,
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate,
                     reminders = emptyList(), // No custom reminders
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense)
 
@@ -323,19 +361,24 @@ class ExpenseNotificationManagerTest {
             val repository = FakeExpenseRepository()
             val prefsRepository = FakeUserPreferencesRepository()
             prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
-            val manager = TestableExpenseNotificationManager(repository, prefsRepository) { testCurrentTime }
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            val firstPaymentDate1 = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC)
+            val firstPaymentDate2 = getDateOffsetFromToday(3).atStartOfDayIn(TimeZone.UTC)
 
             val expense1 =
                 createTestExpense(
                     id = 1,
                     name = "Netflix",
-                    firstPayment = LocalDateTime(2025, 10, 15, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate1, // 2 days away
+                    recurrence = Recurrence.Daily,
                 )
             val expense2 =
                 createTestExpense(
                     id = 2,
                     name = "Spotify",
-                    firstPayment = LocalDateTime(2025, 10, 16, 0, 0, 0, 0).toInstant(TimeZone.UTC),
+                    firstPayment = firstPaymentDate2, // 3 days away
+                    recurrence = Recurrence.Daily,
                 )
             repository.insert(expense1)
             repository.insert(expense2)
