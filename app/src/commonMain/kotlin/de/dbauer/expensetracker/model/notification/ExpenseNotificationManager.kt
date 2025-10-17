@@ -13,24 +13,20 @@ import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_days
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_today
 import recurringexpensetracker.app.generated.resources.notification_expense_reminder_message_tomorrow
-import kotlin.time.Clock
-import kotlin.time.Instant
 
 open class ExpenseNotificationManager(
     private val expenseRepository: IExpenseRepository,
     private val userPreferencesRepository: IUserPreferencesRepository,
-    private val currentTimeProvider: () -> Instant = { Clock.System.now() },
 ) {
     suspend fun getExpenseNotifications(): List<NotificationData> {
         val notifications = mutableListOf<NotificationData>()
         val expenses = expenseRepository.allRecurringExpenses.first()
         val defaultDaysAdvance = userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.get().first()
-        val currentDate = DateTimeCalculator.getCurrentLocalDate(currentTimeProvider())
 
         expenses.forEach { expense ->
             if (expense.notifyForExpense) {
                 expense.getNextPaymentDay()?.let { nextPaymentDay ->
-                    val daysToNextPayment = DateTimeCalculator.getDaysFromUntil(currentDate, nextPaymentDay)
+                    val daysToNextPayment = DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
 
                     // If expense has custom reminders, use them
                     if (expense.reminders.isNotEmpty()) {
@@ -78,8 +74,7 @@ open class ExpenseNotificationManager(
         expenseRepository.getRecurringExpenseById(id)?.let { expense ->
             expense.getNextPaymentDay()?.let { nextPaymentDay ->
                 val nextPaymentInstant = nextPaymentDay.atStartOfDayIn(TimeZone.UTC)
-                val currentDate = DateTimeCalculator.getCurrentLocalDate(currentTimeProvider())
-                val daysToNextPayment = DateTimeCalculator.getDaysFromUntil(currentDate, nextPaymentDay)
+                val daysToNextPayment = DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
 
                 if (expense.reminders.isNotEmpty()) {
                     // Update ALL reminders that should have already triggered or are triggering now
