@@ -75,6 +75,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.compose.colorpicker)
+            implementation(libs.compose.ui.backhandler)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
 

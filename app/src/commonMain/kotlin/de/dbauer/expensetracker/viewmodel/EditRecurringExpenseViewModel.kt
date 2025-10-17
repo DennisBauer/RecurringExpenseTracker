@@ -60,6 +60,7 @@ class EditRecurringExpenseViewModel(
     private var lastRemindersBeforeDisabling = mutableListOf<Reminder>()
 
     var showDeleteConfirmDialog by mutableStateOf(false)
+    var showDismissUnsavedChangesDialog by mutableStateOf(false)
 
     val isNewExpense = expenseId == null
     val showDeleteButton = !isNewExpense
@@ -269,6 +270,25 @@ class EditRecurringExpenseViewModel(
         }
     }
 
+    fun onBackPressed(onConfirmedDismiss: () -> Unit) {
+        viewModelScope.launch {
+            if (hasUnsavedChanges()) {
+                showDismissUnsavedChangesDialog = true
+            } else {
+                onConfirmedDismiss()
+            }
+        }
+    }
+
+    fun onDismissUnsavedChangesDialog() {
+        showDismissUnsavedChangesDialog = false
+    }
+
+    fun onDiscardChanges(onDismiss: () -> Unit) {
+        showDismissUnsavedChangesDialog = false
+        onDismiss()
+    }
+
     private suspend fun addExpense() {
         val recurringExpense = createRecurringExpenseData()
         expenseRepository.insert(recurringExpense)
@@ -343,5 +363,61 @@ class EditRecurringExpenseViewModel(
 
     private suspend fun getDefaultCurrencyCode(): String {
         return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
+    }
+
+    /**
+     * Check if there are unsaved changes compared to the database values
+     */
+    private suspend fun hasUnsavedChanges(): Boolean {
+        if (expenseId == null) {
+            // For new expenses, check if any field has been filled in
+            return nameState.isNotBlank() ||
+                descriptionState.isNotBlank() ||
+                priceState.isNotBlank() ||
+                everyXRecurrenceState.isNotBlank() ||
+                selectedRecurrence != Recurrence.Monthly ||
+                firstPaymentDate != null ||
+                tags.any { it.second } ||
+                !notifyForExpense ||
+                reminders.size != 1 ||
+                reminders.firstOrNull()?.daysBeforePayment != defaultReminderDays
+        } else {
+            // For existing expenses, compare with database values
+            val expense = expenseRepository.getRecurringExpenseById(expenseId) ?: return false
+
+            // Compare each field
+            if (nameState != expense.name) return true
+            if (descriptionState != expense.description) return true
+            if (priceState != expense.price.value.toLocalString()) return true
+            if (selectedCurrencyOption.currencyCode != expense.price.currencyCode) return true
+            if (everyXRecurrenceState != expense.everyXRecurrence.toString()) return true
+            if (selectedRecurrence != expense.recurrence) return true
+            if (firstPaymentDate != expense.firstPayment) return true
+            if (notifyForExpense != expense.notifyForExpense) return true
+
+            // Compare tags
+            val currentSelectedTags = tags.filter { it.second }.map { it.first }.toSet()
+            val dbSelectedTags = expense.tags.toSet()
+            if (currentSelectedTags != dbSelectedTags) return true
+
+            // Compare reminders
+            val currentReminders = reminders.sortedBy { it.daysBeforePayment }
+            val dbReminders = expense.reminders.sortedBy { it.daysBeforePayment }
+
+            // Handle the case where DB has no reminders but UI shows default
+            val dbRemindersToCompare =
+                if (dbReminders.isEmpty() && expense.notifyForExpense) {
+                    listOf(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
+                } else {
+                    dbReminders
+                }
+
+            if (currentReminders.size != dbRemindersToCompare.size) return true
+            currentReminders.zip(dbRemindersToCompare).forEach { (current, db) ->
+                if (current.daysBeforePayment != db.daysBeforePayment) return true
+            }
+
+            return false
+        }
     }
 }
