@@ -383,4 +383,527 @@ class EditRecurringExpenseViewModelTest {
             assertEquals(0, viewModel.reminders.size)
             assertFalse(viewModel.notifyForExpense)
         }
+
+    @Test
+    fun `new expense with no changes has no unsaved changes`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            // Should dismiss without showing dialog
+            assertTrue(dismissed)
+            assertFalse(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `new expense with name entered has unsaved changes`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Netflix"
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            // Should show dialog
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `new expense with description entered has unsaved changes`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.descriptionState = "Streaming service"
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `new expense with price entered has unsaved changes`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.priceState = "9.99"
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with no changes has no unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            // Should dismiss without showing dialog
+            assertTrue(dismissed)
+            assertFalse(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with changed name has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Netflix Premium"
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with changed price has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.priceState = "12.99"
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with changed recurrence has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.selectedRecurrence = Recurrence.Yearly
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with changed notification setting has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.onNotifyForExpenseChange(false)
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with added reminder has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.addReminder(7)
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with removed reminder has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders =
+                        listOf(
+                            Reminder(id = 1, daysBeforePayment = 3),
+                            Reminder(id = 2, daysBeforePayment = 7),
+                        ),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.removeReminder(0)
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `existing expense with updated reminder has unsaved changes`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = listOf(Reminder(id = 1, daysBeforePayment = 3)),
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.updateReminder(0, 5)
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            assertFalse(dismissed)
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `onDismissUnsavedChangesDialog hides the dialog`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Test"
+            viewModel.onBackPressed { }
+
+            advanceUntilIdle()
+
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+
+            viewModel.onDismissUnsavedChangesDialog()
+
+            assertFalse(viewModel.showDismissUnsavedChangesDialog)
+        }
+
+    @Test
+    fun `onDiscardChanges dismisses and calls callback`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            viewModel.nameState = "Test"
+            viewModel.onBackPressed { }
+
+            advanceUntilIdle()
+
+            assertTrue(viewModel.showDismissUnsavedChangesDialog)
+
+            var dismissed = false
+            viewModel.onDiscardChanges { dismissed = true }
+
+            assertFalse(viewModel.showDismissUnsavedChangesDialog)
+            assertTrue(dismissed)
+        }
+
+    @Test
+    fun `existing expense with default reminder shown when DB has no reminders matches default`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(9.99f, "USD"),
+                    monthlyPrice = CurrencyValue(9.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = emptyList(), // No reminders in DB
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            // Should show default reminder but no unsaved changes
+            assertEquals(1, viewModel.reminders.size)
+            assertEquals(3, viewModel.reminders[0].daysBeforePayment)
+
+            var dismissed = false
+            viewModel.onBackPressed { dismissed = true }
+
+            advanceUntilIdle()
+
+            // Should not show dialog since the default reminder matches expectations
+            assertTrue(dismissed)
+            assertFalse(viewModel.showDismissUnsavedChangesDialog)
+        }
 }

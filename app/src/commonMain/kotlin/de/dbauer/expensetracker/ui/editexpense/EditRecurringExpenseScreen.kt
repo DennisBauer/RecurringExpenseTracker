@@ -24,7 +24,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -37,12 +39,15 @@ import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.cancel
 import recurringexpensetracker.app.generated.resources.delete
+import recurringexpensetracker.app.generated.resources.discard
 import recurringexpensetracker.app.generated.resources.edit_expense_button_add
 import recurringexpensetracker.app.generated.resources.edit_expense_delete_dialog_text
 import recurringexpensetracker.app.generated.resources.edit_expense_title
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_dialog_text
+import recurringexpensetracker.app.generated.resources.edit_expense_unsaved_changes_dialog_title
 import recurringexpensetracker.app.generated.resources.save
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun EditRecurringExpenseScreen(
     expenseId: Int?,
@@ -53,6 +58,12 @@ fun EditRecurringExpenseScreen(
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
 ) {
+    // This disables the predictive back gesture on this screen to prevent accidental data loss
+    // TODO: Something to revisit later whether it can be improved
+    BackHandler {
+        viewModel.onBackPressed(onDismiss)
+    }
+
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
     Column(
@@ -176,6 +187,33 @@ fun EditRecurringExpenseScreen(
             },
         )
     }
+    if (viewModel.showDismissUnsavedChangesDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissUnsavedChangesDialog,
+            title = {
+                Text(text = stringResource(Res.string.edit_expense_unsaved_changes_dialog_title))
+            },
+            text = {
+                Text(text = stringResource(Res.string.edit_expense_unsaved_changes_dialog_text))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onDiscardChanges(onDismiss)
+                    },
+                ) {
+                    Text(text = stringResource(Res.string.discard))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = viewModel::onDismissUnsavedChangesDialog,
+                ) {
+                    Text(text = stringResource(Res.string.cancel))
+                }
+            },
+        )
+    }
     setTopAppBar {
         TopAppBar(
             title = {
@@ -185,7 +223,7 @@ fun EditRecurringExpenseScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onDismiss,
+                    onClick = { viewModel.onBackPressed(onDismiss) },
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
