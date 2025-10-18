@@ -1,4 +1,6 @@
 A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
 
-As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, etc.
-It's a simple Kotlin multiplatform app with basic functionality. My idea is to add new features iteratively and I'm happy for any contribution. Feel free to make feature requests or report bugs if you find any.
+As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, and other regular payments.
+Built with Kotlin Multiplatform and Material You design principles, it provides a simple yet powerful way to track and visualize your recurring financial commitments.
+The app is designed to be intuitive and straightforward, helping you understand exactly where your money goes each month.
+My idea is to add new features iteratively, and I'm happy for any contribution. Feel free to make feature requests or report bugs if you find any.
