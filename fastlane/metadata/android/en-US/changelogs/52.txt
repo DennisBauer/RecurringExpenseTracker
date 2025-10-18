@@ -1,0 +1,9 @@
+Changelog 0.19.0:
+* Add option for multiple reminders per expense
+* Allow searching default currencies in settings with a search bar
+* Confirm back action on edit expense screen
+* (Russian) translation updated
+* Update exchange rates
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.0
