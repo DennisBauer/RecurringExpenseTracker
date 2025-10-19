@@ -56,7 +56,7 @@ My idea is to add new features iteratively, and I'm happy for any contribution. 
 - **Android 15 Widget Previews**: Enhanced widget preview support
 
 ### 🌍 Internationalization
-- **30+ Languages**: Extensive translation support through community contributions
+- **15+ Languages**: Extensive translation support through community contributions
 - **Community-Driven Translations**: Help translate the app on [Weblate](https://hosted.weblate.org/engage/recurringexpensetracker/)
 
 ### 💡 Advanced Use Cases
