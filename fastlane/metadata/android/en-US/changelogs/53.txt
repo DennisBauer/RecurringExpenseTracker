@@ -1,0 +1,4 @@
+Changelog 0.19.1:
+* Fix crash adding a new expense with reminders enabled
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.1
