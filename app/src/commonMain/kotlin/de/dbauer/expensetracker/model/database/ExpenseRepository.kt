@@ -37,12 +37,15 @@ class ExpenseRepository(
 
     override suspend fun insert(recurringExpense: RecurringExpenseData) =
         withContext(Dispatchers.IO) {
-            recurringExpenseDao.insert(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
+            val expenseId =
+                recurringExpenseDao.insert(
+                    recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()),
+                )
             recurringExpense.tags.forEach {
-                recurringExpenseDao.upsert(ExpenseTagCrossRefEntry(recurringExpense.id, it.id))
+                recurringExpenseDao.upsert(ExpenseTagCrossRefEntry(expenseId.toInt(), it.id))
             }
             recurringExpense.reminders.forEach { reminder ->
-                recurringExpenseDao.insertReminder(reminder.toReminderEntry(recurringExpense.id))
+                recurringExpenseDao.insertReminder(reminder.toReminderEntry(expenseId.toInt()))
             }
         }
 
