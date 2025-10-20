@@ -32,7 +32,7 @@ interface RecurringExpenseDao {
     suspend fun getTagById(id: Int): TagEntry
 
     @Insert
-    suspend fun insert(recurringExpense: RecurringExpenseEntry)
+    suspend fun insert(recurringExpense: RecurringExpenseEntry): Long
 
     @Update
     suspend fun update(recurringExpense: RecurringExpenseEntry)

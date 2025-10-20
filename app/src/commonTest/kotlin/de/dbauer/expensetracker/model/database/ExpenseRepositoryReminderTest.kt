@@ -26,6 +26,7 @@ class ExpenseRepositoryReminderTest {
         val tags = mutableMapOf<Int, TagEntry>()
         val crossRefs = mutableListOf<ExpenseTagCrossRefEntry>()
 
+        private var nextExpenseId = 1
         private var nextReminderId = 1
 
         override fun getAllExpenses(): Flow<List<RecurringExpenseWithTagsEntry>> {
@@ -50,13 +51,15 @@ class ExpenseRepositoryReminderTest {
             return tags[id] ?: throw NoSuchElementException()
         }
 
-        override suspend fun insert(recurringExpense: RecurringExpenseEntry) {
-            expenses[recurringExpense.id] =
+        override suspend fun insert(recurringExpense: RecurringExpenseEntry): Long {
+            val id = if (recurringExpense.id == 0) nextExpenseId++ else recurringExpense.id
+            expenses[id] =
                 RecurringExpenseWithTagsEntry(
-                    expense = recurringExpense,
+                    expense = recurringExpense.copy(id = id),
                     tags = emptyList(),
                     reminders = emptyList(),
                 )
+            return id.toLong()
         }
 
         override suspend fun update(recurringExpense: RecurringExpenseEntry) {
