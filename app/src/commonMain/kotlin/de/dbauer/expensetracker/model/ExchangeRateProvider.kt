@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import recurringexpensetracker.app.generated.resources.Res
+import kotlin.concurrent.Volatile
 
 @Serializable
 private data class ExchangeRates(
@@ -34,7 +35,7 @@ private data class Rate(
 class ExchangeRateProvider : IExchangeRateProvider {
     private val mutex = Mutex()
 
-    private var exchangeRates: ExchangeRates? = null
+    @Volatile private var exchangeRates: ExchangeRates? = null
 
     override suspend fun exchangeCurrencyValue(
         from: CurrencyValue,
