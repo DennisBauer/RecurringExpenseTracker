@@ -15,7 +15,11 @@ import kotlin.time.Instant
 actual fun Float.toCurrencyString(currencyCode: String): String {
     val currencyInstance = NumberFormat.getCurrencyInstance()
     if (currencyCode.isNotEmpty()) {
-        currencyInstance.currency = Currency.getInstance(currencyCode)
+        try {
+            currencyInstance.currency = Currency.getInstance(currencyCode)
+        } catch (_: IllegalArgumentException) {
+            return "${String.format(Locale.getDefault(), "%.2f", this)} $currencyCode"
+        }
     }
     return currencyInstance.format(this)
 }
