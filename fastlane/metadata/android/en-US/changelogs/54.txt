@@ -1,0 +1,8 @@
+Changelog 0.19.2:
+* Fix crash when using currency unknown to system
+* Added (Belarusian) translation
+* Added (Lithuanian) translation
+* Update exchange rates
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.2
