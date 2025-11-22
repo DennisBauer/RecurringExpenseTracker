@@ -173,13 +173,20 @@ private fun UpcomingPaymentsOverview(
 private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentData): String {
     val inDaysString =
         when (upcomingPaymentData.nextPaymentRemainingDays) {
-            0 -> stringResource(Res.string.upcoming_time_remaining_today)
-            1 -> stringResource(Res.string.upcoming_time_remaining_tomorrow)
-            else ->
+            0 -> {
+                stringResource(Res.string.upcoming_time_remaining_today)
+            }
+
+            1 -> {
+                stringResource(Res.string.upcoming_time_remaining_tomorrow)
+            }
+
+            else -> {
                 stringResource(
                     Res.string.upcoming_time_remaining_days,
                     upcomingPaymentData.nextPaymentRemainingDays,
                 )
+            }
         }
     return inDaysString
 }

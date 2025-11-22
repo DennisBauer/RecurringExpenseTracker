@@ -76,6 +76,7 @@ class ConfigureWidgetActivity : AppCompatActivity() {
                             userPreferencesRepository.biometricSecurity.save(false)
                         }
                     }
+
                     else -> {
                         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                         setResult(RESULT_CANCELED, resultValue)

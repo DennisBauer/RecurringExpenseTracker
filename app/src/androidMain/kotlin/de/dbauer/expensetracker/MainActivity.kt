@@ -104,9 +104,11 @@ class MainActivity : AppCompatActivity() {
                     is BiometricResult.AuthenticationError -> {
                         Log.e(TAG, it.error)
                     }
+
                     BiometricResult.AuthenticationFailed -> {
                         Log.e(TAG, "Authentication failed")
                     }
+
                     BiometricResult.AuthenticationNotSet -> {
                         // open directly the setup settings for biometrics
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -134,13 +136,16 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
                     BiometricResult.AuthenticationSuccess -> {
                         Log.i(TAG, "Authentication Success")
                         mainActivityViewModel.isUnlocked = true
                     }
+
                     BiometricResult.FeatureUnavailable -> {
                         Log.i(TAG, "Authentication unavailable")
                     }
+
                     BiometricResult.HardwareUnavailable -> {
                         Log.i(TAG, "Hardware not available")
                     }

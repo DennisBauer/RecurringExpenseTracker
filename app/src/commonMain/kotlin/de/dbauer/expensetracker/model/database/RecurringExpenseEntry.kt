@@ -21,16 +21,22 @@ data class RecurringExpenseEntry(
             RecurrenceDatabase.Daily.value -> {
                 (365 / 12f) / everyXRecurrence!! * price!!
             }
+
             RecurrenceDatabase.Weekly.value -> {
                 (52 / 12f) / everyXRecurrence!! * price!!
             }
+
             RecurrenceDatabase.Monthly.value -> {
                 1f / everyXRecurrence!! * price!!
             }
+
             RecurrenceDatabase.Yearly.value -> {
                 price!! / (everyXRecurrence!! * 12f)
             }
-            else -> 0f
+
+            else -> {
+                0f
+            }
         }
     }
 }
