@@ -30,8 +30,13 @@ actual fun ExpenseTrackerTheme(
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             }
 
-            darkTheme -> darkColorScheme
-            else -> lightColorScheme
+            darkTheme -> {
+                darkColorScheme
+            }
+
+            else -> {
+                lightColorScheme
+            }
         }.let { baseColorScheme ->
             if (themeMode == ThemeMode.Amoled) {
                 baseColorScheme.toAmoledColorScheme()

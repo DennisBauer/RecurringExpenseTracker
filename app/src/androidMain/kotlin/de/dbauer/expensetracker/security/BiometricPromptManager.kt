@@ -53,7 +53,10 @@ class BiometricPromptManager(
             -> {
                 true
             }
-            else -> false
+
+            else -> {
+                false
+            }
         }
     }
 
@@ -81,6 +84,7 @@ class BiometricPromptManager(
                 resultChannel.trySend(BiometricResult.HardwareUnavailable)
                 return
             }
+
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
                 resultChannel.trySend(BiometricResult.FeatureUnavailable)
                 return
@@ -90,7 +94,10 @@ class BiometricPromptManager(
                 resultChannel.trySend(BiometricResult.AuthenticationNotSet)
                 return
             }
-            else -> Unit
+
+            else -> {
+                Unit
+            }
         }
 
         BiometricPrompt(

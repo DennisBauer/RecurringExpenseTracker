@@ -159,6 +159,7 @@ private fun EditTagEntry(
                 // Reset the state back to Settled to prevent re-triggering on undo
                 dismissState.snapTo(SwipeToDismissBoxValue.Settled)
             }
+
             SwipeToDismissBoxValue.Settled -> {}
         }
     }
