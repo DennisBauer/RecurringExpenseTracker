@@ -30,13 +30,13 @@
     <string name="edit_expense_recurrence_year">Metai (-ų)</string>
     <string name="edit_expense_recurrence_year_short">m.</string>
     <string name="edit_expense_first_payment">Pirmasis mokėjimas (nebūtinas)</string>
-    <string name="edit_expense_first_payment_placeholder">Pasirinkite datą</string>
+    <string name="edit_expense_first_payment_placeholder">Pasirinkti datą</string>
     <string name="edit_expense_tags">Pridėti žymę</string>
     <string name="edit_expense_notification_get_notified">Pradėkite gauti pranešimus apie būsimus mokėjimus. Tiesiog eikite į nustatymus ir įjunkite pranešimus.</string>
     <string name="edit_expense_notification_add_reminder">Pridėti</string>
     <string name="edit_expense_notification_add_reminder_content_desc">Pridėti priminimą</string>
     <string name="edit_expense_notification_remove_reminder_content_desc">Šalinti priminimą</string>
-    <string name="edit_expense_notification_days_before_payment">%1$s dienos (-ų) prieš mokėjimą</string>
+    <string name="edit_expense_notification_days_before_payment">%1$s diena (-os, -ų) prieš mokėjimą</string>
     <string name="edit_expense_delete_dialog_text">Ar tikrai norite ištrinti šią išlaidą?</string>
     <string name="edit_expense_unsaved_changes_dialog_title">Neišsaugoti pakeitimai</string>
     <string name="edit_expense_unsaved_changes_dialog_text">Turite neišsaugotų pakeitimų. Ar norite juos atmesti?</string>
