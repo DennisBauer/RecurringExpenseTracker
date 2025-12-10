@@ -62,7 +62,7 @@ jobs:
           git commit -S -m "Update library licenses"
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.PREPARE_RELEASE_WORKFLOW_TOKEN }}
           title: "Update exchange rates and licenses"
