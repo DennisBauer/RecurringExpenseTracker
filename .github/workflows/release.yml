@@ -84,15 +84,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download APK from build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: apk
       - name: Download aab from build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: appbundle
       - name: Download whatsnew from build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: whatsnew
           path: whatsnew
