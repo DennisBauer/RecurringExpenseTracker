@@ -24,7 +24,7 @@
     <string name="edit_expense_recurrence_day">Diena (-os, -ų)</string>
     <string name="edit_expense_recurrence_day_short">d.</string>
     <string name="edit_expense_recurrence_week">Savaitė (-ės, -čių)</string>
-    <string name="edit_expense_recurrence_week_short">sat.</string>
+    <string name="edit_expense_recurrence_week_short">sav.</string>
     <string name="edit_expense_recurrence_month">Mėnesis (-iai, -ių)</string>
     <string name="edit_expense_recurrence_month_short">mėn.</string>
     <string name="edit_expense_recurrence_year">Metai (-ų)</string>
