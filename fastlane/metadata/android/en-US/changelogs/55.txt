@@ -1,0 +1,7 @@
+Changelog 0.19.3:
+* (Lithuanian) translation updated
+* (Chinese (Simplified Han script)) translation updated
+* Update exchange rates
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.3
