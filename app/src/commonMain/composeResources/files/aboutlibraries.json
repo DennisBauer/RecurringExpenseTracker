@@ -2,10 +2,10 @@
     "libraries": [
         {
             "uniqueId": "androidx.activity:activity",
-            "artifactVersion": "1.11.0",
+            "artifactVersion": "1.12.2",
             "name": "Activity",
             "description": "Provides the base Activity subclass and the relevant hooks to build a composable structure on top.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.11.0",
+            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.12.2",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -27,10 +27,10 @@
         },
         {
             "uniqueId": "androidx.activity:activity-compose",
-            "artifactVersion": "1.11.0",
+            "artifactVersion": "1.12.2",
             "name": "Activity Compose",
             "description": "Compose integration with Activity",
-            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.11.0",
+            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.12.2",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -52,10 +52,10 @@
         },
         {
             "uniqueId": "androidx.activity:activity-ktx",
-            "artifactVersion": "1.11.0",
+            "artifactVersion": "1.12.2",
             "name": "Activity Kotlin Extensions",
             "description": "Kotlin extensions for 'activity' artifact",
-            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.11.0",
+            "website": "https://developer.android.com/jetpack/androidx/releases/activity#1.12.2",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -975,10 +975,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "DataStore",
             "description": "Android DataStore - contains the underlying store used by each serialization method along with components that require an Android dependency",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1000,10 +1000,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-core",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "DataStore Core",
             "description": "Android DataStore Core - contains the underlying store used by each serialization method",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1025,10 +1025,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-core-okio",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "DataStore Core Okio",
             "description": "Android DataStore Core Okio- contains APIs to use datastore-core in multiplatform via okio",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1050,10 +1050,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-preferences",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "Preferences DataStore",
             "description": "Android Preferences DataStore",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1075,10 +1075,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-preferences-core",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "Preferences DataStore Core",
             "description": "Android Preferences DataStore without the Android Dependencies",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1100,10 +1100,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-preferences-external-protobuf",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "Preferences External Protobuf",
             "description": "Repackaged proto-lite dependency for use by datastore preferences",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1125,10 +1125,10 @@
         },
         {
             "uniqueId": "androidx.datastore:datastore-preferences-proto",
-            "artifactVersion": "1.1.7",
+            "artifactVersion": "1.2.0",
             "name": "Preferences DataStore Proto",
             "description": "Jarjar the generated proto for use by datastore-preferences.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.1.7",
+            "website": "https://developer.android.com/jetpack/androidx/releases/datastore#1.2.0",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1266,10 +1266,10 @@
         },
         {
             "uniqueId": "androidx.glance:glance",
-            "artifactVersion": "1.2.0-beta01",
+            "artifactVersion": "1.2.0-rc01",
             "name": "Glance",
             "description": "Glance allows developers to build layouts for remote surfaces using a Jetpack Compose-style API.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-beta01",
+            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-rc01",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1291,10 +1291,10 @@
         },
         {
             "uniqueId": "androidx.glance:glance-appwidget",
-            "artifactVersion": "1.2.0-beta01",
+            "artifactVersion": "1.2.0-rc01",
             "name": "Glance For App Widgets",
             "description": "Glance-appwidgets allows developers to build layouts for Android AppWidgets using a Jetpack Compose-style API.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-beta01",
+            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-rc01",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1316,10 +1316,10 @@
         },
         {
             "uniqueId": "androidx.glance:glance-appwidget-external-protobuf",
-            "artifactVersion": "1.2.0-beta01",
+            "artifactVersion": "1.2.0-rc01",
             "name": "Glance AppWidget External Protobuf",
             "description": "Repackaged proto-lite dependency for use by galnce",
-            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-beta01",
+            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-rc01",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1341,10 +1341,10 @@
         },
         {
             "uniqueId": "androidx.glance:glance-appwidget-proto",
-            "artifactVersion": "1.2.0-beta01",
+            "artifactVersion": "1.2.0-rc01",
             "name": "Glance AppWidget Protos",
             "description": "Protos for use with glance app widgets.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-beta01",
+            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-rc01",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1366,10 +1366,10 @@
         },
         {
             "uniqueId": "androidx.glance:glance-material3",
-            "artifactVersion": "1.2.0-beta01",
+            "artifactVersion": "1.2.0-rc01",
             "name": "Glance Material",
             "description": "Glance Material integration library. This library provides interop APIs with Material 3.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-beta01",
+            "website": "https://developer.android.com/jetpack/androidx/releases/glance#1.2.0-rc01",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1884,6 +1884,56 @@
             ]
         },
         {
+            "uniqueId": "androidx.navigationevent:navigationevent",
+            "artifactVersion": "1.0.1",
+            "name": "Navigation Event",
+            "description": "Provides APIs to easily intercept platform navigation events, including swipes and clicks, to provide a consistent API surface for handling these events.",
+            "website": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.0.1",
+            "developers": [
+                {
+                    "name": "The Android Open Source Project"
+                }
+            ],
+            "organization": {
+                "name": "The Android Open Source Project"
+            },
+            "scm": {
+                "connection": "scm:git:https://android.googlesource.com/platform/frameworks/support",
+                "url": "https://cs.android.com/androidx/platform/frameworks/support"
+            },
+            "licenses": [
+                "Apache-2.0"
+            ],
+            "funding": [
+                
+            ]
+        },
+        {
+            "uniqueId": "androidx.navigationevent:navigationevent-compose",
+            "artifactVersion": "1.0.1",
+            "name": "NavigationEvent Compose",
+            "description": "Compose integration with NavigationEvent",
+            "website": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.0.1",
+            "developers": [
+                {
+                    "name": "The Android Open Source Project"
+                }
+            ],
+            "organization": {
+                "name": "The Android Open Source Project"
+            },
+            "scm": {
+                "connection": "scm:git:https://android.googlesource.com/platform/frameworks/support",
+                "url": "https://cs.android.com/androidx/platform/frameworks/support"
+            },
+            "licenses": [
+                "Apache-2.0"
+            ],
+            "funding": [
+                
+            ]
+        },
+        {
             "uniqueId": "androidx.profileinstaller:profileinstaller",
             "artifactVersion": "1.4.0",
             "name": "Profile Installer",
@@ -1932,10 +1982,10 @@
         },
         {
             "uniqueId": "androidx.room:room-common",
-            "artifactVersion": "2.8.3",
+            "artifactVersion": "2.8.4",
             "name": "Room-Common",
             "description": "Android Room-Common",
-            "website": "https://developer.android.com/jetpack/androidx/releases/room#2.8.3",
+            "website": "https://developer.android.com/jetpack/androidx/releases/room#2.8.4",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -1957,10 +2007,10 @@
         },
         {
             "uniqueId": "androidx.room:room-runtime-android",
-            "artifactVersion": "2.8.3",
+            "artifactVersion": "2.8.4",
             "name": "Room-Runtime",
             "description": "Android Room-Runtime",
-            "website": "https://developer.android.com/jetpack/androidx/releases/room#2.8.3",
+            "website": "https://developer.android.com/jetpack/androidx/releases/room#2.8.4",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -2057,10 +2107,10 @@
         },
         {
             "uniqueId": "androidx.sqlite:sqlite",
-            "artifactVersion": "2.6.1",
+            "artifactVersion": "2.6.2",
             "name": "SQLite",
             "description": "SQLite API",
-            "website": "https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.1",
+            "website": "https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -2082,10 +2132,10 @@
         },
         {
             "uniqueId": "androidx.sqlite:sqlite-framework",
-            "artifactVersion": "2.6.1",
+            "artifactVersion": "2.6.2",
             "name": "SQLite Framework Integration",
             "description": "The implementation of SQLite library using the framework code.",
-            "website": "https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.1",
+            "website": "https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2",
             "developers": [
                 {
                     "name": "The Android Open Source Project"
@@ -2306,7 +2356,7 @@
         },
         {
             "uniqueId": "com.github.skydoves:colorpicker-compose",
-            "artifactVersion": "1.1.2",
+            "artifactVersion": "1.1.3",
             "name": "colorpicker-compose",
             "description": "Jetpack Compose color picker for getting colors from any images by tapping on the desired color.",
             "website": "https://github.com/skydoves/colorpicker-compose/",
@@ -2445,7 +2495,7 @@
         },
         {
             "uniqueId": "com.squareup.okio:okio",
-            "artifactVersion": "3.4.0",
+            "artifactVersion": "3.9.1",
             "name": "okio",
             "description": "A modern I/O library for Android, Java, and Kotlin Multiplatform.",
             "website": "https://github.com/square/okio/",
@@ -3281,106 +3331,10 @@
             ]
         },
         {
-            "uniqueId": "org.jetbrains.kotlin:kotlin-android-extensions-runtime",
-            "artifactVersion": "1.9.22",
-            "name": "Kotlin Android Extensions Runtime",
-            "description": "Kotlin Android Extensions Runtime",
-            "website": "https://kotlinlang.org/",
-            "developers": [
-                {
-                    "name": "Kotlin Team",
-                    "organisationUrl": "https://www.jetbrains.com"
-                }
-            ],
-            "scm": {
-                "connection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "developerConnection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "url": "https://github.com/JetBrains/kotlin"
-            },
-            "licenses": [
-                "Apache-2.0"
-            ],
-            "funding": [
-                
-            ]
-        },
-        {
-            "uniqueId": "org.jetbrains.kotlin:kotlin-parcelize-runtime",
-            "artifactVersion": "1.9.22",
-            "name": "Parcelize Runtime",
-            "description": "Runtime library for the Parcelize compiler plugin",
-            "website": "https://kotlinlang.org/",
-            "developers": [
-                {
-                    "name": "Kotlin Team",
-                    "organisationUrl": "https://www.jetbrains.com"
-                }
-            ],
-            "scm": {
-                "connection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "developerConnection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "url": "https://github.com/JetBrains/kotlin"
-            },
-            "licenses": [
-                "Apache-2.0"
-            ],
-            "funding": [
-                
-            ]
-        },
-        {
             "uniqueId": "org.jetbrains.kotlin:kotlin-stdlib",
-            "artifactVersion": "2.2.21",
+            "artifactVersion": "2.3.0",
             "name": "Kotlin Stdlib",
             "description": "Kotlin Standard Library",
-            "website": "https://kotlinlang.org/",
-            "developers": [
-                {
-                    "name": "Kotlin Team",
-                    "organisationUrl": "https://www.jetbrains.com"
-                }
-            ],
-            "scm": {
-                "connection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "developerConnection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "url": "https://github.com/JetBrains/kotlin"
-            },
-            "licenses": [
-                "Apache-2.0"
-            ],
-            "funding": [
-                
-            ]
-        },
-        {
-            "uniqueId": "org.jetbrains.kotlin:kotlin-stdlib-jdk7",
-            "artifactVersion": "1.8.0",
-            "name": "Kotlin Stdlib Jdk7",
-            "description": "Kotlin Standard Library JDK 7 extension",
-            "website": "https://kotlinlang.org/",
-            "developers": [
-                {
-                    "name": "Kotlin Team",
-                    "organisationUrl": "https://www.jetbrains.com"
-                }
-            ],
-            "scm": {
-                "connection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "developerConnection": "scm:git:https://github.com/JetBrains/kotlin.git",
-                "url": "https://github.com/JetBrains/kotlin"
-            },
-            "licenses": [
-                "Apache-2.0"
-            ],
-            "funding": [
-                
-            ]
-        },
-        {
-            "uniqueId": "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
-            "artifactVersion": "1.8.0",
-            "name": "Kotlin Stdlib Jdk8",
-            "description": "Kotlin Standard Library JDK 8 extension",
             "website": "https://kotlinlang.org/",
             "developers": [
                 {
@@ -3424,7 +3378,7 @@
         },
         {
             "uniqueId": "org.jetbrains.kotlinx:kotlinx-coroutines-android",
-            "artifactVersion": "1.8.1",
+            "artifactVersion": "1.9.0",
             "name": "kotlinx-coroutines-android",
             "description": "Coroutines support libraries for Kotlin",
             "website": "https://github.com/Kotlin/kotlinx.coroutines",
@@ -3446,7 +3400,7 @@
         },
         {
             "uniqueId": "org.jetbrains.kotlinx:kotlinx-coroutines-bom",
-            "artifactVersion": "1.8.1",
+            "artifactVersion": "1.9.0",
             "name": "kotlinx-coroutines-bom",
             "description": "Coroutines support libraries for Kotlin",
             "website": "https://github.com/Kotlin/kotlinx.coroutines",
@@ -3468,7 +3422,7 @@
         },
         {
             "uniqueId": "org.jetbrains.kotlinx:kotlinx-coroutines-core",
-            "artifactVersion": "1.8.1",
+            "artifactVersion": "1.9.0",
             "name": "kotlinx-coroutines-core",
             "description": "Coroutines support libraries for Kotlin",
             "website": "https://github.com/Kotlin/kotlinx.coroutines",
