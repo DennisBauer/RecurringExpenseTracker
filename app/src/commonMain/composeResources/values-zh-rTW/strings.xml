@@ -55,4 +55,20 @@
     <string name="settings_title_security">安全性</string>
     <string name="settings_security_biometric_lock">生物辨識鎖定</string>
     <string name="biometric_prompt_manager_title">解鎖 Recurring Expense Tracker</string>
+    <string name="top_app_bar_navigate_up_content_desc">返回</string>
+    <string name="edit_expense_tags">新增標籤</string>
+    <string name="edit_expense_notification_add_reminder">新增</string>
+    <string name="edit_expense_notification_days_before_payment">%1$s 天後付款</string>
+    <string name="edit_expense_unsaved_changes_dialog_title">未儲存的更動</string>
+    <string name="tags_delete_undo">復原</string>
+    <string name="settings_currency_search_placeholder">搜尋貨幣…</string>
+    <string name="settings_currency_search_content_desc">搜尋貨幣</string>
+    <string name="settings_currency_close_search_content_desc">關閉搜尋</string>
+    <string name="settings_currency_clear_search_content_desc">清除搜尋</string>
+    <string name="settings_notifications">通知</string>
+    <string name="settings_about_developer">開發人員</string>
+    <string name="settings_about_version">版本</string>
+    <string name="settings_about_support">支持此專案</string>
+    <string name="settings_about_libraries">程式庫版權</string>
+    <string name="settings_currency">貨幣</string>
 </resources>
