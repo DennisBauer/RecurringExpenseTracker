@@ -29,11 +29,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.data.Reminder
 import de.dbauer.expensetracker.ui.theme.ExpenseTrackerThemePreview
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import recurringexpensetracker.app.generated.resources.Res
 import recurringexpensetracker.app.generated.resources.edit_expense_notification_add_reminder
 import recurringexpensetracker.app.generated.resources.edit_expense_notification_add_reminder_content_desc
