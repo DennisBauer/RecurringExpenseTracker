@@ -54,7 +54,7 @@ jobs:
         run: |
           set -o pipefail
 
-          EXPECTED_COUNT=19
+          EXPECTED_COUNT=16
 
           ./gradlew build --no-daemon --no-configuration-cache --no-build-cache --stacktrace 2>&1 | tee build_log.txt
 
