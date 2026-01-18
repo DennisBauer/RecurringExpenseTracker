@@ -53,12 +53,12 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email '37552885+DennisBauer@users.noreply.github.com'
-          git add app/src/commonMain/composeResources/files/exchange_rates.json
+          git add shared/src/commonMain/composeResources/files/exchange_rates.json
           git commit -S -m "Update exchange rates"
 
       - name: Commit library licenses
         run: |
-          git add app/src/commonMain/composeResources/files/aboutlibraries.json
+          git add shared/src/commonMain/composeResources/files/aboutlibraries.json
           git commit -S -m "Update library licenses"
 
       - name: Create pull request

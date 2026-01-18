@@ -7,6 +7,7 @@ android-minSdk = "26"
 android-targetSdk = "36"
 androidx-activityCompose = "1.12.2"
 androidx-appcompat = "1.7.1"
+androidx-core = "1.17.0"
 androidx-datastore-preferences = "1.2.0"
 androidx-lifecycle-viewmodel = "2.9.6"
 androidx-navigation-compose = "2.9.1"
@@ -35,6 +36,7 @@ aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3",
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-core = { group = "androidx.core", name = "core", version.ref = "androidx-core" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore-preferences" }
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
@@ -74,6 +76,7 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 [plugins]
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

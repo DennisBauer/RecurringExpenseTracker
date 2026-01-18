@@ -1,0 +1,53 @@
+package de.dbauer.expensetracker.shared.model.database
+
+import de.dbauer.expensetracker.shared.data.CurrencyValue
+import de.dbauer.expensetracker.shared.data.Recurrence
+import de.dbauer.expensetracker.shared.data.RecurringExpenseData
+import de.dbauer.expensetracker.shared.data.Tag
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+class FakePreviewExpenseRepository : IExpenseRepository {
+    @OptIn(ExperimentalUuidApi::class)
+    private val fakeTags =
+        listOf(
+            Tag(title = "TagTitle1", color = 0xFF00658F, id = Uuid.random().hashCode()),
+            Tag(title = "TagTitle1", color = 0xFF4F616E, id = Uuid.random().hashCode()),
+        )
+    private val fakeExpense =
+        RecurringExpenseData(
+            id = 0,
+            name = "name",
+            description = "description",
+            price = CurrencyValue(10f, "EUR"),
+            monthlyPrice = CurrencyValue(10f, "EUR"),
+            everyXRecurrence = 1,
+            recurrence = Recurrence.Monthly,
+            tags = fakeTags,
+            firstPayment = null,
+            notifyForExpense = true,
+            reminders = emptyList(),
+        )
+
+    override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
+    override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
+    override val allTags: Flow<List<Tag>> = flowOf(fakeTags)
+
+    override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
+        return fakeExpense
+    }
+
+    override suspend fun insert(recurringExpense: RecurringExpenseData) {}
+
+    override suspend fun update(recurringExpense: RecurringExpenseData) {}
+
+    override suspend fun delete(recurringExpense: RecurringExpenseData) {}
+
+    override suspend fun insert(tag: Tag) {}
+
+    override suspend fun update(tag: Tag) {}
+
+    override suspend fun delete(tag: Tag) {}
+}
