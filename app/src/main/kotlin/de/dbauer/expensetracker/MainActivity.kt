@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
                             if (backupRestored) {
                                 // Restart Activity after restoring backup to make sure the repository is updated
                                 finish()
-                                startActivity(intent)
+                                startActivity(Intent(this@MainActivity, MainActivity::class.java))
                             }
                         }
                     }
