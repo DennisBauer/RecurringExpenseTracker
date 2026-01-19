@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
+    alias(libs.plugins.aboutLibraries)
 }
 
 android {
@@ -95,6 +96,15 @@ dependencies {
     implementation(libs.koin.core)
 
     debugImplementation(libs.compose.ui.tooling)
+}
+
+aboutLibraries {
+    export {
+        prettyPrint = true
+        exportVariant = "release"
+        outputFile = file("aboutlibraries.json")
+    }
+    collect.gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
