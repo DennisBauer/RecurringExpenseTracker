@@ -1,6 +1,5 @@
 package de.dbauer.expensetracker.shared.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -100,14 +99,14 @@ fun RecurringExpenseOverview(
             if (isGridMode) {
                 GridRecurringExpense(
                     recurringExpenseData = recurringExpenseData,
-                    onClickItem = {
+                    onClick = {
                         navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
                 )
             } else {
                 RecurringExpense(
                     recurringExpenseData = recurringExpenseData,
-                    onClickItem = {
+                    onClick = {
                         navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
                 )
@@ -182,11 +181,12 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun GridRecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    onClickItem: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.clickable { onClickItem() },
+        onClick = onClick,
+        modifier = modifier,
     ) {
         Column(
             modifier =
@@ -249,11 +249,12 @@ private fun GridRecurringExpense(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
-    onClickItem: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.clickable { onClickItem() },
+        onClick = onClick,
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -285,7 +286,7 @@ private fun RecurringExpense(
                 }
                 HorizontalAssignedTagList(
                     tags = recurringExpenseData.tags,
-                    onTagClick = { onClickItem() },
+                    onTagClick = { onClick() },
                 )
             }
             Column(

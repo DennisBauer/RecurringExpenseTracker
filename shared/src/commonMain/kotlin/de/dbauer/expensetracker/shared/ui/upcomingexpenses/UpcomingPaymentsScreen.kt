@@ -1,6 +1,5 @@
 package de.dbauer.expensetracker.shared.ui.upcomingexpenses
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -142,14 +141,14 @@ private fun UpcomingPaymentsOverview(
                     if (isGridMode) {
                         GridUpcomingPayment(
                             upcomingPaymentData = entry.payment,
-                            onClickItem = {
+                            onClick = {
                                 onClickItem(entry.payment.id)
                             },
                         )
                     } else {
                         UpcomingPayment(
                             upcomingPaymentData = entry.payment,
-                            onClickItem = {
+                            onClick = {
                                 onClickItem(entry.payment.id)
                             },
                         )
@@ -225,12 +224,13 @@ private fun UpcomingPaymentsSummary(
 @Composable
 private fun GridUpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    onClickItem: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
-        modifier = modifier.clickable { onClickItem() },
+        onClick = onClick,
+        modifier = modifier,
     ) {
         Column(
             modifier =
@@ -277,12 +277,13 @@ private fun GridUpcomingPayment(
 @Composable
 private fun UpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
-    onClickItem: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
     Card(
-        modifier = modifier.clickable { onClickItem() },
+        onClick = onClick,
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -312,7 +313,7 @@ private fun UpcomingPayment(
                 )
                 HorizontalAssignedTagList(
                     tags = upcomingPaymentData.tags,
-                    onTagClick = { onClickItem() },
+                    onTagClick = { onClick() },
                 )
             }
             Column(
