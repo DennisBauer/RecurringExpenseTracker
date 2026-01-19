@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.aboutLibraries)
 }
 
 kotlin {
@@ -133,14 +132,6 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
             path.contains("\\generated\\") || path.contains("/generated/")
         }
     }
-}
-
-aboutLibraries {
-    export {
-        prettyPrint = true
-        exportVariant = "release"
-    }
-    collect.gitHubApiToken = System.getenv("ABOUT_LIBRARIES_TOKEN")
 }
 
 dependencies {

@@ -39,7 +39,9 @@ jobs:
           CURRENCY_EXCHANGE_API_KEY: ${{ secrets.CURRENCY_EXCHANGE_API_KEY }}
 
       - name: Update About Libraries json
-        run: ./gradlew :app:exportLibraryDefinitions --no-daemon --no-configuration-cache --no-build-cache
+        run: |
+          ./gradlew :app:exportLibraryDefinitions --no-daemon --no-configuration-cache --no-build-cache
+          mv app/aboutlibraries.json shared/src/commonMain/composeResources/files/
         env:
           ABOUT_LIBRARIES_TOKEN: ${{ secrets.ABOUT_LIBRARIES_TOKEN }}
 
