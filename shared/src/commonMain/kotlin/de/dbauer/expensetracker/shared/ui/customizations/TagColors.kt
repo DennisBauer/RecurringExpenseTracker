@@ -1,0 +1,278 @@
+package de.dbauer.expensetracker.shared.ui.customizations
+
+// Red
+const val RED_50 = 0xFFFEF2F2
+const val RED_100 = 0xFFFEE2E2
+const val RED_200 = 0xFFFECACA
+const val RED_300 = 0xFFFCA5A5
+const val RED_400 = 0xFFF87171
+const val RED_500 = 0xFFEF4444
+const val RED_600 = 0xFFDC2626
+const val RED_700 = 0xFFB91C1C
+const val RED_800 = 0xFF991B1B
+const val RED_900 = 0xFF7F1D1D
+const val RED_950 = 0xFF450A0A
+
+// Orange
+const val ORANGE_50 = 0xFFFFF7ED
+const val ORANGE_100 = 0xFFFFEDD5
+const val ORANGE_200 = 0xFFFED7AA
+const val ORANGE_300 = 0xFFFDBA74
+const val ORANGE_400 = 0xFFFB923C
+const val ORANGE_500 = 0xFFF97316
+const val ORANGE_600 = 0xFFEA580C
+const val ORANGE_700 = 0xFFC2410C
+const val ORANGE_800 = 0xFF9A3412
+const val ORANGE_900 = 0xFF7C2D12
+const val ORANGE_950 = 0xFF431407
+
+// Amber
+const val AMBER_50 = 0xFFFFFBEB
+const val AMBER_100 = 0xFFFEF3C7
+const val AMBER_200 = 0xFFFDE68A
+const val AMBER_300 = 0xFFFCD34D
+const val AMBER_400 = 0xFFFBBF24
+const val AMBER_500 = 0xFFF59E0B
+const val AMBER_600 = 0xFFD97706
+const val AMBER_700 = 0xFFB45309
+const val AMBER_800 = 0xFF92400E
+const val AMBER_900 = 0xFF78350F
+const val AMBER_950 = 0xFF451A03
+
+// Yellow
+const val YELLOW_50 = 0xFFFEFCE8
+const val YELLOW_100 = 0xFFFEF9C3
+const val YELLOW_200 = 0xFFFEF08A
+const val YELLOW_300 = 0xFFFDE047
+const val YELLOW_400 = 0xFFFACC15
+const val YELLOW_500 = 0xFFEAB308
+const val YELLOW_600 = 0xFFCA8A04
+const val YELLOW_700 = 0xFFA16207
+const val YELLOW_800 = 0xFF854D0E
+const val YELLOW_900 = 0xFF713F12
+const val YELLOW_950 = 0xFF422006
+
+// Lime
+const val LIME_50 = 0xFFF7FEE7
+const val LIME_100 = 0xFFECFCCB
+const val LIME_200 = 0xFFD9F99D
+const val LIME_300 = 0xFFBEF264
+const val LIME_400 = 0xFFA3E635
+const val LIME_500 = 0xFF84CC16
+const val LIME_600 = 0xFF65A30D
+const val LIME_700 = 0xFF4D7C0F
+const val LIME_800 = 0xFF3F6212
+const val LIME_900 = 0xFF365314
+const val LIME_950 = 0xFF1A2E05
+
+// Green
+const val GREEN_50 = 0xFFF0FDF4
+const val GREEN_100 = 0xFFDCFCE7
+const val GREEN_200 = 0xFFBBF7D0
+const val GREEN_300 = 0xFF86EFAC
+const val GREEN_400 = 0xFF4ADE80
+const val GREEN_500 = 0xFF22C55E
+const val GREEN_600 = 0xFF16A34A
+const val GREEN_700 = 0xFF15803D
+const val GREEN_800 = 0xFF166534
+const val GREEN_900 = 0xFF14532D
+const val GREEN_950 = 0xFF052E16
+
+// Emerald
+const val EMERALD_50 = 0xFFECFDF5
+const val EMERALD_100 = 0xFFD1FAE5
+const val EMERALD_200 = 0xFFA7F3D0
+const val EMERALD_300 = 0xFF6EE7B7
+const val EMERALD_400 = 0xFF34D399
+const val EMERALD_500 = 0xFF10B981
+const val EMERALD_600 = 0xFF059669
+const val EMERALD_700 = 0xFF047857
+const val EMERALD_800 = 0xFF065F46
+const val EMERALD_900 = 0xFF064E3B
+const val EMERALD_950 = 0xFF022C22
+
+// Teal
+const val TEAL_50 = 0xFFF0FDFA
+const val TEAL_100 = 0xFFCCFBF1
+const val TEAL_200 = 0xFF99F6E4
+const val TEAL_300 = 0xFF5EEAD4
+const val TEAL_400 = 0xFF2DD4BF
+const val TEAL_500 = 0xFF14B8A6
+const val TEAL_600 = 0xFF0D9488
+const val TEAL_700 = 0xFF0F766E
+const val TEAL_800 = 0xFF115E59
+const val TEAL_900 = 0xFF134E4A
+const val TEAL_950 = 0xFF042F2E
+
+// Cyan
+const val CYAN_50 = 0xFFECFEFF
+const val CYAN_100 = 0xFFCFFAFE
+const val CYAN_200 = 0xFFA5F3FC
+const val CYAN_300 = 0xFF67E8F9
+const val CYAN_400 = 0xFF22D3EE
+const val CYAN_500 = 0xFF06B6D4
+const val CYAN_600 = 0xFF0891B2
+const val CYAN_700 = 0xFF0E7490
+const val CYAN_800 = 0xFF155E75
+const val CYAN_900 = 0xFF164E63
+const val CYAN_950 = 0xFF083344
+
+// Sky
+const val SKY_50 = 0xFFF0F9FF
+const val SKY_100 = 0xFFE0F2FE
+const val SKY_200 = 0xFFBAE6FD
+const val SKY_300 = 0xFF7DD3FC
+const val SKY_400 = 0xFF38BDF8
+const val SKY_500 = 0xFF0EA5E9
+const val SKY_600 = 0xFF0284C7
+const val SKY_700 = 0xFF0369A1
+const val SKY_800 = 0xFF075985
+const val SKY_900 = 0xFF0C4A6E
+const val SKY_950 = 0xFF082F49
+
+// Blue
+const val BLUE_50 = 0xFFEFF6FF
+const val BLUE_100 = 0xFFDBEAFE
+const val BLUE_200 = 0xFFBFDBFE
+const val BLUE_300 = 0xFF93C5FD
+const val BLUE_400 = 0xFF60A5FA
+const val BLUE_500 = 0xFF3B82F6
+const val BLUE_600 = 0xFF2563EB
+const val BLUE_700 = 0xFF1D4ED8
+const val BLUE_800 = 0xFF1E40AF
+const val BLUE_900 = 0xFF1E3A8A
+const val BLUE_950 = 0xFF172554
+
+// Indigo
+const val INDIGO_50 = 0xFFEEF2FF
+const val INDIGO_100 = 0xFFE0E7FF
+const val INDIGO_200 = 0xFFC7D2FE
+const val INDIGO_300 = 0xFFA5B4FC
+const val INDIGO_400 = 0xFF818CF8
+const val INDIGO_500 = 0xFF6366F1
+const val INDIGO_600 = 0xFF4F46E5
+const val INDIGO_700 = 0xFF4338CA
+const val INDIGO_800 = 0xFF3730A3
+const val INDIGO_900 = 0xFF312E81
+const val INDIGO_950 = 0xFF1E1B4B
+
+// Violet
+const val VIOLET_50 = 0xFFF5F3FF
+const val VIOLET_100 = 0xFFEDE9FE
+const val VIOLET_200 = 0xFFDDD6FE
+const val VIOLET_300 = 0xFFC4B5FD
+const val VIOLET_400 = 0xFFA78BFA
+const val VIOLET_500 = 0xFF8B5CF6
+const val VIOLET_600 = 0xFF7C3AED
+const val VIOLET_700 = 0xFF6D28D9
+const val VIOLET_800 = 0xFF5B21B6
+const val VIOLET_900 = 0xFF4C1D95
+const val VIOLET_950 = 0xFF2E1065
+
+// Purple
+const val PURPLE_50 = 0xFFFAF5FF
+const val PURPLE_100 = 0xFFF3E8FF
+const val PURPLE_200 = 0xFFE9D5FF
+const val PURPLE_300 = 0xFFD8B4FE
+const val PURPLE_400 = 0xFFC084FC
+const val PURPLE_500 = 0xFFA855F7
+const val PURPLE_600 = 0xFF9333EA
+const val PURPLE_700 = 0xFF7E22CE
+const val PURPLE_800 = 0xFF6B21A8
+const val PURPLE_900 = 0xFF581C87
+const val PURPLE_950 = 0xFF3B0764
+
+// Fuchsia
+const val FUCHSIA_50 = 0xFFFDF4FF
+const val FUCHSIA_100 = 0xFFFAE8FF
+const val FUCHSIA_200 = 0xFFF0D9FF
+const val FUCHSIA_300 = 0xFFE879F9
+const val FUCHSIA_400 = 0xFFD946EF
+const val FUCHSIA_500 = 0xFFC026D3
+const val FUCHSIA_600 = 0xFFA21CAF
+const val FUCHSIA_700 = 0xFF86198F
+const val FUCHSIA_800 = 0xFF701A75
+const val FUCHSIA_900 = 0xFF5F0F5B
+const val FUCHSIA_950 = 0xFF3A023A
+
+// Pink
+const val PINK_50 = 0xFFFDF2F8
+const val PINK_100 = 0xFFFCE7F3
+const val PINK_200 = 0xFFFBCFE8
+const val PINK_300 = 0xFFF9A8D4
+const val PINK_400 = 0xFFF472B6
+const val PINK_500 = 0xFFEC4899
+const val PINK_600 = 0xFFDB2777
+const val PINK_700 = 0xFFBE185D
+const val PINK_800 = 0xFF9D174D
+const val PINK_900 = 0xFF831843
+const val PINK_950 = 0xFF500724
+
+// Rose
+const val ROSE_50 = 0xFFFFF1F2
+const val ROSE_100 = 0xFFFFE4E6
+const val ROSE_200 = 0xFFFECDD3
+const val ROSE_300 = 0xFFFDA4AF
+const val ROSE_400 = 0xFFFB7185
+const val ROSE_500 = 0xFFF43F5E
+const val ROSE_600 = 0xFFE11D48
+const val ROSE_700 = 0xFFBE123C
+const val ROSE_800 = 0xFF9F1239
+const val ROSE_900 = 0xFF881337
+const val ROSE_950 = 0xFF4C0519
+
+// Slate
+const val SLATE_50 = 0xFFF8FAFC
+const val SLATE_100 = 0xFFF1F5F9
+const val SLATE_200 = 0xFFE2E8F0
+const val SLATE_300 = 0xFFCBD5E1
+const val SLATE_400 = 0xFF94A3B8
+const val SLATE_500 = 0xFF64748B
+const val SLATE_600 = 0xFF475569
+const val SLATE_700 = 0xFF334155
+const val SLATE_800 = 0xFF1E293B
+const val SLATE_900 = 0xFF0F172A
+const val SLATE_950 = 0xFF020617
+
+// Stone
+const val STONE_50 = 0xFFFAFAF9
+const val STONE_100 = 0xFFF5F5F4
+const val STONE_200 = 0xFFE7E5E4
+const val STONE_300 = 0xFFD6D3D1
+const val STONE_400 = 0xFFA8A29E
+const val STONE_500 = 0xFF78716C
+const val STONE_600 = 0xFF57534E
+const val STONE_700 = 0xFF44403C
+const val STONE_800 = 0xFF292524
+const val STONE_900 = 0xFF1C1917
+const val STONE_950 = 0xFF0C0A09
+
+data class TagColorFamily(
+    val name: String,
+    val base: Long,
+    val palette: List<Long>,
+)
+
+@Suppress("ktlint:standard:argument-list-wrapping", "ktlint:standard:max-line-length")
+val tagColorFamilies =
+    listOf(
+        TagColorFamily("Red", RED_500, listOf(RED_50, RED_100, RED_200, RED_300, RED_400, RED_500, RED_600, RED_700, RED_800, RED_900, RED_950)),
+        TagColorFamily("Orange", ORANGE_500, listOf(ORANGE_50, ORANGE_100, ORANGE_200, ORANGE_300, ORANGE_400, ORANGE_500, ORANGE_600, ORANGE_700, ORANGE_800, ORANGE_900, ORANGE_950)),
+        TagColorFamily("Amber", AMBER_500, listOf(AMBER_50, AMBER_100, AMBER_200, AMBER_300, AMBER_400, AMBER_500, AMBER_600, AMBER_700, AMBER_800, AMBER_900, AMBER_950)),
+        TagColorFamily("Yellow", YELLOW_500, listOf(YELLOW_50, YELLOW_100, YELLOW_200, YELLOW_300, YELLOW_400, YELLOW_500, YELLOW_600, YELLOW_700, YELLOW_800, YELLOW_900, YELLOW_950)),
+        TagColorFamily("Lime", LIME_500, listOf(LIME_50, LIME_100, LIME_200, LIME_300, LIME_400, LIME_500, LIME_600, LIME_700, LIME_800, LIME_900, LIME_950)),
+        TagColorFamily("Green", GREEN_500, listOf(GREEN_50, GREEN_100, GREEN_200, GREEN_300, GREEN_400, GREEN_500, GREEN_600, GREEN_700, GREEN_800, GREEN_900, GREEN_950)),
+        TagColorFamily("Emerald", EMERALD_500, listOf(EMERALD_50, EMERALD_100, EMERALD_200, EMERALD_300, EMERALD_400, EMERALD_500, EMERALD_600, EMERALD_700, EMERALD_800, EMERALD_900, EMERALD_950)),
+        TagColorFamily("Teal", TEAL_500, listOf(TEAL_50, TEAL_100, TEAL_200, TEAL_300, TEAL_400, TEAL_500, TEAL_600, TEAL_700, TEAL_800, TEAL_900, TEAL_950)),
+        TagColorFamily("Cyan", CYAN_500, listOf(CYAN_50, CYAN_100, CYAN_200, CYAN_300, CYAN_400, CYAN_500, CYAN_600, CYAN_700, CYAN_800, CYAN_900, CYAN_950)),
+        TagColorFamily("Sky", SKY_500, listOf(SKY_50, SKY_100, SKY_200, SKY_300, SKY_400, SKY_500, SKY_600, SKY_700, SKY_800, SKY_900, SKY_950)),
+        TagColorFamily("Blue", BLUE_500, listOf(BLUE_50, BLUE_100, BLUE_200, BLUE_300, BLUE_400, BLUE_500, BLUE_600, BLUE_700, BLUE_800, BLUE_900, BLUE_950)),
+        TagColorFamily("Indigo", INDIGO_500, listOf(INDIGO_50, INDIGO_100, INDIGO_200, INDIGO_300, INDIGO_400, INDIGO_500, INDIGO_600, INDIGO_700, INDIGO_800, INDIGO_900, INDIGO_950)),
+        TagColorFamily("Violet", VIOLET_500, listOf(VIOLET_50, VIOLET_100, VIOLET_200, VIOLET_300, VIOLET_400, VIOLET_500, VIOLET_600, VIOLET_700, VIOLET_800, VIOLET_900, VIOLET_950)),
+        TagColorFamily("Purple", PURPLE_500, listOf(PURPLE_50, PURPLE_100, PURPLE_200, PURPLE_300, PURPLE_400, PURPLE_500, PURPLE_600, PURPLE_700, PURPLE_800, PURPLE_900, PURPLE_950)),
+        TagColorFamily("Fuchsia", FUCHSIA_500, listOf(FUCHSIA_50, FUCHSIA_100, FUCHSIA_200, FUCHSIA_300, FUCHSIA_400, FUCHSIA_500, FUCHSIA_600, FUCHSIA_700, FUCHSIA_800, FUCHSIA_900, FUCHSIA_950)),
+        TagColorFamily("Pink", PINK_500, listOf(PINK_50, PINK_100, PINK_200, PINK_300, PINK_400, PINK_500, PINK_600, PINK_700, PINK_800, PINK_900, PINK_950)),
+        TagColorFamily("Rose", ROSE_500, listOf(ROSE_50, ROSE_100, ROSE_200, ROSE_300, ROSE_400, ROSE_500, ROSE_600, ROSE_700, ROSE_800, ROSE_900, ROSE_950)),
+        TagColorFamily("Slate", SLATE_500, listOf(SLATE_50, SLATE_100, SLATE_200, SLATE_300, SLATE_400, SLATE_500, SLATE_600, SLATE_700, SLATE_800, SLATE_900, SLATE_950)),
+        TagColorFamily("Stone", STONE_500, listOf(STONE_50, STONE_100, STONE_200, STONE_300, STONE_400, STONE_500, STONE_600, STONE_700, STONE_800, STONE_900, STONE_950)),
+    )
