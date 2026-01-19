@@ -27,6 +27,7 @@ class EditRecurringExpenseViewModelTest {
     private lateinit var expenseRepository: FakeExpenseRepository
     private lateinit var userPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var currencyProvider: FakeCurrencyProvider
+    private lateinit var topAppBarMediator: TopAppBarMediator
     private val testDispatcher = StandardTestDispatcher()
 
     @BeforeTest
@@ -35,6 +36,7 @@ class EditRecurringExpenseViewModelTest {
         expenseRepository = FakeExpenseRepository()
         userPreferencesRepository = FakeUserPreferencesRepository()
         currencyProvider = FakeCurrencyProvider()
+        topAppBarMediator = TopAppBarMediator()
     }
 
     @AfterTest
@@ -50,6 +52,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -68,6 +71,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -95,6 +99,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -127,6 +132,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -146,6 +152,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -168,6 +175,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -192,6 +200,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -219,6 +228,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -260,6 +270,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = savedExpenseId,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -303,6 +314,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -339,6 +351,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -375,6 +388,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -392,6 +406,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -415,6 +430,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -440,6 +456,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -464,6 +481,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -505,6 +523,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -545,6 +564,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -586,6 +606,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -627,6 +648,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -668,6 +690,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -709,6 +732,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -754,6 +778,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -795,6 +820,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -819,6 +845,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -844,6 +871,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = null,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 
@@ -888,6 +916,7 @@ class EditRecurringExpenseViewModelTest {
                     expenseId = 1,
                     expenseRepository = expenseRepository,
                     currencyProvider = currencyProvider,
+                    topAppBarMediator = topAppBarMediator,
                     userPreferencesRepository = userPreferencesRepository,
                 )
 

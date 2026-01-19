@@ -10,13 +10,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import de.dbauer.expensetracker.shared.data.BottomNavigation
 import de.dbauer.expensetracker.shared.data.HomePane
+import de.dbauer.expensetracker.shared.data.NavRoute
 import de.dbauer.expensetracker.shared.data.SettingsPane
 import de.dbauer.expensetracker.shared.data.UpcomingPane
 import org.jetbrains.compose.resources.stringResource
@@ -27,39 +28,40 @@ import recurringexpensetracker.shared.generated.resources.bottom_nav_upcoming
 
 @Composable
 fun BottomNavBar(
-    navController: NavController,
+    backStackTop: NavRoute,
+    onClick: (NavRoute) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
     val bottomNavigationItems =
         listOf(
-            BottomNavigation(HomePane, Res.string.bottom_nav_home, Icons.Rounded.Home),
-            BottomNavigation(UpcomingPane, Res.string.bottom_nav_upcoming, Icons.Rounded.Payment),
-            BottomNavigation(SettingsPane, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
+            BottomNavigation(NavRoute.HomePane, Res.string.bottom_nav_home, Icons.Rounded.Home),
+            BottomNavigation(NavRoute.UpcomingPane, Res.string.bottom_nav_upcoming, Icons.Rounded.Payment),
+            BottomNavigation(NavRoute.SettingsPane, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
         )
 
     NavigationBar(modifier = modifier) {
         bottomNavigationItems.forEach { item ->
-            val selected = backStackEntry?.destination?.hasRoute(item.route::class) == true
+            val selected = backStackTop == item.route
 
             NavigationBarItem(
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        navController.graph.findStartDestination().route?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
-                            }
-                        }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
+                    onClick(item.route)
+//                    navController.navigate(item.route) {
+//                        // Pop up to the start destination of the graph to
+//                        // avoid building up a large stack of destinations
+//                        // on the back stack as users select items
+//                        navController.graph.findStartDestination().route?.let { route ->
+//                            popUpTo(route) {
+//                                saveState = true
+//                            }
+//                        }
+//                        // Avoid multiple copies of the same destination when
+//                        // reselecting the same item
+//                        launchSingleTop = true
+//                        // Restore state when reselecting a previously selected item
+//                        restoreState = true
+//                    }
                 },
                 icon = {
                     Icon(

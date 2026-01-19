@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.dbauer.expensetracker.shared.data.CurrencyValue
 import de.dbauer.expensetracker.shared.data.EditExpensePane
+import de.dbauer.expensetracker.shared.data.NavRoute
 import de.dbauer.expensetracker.shared.data.Tag
 import de.dbauer.expensetracker.shared.data.UpcomingPaymentData
 import de.dbauer.expensetracker.shared.toLocaleString
@@ -58,7 +59,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun UpcomingPaymentsScreen(
     isGridMode: Boolean,
-    navController: NavController,
+    navigateTo: (NavRoute) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
@@ -68,7 +69,7 @@ fun UpcomingPaymentsScreen(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
             onClickItem = { expenseId ->
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
-                    navController.navigate(EditExpensePane(expenseId))
+                    navigateTo(NavRoute.EditExpensePane(expenseId))
                 }
             },
             isGridMode = isGridMode,

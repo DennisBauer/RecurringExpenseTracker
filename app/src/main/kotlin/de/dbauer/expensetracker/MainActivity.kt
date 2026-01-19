@@ -40,13 +40,14 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import de.dbauer.expensetracker.shared.model.DatabaseBackupRestore
 import de.dbauer.expensetracker.model.notification.NotificationLoopReceiver
 import de.dbauer.expensetracker.model.notification.startAlarmLooper
 import de.dbauer.expensetracker.shared.asString
 import de.dbauer.expensetracker.shared.data.HomePane
 import de.dbauer.expensetracker.shared.data.MainNavRoute
+import de.dbauer.expensetracker.shared.data.NavRoute
 import de.dbauer.expensetracker.shared.data.UpcomingPane
+import de.dbauer.expensetracker.shared.model.DatabaseBackupRestore
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.notification.ExpenseNotificationManager
 import de.dbauer.expensetracker.shared.security.BiometricPromptManager
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val canUseBiometric = biometricPromptManager.canUseAuthenticator()
-        val startRoute: MainNavRoute =
+        val startRoute: NavRoute =
             IntentCompat
                 .getSerializableExtra(intent, EXTRA_START_ROUTE, String::class.java)
                 ?.let { jsonString ->
@@ -163,9 +164,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 ?: runBlocking {
                     when (userPreferencesRepository.defaultTab.get().first()) {
-                        DefaultTab.Home.value -> HomePane
-                        DefaultTab.Upcoming.value -> UpcomingPane
-                        else -> HomePane
+                        DefaultTab.Home.value -> NavRoute.HomePane
+                        DefaultTab.Upcoming.value -> NavRoute.UpcomingPane
+                        else -> NavRoute.HomePane
                     }
                 }
 

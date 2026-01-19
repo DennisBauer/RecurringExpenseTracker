@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -18,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,20 +28,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import de.dbauer.expensetracker.shared.data.EditExpensePane
-import de.dbauer.expensetracker.shared.data.HomePane
-import de.dbauer.expensetracker.shared.data.MainNavRoute
-import de.dbauer.expensetracker.shared.data.SettingsPane
-import de.dbauer.expensetracker.shared.data.TagsPane
-import de.dbauer.expensetracker.shared.data.UpcomingPane
-import de.dbauer.expensetracker.shared.data.WhatsNew
-import de.dbauer.expensetracker.shared.data.isInRoute
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import de.dbauer.expensetracker.shared.data.NavRoute
 import de.dbauer.expensetracker.shared.ui.editexpense.EditRecurringExpenseScreen
 import de.dbauer.expensetracker.shared.ui.settings.SettingsScreen
 import de.dbauer.expensetracker.shared.ui.tags.TagsScreen
@@ -46,13 +38,12 @@ import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.shared.ui.upcomingexpenses.UpcomingPaymentsScreen
 import de.dbauer.expensetracker.shared.ui.whatsnew.IWhatsNew
 import de.dbauer.expensetracker.shared.viewmodel.MainNavigationViewModel
+import de.dbauer.expensetracker.shared.viewmodel.TopAppBarViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.edit_expense_button_add
-import recurringexpensetracker.shared.generated.resources.home_title
-import recurringexpensetracker.shared.generated.resources.upcoming_title
 import recurringexpensetracker.shared.generated.resources.whats_new_title
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,18 +62,52 @@ fun MainContent(
     onClickRestore: () -> Unit,
     updateWidget: () -> Unit,
     modifier: Modifier = Modifier,
-    startRoute: MainNavRoute = HomePane,
+    startRoute: NavRoute = NavRoute.HomePane,
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
+    topAppBarViewModel: TopAppBarViewModel = koinViewModel<TopAppBarViewModel>(),
     whatsNew: IWhatsNew = koinInject<IWhatsNew>(),
 ) {
-    val navController = rememberNavController()
-    val backStackEntry by navController.currentBackStackEntryAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val currentRoute by mainNavigationViewModel.currentRoute.collectAsState()
+    val topAppBarTitle by topAppBarViewModel.title.collectAsState()
+    val topAppBarShowBackAction by topAppBarViewModel.showBackAction.collectAsState()
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            mainNavigationViewModel.topAppBar()
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(topAppBarTitle),
+                    )
+                },
+                navigationIcon = {
+                    if (topAppBarShowBackAction) {
+                        IconButton(
+                            onClick = {
+                                mainNavigationViewModel.navigateUp()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                },
+                actions = {
+                    topAppBarViewModel.actions.forEach { (icon, contentDescription, onClick) ->
+                        IconButton(
+                            onClick = onClick,
+                        ) {
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = stringResource(contentDescription),
+                            )
+                        }
+                    }
+                },
+            )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) {
@@ -90,18 +115,20 @@ fun MainContent(
             }
         },
         bottomBar = {
-            if (backStackEntry
-                    ?.destination
-                    ?.isInRoute<MainNavRoute>(HomePane, UpcomingPane, SettingsPane) == true
+            if (currentRoute::class in
+                listOf(NavRoute.HomePane::class, NavRoute.UpcomingPane::class, NavRoute.SettingsPane::class)
             ) {
-                BottomNavBar(navController = navController)
+                BottomNavBar(
+                    backStackTop = currentRoute,
+                    onClick = mainNavigationViewModel::onBottomNavClick,
+                )
             }
         },
         floatingActionButton = {
-            if (backStackEntry?.destination?.isInRoute<MainNavRoute>(HomePane, UpcomingPane) == true) {
+            if (currentRoute::class in listOf(NavRoute.HomePane::class, NavRoute.UpcomingPane::class)) {
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate(EditExpensePane())
+                        mainNavigationViewModel.navigate(NavRoute.EditExpensePane())
                     },
                 ) {
                     Icon(
@@ -113,154 +140,106 @@ fun MainContent(
             }
         },
         content = { paddingValues ->
-            NavHost(
-                navController = navController,
-                startDestination = startRoute,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                composable<HomePane> {
-                    mainNavigationViewModel.topAppBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(Res.string.home_title),
-                                )
-                            },
-                            actions = {
-                                ToggleGridModeButton(
-                                    onToggleGridMode = toggleGridMode,
-                                    isGridMode = isGridMode,
-                                )
-                            },
-                        )
-                    }
+            NavDisplay(
+                backStack = mainNavigationViewModel.backStack,
+                onBack = { mainNavigationViewModel.navigateUp() },
+                entryProvider =
+                    entryProvider {
+                        entry<NavRoute.HomePane> { backStackEntry ->
+                            RecurringExpenseOverview(
+                                isGridMode = isGridMode,
+                                navigateTo = { mainNavigationViewModel.navigate(it) },
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
+                                modifier = Modifier.padding(paddingValues),
+                            )
 
-                    RecurringExpenseOverview(
-                        isGridMode = isGridMode,
-                        navController = navController,
-                        contentPadding =
-                            PaddingValues(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                            ),
-                        modifier = Modifier.padding(paddingValues),
-                    )
-
-                    LaunchedEffect(mainNavigationViewModel.shouldShowWhatsNew) {
-                        if (mainNavigationViewModel.shouldShowWhatsNew &&
-                            backStackEntry?.destination?.hasRoute(WhatsNew::class) == false
-                        ) {
-                            navController.navigate(WhatsNew)
-                            mainNavigationViewModel.onWhatsNewShown()
+                            // TODO: Move into the VM itself
+                            LaunchedEffect(mainNavigationViewModel.shouldShowWhatsNew) {
+                                if (mainNavigationViewModel.shouldShowWhatsNew &&
+                                    currentRoute::class != NavRoute.WhatsNew
+                                ) {
+                                    mainNavigationViewModel.navigate(NavRoute.WhatsNew)
+                                }
+                            }
                         }
-                    }
-                }
-                composable<UpcomingPane> {
-                    mainNavigationViewModel.topAppBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(Res.string.upcoming_title),
+                        entry<NavRoute.UpcomingPane> {
+                            UpcomingPaymentsScreen(
+                                isGridMode = isGridMode,
+                                navigateTo = { mainNavigationViewModel.navigate(it) },
+                                contentPadding =
+                                    PaddingValues(
+                                        top = 8.dp,
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                    ),
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                        }
+                        entry<NavRoute.SettingsPane> {
+                            var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
+                            SettingsScreen(
+                                onClickTags = { mainNavigationViewModel.navigate(NavRoute.TagsPane) },
+                                biometricsChecked = biometricSecurity,
+                                onClickBackup = onClickBackup,
+                                onClickRestore = onClickRestore,
+                                onBiometricCheckedChange = onBiometricSecurityChange,
+                                canUseBiometric = canUseBiometric,
+                                canUseNotifications = canUseNotifications,
+                                hasNotificationPermission = hasNotificationPermission,
+                                requestNotificationPermission = requestNotificationPermission,
+                                navigateToPermissionsSettings = navigateToPermissionsSettings,
+                                setTopAppBar = {
+                                    mainNavigationViewModel.topAppBar = it
+                                    topAppBar = it
+                                },
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                            mainNavigationViewModel.topAppBar = topAppBar
+                        }
+                        entry<NavRoute.EditExpensePane> { backStackEntry ->
+                            EditRecurringExpenseScreen(
+                                expenseId = backStackEntry.expenseId,
+                                canUseNotifications = canUseNotifications,
+                                onDismiss = {
+                                    mainNavigationViewModel.navigateUp()
+                                    updateWidget()
+                                },
+                                onEditTagsClick = {
+                                    mainNavigationViewModel.navigate(NavRoute.TagsPane)
+                                },
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                        }
+                        entry<NavRoute.TagsPane> {
+                            TagsScreen(
+                                snackbarHostState = snackbarHostState,
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                        }
+                        entry<NavRoute.WhatsNew> {
+                            mainNavigationViewModel.topAppBar = {
+                                TopAppBar(
+                                    title = {
+                                        Text(
+                                            text = stringResource(Res.string.whats_new_title),
+                                        )
+                                    },
                                 )
-                            },
-                            actions = {
-                                ToggleGridModeButton(
-                                    onToggleGridMode = toggleGridMode,
-                                    isGridMode = isGridMode,
-                                )
-                            },
-                        )
-                    }
-
-                    UpcomingPaymentsScreen(
-                        isGridMode = isGridMode,
-                        navController = navController,
-                        contentPadding =
-                            PaddingValues(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                            ),
-                        modifier = Modifier.padding(paddingValues),
-                    )
-                }
-                composable<SettingsPane> {
-                    var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
-                    SettingsScreen(
-                        onClickTags = { navController.navigate(TagsPane) },
-                        biometricsChecked = biometricSecurity,
-                        onClickBackup = onClickBackup,
-                        onClickRestore = onClickRestore,
-                        onBiometricCheckedChange = onBiometricSecurityChange,
-                        canUseBiometric = canUseBiometric,
-                        canUseNotifications = canUseNotifications,
-                        hasNotificationPermission = hasNotificationPermission,
-                        requestNotificationPermission = requestNotificationPermission,
-                        navigateToPermissionsSettings = navigateToPermissionsSettings,
-                        setTopAppBar = {
-                            mainNavigationViewModel.topAppBar = it
-                            topAppBar = it
-                        },
-                        modifier = Modifier.padding(paddingValues),
-                    )
-                    mainNavigationViewModel.topAppBar = topAppBar
-                }
-                composable<EditExpensePane> { backStackEntry ->
-                    var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
-                    val editExpensePane = backStackEntry.toRoute<EditExpensePane>()
-                    EditRecurringExpenseScreen(
-                        expenseId = editExpensePane.expenseId,
-                        canUseNotifications = canUseNotifications,
-                        onDismiss = {
-                            navController.navigateUp()
-                            updateWidget()
-                        },
-                        onEditTagsClick = {
-                            navController.navigate(TagsPane)
-                        },
-                        setTopAppBar = {
-                            mainNavigationViewModel.topAppBar = it
-                            topAppBar = it
-                        },
-                        modifier = Modifier.padding(paddingValues),
-                    )
-                    mainNavigationViewModel.topAppBar = topAppBar
-                }
-                composable<TagsPane> {
-                    var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
-                    TagsScreen(
-                        onNavigateBack = {
-                            navController.navigateUp()
-                        },
-                        setTopAppBar = {
-                            mainNavigationViewModel.topAppBar = it
-                            topAppBar = it
-                        },
-                        snackbarHostState = snackbarHostState,
-                        modifier = Modifier.padding(paddingValues),
-                    )
-                    mainNavigationViewModel.topAppBar = topAppBar
-                }
-                composable<WhatsNew> {
-                    mainNavigationViewModel.topAppBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(Res.string.whats_new_title),
-                                )
-                            },
-                        )
-                    }
-                    whatsNew.WhatsNewUI(
-                        onDismissRequest = {
-                            mainNavigationViewModel.onWhatsNewShown()
-                            navController.navigateUp()
-                        },
-                        modifier = Modifier.padding(paddingValues),
-                    )
-                }
-            }
+                            }
+                            whatsNew.WhatsNewUI(
+                                onDismissRequest = {
+                                    mainNavigationViewModel.onWhatsNewShown()
+                                },
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                        }
+                    },
+            )
         },
     )
 }

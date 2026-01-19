@@ -76,15 +76,6 @@ fun SettingsScreen(
         modifier = modifier,
     ) {
         composable<SettingsPane> {
-            setTopAppBar {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(Res.string.settings_title),
-                        )
-                    },
-                )
-            }
             SettingsMainScreen(
                 onClickTags = onClickTags,
                 biometricsChecked = biometricsChecked,
