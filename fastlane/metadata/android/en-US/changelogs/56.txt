@@ -1,0 +1,8 @@
+Changelog 0.19.4:
+* Fix: Properly mask ripple effect on expense cards
+* Fix unsafe Intent Lint warning
+* Chinese (Traditional Han script) translation updated
+* Update exchange rates
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.4
