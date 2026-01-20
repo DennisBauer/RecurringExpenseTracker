@@ -70,6 +70,16 @@ android {
     }
 }
 
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        variant.outputs.forEach { variantOutput ->
+            if (variantOutput is com.android.build.api.variant.impl.VariantOutputImpl) {
+                variantOutput.outputFileName.set("${rootProject.name}_${variant.outputs.first().versionName.get()}.apk")
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(project(":shared"))
 
