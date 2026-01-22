@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
-import de.dbauer.expensetracker.shared.security.BiometricPromptManager
-import de.dbauer.expensetracker.shared.security.BiometricPromptManager.BiometricResult
+import de.dbauer.expensetracker.security.BiometricPromptManager
+import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest

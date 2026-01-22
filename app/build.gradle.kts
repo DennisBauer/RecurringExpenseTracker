@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.biometric)
     implementation(libs.androidx.core)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
