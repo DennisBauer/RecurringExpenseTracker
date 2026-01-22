@@ -53,11 +53,6 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.biometric)
-            implementation(libs.room.runtime.android)
-
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }

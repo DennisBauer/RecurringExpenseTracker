@@ -1,4 +1,4 @@
-package de.dbauer.expensetracker.shared.security
+package de.dbauer.expensetracker.security
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity

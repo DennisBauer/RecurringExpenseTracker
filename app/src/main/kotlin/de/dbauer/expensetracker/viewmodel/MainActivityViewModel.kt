@@ -1,4 +1,4 @@
-package de.dbauer.expensetracker.shared.viewmodel
+package de.dbauer.expensetracker.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -40,7 +40,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import de.dbauer.expensetracker.shared.model.DatabaseBackupRestore
+import de.dbauer.expensetracker.model.DatabaseBackupRestore
 import de.dbauer.expensetracker.model.notification.NotificationLoopReceiver
 import de.dbauer.expensetracker.model.notification.startAlarmLooper
 import de.dbauer.expensetracker.shared.asString
@@ -49,13 +49,13 @@ import de.dbauer.expensetracker.shared.data.MainNavRoute
 import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.notification.ExpenseNotificationManager
-import de.dbauer.expensetracker.shared.security.BiometricPromptManager
-import de.dbauer.expensetracker.shared.security.BiometricPromptManager.BiometricResult
+import de.dbauer.expensetracker.security.BiometricPromptManager
+import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
 import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
-import de.dbauer.expensetracker.shared.viewmodel.MainActivityViewModel
+import de.dbauer.expensetracker.viewmodel.MainActivityViewModel
 import de.dbauer.expensetracker.widget.UpcomingPaymentsWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest

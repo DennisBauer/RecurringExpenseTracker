@@ -1,4 +1,4 @@
-package de.dbauer.expensetracker.shared.model
+package de.dbauer.expensetracker.model
 
 import android.content.Context
 import android.net.Uri
