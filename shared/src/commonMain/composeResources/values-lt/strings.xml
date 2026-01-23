@@ -52,7 +52,7 @@
     <string name="tags_color_simple">Paprasta</string>
     <string name="tags_color_custom">Pasirinktinė</string>
     <string name="upcoming_title">Būsimi mokėjimai</string>
-    <string name="upcoming_placeholder_title">Nustatykite pirmąją mokėjimo datą išlaidams, kad žiūrėtumėte būsimų mokėjimų apžvalgą.</string>
+    <string name="upcoming_placeholder_title">Nustatykite pirmąją mokėjimo datą išlaidams, kad matytumėte būsimų mokėjimų apžvalgą.</string>
     <string name="upcoming_time_remaining_today">šiandien</string>
     <string name="upcoming_time_remaining_tomorrow">rytoj</string>
     <string name="upcoming_time_remaining_days">per %1$d dienos (-ų)</string>
