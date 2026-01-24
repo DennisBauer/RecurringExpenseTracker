@@ -1,0 +1,7 @@
+Changelog 0.19.5:
+* Fix: Define minSdkVersion to prevent legacy permissions added to the manifest
+In the last update some legacy permissions were added to the app by accident which got removed again in this update.
+* (Lithuanian) translation updated
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.5
