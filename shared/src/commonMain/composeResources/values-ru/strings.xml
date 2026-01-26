@@ -102,4 +102,5 @@
     <string name="whats_new_title">Что нового-то?</string>
     <string name="settings_about_suggest_or_report">Предложить идею или сообщить про ошибку</string>
     <string name="settings_theme_mode_amoled">Полностью чёрная</string>
+    <string name="top_app_bar_navigate_up_content_desc">Вернуться назад</string>
 </resources>
