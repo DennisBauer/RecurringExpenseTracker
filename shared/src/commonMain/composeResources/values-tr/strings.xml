@@ -38,7 +38,7 @@
     <string name="settings_currency">Para birimi</string>
     <string name="settings_choose_currency">Para Birimi Seçin</string>
     <string name="settings_system_default">Sistem varsayılanı</string>
-    <string name="settings_currency_exchange_last_update">Değişim oranları %1$s\'den itibaren</string>
+    <string name="settings_currency_exchange_last_update">Değişim oranları %1$s'den itibaren</string>
     <string name="settings_show_converted_currency">Dönüştürülen para birimini göster</string>
     <string name="settings_backup_restore">Yedeği geri yükle</string>
     <string name="settings_backup_created_toast">Yedekleme başarılı</string>
@@ -66,10 +66,10 @@
     <string name="notification_expense_reminder_message_today">Bir sonraki ödeme bugün</string>
     <string name="notification_expense_reminder_message_tomorrow">Bir sonraki ödeme yarın</string>
     <string name="notification_expense_reminder_message_days">Sonraki ödeme %1$d gün içinde</string>
-    <string name="widget_configuration_biometric">Widget\'ı kullanabilmek için biyometrik doğrulamayı kapatın</string>
+    <string name="widget_configuration_biometric">Widget'ı kullanabilmek için biyometrik doğrulamayı kapatın</string>
     <string name="widget_configuration_biometric_deactivate">Biyometrik Doğrulamayı Kapat</string>
     <string name="widget_grid_mode">Izgara Modu</string>
-    <string name="widget_configuration_title">Widget\'ı Yapılandır</string>
+    <string name="widget_configuration_title">Widget'ı Yapılandır</string>
     <string name="edit_expense_description_placeholder">ör. özel abonelik</string>
     <string name="settings_backup_not_restored_toast">Yedek geri yüklenirken hata oluştu</string>
     <string name="tags_color">Renk</string>
