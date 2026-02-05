@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dbauer.expensetracker.shared.data.CurrencyOption
@@ -61,6 +62,9 @@ class EditRecurringExpenseViewModel(
 
     var showDeleteConfirmDialog by mutableStateOf(false)
     var showDismissUnsavedChangesDialog by mutableStateOf(false)
+
+    var hasUnsavedChanges by mutableStateOf(false)
+        private set
 
     val isNewExpense = expenseId == null
     val showDeleteButton = !isNewExpense
@@ -118,6 +122,23 @@ class EditRecurringExpenseViewModel(
                 if (notifyForExpense) {
                     reminders.add(Reminder(id = 0, daysBeforePayment = defaultReminderDays))
                 }
+            }
+
+            snapshotFlow {
+                listOf(
+                    nameState,
+                    descriptionState,
+                    priceState,
+                    selectedCurrencyOption,
+                    everyXRecurrenceState,
+                    selectedRecurrence,
+                    firstPaymentDate,
+                    notifyForExpense,
+                    _tags.toMap(),
+                    reminders.toList(),
+                )
+            }.collect {
+                hasUnsavedChanges = checkHasUnsavedChanges()
             }
         }
         viewModelScope.launch {
@@ -270,14 +291,8 @@ class EditRecurringExpenseViewModel(
         }
     }
 
-    fun onBackPressed(onConfirmedDismiss: () -> Unit) {
-        viewModelScope.launch {
-            if (hasUnsavedChanges()) {
-                showDismissUnsavedChangesDialog = true
-            } else {
-                onConfirmedDismiss()
-            }
-        }
+    fun onBackPressedWithUnsavedChanges() {
+        showDismissUnsavedChangesDialog = true
     }
 
     fun onDismissUnsavedChangesDialog() {
@@ -368,7 +383,7 @@ class EditRecurringExpenseViewModel(
     /**
      * Check if there are unsaved changes compared to the database values
      */
-    private suspend fun hasUnsavedChanges(): Boolean {
+    private suspend fun checkHasUnsavedChanges(): Boolean {
         if (expenseId == null) {
             // For new expenses, check if any field has been filled in
             return nameState.isNotBlank() ||

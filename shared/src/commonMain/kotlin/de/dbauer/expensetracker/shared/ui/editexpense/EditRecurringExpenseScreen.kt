@@ -64,13 +64,10 @@ fun EditRecurringExpenseScreen(
         rememberNavigationEventState(
             currentInfo = NavigationEventInfo.None,
         )
-    // This disables the predictive back gesture on this screen to prevent accidental data loss
     NavigationBackHandler(
-        isBackEnabled = false,
+        isBackEnabled = viewModel.hasUnsavedChanges,
         state = backState,
-        onBackCompleted = {
-            viewModel.onBackPressed(onDismiss)
-        },
+        onBackCompleted = viewModel::onBackPressedWithUnsavedChanges,
     )
 
     val scrollState = rememberScrollState()
@@ -232,7 +229,13 @@ fun EditRecurringExpenseScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = { viewModel.onBackPressed(onDismiss) },
+                    onClick = {
+                        if (viewModel.hasUnsavedChanges) {
+                            viewModel.onBackPressedWithUnsavedChanges()
+                        } else {
+                            onDismiss()
+                        }
+                    },
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
