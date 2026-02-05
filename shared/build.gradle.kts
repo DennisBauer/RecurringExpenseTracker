@@ -138,4 +138,6 @@ dependencies {
     add("kspIosArm64", libs.room.compiler)
 
     ktlintRuleset(libs.ktlint)
+
+    androidRuntimeClasspath(libs.compose.ui.tooling)
 }
