@@ -1,0 +1,10 @@
+Changelog 0.19.6:
+* Fix: string character escapes in some languages
+* Fix: Add proper predictive back support for edit expense
+* (Russian) translation updated
+* (French) translation updated
+* (Croatian) translation added
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.6
