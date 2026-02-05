@@ -26,11 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.shared.viewmodel.EditRecurringExpenseViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -58,11 +60,18 @@ fun EditRecurringExpenseScreen(
     modifier: Modifier = Modifier,
     viewModel: EditRecurringExpenseViewModel = koinViewModel { parametersOf(expenseId) },
 ) {
+    val backState =
+        rememberNavigationEventState(
+            currentInfo = NavigationEventInfo.None,
+        )
     // This disables the predictive back gesture on this screen to prevent accidental data loss
-    // TODO: Something to revisit later whether it can be improved
-    BackHandler {
-        viewModel.onBackPressed(onDismiss)
-    }
+    NavigationBackHandler(
+        isBackEnabled = false,
+        state = backState,
+        onBackCompleted = {
+            viewModel.onBackPressed(onDismiss)
+        },
+    )
 
     val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current

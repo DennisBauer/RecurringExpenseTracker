@@ -28,6 +28,7 @@ ksp = "2.3.5"
 ktlint = "0.5.6"
 ktlint-plugin = "14.0.1"
 ktlint-version = "1.8.0"
+navigationevent-compose = "1.0.0"
 room = "2.8.4"
 sqlite = "2.6.2"
 
@@ -68,6 +69,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint" }
 ktlint-version = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-standard", version.ref = "ktlint-version" }
+navigationevent-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigationevent-compose" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "room" }
