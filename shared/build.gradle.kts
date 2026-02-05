@@ -70,6 +70,7 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.backhandler)
             implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.navigationevent.compose)
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
