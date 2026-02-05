@@ -61,6 +61,7 @@ val previewModule =
         singleOf(::CurrencyProvider)
         single<IExpenseRepository> { FakePreviewExpenseRepository() }
         single<IUserPreferencesRepository> { FakeUserPreferencesRepository() }
+        viewModelOf(::MainNavigationViewModel)
         viewModelOf(::TagsScreenViewModel)
         single<IWhatsNew> { FakeWhatsNew() }
     }
