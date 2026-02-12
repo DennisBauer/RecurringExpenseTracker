@@ -97,7 +97,7 @@
     <string name="settings_notifications_subtitle">Rodyti pranešimus apie būsimus mokėjimus</string>
     <string name="settings_notifications_schedule_time">Pranešimo laikas</string>
     <string name="settings_notifications_schedule_days">Dienos iki mokėjimo</string>
-    <string name="settings_notifications_schedule_days_subtitle">%1$d dienos (-ų) iš anksto</string>
+    <string name="settings_notifications_schedule_days_subtitle">%1$d diena (-os, -ų) iš anksto</string>
     <string name="settings_notifications_missing_permission_title">Trūksta leidimo</string>
     <string name="settings_notifications_missing_permission_subtitle">Trūksta pranešimų leidimo. Be šio leidimo programa negali rodyti pranešimų apie būsimus mokėjimus. Spauskite čia ir suteikite jį nustatymuose.</string>
     <string name="settings_about_app">Apie programą</string>
