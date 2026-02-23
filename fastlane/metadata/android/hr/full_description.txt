@@ -1,4 +1,4 @@
-A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
+Praćenje ponavljajućih troškova u Material You dizajnu koje omogućuje praćenje tvojih mjesečnih troškova.
 
 As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, and other regular payments.
 Built with Kotlin Multiplatform and Material You design principles, it provides a simple yet powerful way to track and visualize your recurring financial commitments.
