@@ -44,7 +44,6 @@
     <string name="edit_expense_delete_dialog_text">Möchtest du diese Ausgabe wirklich löschen?</string>
     <string name="edit_expense_unsaved_changes_dialog_title">Ungespeicherte Änderungen</string>
     <string name="edit_expense_unsaved_changes_dialog_text">Du hast ungespeicherte Änderungen. Möchtest du sie verwerfen?</string>
-
     <string name="tags_screen_title">Tags</string>
     <string name="tags_add_new">Neuen Tag erstellen</string>
     <string name="tags_edit">Tag bearbeiten</string>
