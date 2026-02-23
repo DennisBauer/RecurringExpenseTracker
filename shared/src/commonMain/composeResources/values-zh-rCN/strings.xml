@@ -114,10 +114,4 @@
     <string name="widget_configuration_title">配置小组件</string>
     <string name="widget_transparent_background">透明背景</string>
     <string name="whats_new_title">有哪些更新内容？</string>
-    <string name="whats_new_2_title" translatable="false"></string>
-    <string name="whats_new_1_title" translatable="false"></string>
-    <string name="whats_new_1_description" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
-    <string name="whats_new_2_description" translatable="false"></string>
 </resources>

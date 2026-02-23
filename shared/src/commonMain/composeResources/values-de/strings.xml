@@ -126,10 +126,4 @@
     <string name="widget_transparent_background">Transparenter Hintergrund</string>
     <!-- WhatsNew -->
     <string name="whats_new_title">Was ist neu?</string>
-    <string name="whats_new_2_title" translatable="false"></string>
-    <string name="whats_new_1_title" translatable="false"></string>
-    <string name="whats_new_1_description" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
-    <string name="whats_new_2_description" translatable="false"></string>
 </resources>

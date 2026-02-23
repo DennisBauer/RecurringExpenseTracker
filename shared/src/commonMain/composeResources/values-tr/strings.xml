@@ -114,10 +114,4 @@
     <string name="discard">At</string>
     <string name="widget_transparent_background">Şeffaf Arka Plan</string>
     <string name="whats_new_title">Neler Yeni?</string>
-    <string name="whats_new_2_title" translatable="false"></string>
-    <string name="whats_new_1_title" translatable="false"></string>
-    <string name="whats_new_1_description" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
-    <string name="whats_new_2_description" translatable="false"></string>
 </resources>

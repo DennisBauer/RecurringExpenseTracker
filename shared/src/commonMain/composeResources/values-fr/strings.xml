@@ -114,10 +114,4 @@
     <string name="settings_currency_close_search_content_desc">Fermer la recherche</string>
     <string name="settings_currency_clear_search_content_desc">Effacer la recherche</string>
     <string name="discard">Annuler</string>
-    <string name="whats_new_2_title" translatable="false"></string>
-    <string name="whats_new_1_title" translatable="false"></string>
-    <string name="whats_new_1_description" translatable="false"></string>
-    <string name="home_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
-    <string name="whats_new_2_description" translatable="false"></string>
 </resources>
