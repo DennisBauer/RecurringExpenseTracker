@@ -114,4 +114,10 @@
     <string name="save">Išsaugoti</string>
     <string name="discard">Atmesti</string>
     <string name="biometric_prompt_manager_title">Atrakinti „Expense Tracker“</string>
+    <string name="whats_new_2_title" translatable="false"></string>
+    <string name="whats_new_1_title" translatable="false"></string>
+    <string name="whats_new_1_description" translatable="false"></string>
+    <string name="home_title" translatable="false"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="whats_new_2_description" translatable="false"></string>
 </resources>
