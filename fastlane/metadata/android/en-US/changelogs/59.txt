@@ -1,0 +1,7 @@
+Changelog 0.19.7:
+* (Lithuanian) and (Turkish) translation updated
+* Added (German) and (Croatian) store entry translation
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.19.7
