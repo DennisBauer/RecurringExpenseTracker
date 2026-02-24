@@ -152,3 +152,29 @@ jobs:
           releaseFiles: app-release.aab
           track: production
           whatsNewDirectory: whatsnew/
+  update-play-store-metadata:
+    name: Update Play Store Metadata
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+      - name: Install Fastlane
+        run: gem install fastlane
+      - name: Create service account key file
+        run: echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' > service-account.json
+      - name: Update Play Store metadata
+        run: |
+          fastlane supply \
+            --json_key service-account.json \
+            --package_name de.dbauer.expensetracker \
+            --metadata_path fastlane/metadata/android \
+            --skip_upload_apk \
+            --skip_upload_aab \
+            --skip_upload_changelogs
+      - name: Clean up service account key
+        if: always()
+        run: rm -f service-account.json
