@@ -1,0 +1,6 @@
+Eine App im Material You Design, mit der Sie Ihre monatlichen und wiederkehrenden Ausgaben im Blick behalten.
+
+Wie der Name schon sagt, konzentriert sich diese App auf wiederkehrende Ausgaben wie Miete, Versicherungen, Abonnements und andere regelmäßige Zahlungen.
+Es ist eine Kotlin Multiplatform App im Material You Design und bietet eine einfache, aber leistungsstarke Möglichkeit, Ihre wiederkehrenden finanziellen Ausgaben zu verfolgen und zu visualisieren.
+Die App ist intuitiv und übersichtlich gestaltet und hilft Ihnen dabei, genau zu verstehen, wohin Ihr Geld jeden Monat fließt.
+Meine Idee ist es, nach und nach neue Funktionen hinzuzufügen, und ich freue mich über jeden Beitrag. Sie können gerne Funktionswünsche äußern oder Fehler melden, wenn Sie welche finden.
