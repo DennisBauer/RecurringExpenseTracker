@@ -1,0 +1,6 @@
+Praćenje ponavljajućih troškova u Material You dizajnu koje omogućuje praćenje tvojih mjesečnih troškova.
+
+Kao što i samo ime govori, ova se aplikacija fokusira na ponavljajuće troškove poput najamnine, osiguranja, pretplata i drugih redovitih plaćanja.
+Izgrađena s Kotlin Multiplatform i Material You principima dizajna, pruža jednostavan, ali moćan način praćenja i vizualizacije ponavljajućih financijskih obveza.
+Aplikacija je dizajnirana da bude intuitivna i jednostavna, pomažući da točno znaš za što trošiš novac svaki mjesec.
+Moja je ideja iterativno dodavati nove funkcije i radujem se svakom doprinosu. Slobodno pošalji zahtjeve za funkcijama ili prijavi greške ako ih pronađeš.
