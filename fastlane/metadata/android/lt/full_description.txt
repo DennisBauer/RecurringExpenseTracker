@@ -1,6 +1,6 @@
-A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
+„Material You“ pasikartojančių išlaidų stebėkylė, leidžianti sekti mėnesines išlaidas.
 
-As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, and other regular payments.
-Built with Kotlin Multiplatform and Material You design principles, it provides a simple yet powerful way to track and visualize your recurring financial commitments.
-The app is designed to be intuitive and straightforward, helping you understand exactly where your money goes each month.
-My idea is to add new features iteratively, and I'm happy for any contribution. Feel free to make feature requests or report bugs if you find any.
+Kaip galima suprasti iš pavadinimo, ši programa skirta pasikartojantiems išlaidoms kaip nuoma, draudimas, prenumeratos ir kiti įprasti mokėjimai.
+Sukurta naudojant „Kotlin Multiplatform“ ir „Material You“ dizaino principus, ji suteikia paprastą, bet galingą būdą stebėti ir vizualizuoti savo pasikartojančius finansinius įsipareigojimus.
+Programa sukurta būti intuityvi ir paprasta, padedanti jums tiksliai suprasti, kur kiekvieną mėnesį eina jūsų pinigai.
+Mano idėja – nuolat pridėti naujas funkcijas, todėl džiaugiuosi bet kokiu prisidėjimu. Jei pastebėjote riktų, praneškite apie juos arba pateikite funkcijų prašymus.
