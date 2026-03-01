@@ -55,7 +55,7 @@
     <string name="upcoming_placeholder_title">Nustatykite pirmąją mokėjimo datą išlaidams, kad matytumėte būsimų mokėjimų apžvalgą.</string>
     <string name="upcoming_time_remaining_today">šiandien</string>
     <string name="upcoming_time_remaining_tomorrow">rytoj</string>
-    <string name="upcoming_time_remaining_days">per %1$d dienos (-ų)</string>
+    <string name="upcoming_time_remaining_days">per %1$d dieną (-as, -os, -ų)</string>
     <string name="settings_title">Nustatymai</string>
     <string name="settings_general">Bendrieji</string>
     <string name="settings_theme_mode">Temos režimas</string>
