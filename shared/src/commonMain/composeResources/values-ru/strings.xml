@@ -103,4 +103,15 @@
     <string name="settings_about_suggest_or_report">Предложить идею или сообщить про ошибку</string>
     <string name="settings_theme_mode_amoled">Полностью чёрная</string>
     <string name="top_app_bar_navigate_up_content_desc">Вернуться назад</string>
+    <string name="edit_expense_unsaved_changes_dialog_text">У вас есть несохранённые изменения. Хотите их отменить?</string>
+    <string name="edit_expense_notification_add_reminder_content_desc">Добавить напоминание</string>
+    <string name="edit_expense_notification_add_reminder">Добавить</string>
+    <string name="edit_expense_notification_remove_reminder_content_desc">Убрать напоминание</string>
+    <string name="edit_expense_unsaved_changes_dialog_title">Несохранённые изменения</string>
+    <string name="edit_expense_notification_days_before_payment">%1$s дн. до платежа</string>
+    <string name="discard">Отменить</string>
+    <string name="settings_currency_clear_search_content_desc">Отчистить</string>
+    <string name="settings_currency_close_search_content_desc">Закрыть</string>
+    <string name="settings_currency_search_content_desc">Поиск валют</string>
+    <string name="settings_currency_search_placeholder">Поиск валют...</string>
 </resources>

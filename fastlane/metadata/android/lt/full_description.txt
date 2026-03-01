@@ -1,0 +1,6 @@
+„Material You“ pasikartojančių išlaidų stebėkylė, leidžianti sekti mėnesines išlaidas.
+
+Kaip galima suprasti iš pavadinimo, ši programa skirta pasikartojantiems išlaidoms kaip nuoma, draudimas, prenumeratos ir kiti įprasti mokėjimai.
+Sukurta naudojant „Kotlin Multiplatform“ ir „Material You“ dizaino principus, ji suteikia paprastą, bet galingą būdą stebėti ir vizualizuoti savo pasikartojančius finansinius įsipareigojimus.
+Programa sukurta būti intuityvi ir paprasta, padedanti jums tiksliai suprasti, kur kiekvieną mėnesį eina jūsų pinigai.
+Mano idėja – nuolat pridėti naujas funkcijas, todėl džiaugiuosi bet kokiu prisidėjimu. Jei pastebėjote riktų, praneškite apie juos arba pateikite funkcijų prašymus.
