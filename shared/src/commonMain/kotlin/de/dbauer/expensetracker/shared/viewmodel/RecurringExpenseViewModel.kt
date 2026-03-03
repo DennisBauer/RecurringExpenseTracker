@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class RecurringExpenseViewModel(
     private val expenseRepository: IExpenseRepository,
     private val exchangeRateProvider: IExchangeRateProvider,
-    userPreferencesRepository: IUserPreferencesRepository,
+    private val userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
     private val _recurringExpenseData = mutableStateListOf<RecurringExpenseData>()
     val recurringExpenseData: List<RecurringExpenseData>
@@ -27,6 +27,9 @@ class RecurringExpenseViewModel(
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private val showConvertedCurrency = userPreferencesRepository.showConvertedCurrency.get()
+
+    private var _showPersonalExpenses by mutableStateOf(false)
+    val showPersonalExpenses: Boolean get() = _showPersonalExpenses
 
     var currencyPrefix by mutableStateOf("")
         private set
@@ -57,15 +60,28 @@ class RecurringExpenseViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            userPreferencesRepository.showPersonalExpenses.get().collect { value ->
+                _showPersonalExpenses = value
+                updateExpenseSummary()
+            }
+        }
+    }
+
+    fun setShowPersonalExpenses(value: Boolean) {
+        _showPersonalExpenses = value
+        viewModelScope.launch {
+            userPreferencesRepository.showPersonalExpenses.save(value)
+        }
     }
 
     private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpenseData>) {
         _recurringExpenseData.clear()
-        val defaultCurrency = getDefaultCurrencyCode()
+        val defaultCurrencyCode = getDefaultCurrencyCode()
         var atLeastOneWasExchanged = false
         recurringExpenses.forEach {
             var expense = it
-            if (expense.price.currencyCode != defaultCurrency) {
+            if (expense.price.currencyCode != defaultCurrencyCode) {
                 val newPrice = expense.price.currencyValueBasedOnSetting()
                 val newMonthlyPrice = expense.monthlyPrice.currencyValueBasedOnSetting()
                 expense =
@@ -84,14 +100,23 @@ class RecurringExpenseViewModel(
 
     private suspend fun updateExpenseSummary() {
         var price = 0f
+        var personalPrice = 0f
         _recurringExpenseData.forEach {
-            it.monthlyPrice.exchangeToDefaultCurrency()?.let { exchanged ->
-                price += exchanged.value
-            }
+            val value = it.monthlyPrice.exchangeToDefaultCurrency()?.value ?: it.monthlyPrice.value
+            price += value
+            val divided =
+                if (it.isSplit && it.splitBetweenPeople > 1) {
+                    value / it.splitBetweenPeople
+                } else {
+                    value
+                }
+            personalPrice += divided
         }
-        weeklyExpense = (price / (52 / 12f))
-        monthlyExpense = price
-        yearlyExpense = (price * 12)
+
+        val summaryPrice = if (showPersonalExpenses) personalPrice else price
+        weeklyExpense = summaryPrice / (52 / 12f)
+        monthlyExpense = summaryPrice
+        yearlyExpense = summaryPrice * 12
     }
 
     private suspend fun CurrencyValue.currencyValueBasedOnSetting(): CurrencyValue {
