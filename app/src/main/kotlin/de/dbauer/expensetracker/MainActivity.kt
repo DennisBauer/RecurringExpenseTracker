@@ -43,14 +43,14 @@ import com.google.accompanist.permissions.rememberPermissionState
 import de.dbauer.expensetracker.model.DatabaseBackupRestore
 import de.dbauer.expensetracker.model.notification.NotificationLoopReceiver
 import de.dbauer.expensetracker.model.notification.startAlarmLooper
+import de.dbauer.expensetracker.security.BiometricPromptManager
+import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
 import de.dbauer.expensetracker.shared.asString
 import de.dbauer.expensetracker.shared.data.HomePane
 import de.dbauer.expensetracker.shared.data.MainNavRoute
 import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.notification.ExpenseNotificationManager
-import de.dbauer.expensetracker.security.BiometricPromptManager
-import de.dbauer.expensetracker.security.BiometricPromptManager.BiometricResult
 import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
