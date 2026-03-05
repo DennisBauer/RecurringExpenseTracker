@@ -23,3 +23,6 @@
 -dontwarn kotlinx.serialization.internal.AbstractPolymorphicSerializer
 
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
+
+# WorkManager InputMerger subclasses are instantiated via reflection
+-keep class * extends androidx.work.InputMerger { <init>(); }
