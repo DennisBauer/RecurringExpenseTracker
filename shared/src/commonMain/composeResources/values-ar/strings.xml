@@ -46,7 +46,7 @@
     <string name="settings_default_currency">العملة الافتراضية</string>
     <string name="settings_choose_currency">اختر العملة</string>
     <string name="settings_system_default">النظام الافتراضي</string>
-    <string name="settings_currency_exchange_info">النفقات المضافة بعملات مختلفة ستتحول تلقائيًا إلى العملة المختارة.\nأسعار الصرف مضمنة في التطبيق لتجنب الحاجة للاتصال بالإنترنت.</string>
+    <string name="settings_currency_exchange_info">المصروفات المضافة بعملات مختلفة ستتحول تلقائيًا إلى العملة المختارة.\nأسعار الصرف مضمنة في التطبيق لتجنب الحاجة للاتصال بالإنترنت.</string>
     <string name="settings_backup">النسخة الاحتياطية</string>
     <string name="settings_backup_create">إنشاء نسخة احتياطية</string>
     <string name="settings_backup_restore">استعادة النسخة الاحتياطية</string>
@@ -85,7 +85,7 @@
     <string name="settings_title_security">الأمان</string>
     <string name="settings_notifications_subtitle">إظهار تنبيه للمدفوعات المستحقة</string>
     <string name="settings_notifications_schedule_days_subtitle">قبل %1$d أيام</string>
-    <string name="biometric_prompt_manager_title">فتح أداة تتبع النفقات</string>
+    <string name="biometric_prompt_manager_title">فتح أداة تتبع المصروفات</string>
     <string name="biometric_prompt_manager_unlock">فتح</string>
     <string name="notification_expense_reminder">تذكير المصروفات</string>
     <string name="edit_expense_tags">أضف وسوم</string>
