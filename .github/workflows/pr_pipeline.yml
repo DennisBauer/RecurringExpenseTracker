@@ -1,21 +1,22 @@
-name: "PR Pipeline"
+name: PR Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   code_formatting:
     name: Check Code Format
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
 
     permissions:
       actions: read
       contents: read
-      security-events: write
 
     steps:
       - name: Checkout Repository
@@ -27,13 +28,21 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      # Unified Gradle caching: handles ~/.gradle/caches, ~/.gradle/wrapper,
+      # the local build cache, and the configuration cache in one step.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
       - name: Check Code Format
-        run: ./gradlew ktlintCheck --no-daemon --no-configuration-cache --no-build-cache
+        run: ./gradlew ktlintCheck --no-daemon --stacktrace
 
   build_android:
     name: Build Android app and Desktop
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
+    needs: code_formatting
 
     permissions:
       actions: read
@@ -49,6 +58,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      # Unified Gradle caching — reads the cache written by the formatting job
+      # on PRs; pushes an updated cache on main.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Run Build, Lint and Tests
         run: |
@@ -56,7 +72,7 @@ jobs:
 
           EXPECTED_COUNT=11
 
-          ./gradlew build --no-daemon --no-configuration-cache --no-build-cache --stacktrace 2>&1 | tee build_log.txt
+          ./gradlew build --no-daemon --stacktrace 2>&1 | tee build_log.txt
 
           # Count the number of compile warnings (lines starting with "w:").
           WARNING_COUNT=$(grep -c "w: " build_log.txt || true)
