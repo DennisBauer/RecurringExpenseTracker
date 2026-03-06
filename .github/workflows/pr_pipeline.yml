@@ -69,23 +69,10 @@ jobs:
       - name: Run Build, Lint and Tests
         run: |
           set -o pipefail
-
-          EXPECTED_COUNT=11
-
           ./gradlew build --no-daemon --stacktrace 2>&1 | tee build_log.txt
 
-          # Count the number of compile warnings (lines starting with "w:").
-          WARNING_COUNT=$(grep -c "w: " build_log.txt || true)
-
-          # Check if the count exceeds the threshold
-          echo "Found $WARNING_COUNT warnings. Expected exactly $EXPECTED_COUNT."
-          if [ $WARNING_COUNT -ne $EXPECTED_COUNT ]; then
-            echo "❌ Error: The number of warnings ($WARNING_COUNT) does not match the expected count of $EXPECTED_COUNT."
-            # Exit with a non-zero code to fail the workflow.
-            exit 1
-          else
-            echo "✅ The number of warnings is exactly as expected."
-          fi
+      - name: Check compiler warnings against baseline
+        run: bash .github/check-compiler-warnings.sh build_log.txt
 
       - name: Upload Lint SARIF report
         uses: github/codeql-action/upload-sarif@v4

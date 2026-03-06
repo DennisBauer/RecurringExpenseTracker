@@ -1,0 +1,22 @@
+# Kotlin compiler warning baseline
+# Each line is a fixed string that is matched against compiler warning lines (lines starting with "w: ").
+# Warnings matching any entry here are considered known/accepted and do not fail the build.
+# To add a new accepted warning, append its stable identifier below.
+# To enforce that a warning is gone, remove its entry — CI will pass only once no output matches it.
+
+# KLIB resolver duplicate unique_name warnings:
+# These are emitted because Compose Multiplatform bundles its own copies of several
+# AndroidX KLIBs (annotation, collection, lifecycle-*, runtime, savedstate), which
+# conflict with the direct AndroidX dependencies pulled in transitively.
+# Tracked upstream: https://youtrack.jetbrains.com/issue/KT-58551
+KLIB resolver: The same 'unique_name=annotation_commonMain'
+KLIB resolver: The same 'unique_name=collection_commonMain'
+KLIB resolver: The same 'unique_name=lifecycle-common_commonMain'
+KLIB resolver: The same 'unique_name=lifecycle-runtime-compose_commonMain'
+KLIB resolver: The same 'unique_name=lifecycle-runtime_commonMain'
+KLIB resolver: The same 'unique_name=lifecycle-viewmodel-savedstate_commonMain'
+KLIB resolver: The same 'unique_name=lifecycle-viewmodel_commonMain'
+KLIB resolver: The same 'unique_name=runtime-saveable_commonMain'
+KLIB resolver: The same 'unique_name=runtime_commonMain'
+KLIB resolver: The same 'unique_name=savedstate-compose_commonMain'
+KLIB resolver: The same 'unique_name=savedstate_commonMain'
