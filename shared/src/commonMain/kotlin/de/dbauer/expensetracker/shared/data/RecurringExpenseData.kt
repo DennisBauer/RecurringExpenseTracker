@@ -37,6 +37,8 @@ data class RecurringExpenseData(
     val firstPayment: Instant?,
     val notifyForExpense: Boolean,
     val reminders: List<Reminder> = emptyList(),
+    val isSplit: Boolean = false,
+    val splitBetweenPeople: Int = 1,
 ) {
     fun getNextPaymentDay(): LocalDate? {
         if (firstPayment == null) return null

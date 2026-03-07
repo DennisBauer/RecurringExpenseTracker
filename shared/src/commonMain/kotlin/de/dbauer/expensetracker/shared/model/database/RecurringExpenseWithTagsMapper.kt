@@ -26,6 +26,8 @@ internal fun RecurringExpenseWithTagsEntry.toRecurringExpenseData(
         firstPayment = this.expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
         notifyForExpense = this.expense.notifyForExpense,
         reminders = this.reminders.toReminders(),
+        isSplit = this.expense.isSplit,
+        splitBetweenPeople = this.expense.splitBetweenPeople,
     )
 }
 

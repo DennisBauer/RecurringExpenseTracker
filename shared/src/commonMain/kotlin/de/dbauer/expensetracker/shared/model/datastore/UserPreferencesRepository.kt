@@ -64,4 +64,5 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) :
         Preference(booleanPreferencesKey("WIDGET_BACKGROUND_TRANSPARENT"), false)
     override val whatsNewVersionShown: IUserPreferencesRepository.IPreference<Int> =
         Preference(intPreferencesKey("WHATS_NEW_VERSION_SHOWN"), 0)
+    override val showPersonalExpenses = Preference(booleanPreferencesKey("SHOW_PERSONAL_EXPENSES"), false)
 }

@@ -23,7 +23,7 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
         ExpenseTagCrossRefEntry::class,
         ReminderEntry::class,
     ],
-    version = 9,
+    version = 10,
 )
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
@@ -40,6 +40,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_6_7)
                 .addMigrations(migration_7_8)
                 .addMigrations(migration_8_9)
+                .addMigrations(migration_9_10)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -303,6 +304,18 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     connection.execSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
 
                     connection.execSQL("PRAGMA foreign_keys=ON")
+                }
+            }
+
+        private val migration_9_10 =
+            object : Migration(9, 10) {
+                override fun migrate(connection: SQLiteConnection) {
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN isSplit INTEGER NOT NULL DEFAULT 0",
+                    )
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN splitBetweenPeople INTEGER NOT NULL DEFAULT 1",
+                    )
                 }
             }
     }

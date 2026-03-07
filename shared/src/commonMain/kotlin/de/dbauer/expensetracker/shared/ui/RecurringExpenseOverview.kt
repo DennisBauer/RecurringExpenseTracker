@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker.shared.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,11 +18,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +47,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.shared.generated.resources.Res
+import recurringexpensetracker.shared.generated.resources.edit_expense_split_between
 import recurringexpensetracker.shared.generated.resources.home_summary_monthly
+import recurringexpensetracker.shared.generated.resources.home_summary_personal
+import recurringexpensetracker.shared.generated.resources.home_summary_total
 import recurringexpensetracker.shared.generated.resources.home_summary_weekly
 import recurringexpensetracker.shared.generated.resources.home_summary_yearly
 
@@ -91,6 +98,8 @@ fun RecurringExpenseOverview(
                 weeklyExpense = weeklyExpense,
                 monthlyExpense = monthlyExpense,
                 yearlyExpense = yearlyExpense,
+                showPersonalExpenses = recurringExpenseViewModel.showPersonalExpenses,
+                onShowPersonalExpensesChange = recurringExpenseViewModel::setShowPersonalExpenses,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
         }
@@ -99,6 +108,7 @@ fun RecurringExpenseOverview(
             if (isGridMode) {
                 GridRecurringExpense(
                     recurringExpenseData = recurringExpenseData,
+                    showPersonalExpenses = recurringExpenseViewModel.showPersonalExpenses,
                     onClick = {
                         navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
@@ -106,6 +116,7 @@ fun RecurringExpenseOverview(
             } else {
                 RecurringExpense(
                     recurringExpenseData = recurringExpenseData,
+                    showPersonalExpenses = recurringExpenseViewModel.showPersonalExpenses,
                     onClick = {
                         navController.navigate(EditExpensePane(recurringExpenseData.id))
                     },
@@ -129,6 +140,8 @@ private fun RecurringExpenseSummary(
     weeklyExpense: String,
     monthlyExpense: String,
     yearlyExpense: String,
+    showPersonalExpenses: Boolean,
+    onShowPersonalExpensesChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -138,6 +151,43 @@ private fun RecurringExpenseSummary(
                 .fillMaxWidth()
                 .padding(8.dp),
     ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier =
+                Modifier
+                    .clickable { onShowPersonalExpensesChange(!showPersonalExpenses) }
+                    .padding(8.dp),
+        ) {
+            Text(
+                text = stringResource(Res.string.home_summary_total),
+                style = MaterialTheme.typography.labelLarge,
+                color =
+                    if (!showPersonalExpenses) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                fontWeight = if (!showPersonalExpenses) FontWeight.Bold else FontWeight.Normal,
+            )
+            Switch(
+                checked = showPersonalExpenses,
+                onCheckedChange = onShowPersonalExpensesChange,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            )
+            Text(
+                text = stringResource(Res.string.home_summary_personal),
+                style = MaterialTheme.typography.labelLarge,
+                color =
+                    if (showPersonalExpenses) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                fontWeight = if (showPersonalExpenses) FontWeight.Bold else FontWeight.Normal,
+            )
+        }
+
         Text(
             text = stringResource(Res.string.home_summary_monthly),
             style = MaterialTheme.typography.titleLarge,
@@ -181,9 +231,33 @@ private fun RecurringExpenseSummary(
 @Composable
 private fun GridRecurringExpense(
     recurringExpenseData: RecurringExpenseData,
+    showPersonalExpenses: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val monthlyPrice =
+        if (showPersonalExpenses && recurringExpenseData.isSplit &&
+            recurringExpenseData.splitBetweenPeople > 1
+        ) {
+            recurringExpenseData.monthlyPrice.copy(
+                value =
+                    recurringExpenseData.monthlyPrice.value / recurringExpenseData.splitBetweenPeople,
+            )
+        } else {
+            recurringExpenseData.monthlyPrice
+        }
+    val price =
+        if (showPersonalExpenses && recurringExpenseData.isSplit &&
+            recurringExpenseData.splitBetweenPeople > 1
+        ) {
+            recurringExpenseData.price.copy(
+                value =
+                    recurringExpenseData.price.value / recurringExpenseData.splitBetweenPeople,
+            )
+        } else {
+            recurringExpenseData.price
+        }
+
     Card(
         onClick = onClick,
         modifier = modifier,
@@ -224,11 +298,26 @@ private fun GridRecurringExpense(
                     ) {
                         Text(
                             text =
-                                "${recurringExpenseData.price.toCurrencyString()} / " +
+                                "${price.toCurrencyString()} / " +
                                     "${recurringExpenseData.everyXRecurrence} " +
                                     stringResource(recurringExpenseData.recurrence.shortStringRes),
                             style = MaterialTheme.typography.bodySmall,
                         )
+                    }
+                    if (recurringExpenseData.isSplit && recurringExpenseData.splitBetweenPeople > 1) {
+                        Text(
+                            text =
+                                stringResource(
+                                    Res.string.edit_expense_split_between,
+                                    recurringExpenseData.splitBetweenPeople,
+                                ),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    if (recurringExpenseData.recurrence != Recurrence.Monthly ||
+                        recurringExpenseData.everyXRecurrence != 1 ||
+                        (recurringExpenseData.isSplit && recurringExpenseData.splitBetweenPeople > 1)
+                    ) {
                         Spacer(modifier = Modifier.size(4.dp))
                     }
                     HorizontalAssignedTagColorsList(
@@ -236,7 +325,7 @@ private fun GridRecurringExpense(
                     )
                 }
                 Text(
-                    text = recurringExpenseData.monthlyPrice.toCurrencyString(),
+                    text = monthlyPrice.toCurrencyString(),
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -249,9 +338,33 @@ private fun GridRecurringExpense(
 @Composable
 private fun RecurringExpense(
     recurringExpenseData: RecurringExpenseData,
+    showPersonalExpenses: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val monthlyPrice =
+        if (showPersonalExpenses && recurringExpenseData.isSplit &&
+            recurringExpenseData.splitBetweenPeople > 1
+        ) {
+            recurringExpenseData.monthlyPrice.copy(
+                value =
+                    recurringExpenseData.monthlyPrice.value / recurringExpenseData.splitBetweenPeople,
+            )
+        } else {
+            recurringExpenseData.monthlyPrice
+        }
+    val price =
+        if (showPersonalExpenses && recurringExpenseData.isSplit &&
+            recurringExpenseData.splitBetweenPeople > 1
+        ) {
+            recurringExpenseData.price.copy(
+                value =
+                    recurringExpenseData.price.value / recurringExpenseData.splitBetweenPeople,
+            )
+        } else {
+            recurringExpenseData.price
+        }
+
     Card(
         onClick = onClick,
         modifier = modifier,
@@ -297,7 +410,7 @@ private fun RecurringExpense(
                         .padding(bottom = if (recurringExpenseData.tags.isEmpty()) 0.dp else 8.dp),
             ) {
                 Text(
-                    text = recurringExpenseData.monthlyPrice.toCurrencyString(),
+                    text = monthlyPrice.toCurrencyString(),
                     style = MaterialTheme.typography.titleLarge,
                 )
                 if (recurringExpenseData.recurrence != Recurrence.Monthly ||
@@ -305,10 +418,21 @@ private fun RecurringExpense(
                 ) {
                     Text(
                         text =
-                            "${recurringExpenseData.price.toCurrencyString()} / " +
+                            "${price.toCurrencyString()} / " +
                                 "${recurringExpenseData.everyXRecurrence} " +
                                 stringResource(recurringExpenseData.recurrence.shortStringRes),
                         style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.End,
+                    )
+                }
+                if (recurringExpenseData.isSplit && recurringExpenseData.splitBetweenPeople > 1) {
+                    Text(
+                        text =
+                            stringResource(
+                                Res.string.edit_expense_split_between,
+                                recurringExpenseData.splitBetweenPeople,
+                            ),
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.End,
                     )
                 }

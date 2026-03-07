@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -98,6 +99,12 @@ fun EditRecurringExpenseScreen(
             onSelectCurrencyOption = { viewModel.selectedCurrencyOption = it },
             onNext = { localFocusManager.moveFocus(FocusDirection.Next) },
             currencyInputError = viewModel.currencyError,
+        )
+        SplitOption(
+            isSplit = viewModel.isSplit,
+            onIsSplitChange = { viewModel.isSplit = it },
+            splitBetweenPeople = viewModel.splitBetweenPeople,
+            onSplitBetweenPeopleChange = { viewModel.splitBetweenPeople = it },
         )
         RecurrenceOption(
             everyXRecurrence = viewModel.everyXRecurrenceState,

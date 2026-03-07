@@ -69,6 +69,9 @@ class EditRecurringExpenseViewModel(
     val isNewExpense = expenseId == null
     val showDeleteButton = !isNewExpense
 
+    var isSplit by mutableStateOf(false)
+    var splitBetweenPeople by mutableIntStateOf(2)
+
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private var defaultReminderDays by mutableIntStateOf(0)
 
@@ -97,6 +100,9 @@ class EditRecurringExpenseViewModel(
                         }
                         notifyForExpense = expense.notifyForExpense
                         reminders.clear()
+
+                        isSplit = expense.isSplit
+                        splitBetweenPeople = if (expense.splitBetweenPeople < 2) 2 else expense.splitBetweenPeople
 
                         // If no custom reminders exist but notifications are enabled, show global default
                         if (expense.reminders.isEmpty() && expense.notifyForExpense) {
@@ -136,6 +142,8 @@ class EditRecurringExpenseViewModel(
                     notifyForExpense,
                     _tags.toMap(),
                     reminders.toList(),
+                    isSplit,
+                    splitBetweenPeople,
                 )
             }.collect {
                 hasUnsavedChanges = checkHasUnsavedChanges()
@@ -330,6 +338,8 @@ class EditRecurringExpenseViewModel(
             firstPayment = firstPaymentDate,
             notifyForExpense = notifyForExpense,
             reminders = reminders.sortedBy { it.daysBeforePayment },
+            isSplit = isSplit,
+            splitBetweenPeople = splitBetweenPeople,
         )
     }
 
@@ -395,7 +405,9 @@ class EditRecurringExpenseViewModel(
                 tags.any { it.second } ||
                 !notifyForExpense ||
                 reminders.size != 1 ||
-                reminders.firstOrNull()?.daysBeforePayment != defaultReminderDays
+                reminders.firstOrNull()?.daysBeforePayment != defaultReminderDays ||
+                isSplit ||
+                splitBetweenPeople != 2
         } else {
             // For existing expenses, compare with database values
             val expense = expenseRepository.getRecurringExpenseById(expenseId) ?: return false
@@ -409,6 +421,8 @@ class EditRecurringExpenseViewModel(
             if (selectedRecurrence != expense.recurrence) return true
             if (firstPaymentDate != expense.firstPayment) return true
             if (notifyForExpense != expense.notifyForExpense) return true
+            if (isSplit != expense.isSplit) return true
+            if (splitBetweenPeople != expense.splitBetweenPeople) return true
 
             // Compare tags
             val currentSelectedTags = tags.filter { it.second }.map { it.first }.toSet()
