@@ -103,7 +103,7 @@
     <string name="edit_expense_notification_remove_reminder_content_desc">أزِل التذكير</string>
     <string name="edit_expense_notification_days_before_payment">قبل موعد الدفع بـ %1$s يومًا</string>
     <string name="edit_expense_unsaved_changes_dialog_title">تغييرات غير محفوظة</string>
-    <string name="edit_expense_unsaved_changes_dialog_text">لديك تغييرات غير محفوظة. أتريد إهمالها؟</string>
+    <string name="edit_expense_unsaved_changes_dialog_text">لديك تغييرات غير محفوظة. أتريد تجاهلها؟</string>
     <string name="tags_color_simple">بسيط</string>
     <string name="tags_color_custom">مخصّص</string>
     <string name="settings_theme_mode_amoled">أموليد (AMOLED)</string>
@@ -112,6 +112,6 @@
     <string name="settings_currency_close_search_content_desc">أغلِق البحث</string>
     <string name="settings_currency_clear_search_content_desc">امحُ البحث</string>
     <string name="settings_about_suggest_or_report">ساهم بفكرة أو أبلغ عن علة</string>
-    <string name="discard">أهمِل</string>
+    <string name="discard">تجاهل</string>
     <string name="whats_new_title">ما الجديد؟</string>
 </resources>
