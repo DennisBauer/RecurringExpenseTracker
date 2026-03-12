@@ -136,7 +136,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
-        uses: mikepenz/action-gh-release@v1
+        uses: mikepenz/action-gh-release@v2
         with:
           body: ${{steps.github_release.outputs.changelog}}
           draft: true
