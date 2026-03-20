@@ -3,7 +3,7 @@ package de.dbauer.expensetracker.shared.ui.theme
 import androidx.compose.runtime.Composable
 import de.dbauer.expensetracker.shared.di.previewModule
 import de.dbauer.expensetracker.shared.ui.ThemeMode
-import org.koin.compose.KoinApplication
+import org.koin.compose.KoinApplicationPreview
 
 @Composable
 fun ExpenseTrackerThemePreview(
@@ -11,8 +11,7 @@ fun ExpenseTrackerThemePreview(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    KoinApplication(application = {
-        // your preview config here
+    KoinApplicationPreview(application = {
         modules(previewModule)
     }) {
         ExpenseTrackerTheme(
