@@ -31,7 +31,7 @@ jobs:
       # Unified Gradle caching: handles ~/.gradle/caches, ~/.gradle/wrapper,
       # the local build cache, and the configuration cache in one step.
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
@@ -62,7 +62,7 @@ jobs:
       # Unified Gradle caching — reads the cache written by the formatting job
       # on PRs; pushes an updated cache on main.
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
