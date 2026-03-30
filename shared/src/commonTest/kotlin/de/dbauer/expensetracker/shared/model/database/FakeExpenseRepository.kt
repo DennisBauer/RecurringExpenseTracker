@@ -12,6 +12,8 @@ class FakeExpenseRepository : IExpenseRepository {
     private val tags = mutableMapOf<Int, Tag>()
     private val tagsFlow = MutableStateFlow<List<Tag>>(emptyList())
 
+    private val paymentRecords = mutableMapOf<Int, MutableSet<Long>>()
+
     override val allRecurringExpenses: Flow<List<RecurringExpenseData>>
         get() = expensesFlow
     override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
@@ -51,6 +53,24 @@ class FakeExpenseRepository : IExpenseRepository {
     override suspend fun delete(tag: Tag) {
         tags.remove(tag.id)
         tagsFlow.value = tags.values.toList()
+    }
+
+    override suspend fun markAsPaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) {
+        paymentRecords.getOrPut(expenseId) { mutableSetOf() }.add(paymentDateEpoch)
+    }
+
+    override suspend fun markAsUnpaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) {
+        paymentRecords[expenseId]?.remove(paymentDateEpoch)
+    }
+
+    override suspend fun getPaymentRecordsForExpense(expenseId: Int): List<Long> {
+        return paymentRecords[expenseId]?.toList() ?: emptyList()
     }
 
     fun clearExpenses() {

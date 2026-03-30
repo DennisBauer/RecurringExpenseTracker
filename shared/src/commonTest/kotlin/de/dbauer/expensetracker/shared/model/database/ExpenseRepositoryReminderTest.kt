@@ -126,6 +126,35 @@ class ExpenseRepositoryReminderTest {
         override suspend fun getRemindersForExpense(expenseId: Int): List<ReminderEntry> {
             return reminders.values.filter { it.expenseId == expenseId }
         }
+
+        private val paymentRecords = mutableMapOf<Int, MutableList<PaymentRecordEntry>>()
+        private var nextPaymentRecordId = 1
+
+        override suspend fun insertPaymentRecord(paymentRecord: PaymentRecordEntry): Long {
+            val id = if (paymentRecord.id == 0) nextPaymentRecordId++ else paymentRecord.id
+            val recordWithId = paymentRecord.copy(id = id)
+            paymentRecords.getOrPut(recordWithId.expenseId) { mutableListOf() }.add(recordWithId)
+            return id.toLong()
+        }
+
+        override suspend fun deletePaymentRecord(paymentRecord: PaymentRecordEntry) {
+            paymentRecords[paymentRecord.expenseId]?.removeAll { it.id == paymentRecord.id }
+        }
+
+        override suspend fun getPaymentRecordsForExpense(expenseId: Int): List<PaymentRecordEntry> {
+            return paymentRecords[expenseId] ?: emptyList()
+        }
+
+        override suspend fun getPaymentRecord(
+            expenseId: Int,
+            paymentDate: Long,
+        ): PaymentRecordEntry? {
+            return paymentRecords[expenseId]?.find { it.paymentDate == paymentDate }
+        }
+
+        override suspend fun deleteAllPaymentRecordsForExpenseId(expenseId: Int) {
+            paymentRecords.remove(expenseId)
+        }
     }
 
     @BeforeTest

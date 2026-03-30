@@ -75,4 +75,22 @@ interface RecurringExpenseDao {
 
     @Query("SELECT * FROM reminders WHERE expenseId = :expenseId")
     suspend fun getRemindersForExpense(expenseId: Int): List<ReminderEntry>
+
+    @Insert
+    suspend fun insertPaymentRecord(paymentRecord: PaymentRecordEntry): Long
+
+    @Delete
+    suspend fun deletePaymentRecord(paymentRecord: PaymentRecordEntry)
+
+    @Query("SELECT * FROM payment_records WHERE expenseId = :expenseId")
+    suspend fun getPaymentRecordsForExpense(expenseId: Int): List<PaymentRecordEntry>
+
+    @Query("SELECT * FROM payment_records WHERE expenseId = :expenseId AND paymentDate = :paymentDate LIMIT 1")
+    suspend fun getPaymentRecord(
+        expenseId: Int,
+        paymentDate: Long,
+    ): PaymentRecordEntry?
+
+    @Query("DELETE FROM payment_records WHERE expenseId = :expenseId")
+    suspend fun deleteAllPaymentRecordsForExpenseId(expenseId: Int)
 }

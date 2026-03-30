@@ -14,6 +14,7 @@ internal fun RecurringExpenseData.toEntryRecurringExpense(defaultCurrencyCode: S
         firstPayment = this.firstPayment?.toEpochMilliseconds(),
         currencyCode = if (defaultCurrencyCode != this.price.currencyCode) this.price.currencyCode else "",
         notifyForExpense = this.notifyForExpense,
+        requireManualConfirmation = this.requireManualConfirmation,
     )
 }
 

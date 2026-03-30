@@ -50,4 +50,16 @@ class FakePreviewExpenseRepository : IExpenseRepository {
     override suspend fun update(tag: Tag) {}
 
     override suspend fun delete(tag: Tag) {}
+
+    override suspend fun markAsPaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) {}
+
+    override suspend fun markAsUnpaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) {}
+
+    override suspend fun getPaymentRecordsForExpense(expenseId: Int): List<Long> = emptyList()
 }

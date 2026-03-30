@@ -22,8 +22,9 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
         TagEntry::class,
         ExpenseTagCrossRefEntry::class,
         ReminderEntry::class,
+        PaymentRecordEntry::class,
     ],
-    version = 9,
+    version = 10,
 )
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
@@ -40,6 +41,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_6_7)
                 .addMigrations(migration_7_8)
                 .addMigrations(migration_8_9)
+                .addMigrations(migration_9_10)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -303,6 +305,27 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     connection.execSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
 
                     connection.execSQL("PRAGMA foreign_keys=ON")
+                }
+            }
+        val migration_9_10 =
+            object : Migration(9, 10) {
+                override fun migrate(connection: SQLiteConnection) {
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN requireManualConfirmation INTEGER NOT NULL DEFAULT 0",
+                    )
+                    connection.execSQL(
+                        """
+                        CREATE TABLE IF NOT EXISTS `payment_records` (
+                            `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            `expenseId` INTEGER NOT NULL,
+                            `paymentDate` INTEGER NOT NULL,
+                            FOREIGN KEY(`expenseId`) REFERENCES `recurring_expenses`(`id`) ON DELETE CASCADE
+                        )
+                        """.trimIndent(),
+                    )
+                    connection.execSQL(
+                        "CREATE INDEX IF NOT EXISTS `index_payment_records_expenseId` ON `payment_records` (`expenseId`)",
+                    )
                 }
             }
     }

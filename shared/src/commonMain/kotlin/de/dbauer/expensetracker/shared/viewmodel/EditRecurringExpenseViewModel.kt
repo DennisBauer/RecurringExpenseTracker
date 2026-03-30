@@ -57,6 +57,8 @@ class EditRecurringExpenseViewModel(
     var reminders = mutableStateListOf<Reminder>()
         private set
 
+    var requireManualConfirmation by mutableStateOf(false)
+
     // Store the last reminder configuration before disabling
     private var lastRemindersBeforeDisabling = mutableListOf<Reminder>()
 
@@ -96,6 +98,7 @@ class EditRecurringExpenseViewModel(
                             _tags[it] = true
                         }
                         notifyForExpense = expense.notifyForExpense
+                        requireManualConfirmation = expense.requireManualConfirmation
                         reminders.clear()
 
                         // If no custom reminders exist but notifications are enabled, show global default
@@ -134,6 +137,7 @@ class EditRecurringExpenseViewModel(
                     selectedRecurrence,
                     firstPaymentDate,
                     notifyForExpense,
+                    requireManualConfirmation,
                     _tags.toMap(),
                     reminders.toList(),
                 )
@@ -330,6 +334,7 @@ class EditRecurringExpenseViewModel(
             firstPayment = firstPaymentDate,
             notifyForExpense = notifyForExpense,
             reminders = reminders.sortedBy { it.daysBeforePayment },
+            requireManualConfirmation = requireManualConfirmation,
         )
     }
 
@@ -394,6 +399,7 @@ class EditRecurringExpenseViewModel(
                 firstPaymentDate != null ||
                 tags.any { it.second } ||
                 !notifyForExpense ||
+                requireManualConfirmation ||
                 reminders.size != 1 ||
                 reminders.firstOrNull()?.daysBeforePayment != defaultReminderDays
         } else {
@@ -409,6 +415,7 @@ class EditRecurringExpenseViewModel(
             if (selectedRecurrence != expense.recurrence) return true
             if (firstPaymentDate != expense.firstPayment) return true
             if (notifyForExpense != expense.notifyForExpense) return true
+            if (requireManualConfirmation != expense.requireManualConfirmation) return true
 
             // Compare tags
             val currentSelectedTags = tags.filter { it.second }.map { it.first }.toSet()
