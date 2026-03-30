@@ -24,5 +24,9 @@
 
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
 
+# Ensure all Previews have been stripped https://issuetracker.google.com/issues/157891235#comment6
+-checkdiscard class * { @androidx.compose.ui.tooling.preview.Preview <methods>; }
+-keepclassmembers,allowshrinking class * { @androidx.compose.ui.tooling.preview.Preview <methods>; }
+
 # WorkManager InputMerger subclasses are instantiated via reflection
 -keep class * extends androidx.work.InputMerger { <init>(); }
