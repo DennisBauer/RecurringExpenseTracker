@@ -68,38 +68,21 @@ internal fun WhatsNewUI(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 val isLastPage = pagerState.currentPage == whatsNewSlides.size - 1
-
-                val dismissButtonAlpha by animateFloatAsState(
-                    targetValue = if (isLastPage) 1f else 0f,
-                    label = "dismissButtonAlpha",
-                )
-
-                val continueButtonAlpha by animateFloatAsState(
-                    targetValue = if (isLastPage) 0f else 1f,
-                    label = "continueButtonAlpha",
-                )
-
-                Box(
-                    contentAlignment = Alignment.Center,
-                ) {
+                if (isLastPage) {
+                    Button(
+                        onClick = onDismissRequest,
+                    ) {
+                        Text(text = stringResource(Res.string.dialog_ok))
+                    }
+                } else {
                     Button(
                         onClick = {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         },
-                        enabled = !isLastPage,
-                        modifier = Modifier.alpha(continueButtonAlpha),
                     ) {
                         Text(text = stringResource(Res.string.whats_new_continue))
-                    }
-
-                    Button(
-                        onClick = onDismissRequest,
-                        enabled = isLastPage,
-                        modifier = Modifier.alpha(dismissButtonAlpha),
-                    ) {
-                        Text(text = stringResource(Res.string.dialog_ok))
                     }
                 }
             }
