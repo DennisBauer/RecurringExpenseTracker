@@ -21,7 +21,7 @@ data class WhatsNewSlide(
     val description: StringResource,
 )
 
-const val WHATS_NEW_VERSION = 1
+const val WHATS_NEW_VERSION = 2
 
 class WhatsNew(
     private val userPreferencesRepository: IUserPreferencesRepository,
