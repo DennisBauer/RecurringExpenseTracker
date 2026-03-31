@@ -1,0 +1,9 @@
+Changelog 0.20.0:
+* Feat: Allow marking expenses as paid manually
+* Feat: Allow searching for expenses
+* Feat: Add continue button to jump to next screen on WhatsNew
+* (Arabic) translation updated
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.20.0
