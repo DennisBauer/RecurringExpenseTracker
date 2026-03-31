@@ -190,7 +190,7 @@ class UpcomingPaymentsViewModel(
             val monthGroups = mutableListOf<MonthGroup>()
 
             do {
-                val isPastMonth = yearMonthIterator < currentMonthStart
+                val isPastMonth = yearMonthIterator < from
                 val unpaidPaymentsThisMonth = mutableListOf<UpcomingPaymentData>()
                 val paidPaymentsThisMonth = mutableListOf<UpcomingPaymentData>()
                 recurringExpenses.forEach { expense ->
