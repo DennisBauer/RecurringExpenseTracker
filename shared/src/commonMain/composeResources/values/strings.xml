@@ -151,8 +151,8 @@
 
     <!-- WhatsNew -->
     <string name="whats_new_title">Whats new?</string>
-    <string name="whats_new_1_title" translatable="false">Introducing Tags!</string>
-    <string name="whats_new_1_description" translatable="false">• Organize your expenses with customizable tags.\n• Your existing colors have been automatically converted to tags.\n• Create and manage tags from Settings or while editing an expense.</string>
-    <string name="whats_new_2_title" translatable="false">More Colors, More Options!</string>
-    <string name="whats_new_2_description" translatable="false">Choose from a wider range of predefined colors, or create your own with the new custom color picker.</string>
+    <string name="whats_new_1_title" translatable="false">Mark Expenses as Paid!</string>
+    <string name="whats_new_1_description" translatable="false">• Enable manual confirmation for any expense.\n• Mark payments as paid when you've actually made them.\n• Overdue unpaid expenses stay visible so nothing slips through.</string>
+    <string name="whats_new_2_title" translatable="false">Track Your Payment Status!</string>
+    <string name="whats_new_2_description" translatable="false">• Paid expenses move to the done section.\n• Undo a payment anytime if you marked it by mistake.</string>
 </resources>
