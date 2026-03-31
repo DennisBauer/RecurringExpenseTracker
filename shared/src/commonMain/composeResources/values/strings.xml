@@ -16,6 +16,10 @@
     <string name="home_summary_monthly">Monthly</string>
     <string name="home_summary_weekly">Weekly</string>
     <string name="home_summary_yearly">Yearly</string>
+    <string name="home_search_placeholder">Search expenses…</string>
+    <string name="home_search_content_desc">Search</string>
+    <string name="home_search_clear_content_desc">Clear search</string>
+    <string name="home_search_close_content_desc">Close search</string>
 
     <!-- Edit expense -->
     <string name="edit_expense_title">Edit Expense</string>
@@ -155,4 +159,6 @@
     <string name="whats_new_1_description" translatable="false">• Enable manual confirmation for any expense.\n• Mark payments as paid when you've actually made them.\n• Overdue unpaid expenses stay visible so nothing slips through.</string>
     <string name="whats_new_2_title" translatable="false">Track Your Payment Status!</string>
     <string name="whats_new_2_description" translatable="false">• Paid expenses move to the done section.\n• Undo a payment anytime if you marked it by mistake.</string>
+    <string name="whats_new_3_title" translatable="false">Search Your Expenses!</string>
+    <string name="whats_new_3_description" translatable="false">• Quickly find any expense by name, description or tag.</string>
 </resources>

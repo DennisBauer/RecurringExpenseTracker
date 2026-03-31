@@ -21,20 +21,29 @@ class RecurringExpenseViewModel(
     private val exchangeRateProvider: IExchangeRateProvider,
     userPreferencesRepository: IUserPreferencesRepository,
 ) : ViewModel() {
-    private val _recurringExpenseData = mutableStateListOf<RecurringExpenseData>()
-    val recurringExpenseData: List<RecurringExpenseData>
-        get() = _recurringExpenseData
+    private val recurringExpenseData = mutableStateListOf<RecurringExpenseData>()
+
+    private val _filteredRecurringExpenseData = mutableStateListOf<RecurringExpenseData>()
+    val filteredRecurringExpenseData: List<RecurringExpenseData>
+        get() = _filteredRecurringExpenseData
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private val showConvertedCurrency = userPreferencesRepository.showConvertedCurrency.get()
 
     var currencyPrefix by mutableStateOf("")
         private set
-    var weeklyExpense by mutableFloatStateOf(0f)
+    private var weeklyExpense by mutableFloatStateOf(0f)
+    private var monthlyExpense by mutableFloatStateOf(0f)
+    private var yearlyExpense by mutableFloatStateOf(0f)
+
+    var searchQuery by mutableStateOf("")
         private set
-    var monthlyExpense by mutableFloatStateOf(0f)
+
+    var filteredWeeklyExpense by mutableFloatStateOf(0f)
         private set
-    var yearlyExpense by mutableFloatStateOf(0f)
+    var filteredMonthlyExpense by mutableFloatStateOf(0f)
+        private set
+    var filteredYearlyExpense by mutableFloatStateOf(0f)
         private set
 
     init {
@@ -45,22 +54,29 @@ class RecurringExpenseViewModel(
         }
         viewModelScope.launch {
             defaultCurrency.collect {
-                if (_recurringExpenseData.isNotEmpty()) {
+                if (recurringExpenseData.isNotEmpty()) {
                     onDatabaseUpdated(expenseRepository.allRecurringExpensesByPrice.first())
                 }
             }
         }
         viewModelScope.launch {
             showConvertedCurrency.collect {
-                if (_recurringExpenseData.isNotEmpty()) {
+                if (recurringExpenseData.isNotEmpty()) {
                     onDatabaseUpdated(expenseRepository.allRecurringExpensesByPrice.first())
                 }
             }
         }
     }
 
+    fun onSearchQueryChanged(query: String) {
+        searchQuery = query
+        viewModelScope.launch {
+            updateFilteredData()
+        }
+    }
+
     private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpenseData>) {
-        _recurringExpenseData.clear()
+        recurringExpenseData.clear()
         val defaultCurrency = getDefaultCurrencyCode()
         var atLeastOneWasExchanged = false
         recurringExpenses.forEach {
@@ -75,16 +91,17 @@ class RecurringExpenseViewModel(
                     )
                 atLeastOneWasExchanged = true
             }
-            _recurringExpenseData.add(expense)
+            recurringExpenseData.add(expense)
         }
-        _recurringExpenseData.sortByDescending { it.monthlyPrice.value }
+        recurringExpenseData.sortByDescending { it.monthlyPrice.value }
         updateExpenseSummary()
+        updateFilteredData()
         currencyPrefix = if (atLeastOneWasExchanged) "~" else ""
     }
 
     private suspend fun updateExpenseSummary() {
         var price = 0f
-        _recurringExpenseData.forEach {
+        recurringExpenseData.forEach {
             it.monthlyPrice.exchangeToDefaultCurrency()?.let { exchanged ->
                 price += exchanged.value
             }
@@ -108,5 +125,31 @@ class RecurringExpenseViewModel(
 
     private suspend fun getDefaultCurrencyCode(): String {
         return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
+    }
+
+    private suspend fun updateFilteredData() {
+        _filteredRecurringExpenseData.clear()
+        val query = searchQuery.trim().lowercase()
+        val filtered =
+            if (query.isEmpty()) {
+                recurringExpenseData.toList()
+            } else {
+                recurringExpenseData.filter { expense ->
+                    expense.name.lowercase().contains(query) ||
+                        expense.description.lowercase().contains(query) ||
+                        expense.tags.any { tag -> tag.title.lowercase().contains(query) }
+                }
+            }
+        _filteredRecurringExpenseData.addAll(filtered)
+
+        var price = 0f
+        _filteredRecurringExpenseData.forEach {
+            it.monthlyPrice.exchangeToDefaultCurrency()?.let { exchanged ->
+                price += exchanged.value
+            }
+        }
+        filteredWeeklyExpense = (price / (52 / 12f))
+        filteredMonthlyExpense = price
+        filteredYearlyExpense = (price * 12)
     }
 }

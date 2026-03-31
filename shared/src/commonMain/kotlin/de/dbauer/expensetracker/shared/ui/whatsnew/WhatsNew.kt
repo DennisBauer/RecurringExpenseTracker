@@ -14,6 +14,9 @@ import recurringexpensetracker.shared.generated.resources.whats_new_1_title
 import recurringexpensetracker.shared.generated.resources.whats_new_2
 import recurringexpensetracker.shared.generated.resources.whats_new_2_description
 import recurringexpensetracker.shared.generated.resources.whats_new_2_title
+import recurringexpensetracker.shared.generated.resources.whats_new_3
+import recurringexpensetracker.shared.generated.resources.whats_new_3_description
+import recurringexpensetracker.shared.generated.resources.whats_new_3_title
 
 data class WhatsNewSlide(
     val image: DrawableResource,
@@ -52,6 +55,11 @@ class WhatsNew(
                         image = Res.drawable.whats_new_2,
                         title = Res.string.whats_new_2_title,
                         description = Res.string.whats_new_2_description,
+                    ),
+                    WhatsNewSlide(
+                        image = Res.drawable.whats_new_3,
+                        title = Res.string.whats_new_3_title,
+                        description = Res.string.whats_new_3_description,
                     ),
                 )
             }
