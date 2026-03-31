@@ -91,6 +91,7 @@ class ExpenseRepository(
             recurringExpenseDao.delete(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
             recurringExpenseDao.deleteAllCrossRefForExpenseId(recurringExpense.id)
             recurringExpenseDao.deleteAllRemindersForExpenseId(recurringExpense.id)
+            recurringExpenseDao.deleteAllPaymentRecordsForExpenseId(recurringExpense.id)
         }
 
     override suspend fun insert(tag: Tag) =
@@ -107,6 +108,33 @@ class ExpenseRepository(
         withContext(Dispatchers.IO) {
             recurringExpenseDao.delete(tag.toTagEntry())
             recurringExpenseDao.deleteAllCrossRefForTagId(tag.id)
+        }
+
+    override suspend fun markAsPaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) = withContext(Dispatchers.IO) {
+        val existing = recurringExpenseDao.getPaymentRecord(expenseId, paymentDateEpoch)
+        if (existing == null) {
+            recurringExpenseDao.insertPaymentRecord(
+                PaymentRecordEntry(expenseId = expenseId, paymentDate = paymentDateEpoch),
+            )
+        }
+    }
+
+    override suspend fun markAsUnpaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    ) = withContext(Dispatchers.IO) {
+        val record = recurringExpenseDao.getPaymentRecord(expenseId, paymentDateEpoch)
+        if (record != null) {
+            recurringExpenseDao.deletePaymentRecord(record)
+        }
+    }
+
+    override suspend fun getPaymentRecordsForExpense(expenseId: Int): List<Long> =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.getPaymentRecordsForExpense(expenseId).map { it.paymentDate }
         }
 
     private suspend fun getDefaultCurrencyCode(): String {

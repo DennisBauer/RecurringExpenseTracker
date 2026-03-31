@@ -26,6 +26,7 @@ internal fun RecurringExpenseWithTagsEntry.toRecurringExpenseData(
         firstPayment = this.expense.firstPayment?.let { Instant.fromEpochMilliseconds(it) },
         notifyForExpense = this.expense.notifyForExpense,
         reminders = this.reminders.toReminders(),
+        requireManualConfirmation = this.expense.requireManualConfirmation,
     )
 }
 

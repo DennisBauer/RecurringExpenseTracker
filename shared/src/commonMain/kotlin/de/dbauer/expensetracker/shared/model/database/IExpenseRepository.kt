@@ -22,4 +22,16 @@ interface IExpenseRepository {
     suspend fun update(tag: Tag)
 
     suspend fun delete(tag: Tag)
+
+    suspend fun markAsPaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    )
+
+    suspend fun markAsUnpaid(
+        expenseId: Int,
+        paymentDateEpoch: Long,
+    )
+
+    suspend fun getPaymentRecordsForExpense(expenseId: Int): List<Long>
 }

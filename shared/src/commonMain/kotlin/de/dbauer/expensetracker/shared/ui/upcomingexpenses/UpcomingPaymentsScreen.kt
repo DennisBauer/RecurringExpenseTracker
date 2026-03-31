@@ -17,8 +17,15 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
+import androidx.compose.material.icons.automirrored.rounded.Undo
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.CheckCircleOutline
+import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,7 +35,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,7 +55,14 @@ import de.dbauer.expensetracker.shared.viewmodel.UpcomingPaymentsViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.shared.generated.resources.Res
+import recurringexpensetracker.shared.generated.resources.upcoming_mark_as_paid
+import recurringexpensetracker.shared.generated.resources.upcoming_mark_as_unpaid
+import recurringexpensetracker.shared.generated.resources.upcoming_paid_section
 import recurringexpensetracker.shared.generated.resources.upcoming_placeholder_title
+import recurringexpensetracker.shared.generated.resources.upcoming_section_upcoming
+import recurringexpensetracker.shared.generated.resources.upcoming_time_overdue_days
+import recurringexpensetracker.shared.generated.resources.upcoming_time_overdue_today
+import recurringexpensetracker.shared.generated.resources.upcoming_time_past_days
 import recurringexpensetracker.shared.generated.resources.upcoming_time_remaining_days
 import recurringexpensetracker.shared.generated.resources.upcoming_time_remaining_today
 import recurringexpensetracker.shared.generated.resources.upcoming_time_remaining_tomorrow
@@ -65,10 +81,17 @@ fun UpcomingPaymentsScreen(
     if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
+            upcomingStartIndex = upcomingPaymentsViewModel.upcomingStartIndex,
             onClickItem = { expenseId ->
                 upcomingPaymentsViewModel.onExpenseWithIdClicked(expenseId) {
                     navController.navigate(EditExpensePane(expenseId))
                 }
+            },
+            onMarkAsPaid = { expenseId, paymentDateEpoch ->
+                upcomingPaymentsViewModel.markAsPaid(expenseId, paymentDateEpoch)
+            },
+            onMarkAsUnpaid = { expenseId, paymentDateEpoch ->
+                upcomingPaymentsViewModel.markAsUnpaid(expenseId, paymentDateEpoch)
             },
             isGridMode = isGridMode,
             modifier = modifier,
@@ -87,12 +110,18 @@ fun UpcomingPaymentsScreen(
 @Composable
 private fun UpcomingPaymentsOverview(
     upcomingPaymentsData: List<UpcomingPayment>,
+    upcomingStartIndex: Int,
     onClickItem: (Int) -> Unit,
+    onMarkAsPaid: (Int, Long) -> Unit,
+    onMarkAsUnpaid: (Int, Long) -> Unit,
     isGridMode: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    val listState = rememberLazyStaggeredGridState()
+    val listState =
+        rememberLazyStaggeredGridState(
+            initialFirstVisibleItemIndex = upcomingStartIndex,
+        )
 
     val firstVisibleItem by remember {
         derivedStateOf {
@@ -122,36 +151,79 @@ private fun UpcomingPaymentsOverview(
             items(
                 items = upcomingPaymentsData,
                 key = { entry ->
-                    "expense_${entry.month}_${entry.payment?.id}_${entry.payment?.nextPaymentDate}"
+                    when (entry) {
+                        is UpcomingPayment.MonthHeader -> {
+                            val section = if (entry.isPastSection) "past_" else ""
+                            "header_${section}${entry.month}"
+                        }
+
+                        is UpcomingPayment.PaymentItem -> {
+                            "expense_${entry.month}_${entry.payment.id}_${entry.payment.nextPaymentDate}"
+                        }
+
+                        is UpcomingPayment.PaidDivider -> {
+                            val section = if (entry.isPastSection) "past_" else ""
+                            "paid_divider_${section}${entry.month}"
+                        }
+
+                        is UpcomingPayment.UpcomingDivider -> {
+                            "upcoming_divider"
+                        }
+                    }
                 },
                 span = { entry ->
-                    if (entry.payment == null) {
-                        StaggeredGridItemSpan.FullLine
-                    } else {
-                        StaggeredGridItemSpan.SingleLane
+                    when (entry) {
+                        is UpcomingPayment.MonthHeader -> StaggeredGridItemSpan.FullLine
+                        is UpcomingPayment.PaidDivider -> StaggeredGridItemSpan.FullLine
+                        is UpcomingPayment.UpcomingDivider -> StaggeredGridItemSpan.FullLine
+                        is UpcomingPayment.PaymentItem -> StaggeredGridItemSpan.SingleLane
                     }
                 },
             ) { entry ->
-                if (entry.payment == null) {
-                    Text(
-                        text = entry.month,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                } else {
-                    if (isGridMode) {
-                        GridUpcomingPayment(
-                            upcomingPaymentData = entry.payment,
-                            onClick = {
-                                onClickItem(entry.payment.id)
-                            },
+                when (entry) {
+                    is UpcomingPayment.MonthHeader -> {
+                        Text(
+                            text = entry.month,
+                            style = MaterialTheme.typography.titleMedium,
                         )
-                    } else {
-                        UpcomingPayment(
-                            upcomingPaymentData = entry.payment,
-                            onClick = {
-                                onClickItem(entry.payment.id)
-                            },
-                        )
+                    }
+
+                    is UpcomingPayment.PaidDivider -> {
+                        PaidSectionDivider()
+                    }
+
+                    is UpcomingPayment.UpcomingDivider -> {
+                        UpcomingSectionDivider()
+                    }
+
+                    is UpcomingPayment.PaymentItem -> {
+                        if (isGridMode) {
+                            GridUpcomingPayment(
+                                upcomingPaymentData = entry.payment,
+                                onClick = {
+                                    onClickItem(entry.payment.id)
+                                },
+                                onMarkAsPaid = {
+                                    onMarkAsPaid(entry.payment.id, entry.payment.paymentDateEpoch)
+                                },
+                                onMarkAsUnpaid = {
+                                    onMarkAsUnpaid(entry.payment.id, entry.payment.paymentDateEpoch)
+                                },
+                            )
+                        } else {
+                            UpcomingPaymentItem(
+                                upcomingPaymentData = entry.payment,
+                                onClick = {
+                                    onClickItem(entry.payment.id)
+                                },
+                                onMarkAsPaid = {
+                                    onMarkAsPaid(entry.payment.id, entry.payment.paymentDateEpoch)
+                                },
+                                onMarkAsUnpaid = {
+                                    onMarkAsUnpaid(entry.payment.id, entry.payment.paymentDateEpoch)
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -171,12 +243,34 @@ private fun UpcomingPaymentsOverview(
 @Composable
 private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentData): String {
     val inDaysString =
-        when (upcomingPaymentData.nextPaymentRemainingDays) {
-            0 -> {
-                stringResource(Res.string.upcoming_time_remaining_today)
+        when {
+            upcomingPaymentData.isPaid -> {
+                stringResource(Res.string.upcoming_paid_section)
             }
 
-            1 -> {
+            upcomingPaymentData.nextPaymentRemainingDays < 0 && !upcomingPaymentData.requiresConfirmation -> {
+                stringResource(
+                    Res.string.upcoming_time_past_days,
+                    -upcomingPaymentData.nextPaymentRemainingDays,
+                )
+            }
+
+            upcomingPaymentData.nextPaymentRemainingDays < 0 -> {
+                stringResource(
+                    Res.string.upcoming_time_overdue_days,
+                    -upcomingPaymentData.nextPaymentRemainingDays,
+                )
+            }
+
+            upcomingPaymentData.nextPaymentRemainingDays == 0 -> {
+                if (upcomingPaymentData.requiresConfirmation) {
+                    stringResource(Res.string.upcoming_time_overdue_today)
+                } else {
+                    stringResource(Res.string.upcoming_time_remaining_today)
+                }
+            }
+
+            upcomingPaymentData.nextPaymentRemainingDays == 1 -> {
                 stringResource(Res.string.upcoming_time_remaining_tomorrow)
             }
 
@@ -188,6 +282,80 @@ private fun getUpcomingPaymentTimeString(upcomingPaymentData: UpcomingPaymentDat
             }
         }
     return inDaysString
+}
+
+@Composable
+private fun PaidSectionDivider(modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+    ) {
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 12.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.CheckCircle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.size(16.dp),
+            )
+            Text(
+                text = stringResource(Res.string.upcoming_paid_section),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+    }
+}
+
+@Composable
+private fun UpcomingSectionDivider(modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+    ) {
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 12.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Schedule,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.size(16.dp),
+            )
+            Text(
+                text = stringResource(Res.string.upcoming_section_upcoming),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+    }
 }
 
 @Composable
@@ -225,12 +393,26 @@ private fun UpcomingPaymentsSummary(
 private fun GridUpcomingPayment(
     upcomingPaymentData: UpcomingPaymentData,
     onClick: () -> Unit,
+    onMarkAsPaid: () -> Unit,
+    onMarkAsUnpaid: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
+    val cardColors =
+        if (upcomingPaymentData.isOverdue) {
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+            )
+        } else {
+            CardDefaults.cardColors()
+        }
     Card(
         onClick = onClick,
-        modifier = modifier,
+        colors = cardColors,
+        modifier =
+            modifier.then(
+                if (upcomingPaymentData.isPaid) Modifier.alpha(0.6f) else Modifier,
+            ),
     ) {
         Column(
             modifier =
@@ -244,6 +426,12 @@ private fun GridUpcomingPayment(
                 Text(
                     text = inDaysString,
                     style = MaterialTheme.typography.bodyMedium,
+                    color =
+                        if (upcomingPaymentData.isOverdue) {
+                            MaterialTheme.colorScheme.onErrorContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
                 )
                 HorizontalAssignedTagColorsList(
                     tags = upcomingPaymentData.tags,
@@ -257,33 +445,88 @@ private fun GridUpcomingPayment(
             Text(
                 text = upcomingPaymentData.price.toCurrencyString(),
                 style = MaterialTheme.typography.titleMedium,
+                textDecoration =
+                    if (upcomingPaymentData.isPaid) {
+                        TextDecoration.LineThrough
+                    } else {
+                        TextDecoration.None
+                    },
             )
             Text(
                 text = upcomingPaymentData.name,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                textDecoration =
+                    if (upcomingPaymentData.isPaid) {
+                        TextDecoration.LineThrough
+                    } else {
+                        TextDecoration.None
+                    },
             )
-            Text(
-                text = upcomingPaymentData.nextPaymentDate,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = upcomingPaymentData.nextPaymentDate,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                )
+                if (upcomingPaymentData.requiresConfirmation) {
+                    if (upcomingPaymentData.isPaid) {
+                        IconButton(onClick = onMarkAsUnpaid) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.Undo,
+                                contentDescription = stringResource(Res.string.upcoming_mark_as_unpaid),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = onMarkAsPaid) {
+                            Icon(
+                                imageVector = Icons.Rounded.CheckCircleOutline,
+                                contentDescription = stringResource(Res.string.upcoming_mark_as_paid),
+                                tint =
+                                    if (upcomingPaymentData.isOverdue) {
+                                        MaterialTheme.colorScheme.onErrorContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.primary
+                                    },
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun UpcomingPayment(
+private fun UpcomingPaymentItem(
     upcomingPaymentData: UpcomingPaymentData,
     onClick: () -> Unit,
+    onMarkAsPaid: () -> Unit,
+    onMarkAsUnpaid: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val inDaysString = getUpcomingPaymentTimeString(upcomingPaymentData)
+    val cardColors =
+        if (upcomingPaymentData.isOverdue) {
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+            )
+        } else {
+            CardDefaults.cardColors()
+        }
     Card(
         onClick = onClick,
-        modifier = modifier,
+        colors = cardColors,
+        modifier =
+            modifier.then(
+                if (upcomingPaymentData.isPaid) Modifier.alpha(0.6f) else Modifier,
+            ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -304,6 +547,12 @@ private fun UpcomingPayment(
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    textDecoration =
+                        if (upcomingPaymentData.isPaid) {
+                            TextDecoration.LineThrough
+                        } else {
+                            TextDecoration.None
+                        },
                 )
                 Text(
                     text = upcomingPaymentData.nextPaymentDate,
@@ -326,11 +575,47 @@ private fun UpcomingPayment(
                 Text(
                     text = upcomingPaymentData.price.toCurrencyString(),
                     style = MaterialTheme.typography.titleLarge,
+                    textDecoration =
+                        if (upcomingPaymentData.isPaid) {
+                            TextDecoration.LineThrough
+                        } else {
+                            TextDecoration.None
+                        },
                 )
                 Text(
                     text = inDaysString,
                     style = MaterialTheme.typography.bodyLarge,
+                    color =
+                        if (upcomingPaymentData.isOverdue) {
+                            MaterialTheme.colorScheme.onErrorContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
                 )
+                if (upcomingPaymentData.requiresConfirmation) {
+                    if (upcomingPaymentData.isPaid) {
+                        IconButton(onClick = onMarkAsUnpaid) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.Undo,
+                                contentDescription = stringResource(Res.string.upcoming_mark_as_unpaid),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = onMarkAsPaid) {
+                            Icon(
+                                imageVector = Icons.Rounded.CheckCircleOutline,
+                                contentDescription = stringResource(Res.string.upcoming_mark_as_paid),
+                                tint =
+                                    if (upcomingPaymentData.isOverdue) {
+                                        MaterialTheme.colorScheme.onErrorContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.primary
+                                    },
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -371,12 +656,15 @@ private fun UpcomingPaymentsOverviewPreview() {
             UpcomingPaymentsOverview(
                 upcomingPaymentsData =
                     listOf(
-                        UpcomingPayment(
+                        UpcomingPayment.UpcomingDivider(
                             month = "January",
                             paymentsSum = "22,94 €",
-                            payment = null,
                         ),
-                        UpcomingPayment(
+                        UpcomingPayment.MonthHeader(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                        ),
+                        UpcomingPayment.PaymentItem(
                             month = "January",
                             paymentsSum = "22,94 €",
                             payment =
@@ -394,7 +682,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                                         ),
                                 ),
                         ),
-                        UpcomingPayment(
+                        UpcomingPayment.PaymentItem(
                             month = "January",
                             paymentsSum = "22,94 €",
                             payment =
@@ -410,7 +698,7 @@ private fun UpcomingPaymentsOverviewPreview() {
                                         ),
                                 ),
                         ),
-                        UpcomingPayment(
+                        UpcomingPayment.PaymentItem(
                             month = "January",
                             paymentsSum = "22,94 €",
                             payment =
@@ -424,12 +712,35 @@ private fun UpcomingPaymentsOverviewPreview() {
                                         listOf(
                                             Tag("Tag 3", 0xFF80FF80, id = Uuid.random().hashCode()),
                                         ),
+                                    requiresConfirmation = true,
+                                ),
+                        ),
+                        UpcomingPayment.PaidDivider(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                        ),
+                        UpcomingPayment.PaymentItem(
+                            month = "January",
+                            paymentsSum = "22,94 €",
+                            payment =
+                                UpcomingPaymentData(
+                                    id = 3,
+                                    name = "Spotify (Paid)",
+                                    price = CurrencyValue(9.99f, "USD"),
+                                    nextPaymentRemainingDays = -2,
+                                    nextPaymentDate = nextPaymentDate1String,
+                                    tags = emptyList(),
+                                    requiresConfirmation = true,
+                                    isPaid = true,
                                 ),
                         ),
                     ),
                 onClickItem = {},
+                onMarkAsPaid = { _, _ -> },
+                onMarkAsUnpaid = { _, _ -> },
                 contentPadding = PaddingValues(8.dp),
                 isGridMode = false,
+                upcomingStartIndex = 0,
             )
         }
     }

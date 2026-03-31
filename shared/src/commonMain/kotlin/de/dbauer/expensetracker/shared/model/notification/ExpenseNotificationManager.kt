@@ -11,8 +11,10 @@ import kotlinx.datetime.daysUntil
 import org.jetbrains.compose.resources.getString
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.notification_expense_reminder_message_days
-import recurringexpensetracker.shared.generated.resources.notification_expense_reminder_message_today
+import recurringexpensetracker.shared.generated.resources.notification_expense_reminder_message_overdue_days
+import recurringexpensetracker.shared.generated.resources.notification_expense_reminder_message_overdue_today
 import recurringexpensetracker.shared.generated.resources.notification_expense_reminder_message_tomorrow
+import kotlin.math.abs
 
 open class ExpenseNotificationManager(
     private val expenseRepository: IExpenseRepository,
@@ -27,6 +29,15 @@ open class ExpenseNotificationManager(
             if (expense.notifyForExpense) {
                 expense.getNextPaymentDay()?.let { nextPaymentDay ->
                     val daysToNextPayment = DateTimeCalculator.getDaysFromNowUntil(nextPaymentDay)
+
+                    // For manual confirmation expenses, skip if the next payment is already marked as paid
+                    if (expense.requireManualConfirmation) {
+                        val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+                        val paidDates = expenseRepository.getPaymentRecordsForExpense(expense.id).toSet()
+                        if (paidDates.contains(paymentDateEpoch)) {
+                            return@let
+                        }
+                    }
 
                     // If expense has custom reminders, use them
                     if (expense.reminders.isNotEmpty()) {
@@ -110,10 +121,25 @@ open class ExpenseNotificationManager(
     }
 
     protected open suspend fun getNotificationDescription(daysToNextPayment: Int): String {
-        return when (daysToNextPayment) {
-            0 -> getString(Res.string.notification_expense_reminder_message_today)
-            1 -> getString(Res.string.notification_expense_reminder_message_tomorrow)
-            else -> getString(Res.string.notification_expense_reminder_message_days, daysToNextPayment)
+        return when {
+            daysToNextPayment < 0 -> {
+                getString(
+                    Res.string.notification_expense_reminder_message_overdue_days,
+                    abs(daysToNextPayment),
+                )
+            }
+
+            daysToNextPayment == 0 -> {
+                getString(Res.string.notification_expense_reminder_message_overdue_today)
+            }
+
+            daysToNextPayment == 1 -> {
+                getString(Res.string.notification_expense_reminder_message_tomorrow)
+            }
+
+            else -> {
+                getString(Res.string.notification_expense_reminder_message_days, daysToNextPayment)
+            }
         }
     }
 }

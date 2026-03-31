@@ -111,6 +111,10 @@ fun EditRecurringExpenseScreen(
             date = viewModel.firstPaymentDate,
             onSelectDate = { viewModel.firstPaymentDate = it },
         )
+        ManualConfirmationOption(
+            requireManualConfirmation = viewModel.requireManualConfirmation,
+            onRequireManualConfirmationChange = { viewModel.requireManualConfirmation = it },
+        )
         TagsOption(
             tags = viewModel.tags,
             onTagClick = viewModel::onTagClick,

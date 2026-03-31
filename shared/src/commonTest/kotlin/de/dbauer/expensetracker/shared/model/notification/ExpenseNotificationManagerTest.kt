@@ -31,11 +31,17 @@ class ExpenseNotificationManagerTest {
     ) : ExpenseNotificationManager(expenseRepository, userPreferencesRepository) {
         // Override to provide test descriptions without needing resources
         override suspend fun getNotificationDescription(daysToNextPayment: Int): String {
-            return when (daysToNextPayment) {
-                0 -> "Due today"
-                1 -> "Due tomorrow"
+            return when {
+                daysToNextPayment < 0 -> "${-daysToNextPayment} days overdue"
+                daysToNextPayment == 0 -> "Due today"
+                daysToNextPayment == 1 -> "Due tomorrow"
                 else -> "Due in $daysToNextPayment days"
             }
+        }
+
+        // Public wrapper for testing getNotificationDescription directly
+        suspend fun testGetNotificationDescription(daysToNextPayment: Int): String {
+            return getNotificationDescription(daysToNextPayment)
         }
     }
 
@@ -64,6 +70,7 @@ class ExpenseNotificationManagerTest {
         firstPayment: Instant? = null,
         reminders: List<Reminder> = emptyList(),
         recurrence: Recurrence = Recurrence.Monthly,
+        requireManualConfirmation: Boolean = false,
     ): RecurringExpenseData {
         return RecurringExpenseData(
             id = id,
@@ -77,6 +84,7 @@ class ExpenseNotificationManagerTest {
             firstPayment = firstPayment,
             notifyForExpense = notifyForExpense,
             reminders = reminders,
+            requireManualConfirmation = requireManualConfirmation,
         )
     }
 
@@ -387,5 +395,258 @@ class ExpenseNotificationManagerTest {
             assertEquals(2, notifications.size)
             assertTrue(notifications.any { it.id == 1 && it.title == "Netflix" })
             assertTrue(notifications.any { it.id == 2 && it.title == "Spotify" })
+        }
+
+    @Test
+    fun `manual confirmation expense due today and unpaid with default reminder creates notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            // First payment is today, so daysToNextPayment == 0 (within default 3-day window)
+            val firstPaymentDate = getTodayLocalDate().atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Insurance",
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Monthly,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            val notifications = manager.getExpenseNotifications()
+            assertEquals(1, notifications.size)
+            assertEquals("Insurance", notifications[0].title)
+            assertEquals("Due today", notifications[0].description)
+            assertEquals(NotificationChannel.ExpenseReminder, notifications[0].channel)
+        }
+
+    @Test
+    fun `manual confirmation expense due today and already paid does not create notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            val firstPaymentDate = getTodayLocalDate().atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Insurance",
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Monthly,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            // Mark the payment as paid
+            val paymentDateEpoch = firstPaymentDate.toEpochMilliseconds()
+            repository.markAsPaid(1, paymentDateEpoch)
+
+            val notifications = manager.getExpenseNotifications()
+            assertTrue(notifications.isEmpty())
+        }
+
+    @Test
+    fun `manual confirmation expense not yet due does not create overdue notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            // First payment is 2 days from now — within default notification window but not overdue
+            val firstPaymentDate = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Insurance",
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Daily,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            val notifications = manager.getExpenseNotifications()
+            // Should still get a notification from the default reminder, not the overdue path
+            assertEquals(1, notifications.size)
+            assertEquals("Due in 2 days", notifications[0].description)
+        }
+
+    @Test
+    fun `manual confirmation expense due today with custom reminder creates one notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            // Expense due today with manual confirmation and custom reminder
+            val firstPaymentDate = getTodayLocalDate().atStartOfDayIn(TimeZone.UTC)
+            val reminder =
+                Reminder(
+                    id = 1,
+                    daysBeforePayment = 3,
+                    lastNotificationDate = null,
+                )
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Rent",
+                    firstPayment = firstPaymentDate,
+                    reminders = listOf(reminder),
+                    recurrence = Recurrence.Monthly,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            val notifications = manager.getExpenseNotifications()
+            assertEquals(1, notifications.size)
+            assertEquals("Rent", notifications[0].title)
+            assertEquals("Due today", notifications[0].description)
+        }
+
+    @Test
+    fun `manual confirmation expense due today with already shown reminder does not duplicate notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            val firstPaymentDate = getTodayLocalDate().atStartOfDayIn(TimeZone.UTC)
+            val reminder =
+                Reminder(
+                    id = 1,
+                    daysBeforePayment = 3,
+                    lastNotificationDate = firstPaymentDate, // Already notified for this payment
+                )
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Rent",
+                    firstPayment = firstPaymentDate,
+                    reminders = listOf(reminder),
+                    recurrence = Recurrence.Monthly,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            val notifications = manager.getExpenseNotifications()
+            // Reminder already shown for this payment — should not notify again
+            assertTrue(notifications.isEmpty())
+        }
+
+    @Test
+    fun `manual confirmation expense due today without reminders and outside default window creates no notif`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            // Set default advance to -1 so daysToNextPayment (0) > defaultDaysAdvance (-1)
+            prefsRepository.upcomingPaymentNotificationDaysAdvance.save(-1)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            val firstPaymentDate = getTodayLocalDate().atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Insurance",
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Monthly,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            val notifications = manager.getExpenseNotifications()
+            // No custom reminders and outside default window — no notification
+            assertTrue(notifications.isEmpty())
+        }
+
+    @Test
+    fun `overdue description returns correct text for various day values`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            // daysToNextPayment < 0 => overdue
+            assertEquals("1 days overdue", manager.testGetNotificationDescription(-1))
+            assertEquals("5 days overdue", manager.testGetNotificationDescription(-5))
+
+            // daysToNextPayment == 0 => due today
+            assertEquals("Due today", manager.testGetNotificationDescription(0))
+
+            // daysToNextPayment == 1 => due tomorrow
+            assertEquals("Due tomorrow", manager.testGetNotificationDescription(1))
+
+            // daysToNextPayment > 1 => due in N days
+            assertEquals("Due in 7 days", manager.testGetNotificationDescription(7))
+        }
+
+    @Test
+    fun `upcoming manual confirmation expense already paid does not create notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            prefsRepository.upcomingPaymentNotificationDaysAdvance.save(3)
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            // Payment is 2 days from now — within default 3-day notification window
+            val firstPaymentDate = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Insurance",
+                    firstPayment = firstPaymentDate,
+                    recurrence = Recurrence.Daily,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            // Mark the upcoming payment as paid in advance
+            val paymentDateEpoch = getDateOffsetFromToday(2).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+            repository.markAsPaid(1, paymentDateEpoch)
+
+            val notifications = manager.getExpenseNotifications()
+            // Already paid — should not notify even though within reminder window
+            assertTrue(notifications.isEmpty())
+        }
+
+    @Test
+    fun `upcoming manual confirmation expense with custom reminder already paid does not create notification`() =
+        runTest {
+            val repository = FakeExpenseRepository()
+            val prefsRepository = FakeUserPreferencesRepository()
+            val manager = TestableExpenseNotificationManager(repository, prefsRepository)
+
+            val reminder =
+                Reminder(
+                    id = 1,
+                    daysBeforePayment = 5,
+                    lastNotificationDate = null,
+                )
+
+            // Payment is 3 days from now — within 5-day custom reminder window
+            val firstPaymentDate = getDateOffsetFromToday(3).atStartOfDayIn(TimeZone.UTC)
+            val expense =
+                createTestExpense(
+                    id = 1,
+                    name = "Rent",
+                    firstPayment = firstPaymentDate,
+                    reminders = listOf(reminder),
+                    recurrence = Recurrence.Daily,
+                    requireManualConfirmation = true,
+                )
+            repository.insert(expense)
+
+            // Mark the upcoming payment as paid in advance
+            val paymentDateEpoch = getDateOffsetFromToday(3).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+            repository.markAsPaid(1, paymentDateEpoch)
+
+            val notifications = manager.getExpenseNotifications()
+            // Already paid — should not notify even though custom reminder matches
+            assertTrue(notifications.isEmpty())
         }
 }
