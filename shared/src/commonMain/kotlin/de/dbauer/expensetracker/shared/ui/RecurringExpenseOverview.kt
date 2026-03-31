@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -53,6 +54,7 @@ fun RecurringExpenseOverview(
     navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    bottomSafeArea: Dp = 0.dp,
     recurringExpenseViewModel: RecurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>(),
     userPreferencesRepository: IUserPreferencesRepository = koinInject(),
 ) {
@@ -62,13 +64,13 @@ fun RecurringExpenseOverview(
     val currencyCode by userPreferencesRepository.defaultCurrency.collectAsState()
     val weeklyExpense =
         recurringExpenseViewModel.currencyPrefix +
-            recurringExpenseViewModel.weeklyExpense.toCurrencyString(currencyCode)
+            recurringExpenseViewModel.filteredWeeklyExpense.toCurrencyString(currencyCode)
     val monthlyExpense =
         recurringExpenseViewModel.currencyPrefix +
-            recurringExpenseViewModel.monthlyExpense.toCurrencyString(currencyCode)
+            recurringExpenseViewModel.filteredMonthlyExpense.toCurrencyString(currencyCode)
     val yearlyExpense =
         recurringExpenseViewModel.currencyPrefix +
-            recurringExpenseViewModel.yearlyExpense.toCurrencyString(currencyCode)
+            recurringExpenseViewModel.filteredYearlyExpense.toCurrencyString(currencyCode)
 
     LazyVerticalStaggeredGrid(
         columns =
@@ -95,7 +97,7 @@ fun RecurringExpenseOverview(
             )
         }
 
-        items(items = recurringExpenseViewModel.recurringExpenseData) { recurringExpenseData ->
+        items(items = recurringExpenseViewModel.filteredRecurringExpenseData) { recurringExpenseData ->
             if (isGridMode) {
                 GridRecurringExpense(
                     recurringExpenseData = recurringExpenseData,
@@ -118,7 +120,7 @@ fun RecurringExpenseOverview(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(80.dp),
+                        .height(bottomSafeArea),
             )
         }
     }

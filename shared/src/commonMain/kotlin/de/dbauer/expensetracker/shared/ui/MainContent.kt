@@ -1,15 +1,28 @@
 package de.dbauer.expensetracker.shared.ui
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -21,9 +34,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
@@ -31,6 +50,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
+import de.dbauer.expensetracker.shared.conditional
 import de.dbauer.expensetracker.shared.data.EditExpensePane
 import de.dbauer.expensetracker.shared.data.HomePane
 import de.dbauer.expensetracker.shared.data.MainNavRoute
@@ -46,11 +69,16 @@ import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerThemePreview
 import de.dbauer.expensetracker.shared.ui.upcomingexpenses.UpcomingPaymentsScreen
 import de.dbauer.expensetracker.shared.ui.whatsnew.IWhatsNew
 import de.dbauer.expensetracker.shared.viewmodel.MainNavigationViewModel
+import de.dbauer.expensetracker.shared.viewmodel.RecurringExpenseViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.edit_expense_button_add
+import recurringexpensetracker.shared.generated.resources.home_search_clear_content_desc
+import recurringexpensetracker.shared.generated.resources.home_search_close_content_desc
+import recurringexpensetracker.shared.generated.resources.home_search_content_desc
+import recurringexpensetracker.shared.generated.resources.home_search_placeholder
 import recurringexpensetracker.shared.generated.resources.home_title
 import recurringexpensetracker.shared.generated.resources.upcoming_title
 import recurringexpensetracker.shared.generated.resources.whats_new_title
@@ -119,32 +147,135 @@ fun MainContent(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 composable<HomePane> {
-                    mainNavigationViewModel.topAppBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(Res.string.home_title),
-                                )
-                            },
-                            actions = {
-                                ToggleGridModeButton(
-                                    onToggleGridMode = toggleGridMode,
-                                    isGridMode = isGridMode,
-                                )
-                            },
+                    val recurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>()
+                    var isSearchActive by rememberSaveable { mutableStateOf(false) }
+
+                    val backState =
+                        rememberNavigationEventState(
+                            currentInfo = NavigationEventInfo.None,
                         )
+                    NavigationBackHandler(
+                        isBackEnabled = isSearchActive,
+                        state = backState,
+                        onBackCompleted = {
+                            recurringExpenseViewModel.onSearchQueryChanged("")
+                            isSearchActive = false
+                        },
+                    )
+                    val focusRequester = remember { FocusRequester() }
+
+                    if (isSearchActive) {
+                        mainNavigationViewModel.topAppBar = {
+                            SearchBar(
+                                inputField = {
+                                    SearchBarDefaults.InputField(
+                                        query = recurringExpenseViewModel.searchQuery,
+                                        onQueryChange = { recurringExpenseViewModel.onSearchQueryChanged(it) },
+                                        onSearch = { },
+                                        expanded = false,
+                                        onExpandedChange = { },
+                                        modifier = Modifier.focusRequester(focusRequester),
+                                        placeholder = {
+                                            Text(text = stringResource(Res.string.home_search_placeholder))
+                                        },
+                                        leadingIcon = {
+                                            IconButton(
+                                                onClick = {
+                                                    recurringExpenseViewModel.onSearchQueryChanged("")
+                                                    isSearchActive = false
+                                                },
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription =
+                                                        stringResource(Res.string.home_search_close_content_desc),
+                                                )
+                                            }
+                                        },
+                                        trailingIcon = {
+                                            if (recurringExpenseViewModel.searchQuery.isNotEmpty()) {
+                                                IconButton(
+                                                    onClick = {
+                                                        recurringExpenseViewModel.onSearchQueryChanged("")
+                                                    },
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Close,
+                                                        contentDescription =
+                                                            stringResource(
+                                                                Res.string.home_search_clear_content_desc,
+                                                            ),
+                                                    )
+                                                }
+                                            }
+                                        },
+                                    )
+                                },
+                                expanded = false,
+                                onExpandedChange = { },
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                            ) { }
+                        }
+
+                        LaunchedEffect(Unit) {
+                            focusRequester.requestFocus()
+                        }
+                    } else {
+                        mainNavigationViewModel.topAppBar = {
+                            TopAppBar(
+                                title = {
+                                    Text(
+                                        text = stringResource(Res.string.home_title),
+                                    )
+                                },
+                                actions = {
+                                    IconButton(
+                                        onClick = { isSearchActive = true },
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Search,
+                                            contentDescription =
+                                                stringResource(Res.string.home_search_content_desc),
+                                        )
+                                    }
+                                    ToggleGridModeButton(
+                                        onToggleGridMode = toggleGridMode,
+                                        isGridMode = isGridMode,
+                                    )
+                                },
+                            )
+                        }
                     }
 
+                    val keyboardOpen = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+                    val bottomPadding = if (keyboardOpen) 0.dp else 80.dp
+                    val layoutDirection = LocalLayoutDirection.current
                     RecurringExpenseOverview(
                         isGridMode = isGridMode,
                         navController = navController,
+                        recurringExpenseViewModel = recurringExpenseViewModel,
                         contentPadding =
                             PaddingValues(
                                 top = 8.dp,
                                 start = 16.dp,
                                 end = 16.dp,
                             ),
-                        modifier = Modifier.padding(paddingValues),
+                        bottomSafeArea = bottomPadding,
+                        modifier =
+                            Modifier
+                                .conditional(keyboardOpen) {
+                                    Modifier
+                                        .padding(
+                                            start = paddingValues.calculateStartPadding(layoutDirection),
+                                            end = paddingValues.calculateEndPadding(layoutDirection),
+                                            top = paddingValues.calculateTopPadding(),
+                                        ).imePadding()
+                                }.conditional(!keyboardOpen) {
+                                    Modifier.padding(paddingValues)
+                                },
                     )
 
                     LaunchedEffect(mainNavigationViewModel.shouldShowWhatsNew) {
