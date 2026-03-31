@@ -30,8 +30,9 @@ class WhatsNew(
     private val userPreferencesRepository: IUserPreferencesRepository,
 ) : IWhatsNew {
     override suspend fun shouldShowWhatsNew(): Boolean {
-        val lastWhatsNewVersionShown = userPreferencesRepository.whatsNewVersionShown.get().first()
-        return lastWhatsNewVersionShown < WHATS_NEW_VERSION
+        return true
+//        val lastWhatsNewVersionShown = userPreferencesRepository.whatsNewVersionShown.get().first()
+//        return lastWhatsNewVersionShown < WHATS_NEW_VERSION
     }
 
     override suspend fun markAsShown() {
