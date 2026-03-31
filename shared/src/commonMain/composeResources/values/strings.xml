@@ -155,6 +155,7 @@
 
     <!-- WhatsNew -->
     <string name="whats_new_title">Whats new?</string>
+    <string name="whats_new_continue">Continue</string>
     <string name="whats_new_1_title" translatable="false">Mark Expenses as Paid!</string>
     <string name="whats_new_1_description" translatable="false">• Enable manual confirmation for any expense.\n• Mark payments as paid when you've actually made them.\n• Overdue unpaid expenses stay visible so nothing slips through.</string>
     <string name="whats_new_2_title" translatable="false">Track Your Payment Status!</string>

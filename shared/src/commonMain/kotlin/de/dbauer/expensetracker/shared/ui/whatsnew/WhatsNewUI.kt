@@ -2,6 +2,7 @@ package de.dbauer.expensetracker.shared.ui.whatsnew
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,13 +16,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.dialog_ok
+import recurringexpensetracker.shared.generated.resources.whats_new_continue
 
 @Composable
 internal fun WhatsNewUI(
@@ -30,6 +34,7 @@ internal fun WhatsNewUI(
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState(pageCount = { whatsNewSlides.size })
+    val coroutineScope = rememberCoroutineScope()
 
     Surface(modifier = modifier) {
         Column(
@@ -62,19 +67,40 @@ internal fun WhatsNewUI(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                val isButtonVisible = pagerState.currentPage == whatsNewSlides.size - 1
+                val isLastPage = pagerState.currentPage == whatsNewSlides.size - 1
 
                 val dismissButtonAlpha by animateFloatAsState(
-                    targetValue = if (isButtonVisible) 1f else 0f,
+                    targetValue = if (isLastPage) 1f else 0f,
                     label = "dismissButtonAlpha",
                 )
 
-                Button(
-                    onClick = onDismissRequest,
-                    enabled = isButtonVisible,
-                    modifier = Modifier.alpha(dismissButtonAlpha),
+                val continueButtonAlpha by animateFloatAsState(
+                    targetValue = if (isLastPage) 0f else 1f,
+                    label = "continueButtonAlpha",
+                )
+
+                Box(
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = stringResource(Res.string.dialog_ok))
+                    Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
+                        },
+                        enabled = !isLastPage,
+                        modifier = Modifier.alpha(continueButtonAlpha),
+                    ) {
+                        Text(text = stringResource(Res.string.whats_new_continue))
+                    }
+
+                    Button(
+                        onClick = onDismissRequest,
+                        enabled = isLastPage,
+                        modifier = Modifier.alpha(dismissButtonAlpha),
+                    ) {
+                        Text(text = stringResource(Res.string.dialog_ok))
+                    }
                 }
             }
         }
