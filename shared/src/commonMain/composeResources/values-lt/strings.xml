@@ -114,4 +114,20 @@
     <string name="save">Išsaugoti</string>
     <string name="discard">Atmesti</string>
     <string name="biometric_prompt_manager_title">Atrakinti „Expense Tracker“</string>
+    <string name="whats_new_continue">Tęsti</string>
+    <string name="home_search_placeholder">Ieškokite išlaidų…</string>
+    <string name="home_search_content_desc">Paieška</string>
+    <string name="home_search_clear_content_desc">Valyti paiešką</string>
+    <string name="home_search_close_content_desc">Užverti paiešką</string>
+    <string name="edit_expense_require_manual_confirmation">Reikalauti rankinio mokėjimo patvirtinimo</string>
+    <string name="edit_expense_require_manual_confirmation_description">Kai įjungta, ši išlaida bus rodoma kaip vėluojanti, kol ją rankiniu būdu pažymėsite kaip sumokėtą.</string>
+    <string name="upcoming_time_overdue_days">%1$d diena (-os, -ų) vėluojama</string>
+    <string name="upcoming_time_overdue_today">mokėtina šiandien</string>
+    <string name="upcoming_paid_section">Sumokėti</string>
+    <string name="upcoming_section_upcoming">Būsimieji</string>
+    <string name="upcoming_time_past_days">prieš %1$d dieną (-as, -ų)</string>
+    <string name="upcoming_mark_as_paid">Žymėti kaip sumokėtą</string>
+    <string name="upcoming_mark_as_unpaid">Žymėti kaip nesumokėtą</string>
+    <string name="notification_expense_reminder_message_overdue_today">Mokėjimas yra mokamas šiandien.</string>
+    <string name="notification_expense_reminder_message_overdue_days">Mokėjimas yra %1$d diena (-os, -ų) vėluojamas</string>
 </resources>
