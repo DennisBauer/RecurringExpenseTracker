@@ -114,4 +114,20 @@
     <string name="settings_currency_close_search_content_desc">Закрыть</string>
     <string name="settings_currency_search_content_desc">Поиск валют</string>
     <string name="settings_currency_search_placeholder">Поиск валют...</string>
+    <string name="home_search_placeholder">Поиск расходов…</string>
+    <string name="home_search_content_desc">Поиск</string>
+    <string name="home_search_clear_content_desc">Очистить поиск</string>
+    <string name="home_search_close_content_desc">Закрыть поиск</string>
+    <string name="edit_expense_require_manual_confirmation">Требуется подтверждение оплаты вручную</string>
+    <string name="edit_expense_require_manual_confirmation_description">Если эта опция включена, данная расходная операция будет отображаться как просроченная до тех пор, пока вы вручную не помечаете её как оплаченную.</string>
+    <string name="upcoming_time_overdue_days">Просрочка на %1$d дней</string>
+    <string name="upcoming_time_overdue_today">оплата сегодня</string>
+    <string name="upcoming_paid_section">Оплачено</string>
+    <string name="upcoming_section_upcoming">Скоро</string>
+    <string name="upcoming_time_past_days">%1$d дней назад</string>
+    <string name="upcoming_mark_as_paid">Пометить как оплаченное</string>
+    <string name="upcoming_mark_as_unpaid">Пометить как неоплаченное</string>
+    <string name="notification_expense_reminder_message_overdue_today">Срок оплаты истекает сегодня</string>
+    <string name="notification_expense_reminder_message_overdue_days">Просрочка платежа составляет %1$d дней</string>
+    <string name="whats_new_continue">Продолжить</string>
 </resources>
