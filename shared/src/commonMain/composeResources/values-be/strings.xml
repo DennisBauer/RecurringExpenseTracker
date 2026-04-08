@@ -4,7 +4,7 @@
     <string name="top_app_bar_icon_button_grid_close_content_desc">Закрыць рэжым сеткі</string>
     <string name="top_app_bar_navigate_up_content_desc">Вярнуцца назад</string>
     <string name="bottom_nav_home">Галоўная</string>
-    <string name="bottom_nav_upcoming">Скора</string>
+    <string name="bottom_nav_upcoming">Хутка</string>
     <string name="bottom_nav_settings">Налады</string>
     <string name="home_summary_monthly">Штомесяц</string>
     <string name="home_summary_weekly">Штотыдзень</string>
@@ -26,7 +26,7 @@
     <string name="edit_expense_recurrence_month_short">М</string>
     <string name="edit_expense_recurrence_year">Гадоў</string>
     <string name="edit_expense_recurrence_year_short">Г</string>
-    <string name="edit_expense_first_payment">Першы плацёж (апцыянальна)</string>
+    <string name="edit_expense_first_payment">Першы плацеж (апцыянальна)</string>
     <string name="edit_expense_first_payment_placeholder">Выберыце дату</string>
     <string name="edit_expense_tags">Дадайце тэгі</string>
     <string name="edit_expense_notification_get_notified">Пачніце атрымліваць паведамленні пра надыходзячыя плацяжы. Зайдзіце ў налады і ўключыце паведамленні.</string>
@@ -114,4 +114,20 @@
     <string name="widget_configuration_title">Наладзіць віджэт</string>
     <string name="widget_transparent_background">Празрысты фон</string>
     <string name="whats_new_title">Што новага?</string>
+    <string name="home_search_placeholder">Пошук расходаў…</string>
+    <string name="home_search_content_desc">Пошук</string>
+    <string name="home_search_clear_content_desc">Ачысціць пошук</string>
+    <string name="home_search_close_content_desc">Закрыць пошук</string>
+    <string name="edit_expense_require_manual_confirmation">Патрабуецца ручное пацвярджэнне аплаты</string>
+    <string name="edit_expense_require_manual_confirmation_description">Калі ўключана, гэты расход будзе адлюстроўвацца як пратэрмінаваная да ручнога пацвярджэння.</string>
+    <string name="upcoming_time_overdue_days">Пратэрміноўка %1$d дзён</string>
+    <string name="upcoming_time_overdue_today">аплата сёння</string>
+    <string name="upcoming_paid_section">Аплачана</string>
+    <string name="upcoming_section_upcoming">Хутка</string>
+    <string name="upcoming_time_past_days">%1$d дзён таму</string>
+    <string name="upcoming_mark_as_paid">Адзначыць як аплачанае</string>
+    <string name="upcoming_mark_as_unpaid">Адзначыць як неаплачанае</string>
+    <string name="notification_expense_reminder_message_overdue_today">Тэрмін аплаты заканчваецца сёння</string>
+    <string name="notification_expense_reminder_message_overdue_days">Пратэрміноўка ўжо %1$d дзён</string>
+    <string name="whats_new_continue">Працягнуць</string>
 </resources>
