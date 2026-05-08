@@ -59,6 +59,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'build-tools;37.0.0'
+
       # Unified Gradle caching — reads the cache written by the formatting job
       # on PRs; pushes an updated cache on main.
       - name: Setup Gradle

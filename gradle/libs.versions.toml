@@ -2,9 +2,9 @@
 aboutLibraries = '14.2.0'
 accompanist-permissions = "0.37.3"
 agp = "9.2.1"
-android-compileSdk = "36"
+android-compileSdk = "37"
 android-minSdk = "26"
-android-targetSdk = "36"
+android-targetSdk = "37"
 androidx-activityCompose = "1.13.0"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.18.0"

@@ -20,6 +20,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'build-tools;37.0.0'
       - name: Decode Keystore
         id: decode_keystore
         uses: timheuer/base64-to-file@v2
@@ -36,7 +40,7 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       - name: Verify Signature
-        run: $ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
+        run: $ANDROID_SDK_ROOT/build-tools/37.0.0/apksigner verify --print-certs app/build/outputs/apk/release/RecurringExpenseTracker_${{ steps.get_version.outputs.version-without-v }}.apk
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
