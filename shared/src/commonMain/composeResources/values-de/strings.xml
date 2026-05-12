@@ -14,6 +14,10 @@
     <string name="home_summary_monthly">Monatlich</string>
     <string name="home_summary_weekly">Wöchentlich</string>
     <string name="home_summary_yearly">Jährlich</string>
+    <string name="home_search_placeholder">Ausgaben suchen…</string>
+    <string name="home_search_content_desc">Suchen</string>
+    <string name="home_search_clear_content_desc">Suche löschen</string>
+    <string name="home_search_close_content_desc">Suche schließen</string>
 
     <!-- Edit expense -->
     <string name="edit_expense_title">Ausgabe Bearbeiten</string>
@@ -157,4 +161,5 @@
 
     <!-- WhatsNew -->
     <string name="whats_new_title">Was ist neu?</string>
+    <string name="whats_new_continue">Weiter</string>
 </resources>
