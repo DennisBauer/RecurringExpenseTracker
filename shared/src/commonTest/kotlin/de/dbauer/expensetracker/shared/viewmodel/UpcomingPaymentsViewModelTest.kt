@@ -943,6 +943,37 @@ class UpcomingPaymentsViewModelTest {
             assertTrue(paymentItems.all { !it.payment.isPaid })
         }
 
+    @Test
+    fun `horizon clamps upcoming list to configured window`() =
+        runTest {
+            val from = LocalDate(2025, 1, 1)
+            // 3-month horizon: April 1 onward must be excluded
+            val until = LocalDate(2025, 4, 1)
+            val inHorizon =
+                getTestExpense(
+                    name = "InHorizon",
+                    price = 5f,
+                    currencyCode = defaultCurrencyCode,
+                    recurrence = RecurrenceDatabase.Monthly,
+                    everyXRecurrence = 1,
+                    firstPayment = LocalDateTime(2025, 2, 10, 0, 0).toInstant(TimeZone.UTC),
+                )
+            val outOfHorizon =
+                getTestExpense(
+                    name = "OutOfHorizon",
+                    price = 5f,
+                    currencyCode = defaultCurrencyCode,
+                    recurrence = RecurrenceDatabase.Yearly,
+                    everyXRecurrence = 1,
+                    firstPayment = LocalDateTime(2025, 7, 10, 0, 0).toInstant(TimeZone.UTC),
+                )
+
+            val result = viewModel.createUpcomingPaymentData(listOf(inHorizon, outOfHorizon), from, until)
+            val names = result.filterIsInstance<UpcomingPayment.PaymentItem>().map { it.payment.name }
+            assertTrue(names.contains("InHorizon"))
+            assertTrue(!names.contains("OutOfHorizon"))
+        }
+
     private fun getTestExpense(
         name: String,
         price: Float,

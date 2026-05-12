@@ -39,4 +39,6 @@ class FakeUserPreferencesRepository() : IUserPreferencesRepository {
         FakePreference(false)
     override val whatsNewVersionShown: IUserPreferencesRepository.IPreference<Int>
         get() = FakePreference(0)
+    override val upcomingPaymentHorizonMonths: IUserPreferencesRepository.IPreference<Int> =
+        FakePreference(120)
 }

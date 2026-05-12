@@ -88,6 +88,14 @@
     <string name="settings_theme_mode_light">Light</string>
     <string name="settings_theme_mode_amoled">AMOLED</string>
     <string name="settings_default_tab">Default tab</string>
+    <string name="settings_upcoming_horizon">Upcoming horizon</string>
+    <string name="settings_upcoming_horizon_1_month">1 month</string>
+    <string name="settings_upcoming_horizon_3_months">3 months</string>
+    <string name="settings_upcoming_horizon_6_months">6 months</string>
+    <string name="settings_upcoming_horizon_1_year">1 year</string>
+    <string name="settings_upcoming_horizon_2_years">2 years</string>
+    <string name="settings_upcoming_horizon_5_years">5 years</string>
+    <string name="settings_upcoming_horizon_10_years">10 years</string>
     <string name="settings_currency">Currency</string>
     <string name="settings_default_currency">Default Currency</string>
     <string name="settings_choose_currency">Choose Currency</string>

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Restore
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.ThemeMode
+import de.dbauer.expensetracker.shared.ui.UpcomingHorizon
 import de.dbauer.expensetracker.shared.ui.elements.TimePickerDialog
 import de.dbauer.expensetracker.shared.viewmodel.SettingsViewModel
 import kotlinx.datetime.LocalTime
@@ -81,6 +83,14 @@ import recurringexpensetracker.shared.generated.resources.settings_theme_mode_da
 import recurringexpensetracker.shared.generated.resources.settings_theme_mode_follow_system
 import recurringexpensetracker.shared.generated.resources.settings_theme_mode_light
 import recurringexpensetracker.shared.generated.resources.settings_title_security
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_10_years
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_1_month
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_1_year
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_2_years
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_3_months
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_5_years
+import recurringexpensetracker.shared.generated.resources.settings_upcoming_horizon_6_months
 import recurringexpensetracker.shared.generated.resources.tags_screen_title
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,6 +143,13 @@ fun SettingsMainScreen(
                 },
             onClick = viewModel::onClickDefaultTabSelection,
             icon = Icons.Rounded.Rocket,
+        )
+        val upcomingHorizon by viewModel.selectedUpcomingHorizon.collectAsState(UpcomingHorizon.TenYears)
+        SettingsClickableElement(
+            title = stringResource(Res.string.settings_upcoming_horizon),
+            subtitle = stringResource(upcomingHorizon.labelRes()),
+            onClick = viewModel::onClickUpcomingHorizonSelection,
+            icon = Icons.Rounded.HourglassEmpty,
         )
         SettingsClickableElement(
             title = stringResource(Res.string.tags_screen_title),
@@ -314,6 +331,28 @@ fun SettingsMainScreen(
             },
             confirmButton = {},
         )
+    } else if (viewModel.showUpcomingHorizonSelectionDialog) {
+        val current by viewModel.selectedUpcomingHorizon.collectAsState(UpcomingHorizon.TenYears)
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissUpcomingHorizonSelectionDialog,
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = stringResource(Res.string.settings_upcoming_horizon),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    UpcomingHorizon.entries.forEach { horizon ->
+                        DialogCheckbox(
+                            text = stringResource(horizon.labelRes()),
+                            checked = current == horizon,
+                            onClick = { viewModel.onSelectUpcomingHorizon(horizon) },
+                        )
+                    }
+                }
+            },
+            confirmButton = {},
+        )
     } else if (viewModel.upcomingPaymentNotificationTimePickerDialog) {
         val timePickerState =
             rememberTimePickerState(
@@ -380,6 +419,17 @@ fun SettingsMainScreen(
         )
     }
 }
+
+private fun UpcomingHorizon.labelRes() =
+    when (this) {
+        UpcomingHorizon.OneMonth -> Res.string.settings_upcoming_horizon_1_month
+        UpcomingHorizon.ThreeMonths -> Res.string.settings_upcoming_horizon_3_months
+        UpcomingHorizon.SixMonths -> Res.string.settings_upcoming_horizon_6_months
+        UpcomingHorizon.OneYear -> Res.string.settings_upcoming_horizon_1_year
+        UpcomingHorizon.TwoYears -> Res.string.settings_upcoming_horizon_2_years
+        UpcomingHorizon.FiveYears -> Res.string.settings_upcoming_horizon_5_years
+        UpcomingHorizon.TenYears -> Res.string.settings_upcoming_horizon_10_years
+    }
 
 @Composable
 fun DialogCheckbox(
