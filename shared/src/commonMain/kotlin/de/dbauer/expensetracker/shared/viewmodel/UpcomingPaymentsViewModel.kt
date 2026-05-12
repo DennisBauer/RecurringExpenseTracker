@@ -7,24 +7,22 @@ import de.dbauer.expensetracker.shared.data.CurrencyValue
 import de.dbauer.expensetracker.shared.data.RecurringExpenseData
 import de.dbauer.expensetracker.shared.data.UpcomingPaymentData
 import de.dbauer.expensetracker.shared.getDefaultCurrencyCode
-import de.dbauer.expensetracker.shared.model.DateTimeCalculator
 import de.dbauer.expensetracker.shared.model.IExchangeRateProvider
+import de.dbauer.expensetracker.shared.model.UpcomingPaymentsExpander
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.shared.toCurrencyString
-import de.dbauer.expensetracker.shared.toLocaleString
 import de.dbauer.expensetracker.shared.toMonthYearStringUTC
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.minus
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
@@ -72,12 +70,17 @@ class UpcomingPaymentsViewModel(
         private set
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
+    private val horizonMonthsFlow = userPreferencesRepository.upcomingPaymentHorizonMonths.get()
 
     init {
         viewModelScope.launch {
-            expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
-                onDatabaseUpdated(recurringExpenses)
-            }
+            combine(
+                expenseRepository.allRecurringExpensesByPrice,
+                horizonMonthsFlow,
+            ) { expenses, horizonMonths -> expenses to horizonMonths }
+                .collect { (recurringExpenses, horizonMonths) ->
+                    onDatabaseUpdated(recurringExpenses, horizonMonths)
+                }
         }
     }
 
@@ -114,10 +117,14 @@ class UpcomingPaymentsViewModel(
 
     private suspend fun refreshData() {
         val recurringExpenses = expenseRepository.allRecurringExpensesByPrice.first()
-        onDatabaseUpdated(recurringExpenses)
+        val horizonMonths = horizonMonthsFlow.first()
+        onDatabaseUpdated(recurringExpenses, horizonMonths)
     }
 
-    private suspend fun onDatabaseUpdated(recurringExpenses: List<RecurringExpenseData>) {
+    private suspend fun onDatabaseUpdated(
+        recurringExpenses: List<RecurringExpenseData>,
+        horizonMonths: Int,
+    ) {
         val from =
             Clock.System
                 .now()
@@ -127,7 +134,7 @@ class UpcomingPaymentsViewModel(
             createUpcomingPaymentData(
                 recurringExpenses = recurringExpenses,
                 from = from,
-                until = from.plus(DatePeriod(years = 10)),
+                until = from.plus(DatePeriod(months = horizonMonths)),
                 pastMonths = PAST_MONTHS_COUNT,
             )
         upcomingStartIndex =
@@ -197,7 +204,7 @@ class UpcomingPaymentsViewModel(
                     val paidDates = paymentRecordsByExpenseId[expense.id] ?: emptySet()
 
                     if (isPastMonth) {
-                        processPastMonthExpense(
+                        UpcomingPaymentsExpander.expandPastMonth(
                             expense = expense,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
@@ -206,7 +213,7 @@ class UpcomingPaymentsViewModel(
                             paidPayments = paidPaymentsThisMonth,
                         )
                     } else if (expense.requireManualConfirmation) {
-                        processManualConfirmationExpense(
+                        UpcomingPaymentsExpander.expandManualConfirmation(
                             expense = expense,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
@@ -215,7 +222,7 @@ class UpcomingPaymentsViewModel(
                             paidPayments = paidPaymentsThisMonth,
                         )
                     } else {
-                        processAutoAdvanceExpense(
+                        UpcomingPaymentsExpander.expandAutoAdvance(
                             expense = expense,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
@@ -358,149 +365,12 @@ class UpcomingPaymentsViewModel(
         return currencyPrefix + sum.toCurrencyString(defaultCurrency.first())
     }
 
-    private fun processAutoAdvanceExpense(
-        expense: RecurringExpenseData,
-        yearMonthIterator: LocalDate,
-        from: LocalDate,
-        payments: MutableList<UpcomingPaymentData>,
-    ) {
-        var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return
-        while (nextPaymentDay < from) {
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
-        }
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
-            val nextPaymentRemainingDays =
-                DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
-            val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
-            payments.add(
-                UpcomingPaymentData(
-                    id = expense.id,
-                    name = expense.name,
-                    price = expense.price,
-                    nextPaymentRemainingDays = nextPaymentRemainingDays,
-                    nextPaymentDate = nextPaymentDate,
-                    tags = expense.tags,
-                    requiresConfirmation = false,
-                    isPaid = false,
-                    paymentDateEpoch = paymentDateEpoch,
-                ),
-            )
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
-        }
-    }
-
-    private fun processManualConfirmationExpense(
-        expense: RecurringExpenseData,
-        yearMonthIterator: LocalDate,
-        from: LocalDate,
-        paidDates: Set<Long>,
-        unpaidPayments: MutableList<UpcomingPaymentData>,
-        paidPayments: MutableList<UpcomingPaymentData>,
-    ) {
-        // For manual confirmation expenses, we need to find all occurrences in this month,
-        // including past ones that haven't been paid yet (overdue).
-        // Start from the first of the month (or earlier for overdue items in the current month)
-        val monthStart = yearMonthIterator
-
-        var nextPaymentDay = expense.getNextPaymentDayAfter(monthStart) ?: return
-
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
-            val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
-            val isPaid = paidDates.contains(paymentDateEpoch)
-            val nextPaymentRemainingDays =
-                DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
-
-            val paymentData =
-                UpcomingPaymentData(
-                    id = expense.id,
-                    name = expense.name,
-                    price = expense.price,
-                    nextPaymentRemainingDays = nextPaymentRemainingDays,
-                    nextPaymentDate = nextPaymentDate,
-                    tags = expense.tags,
-                    requiresConfirmation = true,
-                    isPaid = isPaid,
-                    paymentDateEpoch = paymentDateEpoch,
-                )
-
-            if (isPaid) {
-                paidPayments.add(paymentData)
-            } else {
-                // Only show future unpaid items, or overdue (past) unpaid items in the current month
-                if (nextPaymentRemainingDays >= 0 || yearMonthIterator.isSameMonth(from)) {
-                    unpaidPayments.add(paymentData)
-                }
-            }
-
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
-        }
-    }
-
     private suspend fun CurrencyValue.exchangeToDefaultCurrency(): CurrencyValue? {
         return exchangeRateProvider.exchangeCurrencyValue(this, getDefaultCurrencyCode())
     }
 
     private suspend fun getDefaultCurrencyCode(): String {
         return defaultCurrency.first().ifBlank { getSystemCurrencyCode() }
-    }
-
-    private fun LocalDate.isSameMonth(other: LocalDate): Boolean {
-        return year == other.year && month == other.month
-    }
-
-    private fun processPastMonthExpense(
-        expense: RecurringExpenseData,
-        yearMonthIterator: LocalDate,
-        from: LocalDate,
-        paidDates: Set<Long>,
-        unpaidPayments: MutableList<UpcomingPaymentData>,
-        paidPayments: MutableList<UpcomingPaymentData>,
-    ) {
-        var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return
-
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
-            val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
-            val isPaid =
-                if (expense.requireManualConfirmation) {
-                    paidDates.contains(paymentDateEpoch)
-                } else {
-                    false
-                }
-            val nextPaymentRemainingDays =
-                DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
-
-            val paymentData =
-                UpcomingPaymentData(
-                    id = expense.id,
-                    name = expense.name,
-                    price = expense.price,
-                    nextPaymentRemainingDays = nextPaymentRemainingDays,
-                    nextPaymentDate = nextPaymentDate,
-                    tags = expense.tags,
-                    requiresConfirmation = expense.requireManualConfirmation,
-                    isPaid = isPaid,
-                    paymentDateEpoch = paymentDateEpoch,
-                )
-
-            if (isPaid) {
-                paidPayments.add(paymentData)
-            } else {
-                unpaidPayments.add(paymentData)
-            }
-
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
-        }
     }
 
     companion object {

@@ -82,6 +82,14 @@
     <string name="settings_theme_mode_light">Hell</string>
     <string name="settings_theme_mode_amoled">AMOLED</string>
     <string name="settings_default_tab">Standard Tab</string>
+    <string name="settings_upcoming_horizon">Anzeigezeitraum</string>
+    <string name="settings_upcoming_horizon_1_month">1 Monat</string>
+    <string name="settings_upcoming_horizon_3_months">3 Monate</string>
+    <string name="settings_upcoming_horizon_6_months">6 Monate</string>
+    <string name="settings_upcoming_horizon_1_year">1 Jahr</string>
+    <string name="settings_upcoming_horizon_2_years">2 Jahre</string>
+    <string name="settings_upcoming_horizon_5_years">5 Jahre</string>
+    <string name="settings_upcoming_horizon_10_years">10 Jahre</string>
     <string name="settings_currency">Währung</string>
     <string name="settings_default_currency">Standardwährung</string>
     <string name="settings_choose_currency">Währung auswählen</string>

@@ -14,6 +14,7 @@ import de.dbauer.expensetracker.shared.model.IExchangeRateProvider
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.ThemeMode
+import de.dbauer.expensetracker.shared.ui.UpcomingHorizon
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -46,6 +47,11 @@ class SettingsViewModel(
         private set
     var upcomingPaymentNotificationDaysAdvance = userPreferencesRepository.upcomingPaymentNotificationDaysAdvance
     var upcomingPaymentNotificationDaysAdvanceDialog by mutableStateOf(false)
+        private set
+    var showUpcomingHorizonSelectionDialog by mutableStateOf(false)
+        private set
+    var selectedUpcomingHorizon =
+        userPreferencesRepository.upcomingPaymentHorizonMonths.get().map { UpcomingHorizon.fromMonths(it) }
         private set
 
     var currencySearchQuery by mutableStateOf("")
@@ -161,6 +167,21 @@ class SettingsViewModel(
             userPreferencesRepository.upcomingPaymentNotificationDaysAdvance.save(days)
         }
         upcomingPaymentNotificationDaysAdvanceDialog = false
+    }
+
+    fun onClickUpcomingHorizonSelection() {
+        showUpcomingHorizonSelectionDialog = true
+    }
+
+    fun onDismissUpcomingHorizonSelectionDialog() {
+        showUpcomingHorizonSelectionDialog = false
+    }
+
+    fun onSelectUpcomingHorizon(horizon: UpcomingHorizon) {
+        viewModelScope.launch {
+            userPreferencesRepository.upcomingPaymentHorizonMonths.save(horizon.months)
+            onDismissUpcomingHorizonSelectionDialog()
+        }
     }
 
     fun onCurrencySearchQueryChange(query: String) {

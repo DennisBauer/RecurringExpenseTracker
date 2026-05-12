@@ -64,4 +64,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) :
         Preference(booleanPreferencesKey("WIDGET_BACKGROUND_TRANSPARENT"), false)
     override val whatsNewVersionShown: IUserPreferencesRepository.IPreference<Int> =
         Preference(intPreferencesKey("WHATS_NEW_VERSION_SHOWN"), 0)
+
+    override val upcomingPaymentHorizonMonths =
+        Preference(intPreferencesKey("UPCOMING_PAYMENT_HORIZON_MONTHS"), 120)
 }
