@@ -12,7 +12,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Unarchive
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +41,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import recurringexpensetracker.shared.generated.resources.Res
+import recurringexpensetracker.shared.generated.resources.archive
 import recurringexpensetracker.shared.generated.resources.cancel
 import recurringexpensetracker.shared.generated.resources.delete
 import recurringexpensetracker.shared.generated.resources.discard
@@ -48,6 +51,7 @@ import recurringexpensetracker.shared.generated.resources.edit_expense_title
 import recurringexpensetracker.shared.generated.resources.edit_expense_unsaved_changes_dialog_text
 import recurringexpensetracker.shared.generated.resources.edit_expense_unsaved_changes_dialog_title
 import recurringexpensetracker.shared.generated.resources.save
+import recurringexpensetracker.shared.generated.resources.unarchive
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -55,6 +59,8 @@ fun EditRecurringExpenseScreen(
     expenseId: Int?,
     canUseNotifications: Boolean,
     onDismiss: () -> Unit,
+    onArchived: (expenseId: Int) -> Unit,
+    onUnarchived: (expenseId: Int, previousArchivedDateMillis: Long?) -> Unit,
     onEditTagsClick: () -> Unit,
     setTopAppBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
@@ -110,6 +116,10 @@ fun EditRecurringExpenseScreen(
         FirstPaymentOption(
             date = viewModel.firstPaymentDate,
             onSelectDate = { viewModel.firstPaymentDate = it },
+        )
+        EndDateOption(
+            date = viewModel.endDate,
+            onSelectDate = { viewModel.endDate = it },
         )
         ManualConfirmationOption(
             requireManualConfirmation = viewModel.requireManualConfirmation,
@@ -248,6 +258,26 @@ fun EditRecurringExpenseScreen(
                 }
             },
             actions = {
+                if (viewModel.showArchiveButton) {
+                    IconButton(
+                        onClick = { viewModel.onArchiveClick(onArchived) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Archive,
+                            contentDescription = stringResource(Res.string.archive),
+                        )
+                    }
+                }
+                if (viewModel.showUnarchiveButton) {
+                    IconButton(
+                        onClick = { viewModel.onUnarchiveClick(onUnarchived) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Unarchive,
+                            contentDescription = stringResource(Res.string.unarchive),
+                        )
+                    }
+                }
                 if (viewModel.showDeleteButton) {
                     IconButton(
                         onClick = viewModel::onDeleteClick,
@@ -272,6 +302,8 @@ private fun EditRecurringExpensePreview() {
                 expenseId = 0,
                 canUseNotifications = true,
                 onDismiss = {},
+                onArchived = {},
+                onUnarchived = { _, _ -> },
                 onEditTagsClick = {},
                 setTopAppBar = {},
             )

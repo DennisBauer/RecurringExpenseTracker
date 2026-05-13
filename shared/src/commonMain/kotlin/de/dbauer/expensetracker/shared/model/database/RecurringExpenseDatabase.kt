@@ -24,7 +24,7 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
         ReminderEntry::class,
         PaymentRecordEntry::class,
     ],
-    version = 10,
+    version = 11,
 )
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
@@ -42,6 +42,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_7_8)
                 .addMigrations(migration_8_9)
                 .addMigrations(migration_9_10)
+                .addMigrations(migration_10_11)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -325,6 +326,17 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     )
                     connection.execSQL(
                         "CREATE INDEX IF NOT EXISTS `index_payment_records_expenseId` ON `payment_records` (`expenseId`)",
+                    )
+                }
+            }
+        val migration_10_11 =
+            object : Migration(10, 11) {
+                override fun migrate(connection: SQLiteConnection) {
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN endDate INTEGER DEFAULT NULL",
+                    )
+                    connection.execSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN archivedDate INTEGER DEFAULT NULL",
                     )
                 }
             }

@@ -8,7 +8,6 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import de.dbauer.expensetracker.MainActivity
 import de.dbauer.expensetracker.R
-import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.model.notification.NotificationData
 import org.jetbrains.compose.resources.getString
 
@@ -30,7 +29,11 @@ class SystemNotificationBuilder(
             PendingIntent.getActivity(
                 context,
                 data.id,
-                MainActivity.newInstance(context, data.id, UpcomingPane),
+                MainActivity.newInstance(
+                    context = context,
+                    expenseId = data.expenseId ?: -1,
+                    startRoute = data.startRoute,
+                ),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
             )
         val dismissIntent =

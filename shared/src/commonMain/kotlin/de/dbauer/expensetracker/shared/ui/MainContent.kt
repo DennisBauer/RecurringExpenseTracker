@@ -1,6 +1,8 @@
 package de.dbauer.expensetracker.shared.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -13,27 +15,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -62,6 +71,7 @@ import de.dbauer.expensetracker.shared.data.TagsPane
 import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.data.WhatsNew
 import de.dbauer.expensetracker.shared.data.isInRoute
+import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.ui.editexpense.EditRecurringExpenseScreen
 import de.dbauer.expensetracker.shared.ui.settings.SettingsScreen
 import de.dbauer.expensetracker.shared.ui.tags.TagsScreen
@@ -70,18 +80,25 @@ import de.dbauer.expensetracker.shared.ui.upcomingexpenses.UpcomingPaymentsScree
 import de.dbauer.expensetracker.shared.ui.whatsnew.IWhatsNew
 import de.dbauer.expensetracker.shared.viewmodel.MainNavigationViewModel
 import de.dbauer.expensetracker.shared.viewmodel.RecurringExpenseViewModel
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.edit_expense_button_add
+import recurringexpensetracker.shared.generated.resources.home_filter_chip_archived
+import recurringexpensetracker.shared.generated.resources.home_filter_content_desc
 import recurringexpensetracker.shared.generated.resources.home_search_clear_content_desc
 import recurringexpensetracker.shared.generated.resources.home_search_close_content_desc
 import recurringexpensetracker.shared.generated.resources.home_search_content_desc
 import recurringexpensetracker.shared.generated.resources.home_search_placeholder
 import recurringexpensetracker.shared.generated.resources.home_title
+import recurringexpensetracker.shared.generated.resources.snackbar_expense_archived
+import recurringexpensetracker.shared.generated.resources.snackbar_expense_unarchived
+import recurringexpensetracker.shared.generated.resources.tags_delete_undo
 import recurringexpensetracker.shared.generated.resources.upcoming_title
 import recurringexpensetracker.shared.generated.resources.whats_new_title
+import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,7 +116,7 @@ fun MainContent(
     onClickRestore: () -> Unit,
     updateWidget: () -> Unit,
     modifier: Modifier = Modifier,
-    startRoute: MainNavRoute = HomePane,
+    startRoute: MainNavRoute = HomePane(),
     mainNavigationViewModel: MainNavigationViewModel = koinViewModel<MainNavigationViewModel>(),
     whatsNew: IWhatsNew = koinInject<IWhatsNew>(),
 ) {
@@ -120,13 +137,13 @@ fun MainContent(
         bottomBar = {
             if (backStackEntry
                     ?.destination
-                    ?.isInRoute<MainNavRoute>(HomePane, UpcomingPane, SettingsPane) == true
+                    ?.isInRoute<MainNavRoute>(HomePane(), UpcomingPane, SettingsPane) == true
             ) {
                 BottomNavBar(navController = navController)
             }
         },
         floatingActionButton = {
-            if (backStackEntry?.destination?.isInRoute<MainNavRoute>(HomePane, UpcomingPane) == true) {
+            if (backStackEntry?.destination?.isInRoute<MainNavRoute>(HomePane(), UpcomingPane) == true) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(EditExpensePane())
@@ -146,9 +163,19 @@ fun MainContent(
                 startDestination = startRoute,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                composable<HomePane> {
+                composable<HomePane> { backStackEntry ->
+                    val homeRoute = backStackEntry.toRoute<HomePane>()
                     val recurringExpenseViewModel = koinViewModel<RecurringExpenseViewModel>()
                     var isSearchActive by rememberSaveable { mutableStateOf(false) }
+                    val isFilterRowVisible = recurringExpenseViewModel.isFilterRowVisible
+                    val showArchived by recurringExpenseViewModel.showArchived.collectAsState()
+
+                    LaunchedEffect(homeRoute.showArchived) {
+                        if (homeRoute.showArchived) {
+                            recurringExpenseViewModel.onFilterRowVisibilityChange(true)
+                            recurringExpenseViewModel.setShowArchived(true)
+                        }
+                    }
 
                     val backState =
                         rememberNavigationEventState(
@@ -245,6 +272,18 @@ fun MainContent(
                                         onToggleGridMode = toggleGridMode,
                                         isGridMode = isGridMode,
                                     )
+                                    IconToggleButton(
+                                        checked = isFilterRowVisible,
+                                        onCheckedChange = { checked ->
+                                            recurringExpenseViewModel.onFilterRowVisibilityChange(checked)
+                                        },
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.FilterList,
+                                            contentDescription =
+                                                stringResource(Res.string.home_filter_content_desc),
+                                        )
+                                    }
                                 },
                             )
                         }
@@ -253,17 +292,7 @@ fun MainContent(
                     val keyboardOpen = WindowInsets.ime.getBottom(LocalDensity.current) > 0
                     val bottomPadding = if (keyboardOpen) 0.dp else 80.dp
                     val layoutDirection = LocalLayoutDirection.current
-                    RecurringExpenseOverview(
-                        isGridMode = isGridMode,
-                        navController = navController,
-                        recurringExpenseViewModel = recurringExpenseViewModel,
-                        contentPadding =
-                            PaddingValues(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                            ),
-                        bottomSafeArea = bottomPadding,
+                    Column(
                         modifier =
                             Modifier
                                 .conditional(keyboardOpen) {
@@ -276,11 +305,43 @@ fun MainContent(
                                 }.conditional(!keyboardOpen) {
                                     Modifier.padding(paddingValues)
                                 },
-                    )
+                    ) {
+                        if (isFilterRowVisible) {
+                            Row(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                        .padding(top = 8.dp),
+                            ) {
+                                FilterChip(
+                                    selected = showArchived,
+                                    onClick = {
+                                        recurringExpenseViewModel.setShowArchived(!showArchived)
+                                    },
+                                    label = {
+                                        Text(text = stringResource(Res.string.home_filter_chip_archived))
+                                    },
+                                )
+                            }
+                        }
+                        RecurringExpenseOverview(
+                            isGridMode = isGridMode,
+                            navController = navController,
+                            recurringExpenseViewModel = recurringExpenseViewModel,
+                            contentPadding =
+                                PaddingValues(
+                                    top = if (isFilterRowVisible) 0.dp else 8.dp,
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                ),
+                            bottomSafeArea = bottomPadding,
+                        )
+                    }
 
                     LaunchedEffect(mainNavigationViewModel.shouldShowWhatsNew) {
                         if (mainNavigationViewModel.shouldShowWhatsNew &&
-                            backStackEntry?.destination?.hasRoute(WhatsNew::class) == false
+                            !backStackEntry.destination.hasRoute(WhatsNew::class)
                         ) {
                             navController.navigate(WhatsNew)
                             mainNavigationViewModel.onWhatsNewShown()
@@ -340,12 +401,54 @@ fun MainContent(
                 composable<EditExpensePane> { backStackEntry ->
                     var topAppBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
                     val editExpensePane = backStackEntry.toRoute<EditExpensePane>()
+                    val expenseRepository = koinInject<IExpenseRepository>()
+                    val snackbarScope = rememberCoroutineScope()
+                    val archivedMessage = stringResource(Res.string.snackbar_expense_archived)
+                    val unarchivedMessage = stringResource(Res.string.snackbar_expense_unarchived)
+                    val undoLabel = stringResource(Res.string.tags_delete_undo)
                     EditRecurringExpenseScreen(
                         expenseId = editExpensePane.expenseId,
                         canUseNotifications = canUseNotifications,
                         onDismiss = {
                             navController.navigateUp()
                             updateWidget()
+                        },
+                        onArchived = { archivedExpenseId ->
+                            navController.navigateUp()
+                            updateWidget()
+                            snackbarScope.launch {
+                                snackbarHostState.currentSnackbarData?.dismiss()
+                                val result =
+                                    snackbarHostState.showSnackbar(
+                                        message = archivedMessage,
+                                        actionLabel = undoLabel,
+                                        duration = SnackbarDuration.Short,
+                                    )
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    expenseRepository.unarchive(archivedExpenseId)
+                                    updateWidget()
+                                }
+                            }
+                        },
+                        onUnarchived = { unarchivedExpenseId, previousArchivedDateMillis ->
+                            navController.navigateUp()
+                            updateWidget()
+                            snackbarScope.launch {
+                                snackbarHostState.currentSnackbarData?.dismiss()
+                                val result =
+                                    snackbarHostState.showSnackbar(
+                                        message = unarchivedMessage,
+                                        actionLabel = undoLabel,
+                                        duration = SnackbarDuration.Short,
+                                    )
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    val restoreMillis =
+                                        previousArchivedDateMillis
+                                            ?: Clock.System.now().toEpochMilliseconds()
+                                    expenseRepository.archive(unarchivedExpenseId, restoreMillis)
+                                    updateWidget()
+                                }
+                            }
                         },
                         onEditTagsClick = {
                             navController.navigate(TagsPane)

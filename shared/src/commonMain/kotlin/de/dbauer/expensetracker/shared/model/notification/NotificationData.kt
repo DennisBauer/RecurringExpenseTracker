@@ -1,5 +1,6 @@
 package de.dbauer.expensetracker.shared.model.notification
 
+import de.dbauer.expensetracker.shared.data.MainNavRoute
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import recurringexpensetracker.shared.generated.resources.Res
@@ -12,6 +13,8 @@ data class NotificationData(
     val description: String,
     val channel: NotificationChannel,
     val action: String? = null,
+    val startRoute: MainNavRoute? = null,
+    val expenseId: Int? = null,
 )
 
 enum class NotificationChannel(

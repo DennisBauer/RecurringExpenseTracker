@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.shared.model.notification
 
 import de.dbauer.expensetracker.shared.data.Reminder
+import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.model.DateTimeCalculator
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
@@ -58,6 +59,8 @@ open class ExpenseNotificationManager(
                                             title = expense.name,
                                             description = getNotificationDescription(daysToNextPayment),
                                             channel = NotificationChannel.ExpenseReminder,
+                                            startRoute = UpcomingPane,
+                                            expenseId = expense.id,
                                         ),
                                     )
                                 }
@@ -71,6 +74,8 @@ open class ExpenseNotificationManager(
                                     title = expense.name,
                                     description = getNotificationDescription(daysToNextPayment),
                                     channel = NotificationChannel.ExpenseReminder,
+                                    startRoute = UpcomingPane,
+                                    expenseId = expense.id,
                                 ),
                             )
                         }

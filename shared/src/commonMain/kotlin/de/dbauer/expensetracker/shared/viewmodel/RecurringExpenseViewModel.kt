@@ -13,7 +13,12 @@ import de.dbauer.expensetracker.shared.model.IExchangeRateProvider
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.getSystemCurrencyCode
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class RecurringExpenseViewModel(
@@ -29,6 +34,33 @@ class RecurringExpenseViewModel(
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private val showConvertedCurrency = userPreferencesRepository.showConvertedCurrency.get()
+
+    private val _showArchived = MutableStateFlow(false)
+    val showArchived: StateFlow<Boolean> = _showArchived.asStateFlow()
+
+    var isFilterRowVisible by mutableStateOf(false)
+        private set
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val expensesSource =
+        _showArchived.flatMapLatest { archived ->
+            if (archived) {
+                expenseRepository.allArchivedRecurringExpensesByPrice
+            } else {
+                expenseRepository.allRecurringExpensesByPrice
+            }
+        }
+
+    fun setShowArchived(value: Boolean) {
+        _showArchived.value = value
+    }
+
+    fun onFilterRowVisibilityChange(visible: Boolean) {
+        isFilterRowVisible = visible
+        if (!visible && _showArchived.value) {
+            _showArchived.value = false
+        }
+    }
 
     var currencyPrefix by mutableStateOf("")
         private set
@@ -48,21 +80,21 @@ class RecurringExpenseViewModel(
 
     init {
         viewModelScope.launch {
-            expenseRepository.allRecurringExpensesByPrice.collect { recurringExpenses ->
+            expensesSource.collect { recurringExpenses ->
                 onDatabaseUpdated(recurringExpenses)
             }
         }
         viewModelScope.launch {
             defaultCurrency.collect {
                 if (recurringExpenseData.isNotEmpty()) {
-                    onDatabaseUpdated(expenseRepository.allRecurringExpensesByPrice.first())
+                    onDatabaseUpdated(expensesSource.first())
                 }
             }
         }
         viewModelScope.launch {
             showConvertedCurrency.collect {
                 if (recurringExpenseData.isNotEmpty()) {
-                    onDatabaseUpdated(expenseRepository.allRecurringExpensesByPrice.first())
+                    onDatabaseUpdated(expensesSource.first())
                 }
             }
         }

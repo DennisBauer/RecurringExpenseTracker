@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface IExpenseRepository {
     val allRecurringExpenses: Flow<List<RecurringExpenseData>>
     val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
+    val allArchivedRecurringExpenses: Flow<List<RecurringExpenseData>>
+    val allArchivedRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
     val allTags: Flow<List<Tag>>
 
     suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData?
@@ -16,6 +18,20 @@ interface IExpenseRepository {
     suspend fun update(recurringExpense: RecurringExpenseData)
 
     suspend fun delete(recurringExpense: RecurringExpenseData)
+
+    suspend fun archive(
+        expenseId: Int,
+        archivedDateEpoch: Long,
+    )
+
+    suspend fun unarchive(expenseId: Int)
+
+    suspend fun clearEndDateIfOverdue(
+        expenseId: Int,
+        nowEpoch: Long,
+    )
+
+    suspend fun autoArchiveExpired(nowEpoch: Long): List<AutoArchiveCandidate>
 
     suspend fun insert(tag: Tag)
 

@@ -163,9 +163,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 ?: runBlocking {
                     when (userPreferencesRepository.defaultTab.get().first()) {
-                        DefaultTab.Home.value -> HomePane
+                        DefaultTab.Home.value -> HomePane()
                         DefaultTab.Upcoming.value -> UpcomingPane
-                        else -> HomePane
+                        else -> HomePane()
                     }
                 }
 
@@ -367,12 +367,14 @@ class MainActivity : AppCompatActivity() {
         fun newInstance(
             context: Context,
             expenseId: Int,
-            startRoute: MainNavRoute,
+            startRoute: MainNavRoute?,
         ): Intent {
             return Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(EXTRA_EXPENSE_ID, expenseId)
-                putExtra(EXTRA_START_ROUTE, Json.encodeToString(startRoute))
+                if (startRoute != null) {
+                    putExtra(EXTRA_START_ROUTE, Json.encodeToString(startRoute))
+                }
             }
         }
     }

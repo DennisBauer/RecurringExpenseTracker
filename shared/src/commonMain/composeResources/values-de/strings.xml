@@ -4,6 +4,11 @@
     <string name="top_app_bar_icon_button_grid_open_content_desc">Raster Modus öffnen</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Raster Modus schließen</string>
     <string name="top_app_bar_navigate_up_content_desc">Zurück navigieren</string>
+    <string name="home_filter_content_desc">Filter</string>
+    <string name="home_filter_chip_archived">Archiviert</string>
+    <string name="snackbar_expense_archived">Ausgabe archiviert</string>
+    <string name="snackbar_expense_unarchived">Ausgabe wiederhergestellt</string>
+    <string name="notification_auto_archived_title">Ausgabe automatisch archiviert</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Start</string>
@@ -162,4 +167,10 @@
     <!-- WhatsNew -->
     <string name="whats_new_title">Was ist neu?</string>
     <string name="whats_new_continue">Weiter</string>
+
+    <!-- Archive -->
+    <string name="archive">Archivieren</string>
+    <string name="unarchive">Wiederherstellen</string>
+    <string name="edit_expense_end_date">Enddatum (optional)</string>
+    <string name="edit_expense_end_date_placeholder">Datum wählen</string>
 </resources>

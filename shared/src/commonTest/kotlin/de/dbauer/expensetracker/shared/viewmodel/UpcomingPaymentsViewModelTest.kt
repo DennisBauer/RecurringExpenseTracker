@@ -3,6 +3,7 @@ package de.dbauer.expensetracker.shared.viewmodel
 import de.dbauer.expensetracker.shared.data.RecurringExpenseData
 import de.dbauer.expensetracker.shared.data.Tag
 import de.dbauer.expensetracker.shared.model.FakeExchangeRateProvider
+import de.dbauer.expensetracker.shared.model.database.AutoArchiveCandidate
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.model.database.RecurrenceDatabase
 import de.dbauer.expensetracker.shared.model.database.RecurringExpenseEntry
@@ -36,6 +37,10 @@ class UpcomingPaymentsViewModelTest {
                 get() = expenses
             override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
                 get() = expenses
+            override val allArchivedRecurringExpenses: Flow<List<RecurringExpenseData>>
+                get() = emptyFlow()
+            override val allArchivedRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
+                get() = emptyFlow()
             override val allTags: Flow<List<Tag>>
                 get() = tags
 
@@ -48,6 +53,20 @@ class UpcomingPaymentsViewModelTest {
             override suspend fun update(recurringExpense: RecurringExpenseData) {}
 
             override suspend fun delete(recurringExpense: RecurringExpenseData) {}
+
+            override suspend fun archive(
+                expenseId: Int,
+                archivedDateEpoch: Long,
+            ) {}
+
+            override suspend fun unarchive(expenseId: Int) {}
+
+            override suspend fun clearEndDateIfOverdue(
+                expenseId: Int,
+                nowEpoch: Long,
+            ) {}
+
+            override suspend fun autoArchiveExpired(nowEpoch: Long): List<AutoArchiveCandidate> = emptyList()
 
             override suspend fun insert(tag: Tag) {}
 
