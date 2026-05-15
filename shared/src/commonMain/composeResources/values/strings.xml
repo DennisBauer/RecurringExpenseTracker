@@ -169,12 +169,12 @@
     <!-- WhatsNew -->
     <string name="whats_new_title">Whats new?</string>
     <string name="whats_new_continue">Continue</string>
-    <string name="whats_new_1_title" translatable="false">Mark Expenses as Paid!</string>
-    <string name="whats_new_1_description" translatable="false">• Enable manual confirmation for any expense.\n• Mark payments as paid when you've actually made them.\n• Overdue unpaid expenses stay visible so nothing slips through.</string>
-    <string name="whats_new_2_title" translatable="false">Track Your Payment Status!</string>
-    <string name="whats_new_2_description" translatable="false">• Paid expenses move to the done section.\n• Undo a payment anytime if you marked it by mistake.</string>
-    <string name="whats_new_3_title" translatable="false">Search Your Expenses!</string>
-    <string name="whats_new_3_description" translatable="false">• Quickly find any expense by name, description or tag.</string>
+    <string name="whats_new_1_title" translatable="false">Archive Expenses!</string>
+    <string name="whats_new_1_description" translatable="false">• Archive expenses you no longer need to keep your active list clean.\n• Let the app auto-archive ended expenses for you.\n• Restore archived expenses anytime when you need them back.</string>
+    <string name="whats_new_2_title" translatable="false">Customize the Upcoming Horizon!</string>
+    <string name="whats_new_2_description" translatable="false">• Choose how far ahead the upcoming payments view looks.\n• Pick anything from 1 month up to 10 years in the settings.</string>
+    <string name="whats_new_3_title" translatable="false">Upcoming Payments in the Widget!</string>
+    <string name="whats_new_3_description" translatable="false">• The widget now shows upcoming payments just like the app.\n• Same order and in chronological order.</string>
 
     <!-- Archive -->
     <string name="archive">Archive</string>
