@@ -1,0 +1,10 @@
+Changelog 0.21.0:
+* Feat: Allow archiving expenses manually and automatically
+* Feat: Allow defining the horizon of upcoming payments in the settings
+* Feat: Properly show upcoming payments in widget same as in the app
+* Update to Android 17
+* Translations updated
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.21.0
