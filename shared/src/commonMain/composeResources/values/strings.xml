@@ -5,6 +5,11 @@
     <string name="top_app_bar_icon_button_grid_open_content_desc">Open Grid Mode</string>
     <string name="top_app_bar_icon_button_grid_close_content_desc">Close Grid Mode</string>
     <string name="top_app_bar_navigate_up_content_desc">Navigate back</string>
+    <string name="home_filter_content_desc">Filter</string>
+    <string name="home_filter_chip_archived">Archived</string>
+    <string name="snackbar_expense_archived">Expense archived</string>
+    <string name="snackbar_expense_unarchived">Expense unarchived</string>
+    <string name="notification_auto_archived_title">Expense auto-archived</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_nav_home">Home</string>
@@ -12,7 +17,7 @@
     <string name="bottom_nav_settings">Settings</string>
 
     <!-- Home Tab -->
-    <string name="home_title" translatable="false">Recurring Expense Tracker</string>
+    <string name="home_title" translatable="false">Recurring Expenses</string>
     <string name="home_summary_monthly">Monthly</string>
     <string name="home_summary_weekly">Weekly</string>
     <string name="home_summary_yearly">Yearly</string>
@@ -170,4 +175,10 @@
     <string name="whats_new_2_description" translatable="false">• Paid expenses move to the done section.\n• Undo a payment anytime if you marked it by mistake.</string>
     <string name="whats_new_3_title" translatable="false">Search Your Expenses!</string>
     <string name="whats_new_3_description" translatable="false">• Quickly find any expense by name, description or tag.</string>
+
+    <!-- Archive -->
+    <string name="archive">Archive</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="edit_expense_end_date">End Date (optional)</string>
+    <string name="edit_expense_end_date_placeholder">Pick a Date</string>
 </resources>

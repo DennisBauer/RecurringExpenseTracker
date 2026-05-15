@@ -16,7 +16,7 @@ data class BottomNavigation(
 sealed interface MainNavRoute
 
 @Serializable
-object HomePane : MainNavRoute
+data class HomePane(val showArchived: Boolean = false) : MainNavRoute
 
 @Serializable
 object UpcomingPane : MainNavRoute

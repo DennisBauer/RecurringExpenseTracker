@@ -151,13 +151,14 @@ object UpcomingPaymentsExpander {
         from: LocalDate,
         until: LocalDate,
     ): List<UpcomingPaymentData> {
+        val activeExpenses = recurringExpenses.filter { it.archivedDate == null }
         val currentMonthStart = LocalDate(from.year, from.month, 1)
         var yearMonthIterator = currentMonthStart
         val yearMonthUntil = LocalDate(until.year, until.month, 1)
         if (yearMonthIterator >= yearMonthUntil) return emptyList()
 
         val paidByExpense = mutableMapOf<Int, Set<Long>>()
-        recurringExpenses.filter { it.requireManualConfirmation }.forEach { expense ->
+        activeExpenses.filter { it.requireManualConfirmation }.forEach { expense ->
             paidByExpense[expense.id] = expenseRepository.getPaymentRecordsForExpense(expense.id).toSet()
         }
 
@@ -165,7 +166,7 @@ object UpcomingPaymentsExpander {
         do {
             val unpaidThisMonth = mutableListOf<UpcomingPaymentData>()
             val paidThisMonth = mutableListOf<UpcomingPaymentData>()
-            recurringExpenses.forEach { expense ->
+            activeExpenses.forEach { expense ->
                 val paidDates = paidByExpense[expense.id] ?: emptySet()
                 if (expense.requireManualConfirmation) {
                     expandManualConfirmation(

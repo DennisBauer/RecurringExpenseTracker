@@ -23,6 +23,14 @@ class ExpenseRepository(
         recurringExpenseDao.getAllExpensesByPrice().map { expenses ->
             expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
         }
+    override val allArchivedRecurringExpenses: Flow<List<RecurringExpenseData>> =
+        recurringExpenseDao.getAllArchivedExpenses().map { expenses ->
+            expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
+        }
+    override val allArchivedRecurringExpensesByPrice: Flow<List<RecurringExpenseData>> =
+        recurringExpenseDao.getAllArchivedExpensesByPrice().map { expenses ->
+            expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
+        }
     override val allTags: Flow<List<Tag>> =
         recurringExpenseDao.getAllTags().map { tags -> tags.toTags() }
 
@@ -92,6 +100,34 @@ class ExpenseRepository(
             recurringExpenseDao.deleteAllCrossRefForExpenseId(recurringExpense.id)
             recurringExpenseDao.deleteAllRemindersForExpenseId(recurringExpense.id)
             recurringExpenseDao.deleteAllPaymentRecordsForExpenseId(recurringExpense.id)
+        }
+
+    override suspend fun archive(
+        expenseId: Int,
+        archivedDateEpoch: Long,
+    ) = withContext(Dispatchers.IO) {
+        recurringExpenseDao.setArchivedDate(expenseId, archivedDateEpoch)
+    }
+
+    override suspend fun unarchive(expenseId: Int) =
+        withContext(Dispatchers.IO) {
+            recurringExpenseDao.setArchivedDate(expenseId, null)
+        }
+
+    override suspend fun clearEndDateIfOverdue(
+        expenseId: Int,
+        nowEpoch: Long,
+    ) = withContext(Dispatchers.IO) {
+        recurringExpenseDao.clearEndDateIfOverdue(expenseId, nowEpoch)
+    }
+
+    override suspend fun autoArchiveExpired(nowEpoch: Long): List<AutoArchiveCandidate> =
+        withContext(Dispatchers.IO) {
+            val candidates = recurringExpenseDao.getExpensesToAutoArchive(nowEpoch)
+            candidates.forEach { candidate ->
+                recurringExpenseDao.setArchivedDate(candidate.id, nowEpoch)
+            }
+            candidates.filter { !it.name.isNullOrBlank() }
         }
 
     override suspend fun insert(tag: Tag) =

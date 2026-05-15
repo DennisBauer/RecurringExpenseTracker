@@ -16,6 +16,8 @@ data class RecurringExpenseEntry(
     @ColumnInfo(name = "currencyCode") val currencyCode: String,
     @ColumnInfo(name = "notifyForExpense") val notifyForExpense: Boolean,
     @ColumnInfo(name = "requireManualConfirmation") val requireManualConfirmation: Boolean = false,
+    @ColumnInfo(name = "endDate") val endDate: Long? = null,
+    @ColumnInfo(name = "archivedDate") val archivedDate: Long? = null,
 ) {
     fun getMonthlyPrice(): Float {
         return when (recurrence) {

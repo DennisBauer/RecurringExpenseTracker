@@ -12,16 +12,43 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecurringExpenseDao {
     @Transaction
-    @Query("SELECT * FROM recurring_expenses")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL")
     fun getAllExpenses(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
-    @Query("SELECT * FROM recurring_expenses ORDER BY price DESC")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL ORDER BY price DESC")
     fun getAllExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>>
+
+    @Transaction
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL ORDER BY archivedDate DESC")
+    fun getAllArchivedExpenses(): Flow<List<RecurringExpenseWithTagsEntry>>
+
+    @Transaction
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL ORDER BY price DESC")
+    fun getAllArchivedExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
     @Query("SELECT * FROM recurring_expenses WHERE id = :id")
     suspend fun getExpenseById(id: Int): RecurringExpenseWithTagsEntry?
+
+    @Query("UPDATE recurring_expenses SET archivedDate = :archivedDate WHERE id = :id")
+    suspend fun setArchivedDate(
+        id: Int,
+        archivedDate: Long?,
+    )
+
+    @Query(
+        "SELECT id, name FROM recurring_expenses WHERE endDate IS NOT NULL AND endDate <= :now AND archivedDate IS NULL",
+    )
+    suspend fun getExpensesToAutoArchive(now: Long): List<AutoArchiveCandidate>
+
+    @Query(
+        "UPDATE recurring_expenses SET endDate = NULL WHERE id = :id AND endDate IS NOT NULL AND endDate <= :now",
+    )
+    suspend fun clearEndDateIfOverdue(
+        id: Int,
+        now: Long,
+    )
 
     @Transaction
     @Query("SELECT * FROM tags")

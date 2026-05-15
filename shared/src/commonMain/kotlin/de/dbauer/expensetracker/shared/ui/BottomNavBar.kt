@@ -33,7 +33,7 @@ fun BottomNavBar(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val bottomNavigationItems =
         listOf(
-            BottomNavigation(HomePane, Res.string.bottom_nav_home, Icons.Rounded.Home),
+            BottomNavigation(HomePane(), Res.string.bottom_nav_home, Icons.Rounded.Home),
             BottomNavigation(UpcomingPane, Res.string.bottom_nav_upcoming, Icons.Rounded.Payment),
             BottomNavigation(SettingsPane, Res.string.bottom_nav_settings, Icons.Rounded.Settings),
         )

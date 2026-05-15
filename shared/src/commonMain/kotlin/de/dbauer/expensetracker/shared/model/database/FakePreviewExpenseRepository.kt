@@ -33,6 +33,8 @@ class FakePreviewExpenseRepository : IExpenseRepository {
 
     override val allRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
     override val allRecurringExpensesByPrice: Flow<List<RecurringExpenseData>> = flowOf(listOf(fakeExpense))
+    override val allArchivedRecurringExpenses: Flow<List<RecurringExpenseData>> = flowOf(emptyList())
+    override val allArchivedRecurringExpensesByPrice: Flow<List<RecurringExpenseData>> = flowOf(emptyList())
     override val allTags: Flow<List<Tag>> = flowOf(fakeTags)
 
     override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? {
@@ -44,6 +46,20 @@ class FakePreviewExpenseRepository : IExpenseRepository {
     override suspend fun update(recurringExpense: RecurringExpenseData) {}
 
     override suspend fun delete(recurringExpense: RecurringExpenseData) {}
+
+    override suspend fun archive(
+        expenseId: Int,
+        archivedDateEpoch: Long,
+    ) {}
+
+    override suspend fun unarchive(expenseId: Int) {}
+
+    override suspend fun clearEndDateIfOverdue(
+        expenseId: Int,
+        nowEpoch: Long,
+    ) {}
+
+    override suspend fun autoArchiveExpired(nowEpoch: Long): List<AutoArchiveCandidate> = emptyList()
 
     override suspend fun insert(tag: Tag) {}
 

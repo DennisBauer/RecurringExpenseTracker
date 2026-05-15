@@ -37,6 +37,44 @@ class ExpenseRepositoryReminderTest {
             return flowOf(expenses.values.sortedByDescending { it.expense.price }.toList())
         }
 
+        override fun getAllArchivedExpenses(): Flow<List<RecurringExpenseWithTagsEntry>> {
+            return flowOf(expenses.values.filter { it.expense.archivedDate != null }.toList())
+        }
+
+        override fun getAllArchivedExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>> {
+            return flowOf(
+                expenses.values
+                    .filter { it.expense.archivedDate != null }
+                    .sortedByDescending { it.expense.price }
+                    .toList(),
+            )
+        }
+
+        override suspend fun setArchivedDate(
+            id: Int,
+            archivedDate: Long?,
+        ) {
+            val existing = expenses[id] ?: return
+            expenses[id] = existing.copy(expense = existing.expense.copy(archivedDate = archivedDate))
+        }
+
+        override suspend fun getExpensesToAutoArchive(now: Long): List<AutoArchiveCandidate> {
+            return expenses.values
+                .filter { it.expense.archivedDate == null && (it.expense.endDate ?: Long.MAX_VALUE) <= now }
+                .map { AutoArchiveCandidate(id = it.expense.id, name = it.expense.name) }
+        }
+
+        override suspend fun clearEndDateIfOverdue(
+            id: Int,
+            now: Long,
+        ) {
+            val existing = expenses[id] ?: return
+            val end = existing.expense.endDate ?: return
+            if (end <= now) {
+                expenses[id] = existing.copy(expense = existing.expense.copy(endDate = null))
+            }
+        }
+
         override fun getAllTags(): Flow<List<TagEntry>> {
             return flowOf(tags.values.toList())
         }

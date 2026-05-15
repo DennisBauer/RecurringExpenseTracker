@@ -4,6 +4,8 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import de.dbauer.expensetracker.shared.data.HomePane
+import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.notification.ExpenseNotificationManager
 import de.dbauer.expensetracker.shared.model.notification.NotificationData
@@ -18,10 +20,14 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.getString
 import org.koin.java.KoinJavaComponent.inject
+import recurringexpensetracker.shared.generated.resources.Res
+import recurringexpensetracker.shared.generated.resources.notification_auto_archived_title
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
+import de.dbauer.expensetracker.shared.model.notification.NotificationChannel as SharedNotificationChannel
 
 internal const val ACTION_NOTIFICATION_LOOP_ACTION = "notification_loop_action"
 
@@ -37,6 +43,9 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
     private val notificationManager: NotificationManager by inject(NotificationManager::class.java)
     private val userPreferencesRepository: IUserPreferencesRepository by inject(
         IUserPreferencesRepository::class.java,
+    )
+    private val expenseRepository: IExpenseRepository by inject(
+        IExpenseRepository::class.java,
     )
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -56,6 +65,19 @@ internal class NotificationLoopReceiver : AlarmLoopReceiver() {
         val pendingResult = goAsync()
 
         coroutineScope.launch {
+            val autoArchivedCandidates =
+                expenseRepository.autoArchiveExpired(Clock.System.now().toEpochMilliseconds())
+            autoArchivedCandidates.forEach { candidate ->
+                showNotification(
+                    NotificationData(
+                        id = -candidate.id - 1,
+                        title = getString(Res.string.notification_auto_archived_title),
+                        description = candidate.name.orEmpty(),
+                        channel = SharedNotificationChannel.ExpenseReminder,
+                        startRoute = HomePane(showArchived = true),
+                    ),
+                )
+            }
             when (intent.action) {
                 ACTION_START_ALARM_LOOPER -> {
                     stop(context)

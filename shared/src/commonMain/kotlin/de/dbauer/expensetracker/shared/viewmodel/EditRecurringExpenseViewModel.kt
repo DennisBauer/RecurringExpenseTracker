@@ -23,6 +23,7 @@ import de.dbauer.expensetracker.shared.toFloatLocaleAware
 import de.dbauer.expensetracker.shared.toLocalString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 import kotlin.time.Instant
 
 class EditRecurringExpenseViewModel(
@@ -44,6 +45,9 @@ class EditRecurringExpenseViewModel(
         private set
     var selectedRecurrence by mutableStateOf(Recurrence.Monthly)
     var firstPaymentDate: Instant? by mutableStateOf(null)
+    var endDate: Instant? by mutableStateOf(null)
+    var archivedDate: Instant? by mutableStateOf(null)
+        private set
     private var _tags = mutableStateMapOf<Tag, Boolean>()
     val tags: List<Pair<Tag, Boolean>>
         get() =
@@ -70,6 +74,8 @@ class EditRecurringExpenseViewModel(
 
     val isNewExpense = expenseId == null
     val showDeleteButton = !isNewExpense
+    val showArchiveButton: Boolean get() = !isNewExpense && archivedDate == null
+    val showUnarchiveButton: Boolean get() = !isNewExpense && archivedDate != null
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
     private var defaultReminderDays by mutableIntStateOf(0)
@@ -94,6 +100,8 @@ class EditRecurringExpenseViewModel(
                         everyXRecurrenceState = expense.everyXRecurrence.toString()
                         selectedRecurrence = expense.recurrence
                         firstPaymentDate = expense.firstPayment
+                        endDate = expense.endDate
+                        archivedDate = expense.archivedDate
                         expense.tags.forEach {
                             _tags[it] = true
                         }
@@ -136,6 +144,7 @@ class EditRecurringExpenseViewModel(
                     everyXRecurrenceState,
                     selectedRecurrence,
                     firstPaymentDate,
+                    endDate,
                     notifyForExpense,
                     requireManualConfirmation,
                     _tags.toMap(),
@@ -335,7 +344,35 @@ class EditRecurringExpenseViewModel(
             notifyForExpense = notifyForExpense,
             reminders = reminders.sortedBy { it.daysBeforePayment },
             requireManualConfirmation = requireManualConfirmation,
+            endDate = endDate,
+            archivedDate = archivedDate,
         )
+    }
+
+    fun onArchiveClick(onArchived: (expenseId: Int) -> Unit) {
+        if (expenseId == null) return
+        viewModelScope.launch {
+            val now = Clock.System.now()
+            expenseRepository.archive(expenseId, now.toEpochMilliseconds())
+            archivedDate = now
+            onArchived(expenseId)
+        }
+    }
+
+    fun onUnarchiveClick(onUnarchived: (expenseId: Int, previousArchivedDateMillis: Long?) -> Unit) {
+        if (expenseId == null) return
+        viewModelScope.launch {
+            val previousArchivedDateMillis = archivedDate?.toEpochMilliseconds()
+            val now = Clock.System.now()
+            val endDateIsOverdue = endDate?.let { it <= now } == true
+            if (endDateIsOverdue) {
+                expenseRepository.clearEndDateIfOverdue(expenseId, now.toEpochMilliseconds())
+                endDate = null
+            }
+            expenseRepository.unarchive(expenseId)
+            archivedDate = null
+            onUnarchived(expenseId, previousArchivedDateMillis)
+        }
     }
 
     private fun verifyUserInput(): Boolean {
@@ -397,6 +434,7 @@ class EditRecurringExpenseViewModel(
                 everyXRecurrenceState.isNotBlank() ||
                 selectedRecurrence != Recurrence.Monthly ||
                 firstPaymentDate != null ||
+                endDate != null ||
                 tags.any { it.second } ||
                 !notifyForExpense ||
                 requireManualConfirmation ||
@@ -414,6 +452,7 @@ class EditRecurringExpenseViewModel(
             if (everyXRecurrenceState != expense.everyXRecurrence.toString()) return true
             if (selectedRecurrence != expense.recurrence) return true
             if (firstPaymentDate != expense.firstPayment) return true
+            if (endDate != expense.endDate) return true
             if (notifyForExpense != expense.notifyForExpense) return true
             if (requireManualConfirmation != expense.requireManualConfirmation) return true
 
