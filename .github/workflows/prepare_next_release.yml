@@ -51,12 +51,13 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Commit exchange rates
+      - name: Commit currencies and exchange rates
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email '37552885+DennisBauer@users.noreply.github.com'
           git add shared/src/commonMain/composeResources/files/exchange_rates.json
-          git commit -S -m "Update exchange rates"
+          git add shared/src/commonMain/composeResources/files/currencies.json
+          git commit -S -m "Update currencies and exchange rates"
 
       - name: Commit library licenses
         run: |
