@@ -130,4 +130,21 @@
     <string name="upcoming_mark_as_unpaid">Žymėti kaip nesumokėtą</string>
     <string name="notification_expense_reminder_message_overdue_today">Mokėjimas yra mokamas šiandien.</string>
     <string name="notification_expense_reminder_message_overdue_days">Mokėjimas yra %1$d diena (-os, -ų) vėluojamas</string>
+    <string name="home_filter_content_desc">Filtruoti</string>
+    <string name="home_filter_chip_archived">Suarchyvuota</string>
+    <string name="snackbar_expense_archived">Išlaida suarchyvuota.</string>
+    <string name="snackbar_expense_unarchived">Išlaida išarchyvuota.</string>
+    <string name="notification_auto_archived_title">Išlaida automatiškai suarchyvuota</string>
+    <string name="settings_upcoming_horizon">Būsimas horizonto laikas</string>
+    <string name="settings_upcoming_horizon_1_month">1 mėnesis</string>
+    <string name="settings_upcoming_horizon_3_months">3 mėnesiai</string>
+    <string name="settings_upcoming_horizon_6_months">6 mėnesiai</string>
+    <string name="settings_upcoming_horizon_1_year">1 metai</string>
+    <string name="settings_upcoming_horizon_2_years">2 metai</string>
+    <string name="settings_upcoming_horizon_5_years">5 metai</string>
+    <string name="settings_upcoming_horizon_10_years">10 metų</string>
+    <string name="archive">Archyvuoti</string>
+    <string name="unarchive">Išarchyvuoti</string>
+    <string name="edit_expense_end_date">Pabaigos data (nebūtina)</string>
+    <string name="edit_expense_end_date_placeholder">Pasirinkti datą</string>
 </resources>
