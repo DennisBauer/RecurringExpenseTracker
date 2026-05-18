@@ -130,4 +130,21 @@
     <string name="notification_expense_reminder_message_overdue_today">Срок оплаты истекает сегодня</string>
     <string name="notification_expense_reminder_message_overdue_days">Просрочка платежа составляет %1$d дней</string>
     <string name="whats_new_continue">Продолжить</string>
+    <string name="home_filter_content_desc">Фильтр</string>
+    <string name="home_filter_chip_archived">Архив</string>
+    <string name="snackbar_expense_archived">Расход заархивирован</string>
+    <string name="snackbar_expense_unarchived">Расход разархивирован</string>
+    <string name="notification_auto_archived_title">Расход авто-архив</string>
+    <string name="settings_upcoming_horizon">Ближайшие перспективы</string>
+    <string name="settings_upcoming_horizon_1_month">1 месяц</string>
+    <string name="settings_upcoming_horizon_3_months">3 месяца</string>
+    <string name="edit_expense_end_date_placeholder">Выберите дату</string>
+    <string name="settings_upcoming_horizon_6_months">6 месяцев</string>
+    <string name="settings_upcoming_horizon_1_year">1 год</string>
+    <string name="settings_upcoming_horizon_2_years">2 года</string>
+    <string name="settings_upcoming_horizon_5_years">5 лет</string>
+    <string name="settings_upcoming_horizon_10_years">10 лет</string>
+    <string name="archive">В архиве</string>
+    <string name="unarchive">Из архива</string>
+    <string name="edit_expense_end_date">Конечная дата (по желанию)</string>
 </resources>
