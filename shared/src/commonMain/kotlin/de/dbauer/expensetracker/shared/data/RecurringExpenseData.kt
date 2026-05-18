@@ -3,6 +3,8 @@ package de.dbauer.expensetracker.shared.data
 import de.dbauer.expensetracker.shared.model.DateTimeCalculator
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.StringResource
 import recurringexpensetracker.shared.generated.resources.Res
 import recurringexpensetracker.shared.generated.resources.edit_expense_recurrence_day
@@ -44,22 +46,28 @@ data class RecurringExpenseData(
     fun getNextPaymentDay(): LocalDate? {
         if (firstPayment == null) return null
 
-        return DateTimeCalculator.getDayOfNextOccurrenceFromNow(
-            from = firstPayment,
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence.toDateTimeUnit(),
-        )
+        val nextDay =
+            DateTimeCalculator.getDayOfNextOccurrenceFromNow(
+                from = firstPayment,
+                everyXRecurrence = everyXRecurrence,
+                recurrence = recurrence.toDateTimeUnit(),
+            )
+        val endLocal = endDate?.toLocalDateTime(TimeZone.UTC)?.date
+        return if (endLocal != null && nextDay > endLocal) null else nextDay
     }
 
     fun getNextPaymentDayAfter(afterDate: LocalDate): LocalDate? {
         if (firstPayment == null) return null
 
-        return DateTimeCalculator.getDayOfNextOccurrence(
-            afterDay = afterDate,
-            first = firstPayment,
-            everyXRecurrence = everyXRecurrence,
-            recurrence = recurrence.toDateTimeUnit(),
-        )
+        val nextDay =
+            DateTimeCalculator.getDayOfNextOccurrence(
+                afterDay = afterDate,
+                first = firstPayment,
+                everyXRecurrence = everyXRecurrence,
+                recurrence = recurrence.toDateTimeUnit(),
+            )
+        val endLocal = endDate?.toLocalDateTime(TimeZone.UTC)?.date
+        return if (endLocal != null && nextDay > endLocal) null else nextDay
     }
 }
 
