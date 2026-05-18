@@ -963,6 +963,61 @@ class UpcomingPaymentsViewModelTest {
         }
 
     @Test
+    fun `expense past endDate is excluded from upcoming list`() =
+        runTest {
+            val from = LocalDate(2025, 6, 1)
+            val until = LocalDate(2026, 6, 1)
+            val firstPayment = LocalDateTime(2025, 1, 10, 0, 0).toInstant(TimeZone.UTC)
+            val ended =
+                getTestExpense(
+                    name = "Ended",
+                    price = 10f,
+                    currencyCode = defaultCurrencyCode,
+                    recurrence = RecurrenceDatabase.Monthly,
+                    everyXRecurrence = 1,
+                    firstPayment = firstPayment,
+                    endDate = LocalDateTime(2025, 4, 30, 0, 0).toInstant(TimeZone.UTC),
+                )
+            val ongoing =
+                getTestExpense(
+                    name = "Ongoing",
+                    price = 5f,
+                    currencyCode = defaultCurrencyCode,
+                    recurrence = RecurrenceDatabase.Monthly,
+                    everyXRecurrence = 1,
+                    firstPayment = firstPayment,
+                    endDate = null,
+                )
+
+            val result = viewModel.createUpcomingPaymentData(listOf(ended, ongoing), from, until)
+            val names = result.filterIsInstance<UpcomingPayment.PaymentItem>().map { it.payment.name }
+            assertTrue(names.contains("Ongoing"))
+            assertTrue(!names.contains("Ended"))
+        }
+
+    @Test
+    fun `expense with endDate equal to payment day is still included`() =
+        runTest {
+            val from = LocalDate(2025, 6, 1)
+            val until = LocalDate(2025, 9, 1)
+            val firstPayment = LocalDateTime(2025, 6, 15, 0, 0).toInstant(TimeZone.UTC)
+            val expense =
+                getTestExpense(
+                    name = "EndsOnPayment",
+                    price = 10f,
+                    currencyCode = defaultCurrencyCode,
+                    recurrence = RecurrenceDatabase.Monthly,
+                    everyXRecurrence = 1,
+                    firstPayment = firstPayment,
+                    endDate = LocalDateTime(2025, 7, 15, 0, 0).toInstant(TimeZone.UTC),
+                )
+
+            val result = viewModel.createUpcomingPaymentData(listOf(expense), from, until)
+            val paymentItems = result.filterIsInstance<UpcomingPayment.PaymentItem>()
+            assertEquals(2, paymentItems.size) // June 15 + July 15 (endDate), no August
+        }
+
+    @Test
     fun `horizon clamps upcoming list to configured window`() =
         runTest {
             val from = LocalDate(2025, 1, 1)
@@ -1001,6 +1056,7 @@ class UpcomingPaymentsViewModelTest {
         recurrence: RecurrenceDatabase = RecurrenceDatabase.Monthly,
         firstPayment: Instant? = null,
         requireManualConfirmation: Boolean = false,
+        endDate: Instant? = null,
     ): RecurringExpenseData {
         return RecurringExpenseWithTagsEntry(
             expense =
@@ -1015,6 +1071,7 @@ class UpcomingPaymentsViewModelTest {
                     currencyCode = currencyCode,
                     notifyForExpense = false,
                     requireManualConfirmation = requireManualConfirmation,
+                    endDate = endDate?.toEpochMilliseconds(),
                 ),
             tags = emptyList(),
             reminders = emptyList(),
