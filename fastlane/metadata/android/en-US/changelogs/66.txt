@@ -1,0 +1,4 @@
+Changelog 0.21.2:
+* Fix widget when having a lot of expenses by limiting expenses to 40
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.21.2
