@@ -12,6 +12,8 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
+private const val MAX_WIDGET_ITEMS = 40
+
 class UpcomingPaymentsWidgetModel(
     private val expenseRepository: IExpenseRepository,
     private val userPreferencesRepository: IUserPreferencesRepository,
@@ -40,7 +42,7 @@ class UpcomingPaymentsWidgetModel(
                         until = until,
                     )
                 _upcomingPaymentsData.clear()
-                _upcomingPaymentsData.addAll(payments)
+                _upcomingPaymentsData.addAll(payments.take(MAX_WIDGET_ITEMS))
             }
     }
 }
