@@ -96,7 +96,6 @@ class BiometricPromptManager(
             }
 
             else -> {
-                Unit
             }
         }
 
