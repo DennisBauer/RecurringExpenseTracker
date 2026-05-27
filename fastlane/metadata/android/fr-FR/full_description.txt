@@ -1,6 +1,6 @@
-A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
+Un outil de suivi des dépenses récurrentes Material You, vous permettant de suivre vos dépenses mensuelles.
 
-As the name suggests, this app focuses on recurring expenses like rent, insurance, subscriptions, and other regular payments.
-Built with Kotlin Multiplatform and Material You design principles, it provides a simple yet powerful way to track and visualize your recurring financial commitments.
-The app is designed to be intuitive and straightforward, helping you understand exactly where your money goes each month.
-My idea is to add new features iteratively, and I'm happy for any contribution. Feel free to make feature requests or report bugs if you find any.
+Comme son nom l'indique, cette application se concentre sur les dépenses récurrentes telles que le loyer, l'assurance, les abonnements et autres paiements réguliers.
+Développée avec Kotlin Multiplatform et les principes de conception Material Design, elle offre un moyen simple et efficace de suivre et de visualiser vos engagements financiers récurrents.
+L'application est conçue pour être intuitive et simple d'utilisation, vous permettant de comprendre précisément où va votre argent chaque mois.
+Mon objectif est d'ajouter de nouvelles fonctionnalités progressivement, et toute contribution est la bienvenue. N'hésitez pas à suggérer des fonctionnalités ou à signaler les bugs que vous pourriez rencontrer.
