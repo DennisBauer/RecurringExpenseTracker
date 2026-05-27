@@ -49,7 +49,7 @@
     <string name="biometric_prompt_manager_unlock">Déverrouiller</string>
     <string name="cancel">Annuler</string>
     <string name="edit_expense_title">Modifier la dépense</string>
-    <string name="edit_expense_delete_dialog_text">Voulez-vous vraiment supprimer cette dépense?</string>
+    <string name="edit_expense_delete_dialog_text">Voulez-vous vraiment supprimer cette dépense ?</string>
     <string name="settings_general">Général</string>
     <string name="settings_default_currency">Devise par défaut</string>
     <string name="settings_system_default">Valeur système</string>
@@ -100,7 +100,7 @@
     <string name="tags_color_custom">Personnalisée</string>
     <string name="settings_about_suggest_or_report">Contribuer avec une idée ou un problème</string>
     <string name="widget_transparent_background">Fond transparent</string>
-    <string name="whats_new_title">Quoi de nouveau?</string>
+    <string name="whats_new_title">Quoi de nouveau ?</string>
     <string name="top_app_bar_navigate_up_content_desc">Retour</string>
     <string name="edit_expense_notification_add_reminder">Ajouter</string>
     <string name="edit_expense_notification_add_reminder_content_desc">Ajouter un rappel</string>
