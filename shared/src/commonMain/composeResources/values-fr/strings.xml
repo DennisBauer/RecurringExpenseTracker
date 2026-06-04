@@ -94,7 +94,7 @@
     <string name="tags_title">Titre</string>
     <string name="tags_title_empty">Le titre d'une étiquette ne peut pas être vide</string>
     <string name="tags_deleted">Étiquette supprimée</string>
-    <string name="tags_delete_undo">Annuler</string>
+    <string name="tags_delete_undo">Défaire</string>
     <string name="tags_show_more">Afficher plus</string>
     <string name="tags_color_simple">Simple</string>
     <string name="tags_color_custom">Personnalisée</string>
@@ -113,7 +113,7 @@
     <string name="settings_currency_search_content_desc">Rechercher des devises</string>
     <string name="settings_currency_close_search_content_desc">Fermer la recherche</string>
     <string name="settings_currency_clear_search_content_desc">Effacer la recherche</string>
-    <string name="discard">Annuler</string>
+    <string name="discard">Supprimer</string>
     <string name="home_filter_content_desc">Filtrer</string>
     <string name="home_filter_chip_archived">Archivé</string>
     <string name="snackbar_expense_archived">Dépense archivée</string>
