@@ -31,7 +31,7 @@
     <string name="home_summary_weekly">أسبوعيًا</string>
     <string name="edit_expense_recurrence_week">اسبوع/أسابيع</string>
     <string name="edit_expense_recurrence_month_short">ش</string>
-    <string name="edit_expense_name_placeholder">مثال: نتفلكس</string>
+    <string name="edit_expense_name_placeholder">مثال: الإنترنت</string>
     <string name="upcoming_time_remaining_today">اليوم</string>
     <string name="upcoming_time_remaining_tomorrow">غدًا</string>
     <string name="upcoming_time_remaining_days">بعد %1$d يومًا</string>
