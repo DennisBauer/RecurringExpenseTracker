@@ -31,7 +31,7 @@
     <string name="home_summary_weekly">أسبوعيًا</string>
     <string name="edit_expense_recurrence_week">اسبوع/أسابيع</string>
     <string name="edit_expense_recurrence_month_short">ش</string>
-    <string name="edit_expense_name_placeholder">مثال: نتفلكس</string>
+    <string name="edit_expense_name_placeholder">مثال: الإنترنت</string>
     <string name="upcoming_time_remaining_today">اليوم</string>
     <string name="upcoming_time_remaining_tomorrow">غدًا</string>
     <string name="upcoming_time_remaining_days">بعد %1$d يومًا</string>
@@ -84,7 +84,7 @@
     <string name="settings_show_converted_currency">عرض العملة المحولة</string>
     <string name="settings_title_security">الأمان</string>
     <string name="settings_notifications_subtitle">إظهار تنبيه للمدفوعات المستحقة</string>
-    <string name="settings_notifications_schedule_days_subtitle">قبل %1$d أيام</string>
+    <string name="settings_notifications_schedule_days_subtitle">قبلها ب%1$d من الأيام</string>
     <string name="biometric_prompt_manager_title">فتح أداة تتبع المصروفات</string>
     <string name="biometric_prompt_manager_unlock">فتح</string>
     <string name="notification_expense_reminder">تذكير المصروفات</string>
@@ -124,7 +124,7 @@
     <string name="upcoming_time_overdue_today">حق اليوم</string>
     <string name="upcoming_paid_section">تم الدفع</string>
     <string name="upcoming_section_upcoming">قريباً</string>
-    <string name="upcoming_time_past_days">قبل %1$d أيام</string>
+    <string name="upcoming_time_past_days">قبل أيام %1$d</string>
     <string name="upcoming_mark_as_paid">تم وضع علامة "تم الدفع"</string>
     <string name="upcoming_mark_as_unpaid">ضع علامة "غير مدفوع الأجر"</string>
     <string name="settings_upcoming_horizon">الأفق القادم</string>
@@ -138,4 +138,13 @@
     <string name="notification_expense_reminder_message_overdue_today">يستحق الدفع اليوم</string>
     <string name="notification_expense_reminder_message_overdue_days">الدفعة متأخرة لمدة %1$d يومًا</string>
     <string name="whats_new_continue">تابع</string>
+    <string name="home_filter_content_desc">تصفية</string>
+    <string name="home_filter_chip_archived">تم أرشفته</string>
+    <string name="snackbar_expense_archived">تمت أرشفة المصروفات</string>
+    <string name="snackbar_expense_unarchived">لم تتم أرشفة المصروفات</string>
+    <string name="notification_auto_archived_title">المصروفات المؤرشفة تلقائيًا</string>
+    <string name="archive">الأرشيف</string>
+    <string name="unarchive">إلغاء الأرشفة</string>
+    <string name="edit_expense_end_date">تاريخ الانتهاء (اختياري)</string>
+    <string name="edit_expense_end_date_placeholder">اختر تاريخًا</string>
 </resources>
