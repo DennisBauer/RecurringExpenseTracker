@@ -95,9 +95,7 @@ class BiometricPromptManager(
                 return
             }
 
-            else -> {
-                Unit
-            }
+            else -> {}
         }
 
         BiometricPrompt(
