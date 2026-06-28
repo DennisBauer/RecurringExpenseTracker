@@ -1,0 +1,6 @@
+Changelog 0.21.3:
+* (French, Arabic, Portuguese, Chinese) Translations updated
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.21.3
