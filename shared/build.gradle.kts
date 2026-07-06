@@ -56,6 +56,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.sqlite.framework)
         }
         commonMain.dependencies {
             implementation(libs.androidx.datastore.preferences)
@@ -117,7 +118,7 @@ compose {
     }
 }
 
-room {
+room3 {
     schemaDirectory("$projectDir/schemas")
 }
 

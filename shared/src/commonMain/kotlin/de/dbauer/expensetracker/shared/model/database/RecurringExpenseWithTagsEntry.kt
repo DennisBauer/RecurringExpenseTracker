@@ -1,25 +1,25 @@
 package de.dbauer.expensetracker.shared.model.database
 
-import androidx.room.Embedded
-import androidx.room.Junction
-import androidx.room.Relation
+import androidx.room3.Embedded
+import androidx.room3.Junction
+import androidx.room3.Relation
 
 data class RecurringExpenseWithTagsEntry(
     @Embedded val expense: RecurringExpenseEntry,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
+        parentColumns = ["id"],
+        entityColumns = ["id"],
         associateBy =
             Junction(
                 value = ExpenseTagCrossRefEntry::class,
-                parentColumn = "expenseId",
-                entityColumn = "tagId",
+                parentColumns = ["expenseId"],
+                entityColumns = ["tagId"],
             ),
     )
     val tags: List<TagEntry>,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "expenseId",
+        parentColumns = ["id"],
+        entityColumns = ["expenseId"],
     )
     val reminders: List<ReminderEntry> = emptyList(),
 )

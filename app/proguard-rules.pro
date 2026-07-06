@@ -22,6 +22,8 @@
 
 -dontwarn kotlinx.serialization.internal.AbstractPolymorphicSerializer
 
+-keep class * extends androidx.room3.RoomDatabase { <init>(); }
+# WorkManager (pulled in transitively via Glance) still uses Room 2 internally
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
 
 # Ensure all Previews have been stripped https://issuetracker.google.com/issues/157891235#comment6
