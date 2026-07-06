@@ -48,7 +48,19 @@ kotlin {
         }
     }
 
+    // Explicit call keeps the default template applied despite the manual
+    // dependsOn edges for nonWebMain below.
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
+        // nonWebMain holds code that relies on APIs unavailable on js/wasmJs
+        // (DataStore, Dispatchers.IO).
+        val nonWebMain = create("nonWebMain")
+        nonWebMain.dependsOn(commonMain.get())
+        androidMain.get().dependsOn(nonWebMain)
+        jvmMain.get().dependsOn(nonWebMain)
+        iosMain.get().dependsOn(nonWebMain)
+
         all {
             languageSettings.optIn("kotlin.time.ExperimentalTime")
         }
@@ -59,7 +71,6 @@ kotlin {
             implementation(libs.sqlite.framework)
         }
         commonMain.dependencies {
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.compose)
 
@@ -80,11 +91,16 @@ kotlin {
             implementation(libs.aboutlibraries.compose.m3)
             implementation(libs.ksafe)
             implementation(libs.room.runtime)
+            implementation(libs.sqlite.async)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+        }
+        getByName("nonWebMain").dependencies {
+            // Kept only for the one-time migration of legacy preferences into KSafe.
+            implementation(libs.androidx.datastore.preferences)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

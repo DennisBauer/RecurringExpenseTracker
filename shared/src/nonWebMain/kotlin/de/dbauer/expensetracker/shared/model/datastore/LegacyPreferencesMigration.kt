@@ -4,11 +4,10 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import de.dbauer.expensetracker.shared.ioDispatcher
 import eu.anifantakis.lib.ksafe.KSafe
 import eu.anifantakis.lib.ksafe.KSafeWriteMode
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
@@ -20,7 +19,7 @@ import okio.Path
  * which makes the migration run at most once.
  */
 suspend fun KSafe.importLegacyPreferences(dataStoreFile: Path) {
-    val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    val scope = CoroutineScope(ioDispatcher + SupervisorJob())
     try {
         val dataStore = PreferenceDataStoreFactory.createWithPath(scope = scope) { dataStoreFile }
         val preferences = dataStore.data.first()

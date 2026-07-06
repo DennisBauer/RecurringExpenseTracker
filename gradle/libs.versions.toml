@@ -73,6 +73,7 @@ ktlint-version = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-standa
 navigationevent-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigationevent-compose" }
 room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room" }
+sqlite-async = { module = "androidx.sqlite:sqlite-async", version.ref = "sqlite" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 

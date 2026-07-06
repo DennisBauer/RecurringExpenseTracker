@@ -1,7 +1,6 @@
 package de.dbauer.expensetracker.shared.model
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import de.dbauer.expensetracker.shared.ioDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -35,7 +34,7 @@ private data class CurrencyWrapper(val data: Map<String, Currency>)
 open class CurrencyProvider {
     @OptIn(ExperimentalResourceApi::class)
     open suspend fun retrieveCurrencies(): List<Currency> =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val currenciesFile = Res.readBytes("files/currencies.json")
             return@withContext Json
                 .decodeFromString<CurrencyWrapper>(currenciesFile.decodeToString())
