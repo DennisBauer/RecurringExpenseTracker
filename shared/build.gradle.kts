@@ -78,6 +78,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.aboutlibraries.compose.m3)
+            implementation(libs.ksafe)
             implementation(libs.room.runtime)
 
             implementation(project.dependencies.platform(libs.koin.bom))
