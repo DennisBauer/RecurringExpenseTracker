@@ -6,7 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.room.RoomDatabase
+import androidx.room3.RoomDatabase
 import de.dbauer.expensetracker.shared.model.database.RecurringExpenseDatabase
 import de.dbauer.expensetracker.shared.model.database.getDatabaseBuilder
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository

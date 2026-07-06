@@ -1,10 +1,10 @@
 package de.dbauer.expensetracker.shared.model.database
 
-import androidx.room.ConstructedBy
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.RoomDatabaseConstructor
-import androidx.room.migration.Migration
+import androidx.room3.ConstructedBy
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
+import androidx.room3.RoomDatabaseConstructor
+import androidx.room3.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +50,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
 
         private val migration_1_2 =
             object : Migration(1, 2) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN everyXRecurrence INTEGER DEFAULT 1",
                     )
@@ -60,28 +60,28 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
 
         private val migration_2_3 =
             object : Migration(2, 3) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN firstPayment INTEGER DEFAULT 0")
                 }
             }
 
         private val migration_3_4 =
             object : Migration(3, 4) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN color INTEGER DEFAULT 0")
                 }
             }
 
         private val migration_4_5 =
             object : Migration(4, 5) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL("UPDATE recurring_expenses SET firstPayment = NULL WHERE firstPayment = 0")
                 }
             }
 
         private val migration_5_6 =
             object : Migration(5, 6) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN currencyCode TEXT DEFAULT '' NOT NULL",
                     )
@@ -90,7 +90,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
 
         private val migration_6_7 =
             object : Migration(6, 7) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN notifyForExpense INTEGER NOT NULL DEFAULT 1",
                     )
@@ -104,7 +104,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             }
         val migration_7_8 =
             object : Migration(7, 8) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     // 1) Create new tables required by v8
                     connection.execSQL(
                         """
@@ -246,7 +246,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             }
         val migration_8_9 =
             object : Migration(8, 9) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     // 1) Create reminders table
                     connection.execSQL(
                         """
@@ -310,7 +310,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             }
         val migration_9_10 =
             object : Migration(9, 10) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN requireManualConfirmation INTEGER NOT NULL DEFAULT 0",
                     )
@@ -331,7 +331,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             }
         val migration_10_11 =
             object : Migration(10, 11) {
-                override fun migrate(connection: SQLiteConnection) {
+                override suspend fun migrate(connection: SQLiteConnection) {
                     connection.execSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN endDate INTEGER DEFAULT NULL",
                     )

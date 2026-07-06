@@ -1,13 +1,13 @@
 package de.dbauer.expensetracker.shared.model.database
 
-import androidx.room.Embedded
-import androidx.room.Relation
+import androidx.room3.Embedded
+import androidx.room3.Relation
 
 data class RecurringExpenseWithRemindersEntry(
     @Embedded val expense: RecurringExpenseEntry,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "expenseId",
+        parentColumns = ["id"],
+        entityColumns = ["expenseId"],
     )
     val reminders: List<ReminderEntry>,
 )
