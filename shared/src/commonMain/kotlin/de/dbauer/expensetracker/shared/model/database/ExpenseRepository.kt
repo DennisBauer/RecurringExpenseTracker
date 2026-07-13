@@ -2,10 +2,9 @@ package de.dbauer.expensetracker.shared.model.database
 
 import de.dbauer.expensetracker.shared.data.RecurringExpenseData
 import de.dbauer.expensetracker.shared.data.Tag
+import de.dbauer.expensetracker.shared.ioDispatcher
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.getSystemCurrencyCode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -37,14 +36,14 @@ class ExpenseRepository(
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
 
     override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             return@withContext recurringExpenseDao
                 .getExpenseById(id)
                 ?.toRecurringExpenseData(getDefaultCurrencyCode())
         }
 
     override suspend fun insert(recurringExpense: RecurringExpenseData) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val expenseId =
                 recurringExpenseDao.insert(
                     recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()),
@@ -58,7 +57,7 @@ class ExpenseRepository(
         }
 
     override suspend fun update(recurringExpense: RecurringExpenseData) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.update(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
 
             // Get current tags for the expense
@@ -95,7 +94,7 @@ class ExpenseRepository(
         }
 
     override suspend fun delete(recurringExpense: RecurringExpenseData) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.delete(recurringExpense.toEntryRecurringExpense(getDefaultCurrencyCode()))
             recurringExpenseDao.deleteAllCrossRefForExpenseId(recurringExpense.id)
             recurringExpenseDao.deleteAllRemindersForExpenseId(recurringExpense.id)
@@ -105,24 +104,24 @@ class ExpenseRepository(
     override suspend fun archive(
         expenseId: Int,
         archivedDateEpoch: Long,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         recurringExpenseDao.setArchivedDate(expenseId, archivedDateEpoch)
     }
 
     override suspend fun unarchive(expenseId: Int) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.setArchivedDate(expenseId, null)
         }
 
     override suspend fun clearEndDateIfOverdue(
         expenseId: Int,
         nowEpoch: Long,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         recurringExpenseDao.clearEndDateIfOverdue(expenseId, nowEpoch)
     }
 
     override suspend fun autoArchiveExpired(nowEpoch: Long): List<AutoArchiveCandidate> =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val candidates = recurringExpenseDao.getExpensesToAutoArchive(nowEpoch)
             candidates.forEach { candidate ->
                 recurringExpenseDao.setArchivedDate(candidate.id, nowEpoch)
@@ -131,17 +130,17 @@ class ExpenseRepository(
         }
 
     override suspend fun insert(tag: Tag) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.insert(tag.toTagEntry())
         }
 
     override suspend fun update(tag: Tag) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.update(tag.toTagEntry())
         }
 
     override suspend fun delete(tag: Tag) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.delete(tag.toTagEntry())
             recurringExpenseDao.deleteAllCrossRefForTagId(tag.id)
         }
@@ -149,7 +148,7 @@ class ExpenseRepository(
     override suspend fun markAsPaid(
         expenseId: Int,
         paymentDateEpoch: Long,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         val existing = recurringExpenseDao.getPaymentRecord(expenseId, paymentDateEpoch)
         if (existing == null) {
             recurringExpenseDao.insertPaymentRecord(
@@ -161,7 +160,7 @@ class ExpenseRepository(
     override suspend fun markAsUnpaid(
         expenseId: Int,
         paymentDateEpoch: Long,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         val record = recurringExpenseDao.getPaymentRecord(expenseId, paymentDateEpoch)
         if (record != null) {
             recurringExpenseDao.deletePaymentRecord(record)
@@ -169,7 +168,7 @@ class ExpenseRepository(
     }
 
     override suspend fun getPaymentRecordsForExpense(expenseId: Int): List<Long> =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             recurringExpenseDao.getPaymentRecordsForExpense(expenseId).map { it.paymentDate }
         }
 
