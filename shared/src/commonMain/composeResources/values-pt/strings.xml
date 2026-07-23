@@ -145,4 +145,5 @@
     <string name="archive">Arquivo</string>
     <string name="unarchive">Desarquivar</string>
     <string name="edit_expense_end_date">Data final (opcional)</string>
+    <string name="edit_expense_include_in_summary">Incluir no resumo</string>
 </resources>

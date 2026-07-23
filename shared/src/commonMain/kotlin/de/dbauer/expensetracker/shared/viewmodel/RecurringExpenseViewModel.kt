@@ -111,7 +111,7 @@ class RecurringExpenseViewModel(
         recurringExpenseData.clear()
         val defaultCurrency = getDefaultCurrencyCode()
         var atLeastOneWasExchanged = false
-        recurringExpenses.forEach {
+        recurringExpenses.filter { it.includeInSummary }.forEach {
             var expense = it
             if (expense.price.currencyCode != defaultCurrency) {
                 val newPrice = expense.price.currencyValueBasedOnSetting()

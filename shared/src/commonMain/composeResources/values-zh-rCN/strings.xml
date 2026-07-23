@@ -114,4 +114,5 @@
     <string name="widget_configuration_title">配置小组件</string>
     <string name="widget_transparent_background">透明背景</string>
     <string name="whats_new_title">有哪些更新内容？</string>
+    <string name="edit_expense_include_in_summary">包含在摘要中</string>
 </resources>

@@ -130,4 +130,5 @@
     <string name="notification_expense_reminder_message_overdue_today">Тэрмін аплаты заканчваецца сёння</string>
     <string name="notification_expense_reminder_message_overdue_days">Пратэрміноўка ўжо %1$d дзён</string>
     <string name="whats_new_continue">Працягнуць</string>
+    <string name="edit_expense_include_in_summary">Include in Summary</string>
 </resources>

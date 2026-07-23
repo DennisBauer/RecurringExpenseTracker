@@ -146,6 +146,11 @@ fun EditRecurringExpenseScreen(
                 isNewReminderDuplicate = viewModel::isNewReminderDuplicate,
             )
         }
+        IncludeInSummaryOption(
+            includeInSummary = viewModel.includeInSummary,
+            onIncludeInSummaryChange = viewModel::onIncludeInSummaryChange,
+            modifier = Modifier.padding(vertical = 8.dp),
+        )
         Row(
             modifier =
                 Modifier

@@ -101,4 +101,5 @@
     <string name="tags_color_custom">Niestandardowy</string>
     <string name="settings_about_suggest_or_report">Zaproponuj swój pomysł lub zgłoś błąd</string>
     <string name="whats_new_title">Co nowego?</string>
+    <string name="edit_expense_include_in_summary">Uwzględnij w podsumowaniu</string>
 </resources>
