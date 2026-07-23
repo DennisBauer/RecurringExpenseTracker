@@ -114,4 +114,5 @@
     <string name="discard">At</string>
     <string name="widget_transparent_background">Şeffaf Arka Plan</string>
     <string name="whats_new_title">Neler Yeni?</string>
+    <string name="edit_expense_include_in_summary">Özetin İçine Dahil Et</string>
 </resources>

@@ -17,6 +17,7 @@ internal fun RecurringExpenseData.toEntryRecurringExpense(defaultCurrencyCode: S
         requireManualConfirmation = this.requireManualConfirmation,
         endDate = this.endDate?.toEpochMilliseconds(),
         archivedDate = this.archivedDate?.toEpochMilliseconds(),
+        includeInSummary = this.includeInSummary,
     )
 }
 

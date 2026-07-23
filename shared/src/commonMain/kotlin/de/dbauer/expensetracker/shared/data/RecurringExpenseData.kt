@@ -42,6 +42,7 @@ data class RecurringExpenseData(
     val requireManualConfirmation: Boolean = false,
     val endDate: Instant? = null,
     val archivedDate: Instant? = null,
+    val includeInSummary: Boolean = true,
 ) {
     fun getNextPaymentDay(): LocalDate? {
         if (firstPayment == null) return null

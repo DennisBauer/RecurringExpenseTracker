@@ -130,4 +130,5 @@
     <string name="notification_expense_reminder_message_overdue_today">O pagamento vence hoje</string>
     <string name="notification_expense_reminder_message_overdue_days">O pagamento está %1$d dias atrasados</string>
     <string name="whats_new_continue">Continuar</string>
+    <string name="edit_expense_include_in_summary">Incluir no resumo</string>
 </resources>

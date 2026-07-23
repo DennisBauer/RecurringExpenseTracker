@@ -354,7 +354,7 @@ class UpcomingPaymentsViewModel(
         var atLeastOneWasExchanged = false
         unpaidItems.forEach { payment ->
             val expense = recurringExpenses.firstOrNull { it.id == payment.id }
-            if (expense != null) {
+            if (expense != null && expense.includeInSummary) {
                 sum += expense.price.exchangeToDefaultCurrency()?.value ?: 0f
                 if (expense.price.currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
                     atLeastOneWasExchanged = true

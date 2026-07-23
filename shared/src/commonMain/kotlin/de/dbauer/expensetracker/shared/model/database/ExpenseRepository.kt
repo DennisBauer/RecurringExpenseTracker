@@ -34,6 +34,16 @@ class ExpenseRepository(
     override val allTags: Flow<List<Tag>> =
         recurringExpenseDao.getAllTags().map { tags -> tags.toTags() }
 
+    override val allRecurringExpensesIncludingExcluded: Flow<List<RecurringExpenseData>> =
+        recurringExpenseDao.getAllExpensesIncludingExcluded().map { expenses ->
+            expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
+        }
+
+    override val allRecurringExpensesIncludingExcludedByPrice: Flow<List<RecurringExpenseData>> =
+        recurringExpenseDao.getAllExpensesIncludingExcludedByPrice().map { expenses ->
+            expenses.map { it.toRecurringExpenseData(getDefaultCurrencyCode()) }
+        }
+
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
 
     override suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData? =

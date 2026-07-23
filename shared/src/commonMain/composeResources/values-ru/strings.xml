@@ -147,4 +147,5 @@
     <string name="archive">В архиве</string>
     <string name="unarchive">Из архива</string>
     <string name="edit_expense_end_date">Конечная дата (по желанию)</string>
+    <string name="edit_expense_include_in_summary">Включить в сводку</string>
 </resources>
