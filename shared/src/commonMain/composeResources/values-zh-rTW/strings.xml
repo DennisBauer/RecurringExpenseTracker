@@ -140,4 +140,5 @@
     <string name="snackbar_expense_archived">支出已封存</string>
     <string name="snackbar_expense_unarchived">支出已取消封存</string>
     <string name="notification_auto_archived_title">支出已自動封存</string>
+    <string name="edit_expense_include_in_summary">包含於摘要中</string>
 </resources>

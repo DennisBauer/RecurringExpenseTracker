@@ -114,4 +114,5 @@
     <string name="widget_configuration_title">Konfiguriraj widget</string>
     <string name="widget_transparent_background">Transparentna pozadina</string>
     <string name="whats_new_title">Što je novo?</string>
+    <string name="edit_expense_include_in_summary">Uključi u sažetak</string>
 </resources>

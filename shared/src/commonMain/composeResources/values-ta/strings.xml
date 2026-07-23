@@ -88,4 +88,5 @@
     <string name="widget_grid_mode">கட்டம் பயன்முறை</string>
     <string name="widget_configuration_title">விட்செட்டை உள்ளமைக்கவும்</string>
     <string name="widget_transparent_background">வெளிப்படையான பின்னணி</string>
+    <string name="edit_expense_include_in_summary">சுருக்கத்தில் சேர்க்கவும்</string>
 </resources>

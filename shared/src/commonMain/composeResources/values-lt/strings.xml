@@ -147,4 +147,5 @@
     <string name="unarchive">Išarchyvuoti</string>
     <string name="edit_expense_end_date">Pabaigos data (nebūtina)</string>
     <string name="edit_expense_end_date_placeholder">Pasirinkti datą</string>
+    <string name="edit_expense_include_in_summary">Įtraukti į santrauką</string>
 </resources>
