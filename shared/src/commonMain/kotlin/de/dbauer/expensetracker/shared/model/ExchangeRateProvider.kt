@@ -1,8 +1,7 @@
 package de.dbauer.expensetracker.shared.model
 
 import de.dbauer.expensetracker.shared.data.CurrencyValue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import de.dbauer.expensetracker.shared.ioDispatcher
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -69,7 +68,7 @@ class ExchangeRateProvider : IExchangeRateProvider {
 
     @OptIn(ExperimentalResourceApi::class)
     private suspend fun retrieveExchangeRates(): ExchangeRates =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val currenciesFile = Res.readBytes("files/exchange_rates.json")
             return@withContext Json.decodeFromString<ExchangeRates>(currenciesFile.decodeToString())
         }
