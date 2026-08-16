@@ -64,10 +64,6 @@ android {
         includeInApk = false
         includeInBundle = false
     }
-
-    lint {
-        sarifReport = true
-    }
 }
 
 androidComponents {
