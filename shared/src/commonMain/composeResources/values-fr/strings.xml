@@ -147,4 +147,5 @@
     <string name="unarchive">Désarchiver</string>
     <string name="edit_expense_end_date">Date de fin (facultatif)</string>
     <string name="edit_expense_end_date_placeholder">Choisissez une date</string>
+    <string name="edit_expense_include_in_summary">Inclure dans le résumé</string>
 </resources>

@@ -12,20 +12,28 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecurringExpenseDao {
     @Transaction
-    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL AND  includeInSummary = 1")
     fun getAllExpenses(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
-    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL ORDER BY price DESC")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL AND includeInSummary = 1 ORDER BY price DESC")
     fun getAllExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
-    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL ORDER BY archivedDate DESC")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL AND includeInSummary = 1 ORDER BY archivedDate DESC")
     fun getAllArchivedExpenses(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
-    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL ORDER BY price DESC")
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NOT NULL AND includeInSummary = 1 ORDER BY price DESC")
     fun getAllArchivedExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>>
+
+    @Transaction
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL")
+    fun getAllExpensesIncludingExcluded(): Flow<List<RecurringExpenseWithTagsEntry>>
+
+    @Transaction
+    @Query("SELECT * FROM recurring_expenses WHERE archivedDate IS NULL ORDER BY price DESC")
+    fun getAllExpensesIncludingExcludedByPrice(): Flow<List<RecurringExpenseWithTagsEntry>>
 
     @Transaction
     @Query("SELECT * FROM recurring_expenses WHERE id = :id")

@@ -63,6 +63,8 @@ class EditRecurringExpenseViewModel(
 
     var requireManualConfirmation by mutableStateOf(false)
 
+    var includeInSummary by mutableStateOf(true)
+
     // Store the last reminder configuration before disabling
     private var lastRemindersBeforeDisabling = mutableListOf<Reminder>()
 
@@ -107,6 +109,7 @@ class EditRecurringExpenseViewModel(
                         }
                         notifyForExpense = expense.notifyForExpense
                         requireManualConfirmation = expense.requireManualConfirmation
+                        includeInSummary = expense.includeInSummary
                         reminders.clear()
 
                         // If no custom reminders exist but notifications are enabled, show global default
@@ -147,6 +150,7 @@ class EditRecurringExpenseViewModel(
                     endDate,
                     notifyForExpense,
                     requireManualConfirmation,
+                    includeInSummary,
                     _tags.toMap(),
                     reminders.toList(),
                 )
@@ -192,6 +196,10 @@ class EditRecurringExpenseViewModel(
             }
             reminders.clear()
         }
+    }
+
+    fun onIncludeInSummaryChange(include: Boolean) {
+        includeInSummary = include
     }
 
     fun addReminder(daysBeforePayment: Int) {
@@ -346,6 +354,7 @@ class EditRecurringExpenseViewModel(
             requireManualConfirmation = requireManualConfirmation,
             endDate = endDate,
             archivedDate = archivedDate,
+            includeInSummary = includeInSummary,
         )
     }
 
@@ -438,6 +447,7 @@ class EditRecurringExpenseViewModel(
                 tags.any { it.second } ||
                 !notifyForExpense ||
                 requireManualConfirmation ||
+                !includeInSummary ||
                 reminders.size != 1 ||
                 reminders.firstOrNull()?.daysBeforePayment != defaultReminderDays
         } else {
@@ -455,6 +465,7 @@ class EditRecurringExpenseViewModel(
             if (endDate != expense.endDate) return true
             if (notifyForExpense != expense.notifyForExpense) return true
             if (requireManualConfirmation != expense.requireManualConfirmation) return true
+            if (includeInSummary != expense.includeInSummary) return true
 
             // Compare tags
             val currentSelectedTags = tags.filter { it.second }.map { it.first }.toSet()

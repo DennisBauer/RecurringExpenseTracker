@@ -88,4 +88,5 @@
     <string name="widget_grid_mode">Modo de rejilla</string>
     <string name="widget_configuration_title">Configurar Widget</string>
     <string name="widget_transparent_background">Fondo transparente</string>
+    <string name="edit_expense_include_in_summary">Incluir en resumen</string>
 </resources>

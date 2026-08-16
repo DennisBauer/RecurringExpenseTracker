@@ -29,6 +29,7 @@ internal fun RecurringExpenseWithTagsEntry.toRecurringExpenseData(
         requireManualConfirmation = this.expense.requireManualConfirmation,
         endDate = this.expense.endDate?.let { Instant.fromEpochMilliseconds(it) },
         archivedDate = this.expense.archivedDate?.let { Instant.fromEpochMilliseconds(it) },
+        includeInSummary = this.expense.includeInSummary,
     )
 }
 

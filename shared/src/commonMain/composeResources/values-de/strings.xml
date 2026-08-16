@@ -55,6 +55,7 @@
     <string name="edit_expense_unsaved_changes_dialog_text">Du hast ungespeicherte Änderungen. Möchtest du sie verwerfen?</string>
     <string name="edit_expense_require_manual_confirmation">Manuelle Zahlungsbestätigung</string>
     <string name="edit_expense_require_manual_confirmation_description">Wenn aktiviert, bleibt diese Ausgabe als überfällig sichtbar, bis du sie manuell als bezahlt markierst.</string>
+    <string name="edit_expense_include_in_summary">In Zusammenfassung aufnehmen</string>
 
     <string name="tags_screen_title">Tags</string>
     <string name="tags_add_new">Neuen Tag erstellen</string>

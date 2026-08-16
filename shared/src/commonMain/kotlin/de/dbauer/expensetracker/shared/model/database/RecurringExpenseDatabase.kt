@@ -24,7 +24,7 @@ expect object RecurringExpenseDatabaseConstructor : RoomDatabaseConstructor<Recu
         ReminderEntry::class,
         PaymentRecordEntry::class,
     ],
-    version = 11,
+    version = 12,
 )
 @ConstructedBy(RecurringExpenseDatabaseConstructor::class)
 abstract class RecurringExpenseDatabase : RoomDatabase() {
@@ -43,6 +43,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_8_9)
                 .addMigrations(migration_9_10)
                 .addMigrations(migration_10_11)
+                .addMigrations(migration_11_12)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -340,5 +341,13 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     )
                 }
             }
+        val migration_11_12 =
+        object : Migration(11, 12) {
+            override suspend fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "ALTER TABLE recurring_expenses ADD COLUMN includeInSummary INTEGER NOT NULL DEFAULT 1",
+                )
+            }
+        }
     }
 }

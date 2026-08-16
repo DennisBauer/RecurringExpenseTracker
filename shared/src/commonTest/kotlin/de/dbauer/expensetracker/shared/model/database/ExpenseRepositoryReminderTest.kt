@@ -13,6 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.test.assertFalse
 import kotlin.time.Instant
 
 class ExpenseRepositoryReminderTest {
@@ -30,11 +31,11 @@ class ExpenseRepositoryReminderTest {
         private var nextReminderId = 1
 
         override fun getAllExpenses(): Flow<List<RecurringExpenseWithTagsEntry>> {
-            return flowOf(expenses.values.toList())
+            return flowOf(expenses.values.filter { it.expense.includeInSummary }.toList())
         }
 
         override fun getAllExpensesByPrice(): Flow<List<RecurringExpenseWithTagsEntry>> {
-            return flowOf(expenses.values.sortedByDescending { it.expense.price }.toList())
+            return flowOf(expenses.values.filter{ it.expense.includeInSummary }.sortedByDescending { it.expense.price }.toList())
         }
 
         override fun getAllArchivedExpenses(): Flow<List<RecurringExpenseWithTagsEntry>> {
@@ -192,6 +193,18 @@ class ExpenseRepositoryReminderTest {
 
         override suspend fun deleteAllPaymentRecordsForExpenseId(expenseId: Int) {
             paymentRecords.remove(expenseId)
+        }
+
+        override fun getAllExpensesIncludingExcluded(): Flow<List<RecurringExpenseWithTagsEntry>> {
+            return flowOf(expenses.values.filter { it.expense.archivedDate == null }.toList())
+        }
+
+        override fun getAllExpensesIncludingExcludedByPrice(): Flow<List<RecurringExpenseWithTagsEntry>> {
+            return flowOf(
+                expenses.values.filter { it.expense.archivedDate == null }
+                    .sortedByDescending { it.expense.price }
+                    .toList(),
+            )
         }
     }
 
@@ -480,5 +493,131 @@ class ExpenseRepositoryReminderTest {
             assertNotNull(retrieved)
             assertEquals(1, retrieved.reminders.size)
             assertEquals(notificationDate, retrieved.reminders[0].lastNotificationDate)
+        }
+    @Test
+    fun `insert expense with includeInSummary true persists the flag`() =
+        runTest {
+            val expense =
+                RecurringExpenseData(
+                    id = 9,
+                    name = "Included Expense",
+                    description = "This expense is included in summary",
+                    price = CurrencyValue(100f, "USD"),
+                    monthlyPrice = CurrencyValue(100f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = false,
+                    reminders = emptyList(),
+                    includeInSummary = true,
+                )
+
+            repository.insert(expense)
+
+            val retrieved = repository.getRecurringExpenseById(9)
+
+            assertNotNull(retrieved)
+            assertTrue(retrieved.includeInSummary)
+        }
+
+    @Test
+    fun `insert expense with includeInSummary false persists the flag`() =
+        runTest {
+            val expense =
+                RecurringExpenseData(
+                    id = 10,
+                    name = "Excluded Expense",
+                    description = "This expense is excluded from summary",
+                    price = CurrencyValue(50f, "USD"),
+                    monthlyPrice = CurrencyValue(50f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = false,
+                    reminders = emptyList(),
+                    includeInSummary = false,
+                )
+
+            repository.insert(expense)
+
+            val retrieved = repository.getRecurringExpenseById(10)
+
+            assertNotNull(retrieved)
+            assertFalse(retrieved.includeInSummary)
+        }
+
+    @Test
+    fun `update expense preserves and updates includeInSummary flag`() =
+        runTest {
+            // Insert initial expense with includeInSummary = true
+            val initialExpense =
+                RecurringExpenseData(
+                    id = 11,
+                    name = "Test Expense",
+                    description = "Description",
+                    price = CurrencyValue(100f, "USD"),
+                    monthlyPrice = CurrencyValue(100f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = false,
+                    reminders = emptyList(),
+                    includeInSummary = true,
+                )
+
+            repository.insert(initialExpense)
+
+            var retrieved = repository.getRecurringExpenseById(11)
+            assertNotNull(retrieved)
+            assertTrue(retrieved.includeInSummary)
+
+            // Update the expense and toggle the flag
+            val updatedExpense =
+                initialExpense.copy(
+                    name = "Updated Expense",
+                    price = CurrencyValue(150f, "USD"),
+                    includeInSummary = false,
+                )
+
+            repository.update(updatedExpense)
+
+            retrieved = repository.getRecurringExpenseById(11)
+            assertNotNull(retrieved)
+            assertEquals("Updated Expense", retrieved.name)
+            assertFalse(retrieved.includeInSummary)
+        }
+
+    @Test
+    fun `delete expense with includeInSummary flag removes it completely`() =
+        runTest {
+            val expense =
+                RecurringExpenseData(
+                    id = 12,
+                    name = "Expense to Delete",
+                    description = "Will be deleted",
+                    price = CurrencyValue(75f, "USD"),
+                    monthlyPrice = CurrencyValue(75f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = false,
+                    reminders = emptyList(),
+                    includeInSummary = false,
+                )
+
+            repository.insert(expense)
+
+            var retrieved = repository.getRecurringExpenseById(12)
+            assertNotNull(retrieved)
+            assertFalse(retrieved.includeInSummary)
+
+            repository.delete(expense)
+
+            retrieved = repository.getRecurringExpenseById(12)
+            assertTrue(retrieved == null || retrieved.id != 12)
         }
 }

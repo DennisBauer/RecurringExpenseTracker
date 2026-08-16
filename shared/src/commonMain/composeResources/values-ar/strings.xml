@@ -147,4 +147,5 @@
     <string name="unarchive">إلغاء الأرشفة</string>
     <string name="edit_expense_end_date">تاريخ الانتهاء (اختياري)</string>
     <string name="edit_expense_end_date_placeholder">اختر تاريخًا</string>
+    <string name="edit_expense_include_in_summary">Include in Summary</string>
 </resources>

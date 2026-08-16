@@ -10,6 +10,8 @@ interface IExpenseRepository {
     val allArchivedRecurringExpenses: Flow<List<RecurringExpenseData>>
     val allArchivedRecurringExpensesByPrice: Flow<List<RecurringExpenseData>>
     val allTags: Flow<List<Tag>>
+    val allRecurringExpensesIncludingExcluded: Flow<List<RecurringExpenseData>>
+    val allRecurringExpensesIncludingExcludedByPrice: Flow<List<RecurringExpenseData>>
 
     suspend fun getRecurringExpenseById(id: Int): RecurringExpenseData?
 

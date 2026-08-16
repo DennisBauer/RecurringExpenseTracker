@@ -68,4 +68,5 @@
     <string name="settings_notifications_schedule_time">Waktu pemberitahuan</string>
     <string name="settings_title_security">Keamanan</string>
     <string name="settings_notifications_missing_permission_subtitle">Izin pemberitahuan yang hilang. Tanpa izin ini, aplikasi tidak dapat menunjukkan pemberitahuan untuk pembayaran yang akan datang. Silakan klik di sini dan berikan di pengaturan.</string>
+    <string name="edit_expense_include_in_summary">Sertakan dalam Ringkasan</string>
 </resources>

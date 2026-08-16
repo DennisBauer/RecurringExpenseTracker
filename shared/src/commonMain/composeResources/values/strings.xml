@@ -57,6 +57,7 @@
     <string name="edit_expense_unsaved_changes_dialog_text">You have unsaved changes. Do you want to discard them?</string>
     <string name="edit_expense_require_manual_confirmation">Require manual payment confirmation</string>
     <string name="edit_expense_require_manual_confirmation_description">When enabled, this expense will stay visible as overdue until you manually mark it as paid.</string>
+    <string name="edit_expense_include_in_summary">Include in Summary</string>
 
     <string name="tags_screen_title">Tags</string>
     <string name="tags_add_new">Add new Tag</string>

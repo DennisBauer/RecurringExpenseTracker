@@ -817,4 +817,157 @@ class EditRecurringExpenseViewModelTest {
             assertFalse(viewModel.notifyForExpense)
             assertEquals(0, viewModel.reminders.size)
         }
+
+    @Test
+    fun `new expense has includeInSummary set to true by default`() =
+        runTest {
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = null,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            // When creating a new expense, includeInSummary should default to true
+            viewModel.nameState = "Netflix"
+            viewModel.priceState = "12.99"
+
+            var updateSuccessful: Boolean? = null
+            viewModel.updateExpense { successful ->
+                updateSuccessful = successful
+            }
+
+            advanceUntilIdle()
+
+            assertTrue(updateSuccessful!!)
+
+            // Verify the saved expense has includeInSummary = true
+            val expenses = expenseRepository.allRecurringExpenses.first()
+            assertEquals(1, expenses.size)
+            assertTrue(expenses[0].includeInSummary)
+        }
+
+    @Test
+    fun `existing expense preserves includeInSummary flag when edited`() =
+        runTest {
+            val existingExpense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Test Expense",
+                    description = "Test Description",
+                    price = CurrencyValue(100f, "USD"),
+                    monthlyPrice = CurrencyValue(100f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = emptyList(),
+                    includeInSummary = false,
+                )
+
+            expenseRepository.insert(existingExpense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            // Verify flag is loaded correctly
+            assertEquals(false, viewModel.includeInSummary)
+
+            // Edit the expense but keep the same includeInSummary value
+            viewModel.nameState = "Updated Expense"
+            viewModel.priceState = "150"
+
+            var updateSuccessful: Boolean? = null
+            viewModel.updateExpense { successful ->
+                updateSuccessful = successful
+            }
+
+            advanceUntilIdle()
+
+            assertTrue(updateSuccessful!!)
+
+            // Verify the flag was preserved
+            val updated = expenseRepository.getRecurringExpenseById(1)
+            assertNotNull(updated)
+            assertEquals("Updated Expense", updated.name)
+            assertEquals(150f, updated.price.value)
+            assertFalse(updated.includeInSummary)
+        }
+
+    @Test
+    fun `toggling includeInSummary flag persists to database`() =
+        runTest {
+            val expense =
+                RecurringExpenseData(
+                    id = 1,
+                    name = "Netflix",
+                    description = "Streaming",
+                    price = CurrencyValue(12.99f, "USD"),
+                    monthlyPrice = CurrencyValue(12.99f, "USD"),
+                    everyXRecurrence = 1,
+                    recurrence = Recurrence.Monthly,
+                    tags = emptyList(),
+                    firstPayment = null,
+                    notifyForExpense = true,
+                    reminders = emptyList(),
+                    includeInSummary = true,
+                )
+
+            expenseRepository.insert(expense)
+
+            val viewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            // Verify initial state
+            assertTrue(viewModel.includeInSummary)
+
+            // Toggle the flag
+            viewModel.includeInSummary = false
+
+            // Save the expense
+            var updateSuccessful: Boolean? = null
+            viewModel.updateExpense { successful ->
+                updateSuccessful = successful
+            }
+
+            advanceUntilIdle()
+
+            assertTrue(updateSuccessful!!)
+
+            // Verify the flag was toggled and saved
+            val updated = expenseRepository.getRecurringExpenseById(1)
+            assertNotNull(updated)
+            assertFalse(updated.includeInSummary)
+
+            // Load again and verify flag persists
+            val reloadViewModel =
+                EditRecurringExpenseViewModel(
+                    expenseId = 1,
+                    expenseRepository = expenseRepository,
+                    currencyProvider = currencyProvider,
+                    userPreferencesRepository = userPreferencesRepository,
+                )
+
+            advanceUntilIdle()
+
+            assertFalse(reloadViewModel.includeInSummary)
+        }
 }

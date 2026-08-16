@@ -68,4 +68,5 @@
     <string name="settings_title_security">Beveiliging</string>
     <string name="home_summary_weekly">Wekelijks</string>
     <string name="settings_notifications">Notificaties</string>
+    <string name="edit_expense_include_in_summary">Opnemen in samenvatting</string>
 </resources>
