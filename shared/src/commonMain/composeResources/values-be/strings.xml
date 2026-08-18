@@ -130,4 +130,21 @@
     <string name="notification_expense_reminder_message_overdue_today">Тэрмін аплаты заканчваецца сёння</string>
     <string name="notification_expense_reminder_message_overdue_days">Пратэрміноўка ўжо %1$d дзён</string>
     <string name="whats_new_continue">Працягнуць</string>
+    <string name="home_filter_content_desc">Фільтр</string>
+    <string name="home_filter_chip_archived">Архіў</string>
+    <string name="snackbar_expense_archived">Расход архівізаваны</string>
+    <string name="snackbar_expense_unarchived">Расход разархівізаваны</string>
+    <string name="notification_auto_archived_title">Расход аўтаматычна архівізаваны</string>
+    <string name="settings_upcoming_horizon">Гарызонт падзей</string>
+    <string name="settings_upcoming_horizon_1_month">1 месяц</string>
+    <string name="settings_upcoming_horizon_3_months">3 месяцы</string>
+    <string name="settings_upcoming_horizon_6_months">6 месяцаў</string>
+    <string name="settings_upcoming_horizon_1_year">1 год</string>
+    <string name="settings_upcoming_horizon_2_years">2 гады</string>
+    <string name="settings_upcoming_horizon_5_years">5 гадоў</string>
+    <string name="settings_upcoming_horizon_10_years">10 гадоў</string>
+    <string name="archive">Архівізаваць</string>
+    <string name="unarchive">Разархівізаваць</string>
+    <string name="edit_expense_end_date">Канчатковая дата (па жаданню)</string>
+    <string name="edit_expense_end_date_placeholder">Выберыце дату</string>
 </resources>
