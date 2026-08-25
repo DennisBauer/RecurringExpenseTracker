@@ -120,10 +120,10 @@ Contributions in any form are welcome!
 </a>
 
 ## ⭐ Star History
-<a href="https://star-history.com/#DennisBauer/RecurringExpenseTracker&Date">
+<a href="https://www.star-history.com/?repos=DennisBauer%2FRecurringExpenseTracker&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DennisBauer/RecurringExpenseTracker&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DennisBauer/RecurringExpenseTracker&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=DennisBauer/RecurringExpenseTracker&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=DennisBauer/RecurringExpenseTracker&type=date&theme=dark&legend=top-left&sealed_token=pC0mjfm0qW8z4EI4hmtsGtnSKuLV5UiqOPSwCrsDp13EwT6Kp1klqEax-_B2jj-UsvW8T7a4GqDuRU1hh4U8QOH8N4brtnGh9Hb__OJCf9nogZRdESyaBgQMZ5EpVXtOxNcKHt2uOgXLvFnU1pgN4P7r3ZGiYjfr1txIeWOPwcI7fFGvBttHpDyFFMLU" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=DennisBauer/RecurringExpenseTracker&type=date&legend=top-left&sealed_token=pC0mjfm0qW8z4EI4hmtsGtnSKuLV5UiqOPSwCrsDp13EwT6Kp1klqEax-_B2jj-UsvW8T7a4GqDuRU1hh4U8QOH8N4brtnGh9Hb__OJCf9nogZRdESyaBgQMZ5EpVXtOxNcKHt2uOgXLvFnU1pgN4P7r3ZGiYjfr1txIeWOPwcI7fFGvBttHpDyFFMLU" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=DennisBauer/RecurringExpenseTracker&type=date&legend=top-left&sealed_token=pC0mjfm0qW8z4EI4hmtsGtnSKuLV5UiqOPSwCrsDp13EwT6Kp1klqEax-_B2jj-UsvW8T7a4GqDuRU1hh4U8QOH8N4brtnGh9Hb__OJCf9nogZRdESyaBgQMZ5EpVXtOxNcKHt2uOgXLvFnU1pgN4P7r3ZGiYjfr1txIeWOPwcI7fFGvBttHpDyFFMLU" />
  </picture>
 </a>
