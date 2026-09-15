@@ -8,10 +8,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dbauer.expensetracker.shared.data.Tag
+import de.dbauer.expensetracker.shared.ioDispatcher
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -122,7 +121,7 @@ class TagsScreenViewModel(
     private fun finalizePendingDeletion() {
         pendingTagDeletion?.let { (tag, job) ->
             job.cancel()
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(ioDispatcher).launch {
                 expenseRepository.delete(tag)
             }
             pendingTagDeletion = null

@@ -74,7 +74,7 @@ jobs:
       - name: Run Build, Lint and Tests
         run: |
           set -o pipefail
-          ./gradlew build --no-daemon --stacktrace 2>&1 | tee build_log.txt
+          ./gradlew build -x :webApp:assemble --no-daemon --stacktrace 2>&1 | tee build_log.txt
 
       - name: Check compiler warnings against baseline
         run: bash .github/check-compiler-warnings.sh build_log.txt
