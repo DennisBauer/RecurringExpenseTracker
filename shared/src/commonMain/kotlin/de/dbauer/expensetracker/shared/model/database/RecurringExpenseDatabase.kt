@@ -6,9 +6,8 @@ import androidx.room3.RoomDatabase
 import androidx.room3.RoomDatabaseConstructor
 import androidx.room3.migration.Migration
 import androidx.sqlite.SQLiteConnection
-import androidx.sqlite.execSQL
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import androidx.sqlite.async.executeSQL
+import de.dbauer.expensetracker.shared.ioDispatcher
 
 // The Room compiler generates the `actual` implementations.
 @Suppress("NO_ACTUAL_FOR_EXPECT")
@@ -44,45 +43,49 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                 .addMigrations(migration_9_10)
                 .addMigrations(migration_10_11)
                 .fallbackToDestructiveMigrationOnDowngrade(true)
-                .setQueryCoroutineContext(Dispatchers.IO)
+                .setQueryCoroutineContext(ioDispatcher)
                 .build()
         }
 
         private val migration_1_2 =
             object : Migration(1, 2) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN everyXRecurrence INTEGER DEFAULT 1",
                     )
-                    connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN recurrence INTEGER DEFAULT 3")
+                    connection.executeSQL("ALTER TABLE recurring_expenses ADD COLUMN recurrence INTEGER DEFAULT 3")
                 }
             }
 
         private val migration_2_3 =
             object : Migration(2, 3) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN firstPayment INTEGER DEFAULT 0")
+                    connection.executeSQL(
+                        "ALTER TABLE recurring_expenses ADD COLUMN firstPayment INTEGER DEFAULT 0",
+                    )
                 }
             }
 
         private val migration_3_4 =
             object : Migration(3, 4) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL("ALTER TABLE recurring_expenses ADD COLUMN color INTEGER DEFAULT 0")
+                    connection.executeSQL("ALTER TABLE recurring_expenses ADD COLUMN color INTEGER DEFAULT 0")
                 }
             }
 
         private val migration_4_5 =
             object : Migration(4, 5) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL("UPDATE recurring_expenses SET firstPayment = NULL WHERE firstPayment = 0")
+                    connection.executeSQL(
+                        "UPDATE recurring_expenses SET firstPayment = NULL WHERE firstPayment = 0",
+                    )
                 }
             }
 
         private val migration_5_6 =
             object : Migration(5, 6) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN currencyCode TEXT DEFAULT '' NOT NULL",
                     )
                 }
@@ -91,13 +94,13 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
         private val migration_6_7 =
             object : Migration(6, 7) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN notifyForExpense INTEGER NOT NULL DEFAULT 1",
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN notifyXDaysBefore INTEGER DEFAULT null",
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN lastNotificationDate INTEGER DEFAULT 0",
                     )
                 }
@@ -106,7 +109,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
             object : Migration(7, 8) {
                 override suspend fun migrate(connection: SQLiteConnection) {
                     // 1) Create new tables required by v8
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `tags` (
                             `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -116,7 +119,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `ExpenseTagCrossRef` (
                             `expenseId` INTEGER NOT NULL,
@@ -126,10 +129,10 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         "CREATE INDEX IF NOT EXISTS `index_ExpenseTagCrossRef_tagId` ON `ExpenseTagCrossRef` (`tagId`)",
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         "CREATE INDEX IF NOT EXISTS `index_ExpenseTagCrossRef_expenseId` ON `ExpenseTagCrossRef` (`expenseId`)",
                     )
 
@@ -151,7 +154,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     //  11 (Pink)     -> 0x80990099  = 2157510809
                     //  12 (Maroon)   -> 0x8099004d  = 2157510733
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         INSERT INTO tags (title, color)
                         SELECT 'Untitled',
@@ -181,7 +184,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     // 3) Create crossrefs: for each expense link to the tag that
                     //    contains the mapped color value for that expense's enum id.
                     // ----------------------------------------------------------
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         INSERT OR IGNORE INTO ExpenseTagCrossRef (expenseId, tagId)
                         SELECT r.id AS expenseId, t.id AS tagId
@@ -209,9 +212,9 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     // 4) Remove old 'color' column from recurring_expenses
                     //    (recreate table without the column and copy data).
                     // ----------------------------------------------------------
-                    connection.execSQL("PRAGMA foreign_keys=OFF")
+                    connection.executeSQL("PRAGMA foreign_keys=OFF")
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `recurring_expenses_new` (
                           `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -229,7 +232,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         INSERT INTO recurring_expenses_new
                         (id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense, notifyXDaysBefore, lastNotificationDate)
@@ -238,17 +241,17 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL("DROP TABLE IF EXISTS recurring_expenses")
-                    connection.execSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
+                    connection.executeSQL("DROP TABLE IF EXISTS recurring_expenses")
+                    connection.executeSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
 
-                    connection.execSQL("PRAGMA foreign_keys=ON")
+                    connection.executeSQL("PRAGMA foreign_keys=ON")
                 }
             }
         val migration_8_9 =
             object : Migration(8, 9) {
                 override suspend fun migrate(connection: SQLiteConnection) {
                     // 1) Create reminders table
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `reminders` (
                             `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -260,12 +263,12 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         "CREATE INDEX IF NOT EXISTS `index_reminders_expenseId` ON `reminders` (`expenseId`)",
                     )
 
                     // 2) Migrate existing notifyXDaysBefore values to the reminders table
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         INSERT INTO reminders (expenseId, daysBeforePayment, lastNotificationDate)
                         SELECT id, notifyXDaysBefore, lastNotificationDate
@@ -275,9 +278,9 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                     )
 
                     // 3) Remove old notification columns from recurring_expenses
-                    connection.execSQL("PRAGMA foreign_keys=OFF")
+                    connection.executeSQL("PRAGMA foreign_keys=OFF")
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `recurring_expenses_new` (
                           `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -293,7 +296,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         INSERT INTO recurring_expenses_new
                         (id, name, description, price, everyXRecurrence, recurrence, firstPayment, currencyCode, notifyForExpense)
@@ -302,19 +305,19 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         """.trimIndent(),
                     )
 
-                    connection.execSQL("DROP TABLE IF EXISTS recurring_expenses")
-                    connection.execSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
+                    connection.executeSQL("DROP TABLE IF EXISTS recurring_expenses")
+                    connection.executeSQL("ALTER TABLE recurring_expenses_new RENAME TO recurring_expenses")
 
-                    connection.execSQL("PRAGMA foreign_keys=ON")
+                    connection.executeSQL("PRAGMA foreign_keys=ON")
                 }
             }
         val migration_9_10 =
             object : Migration(9, 10) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN requireManualConfirmation INTEGER NOT NULL DEFAULT 0",
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         """
                         CREATE TABLE IF NOT EXISTS `payment_records` (
                             `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -324,7 +327,7 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
                         )
                         """.trimIndent(),
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         "CREATE INDEX IF NOT EXISTS `index_payment_records_expenseId` ON `payment_records` (`expenseId`)",
                     )
                 }
@@ -332,10 +335,10 @@ abstract class RecurringExpenseDatabase : RoomDatabase() {
         val migration_10_11 =
             object : Migration(10, 11) {
                 override suspend fun migrate(connection: SQLiteConnection) {
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN endDate INTEGER DEFAULT NULL",
                     )
-                    connection.execSQL(
+                    connection.executeSQL(
                         "ALTER TABLE recurring_expenses ADD COLUMN archivedDate INTEGER DEFAULT NULL",
                     )
                 }
