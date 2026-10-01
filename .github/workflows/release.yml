@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
         with:
@@ -55,7 +55,7 @@ jobs:
         uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
       - name: Decode Keystore
         id: decode_keystore
         uses: timheuer/base64-to-file@v2
