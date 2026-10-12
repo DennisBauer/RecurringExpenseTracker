@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="edit_expense_title">Editar un gasto</string>
+    <string name="edit_expense_title">Editar gasto</string>
     <string name="edit_expense_invalid_input">Entrada inválida</string>
     <string name="edit_expense_name">Nombre</string>
     <string name="edit_expense_recurrence">Repetición</string>
@@ -76,7 +76,7 @@
     <string name="settings_about_app">Acerca de la aplicación</string>
     <string name="settings_about_developer">Desarrollador</string>
     <string name="settings_about_version">Versión</string>
-    <string name="settings_about_made_by">Hecho por</string>
+    <string name="settings_about_made_by">Por</string>
     <string name="settings_about_support">Dona al proyecto</string>
     <string name="settings_about_libraries">Derechos de autor de las librerías</string>
     <string name="notification_expense_reminder">Recordatorio de gasto</string>
@@ -93,7 +93,7 @@
     <string name="edit_expense_notification_remove_reminder_content_desc">Eliminar recordatorio</string>
     <string name="edit_expense_tags">Añadir Etiquetas</string>
     <string name="edit_expense_unsaved_changes_dialog_text">Tienes cambios sin guardar. ¿Quieres descartarlos?</string>
-    <string name="tags_color_custom">Personalizar</string>
+    <string name="tags_color_custom">Personalizado</string>
     <string name="tags_title">Título</string>
     <string name="tags_add_new">Añadir nueva Etiqueta</string>
     <string name="tags_edit">Editar Etiqueta</string>
@@ -111,8 +111,8 @@
     <string name="settings_theme_mode_amoled">AMOLED</string>
     <string name="settings_currency_search_placeholder">Buscar monedas...</string>
     <string name="settings_currency_search_content_desc">Buscar monedas</string>
-    <string name="settings_currency_close_search_content_desc">Cerrar buscador</string>
-    <string name="settings_currency_clear_search_content_desc">Limpiar búsquedas</string>
+    <string name="settings_currency_close_search_content_desc">Cerrar búsqueda</string>
+    <string name="settings_currency_clear_search_content_desc">Limpiar búsqueda</string>
     <string name="settings_upcoming_horizon_1_month">1 mes</string>
     <string name="settings_upcoming_horizon_3_months">3 meses</string>
     <string name="settings_upcoming_horizon_6_months">6 meses</string>
@@ -144,7 +144,7 @@
     <string name="upcoming_section_upcoming">Próximo</string>
     <string name="settings_about_suggest_or_report">Contribuye con una idea o reportando un problema</string>
     <string name="notification_expense_reminder_message_overdue_today">El pago es para hoy</string>
-    <string name="notification_expense_reminder_message_overdue_days">El pago está %1$d día(s) atrasado</string>
+    <string name="notification_expense_reminder_message_overdue_days">El pago está %1$d días atrasado</string>
     <string name="edit_expense_notification_days_before_payment">%1$s días antes del pago</string>
     <string name="settings_upcoming_horizon">Horizonte próximo</string>
 </resources>
