@@ -3,4 +3,4 @@ Un gestor de gastos con interfaz Material You, permitiéndote mantener registro 
 Como el nombre lo sugiere, esta app se enfoca en gastos recurrentes como renta, seguro, suscripciones, y otros gastos regulares.
 Desarrollada con Kotlin Multiplatform y los principios de diseño de Material You, te proporciona una simple pero potente forma de gestionar y visualizar tus responsabilidades financieras recurrentes.
 La app está diseñada para ser intuitiva y directa, ayudándote a entender exactamente donde va tu dinero cada mes.
-My idea es añadir nuevas características de forma iterativa y soy feliz por cualquier contribución. Siéntete libre de pedir funciones o reportar errores si encuentras alguno.
+Mi idea es añadir nuevas características de forma iterativa y soy feliz por cualquier contribución. Siéntete libre de pedir funciones o reportar errores si encuentras alguno.
