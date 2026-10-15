@@ -105,7 +105,7 @@
     <string name="upcoming_paid_section">Pagado</string>
     <string name="upcoming_time_overdue_today">para hoy</string>
     <string name="tags_screen_title">Etiquetas</string>
-    <string name="upcoming_time_overdue_days">%1$d días pendientes</string>
+    <string name="upcoming_time_overdue_days">%1$d días atrasado</string>
     <string name="upcoming_mark_as_paid">Marcar como pagado</string>
     <string name="upcoming_mark_as_unpaid">Marcar como no pagado</string>
     <string name="settings_theme_mode_amoled">AMOLED</string>
