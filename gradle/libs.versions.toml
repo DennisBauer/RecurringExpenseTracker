@@ -1,5 +1,5 @@
 [versions]
-aboutLibraries = '15.2.0'
+aboutLibraries = '15.3.0'
 accompanist-permissions = "0.37.3"
 agp = "9.4.1"
 android-compileSdk = "37"
