@@ -15,11 +15,14 @@ internal fun parseLocalizedFloat(
     decimalSeparator: Char,
     groupSeparator: Char?,
 ): Float? {
-    val text =
+    val signedText =
         input
             .filterNot { it.isWhitespace() || it == ' ' || it == ' ' || it in BIDI_MARKS }
             .map(::toAsciiDigit)
             .joinToString("")
+    // Keep a leading sign out of the digit groups, e.g. "-123,456"
+    val sign = signedText.takeWhile { it == '-' || it == '+' }.take(1)
+    val text = signedText.substring(sign.length)
     if (text.isEmpty()) return null
 
     val normalized =
@@ -50,7 +53,7 @@ internal fun parseLocalizedFloat(
                 text
             }
         }
-    return normalized.toFloatOrNull()
+    return (sign + normalized).toFloatOrNull()
 }
 
 /** Arabic letter mark, left-to-right mark and right-to-left mark, as emitted by Intl for RTL locales. */

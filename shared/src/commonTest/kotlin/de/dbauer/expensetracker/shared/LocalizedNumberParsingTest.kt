@@ -73,6 +73,18 @@ class LocalizedNumberParsingTest {
     }
 
     @Test
+    fun keepsLeadingSignOutOfGrouping() {
+        assertEquals(-123456.78f, en("-123,456.78"))
+        assertEquals(123456.78f, en("+123,456.78"))
+        assertEquals(-123456f, en("-123,456"))
+        assertEquals(123456f, en("+123,456"))
+        assertEquals(-1234.5f, de("-1.234,5"))
+        assertEquals(-12.99f, en("-12.99"))
+        assertNull(en("-"))
+        assertNull(en("--1"))
+    }
+
+    @Test
     fun handlesMissingGroupSeparator() {
         assertEquals(1234.5f, parseLocalizedFloat("1234,5", decimalSeparator = ',', groupSeparator = null))
     }
