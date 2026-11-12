@@ -46,6 +46,32 @@ object DateTimeCalculator {
         return nextOccurrence
     }
 
+    /**
+     * Returns all occurrences inside [[rangeStart], [rangeEndExclusive]) with a single walk from
+     * [first]. The occurrences are produced by the same repeated addition as
+     * [getDayOfNextOccurrence], so the dates are identical to calling it once per occurrence.
+     *
+     * @param lastAllowedDay occurrences after this day are dropped (inclusive bound), if set.
+     */
+    fun getOccurrencesBetween(
+        first: Instant,
+        everyXRecurrence: Int,
+        recurrence: DateTimeUnit.DateBased,
+        rangeStart: LocalDate,
+        rangeEndExclusive: LocalDate,
+        lastAllowedDay: LocalDate? = null,
+    ): List<LocalDate> {
+        val occurrences = mutableListOf<LocalDate>()
+        var occurrence = first.toLocalDateTime(TimeZone.UTC).date
+        while (occurrence < rangeEndExclusive && (lastAllowedDay == null || occurrence <= lastAllowedDay)) {
+            if (occurrence >= rangeStart) occurrences.add(occurrence)
+            // A non-positive step would never advance
+            if (everyXRecurrence <= 0) break
+            occurrence = occurrence.plus(everyXRecurrence, recurrence)
+        }
+        return occurrences
+    }
+
     fun getCurrentLocalDate(
         @VisibleForTesting
         now: Instant = Clock.System.now(),

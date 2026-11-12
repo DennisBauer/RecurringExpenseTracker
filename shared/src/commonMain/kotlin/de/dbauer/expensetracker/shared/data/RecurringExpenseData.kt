@@ -69,6 +69,26 @@ data class RecurringExpenseData(
         val endLocal = endDate?.toLocalDateTime(TimeZone.UTC)?.date
         return if (endLocal != null && nextDay > endLocal) null else nextDay
     }
+
+    /**
+     * Returns all payment days inside [[rangeStart], [rangeEndExclusive]) in ascending order. Same
+     * days as repeatedly calling [getNextPaymentDayAfter], but computed with a single walk.
+     */
+    fun getPaymentDaysBetween(
+        rangeStart: LocalDate,
+        rangeEndExclusive: LocalDate,
+    ): List<LocalDate> {
+        if (firstPayment == null) return emptyList()
+
+        return DateTimeCalculator.getOccurrencesBetween(
+            first = firstPayment,
+            everyXRecurrence = everyXRecurrence,
+            recurrence = recurrence.toDateTimeUnit(),
+            rangeStart = rangeStart,
+            rangeEndExclusive = rangeEndExclusive,
+            lastAllowedDay = endDate?.toLocalDateTime(TimeZone.UTC)?.date,
+        )
+    }
 }
 
 private fun Recurrence?.toDateTimeUnit(): DateTimeUnit.DateBased {
