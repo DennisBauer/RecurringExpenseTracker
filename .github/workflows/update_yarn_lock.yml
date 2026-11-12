@@ -21,7 +21,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  update-yarn-lock:
+  # Runs the PR's Gradle build and npm install scripts, so it gets no secrets. The lock files are
+  # handed to the push job as an artifact.
+  regenerate-yarn-lock:
     name: Regenerate yarn lock files
     # Only Renovate PRs from branches of this repository (secrets are unavailable for forks).
     if: >-
@@ -29,14 +31,15 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
 
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
-          # A push with the default GITHUB_TOKEN would not trigger the PR pipeline again.
-          token: ${{ secrets.PREPARE_RELEASE_WORKFLOW_TOKEN }}
+          persist-credentials: false
 
       - name: Set up Java 21 (Temurin)
         uses: actions/setup-java@v6
@@ -61,18 +64,51 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Import GPG key
+      - name: Upload lock files
         if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: kotlin-js-store
+          path: kotlin-js-store/
+          retention-days: 1
+
+  # Runs on a fresh runner without any PR code being executed, so the token cannot be read by
+  # build scripts or dependencies.
+  push-yarn-lock:
+    name: Push yarn lock files
+    needs: regenerate-yarn-lock
+    if: needs.regenerate-yarn-lock.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+          # A push with the default GITHUB_TOKEN would not trigger the PR pipeline again.
+          token: ${{ secrets.PREPARE_RELEASE_WORKFLOW_TOKEN }}
+
+      - name: Download lock files
+        uses: actions/download-artifact@v8
+        with:
+          name: kotlin-js-store
+          path: kotlin-js-store
+
+      - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v7
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Commit and push lock files
-        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name 'github-actions'
           git config user.email '37552885+DennisBauer@users.noreply.github.com'
           git add kotlin-js-store
+          if git diff --cached --quiet; then
+            echo "Lock files are already up to date."
+            exit 0
+          fi
           git commit -S -m "Update Kotlin/JS yarn lock files"
           git push
