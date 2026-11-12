@@ -14,6 +14,7 @@ import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.websqlite.createWebSQLiteDriver
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -31,8 +32,14 @@ fun main() {
     acquireSingleTabLock { acquired ->
         if (acquired) {
             MainScope().launch {
-                initSystemCurrencyCode()
-                startApp()
+                try {
+                    initSystemCurrencyCode()
+                    startApp()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    showStartupError(STARTUP_ERROR_MESSAGE, e.stackTraceToString())
+                }
             }
         } else {
             showAlreadyOpenInAnotherTab()
