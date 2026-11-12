@@ -1,0 +1,78 @@
+name: Update Kotlin/JS yarn lock files
+
+# Renovate cannot run Gradle, so its PRs that change npm dependencies (webSqliteWorker/worker)
+# or the Kotlin/Compose toolchain leave kotlin-js-store/*.lock outdated and the build fails with
+# "Lock file was changed". This workflow regenerates the lock files and pushes them to the PR.
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'gradle/libs.versions.toml'
+      - '**/package.json'
+      - 'kotlin-js-store/**'
+
+concurrency:
+  group: update-yarn-lock-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  update-yarn-lock:
+    name: Regenerate yarn lock files
+    # Only Renovate PRs from branches of this repository (secrets are unavailable for forks).
+    if: >-
+      github.event.pull_request.user.login == 'renovate[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+          # A push with the default GITHUB_TOKEN would not trigger the PR pipeline again.
+          token: ${{ secrets.PREPARE_RELEASE_WORKFLOW_TOKEN }}
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Regenerate lock files
+        run: ./gradlew kotlinUpgradeYarnLock kotlinWasmUpgradeYarnLock --no-daemon --stacktrace
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet -- kotlin-js-store; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Import GPG key
+        if: steps.changes.outputs.changed == 'true'
+        uses: crazy-max/ghaction-import-gpg@v7
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Commit and push lock files
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions'
+          git config user.email '37552885+DennisBauer@users.noreply.github.com'
+          git add kotlin-js-store
+          git commit -S -m "Update Kotlin/JS yarn lock files"
+          git push
