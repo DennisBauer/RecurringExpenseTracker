@@ -1,12 +1,13 @@
 package de.dbauer.expensetracker.shared.viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.dbauer.expensetracker.shared.data.CurrencyValue
 import de.dbauer.expensetracker.shared.data.RecurringExpenseData
 import de.dbauer.expensetracker.shared.data.UpcomingPaymentData
-import de.dbauer.expensetracker.shared.getDefaultCurrencyCode
 import de.dbauer.expensetracker.shared.model.IExchangeRateProvider
 import de.dbauer.expensetracker.shared.model.UpcomingPaymentsExpander
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
@@ -67,6 +68,10 @@ class UpcomingPaymentsViewModel(
         get() = _upcomingPaymentsData
 
     var upcomingStartIndex: Int = 0
+        private set
+
+    /** True until the list was built for the first time. */
+    var isLoading by mutableStateOf(true)
         private set
 
     private val defaultCurrency = userPreferencesRepository.defaultCurrency.get()
@@ -142,20 +147,20 @@ class UpcomingPaymentsViewModel(
                 .indexOfFirst { it is UpcomingPayment.UpcomingDivider }
                 .let { if (it == -1) 0 else it }
         applyListUpdate(newData)
+        isLoading = false
     }
 
     private fun applyListUpdate(newData: List<UpcomingPayment>) {
-        for (i in newData.indices) {
-            if (i < _upcomingPaymentsData.size) {
-                if (_upcomingPaymentsData[i] != newData[i]) {
-                    _upcomingPaymentsData[i] = newData[i]
-                }
-            } else {
-                _upcomingPaymentsData.add(newData[i])
+        val commonSize = minOf(_upcomingPaymentsData.size, newData.size)
+        for (i in 0 until commonSize) {
+            if (_upcomingPaymentsData[i] != newData[i]) {
+                _upcomingPaymentsData[i] = newData[i]
             }
         }
-        while (_upcomingPaymentsData.size > newData.size) {
-            _upcomingPaymentsData.removeAt(_upcomingPaymentsData.size - 1)
+        if (newData.size > commonSize) {
+            _upcomingPaymentsData.addAll(newData.subList(commonSize, newData.size))
+        } else if (_upcomingPaymentsData.size > commonSize) {
+            _upcomingPaymentsData.removeRange(commonSize, _upcomingPaymentsData.size)
         }
     }
 
@@ -195,6 +200,12 @@ class UpcomingPaymentsViewModel(
             )
 
             val monthGroups = mutableListOf<MonthGroup>()
+            val schedule =
+                UpcomingPaymentsExpander.computePaymentSchedule(
+                    recurringExpenses = recurringExpenses,
+                    rangeStart = yearMonthIterator,
+                    rangeEndExclusive = yearMonthUntil,
+                )
 
             do {
                 val isPastMonth = yearMonthIterator < from
@@ -206,6 +217,7 @@ class UpcomingPaymentsViewModel(
                     if (isPastMonth) {
                         UpcomingPaymentsExpander.expandPastMonth(
                             expense = expense,
+                            schedule = schedule,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
                             paidDates = paidDates,
@@ -215,6 +227,7 @@ class UpcomingPaymentsViewModel(
                     } else if (expense.requireManualConfirmation) {
                         UpcomingPaymentsExpander.expandManualConfirmation(
                             expense = expense,
+                            schedule = schedule,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
                             paidDates = paidDates,
@@ -224,6 +237,7 @@ class UpcomingPaymentsViewModel(
                     } else {
                         UpcomingPaymentsExpander.expandAutoAdvance(
                             expense = expense,
+                            schedule = schedule,
                             yearMonthIterator = yearMonthIterator,
                             from = from,
                             payments = unpaidPaymentsThisMonth,
@@ -269,13 +283,19 @@ class UpcomingPaymentsViewModel(
             } while (yearMonthIterator.monthsUntil(yearMonthUntil) > 0)
 
             // Phase 2: Assemble the final list
+            val sumCalculator =
+                MonthSumCalculator(
+                    expensesById = recurringExpenses.associateBy { it.id },
+                    defaultCurrencyCode = getDefaultCurrencyCode(),
+                    displayCurrencyCode = defaultCurrency.first(),
+                )
             val localUpcomingPaymentsData = mutableListOf<UpcomingPayment>()
 
             // Above section (past/done items)
             for (group in monthGroups) {
                 if (group.aboveUnpaid.isEmpty() && group.abovePaid.isEmpty()) continue
                 val paymentsSum =
-                    computeSumString(group.aboveUnpaid, recurringExpenses)
+                    sumCalculator.computeSumString(group.aboveUnpaid)
                 addMonthSection(
                     result = localUpcomingPaymentsData,
                     monthStr = group.monthStr,
@@ -295,7 +315,7 @@ class UpcomingPaymentsViewModel(
                 val dividerMonth = firstBelowGroup?.monthStr ?: ""
                 val dividerSum =
                     if (firstBelowGroup != null) {
-                        computeSumString(firstBelowGroup.belowUnpaid, recurringExpenses)
+                        sumCalculator.computeSumString(firstBelowGroup.belowUnpaid)
                     } else {
                         ""
                     }
@@ -308,7 +328,7 @@ class UpcomingPaymentsViewModel(
             for (group in monthGroups) {
                 if (group.belowUnpaid.isEmpty() && group.belowPaid.isEmpty()) continue
                 val paymentsSum =
-                    computeSumString(group.belowUnpaid, recurringExpenses)
+                    sumCalculator.computeSumString(group.belowUnpaid)
                 addMonthSection(
                     result = localUpcomingPaymentsData,
                     monthStr = group.monthStr,
@@ -346,27 +366,40 @@ class UpcomingPaymentsViewModel(
         }
     }
 
-    private suspend fun computeSumString(
-        unpaidItems: List<UpcomingPaymentData>,
-        recurringExpenses: List<RecurringExpenseData>,
-    ): String {
-        var sum = 0f
-        var atLeastOneWasExchanged = false
-        unpaidItems.forEach { payment ->
-            val expense = recurringExpenses.firstOrNull { it.id == payment.id }
-            if (expense != null) {
-                sum += expense.price.exchangeToDefaultCurrency()?.value ?: 0f
-                if (expense.price.currencyCode != defaultCurrency.getDefaultCurrencyCode()) {
-                    atLeastOneWasExchanged = true
+    /**
+     * Computes the month sums of one list build. Reads the currency settings only once and
+     * exchanges the price of every expense only once, instead of once per payment.
+     *
+     * @param defaultCurrencyCode the currency to exchange into
+     * @param displayCurrencyCode the currency code used to format the sum, may be blank
+     */
+    private inner class MonthSumCalculator(
+        private val expensesById: Map<Int, RecurringExpenseData>,
+        private val defaultCurrencyCode: String,
+        private val displayCurrencyCode: String,
+    ) {
+        private val exchangedPriceByExpenseId = mutableMapOf<Int, Float>()
+
+        suspend fun computeSumString(unpaidItems: List<UpcomingPaymentData>): String {
+            var sum = 0f
+            var atLeastOneWasExchanged = false
+            unpaidItems.forEach { payment ->
+                val expense = expensesById[payment.id]
+                if (expense != null) {
+                    sum +=
+                        exchangedPriceByExpenseId.getOrPut(expense.id) {
+                            exchangeRateProvider
+                                .exchangeCurrencyValue(expense.price, defaultCurrencyCode)
+                                ?.value ?: 0f
+                        }
+                    if (expense.price.currencyCode != defaultCurrencyCode) {
+                        atLeastOneWasExchanged = true
+                    }
                 }
             }
+            val currencyPrefix = if (atLeastOneWasExchanged) "~" else ""
+            return currencyPrefix + sum.toCurrencyString(displayCurrencyCode)
         }
-        val currencyPrefix = if (atLeastOneWasExchanged) "~" else ""
-        return currencyPrefix + sum.toCurrencyString(defaultCurrency.first())
-    }
-
-    private suspend fun CurrencyValue.exchangeToDefaultCurrency(): CurrencyValue? {
-        return exchangeRateProvider.exchangeCurrencyValue(this, getDefaultCurrencyCode())
     }
 
     private suspend fun getDefaultCurrencyCode(): String {

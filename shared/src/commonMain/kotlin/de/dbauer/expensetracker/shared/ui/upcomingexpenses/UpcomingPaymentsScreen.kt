@@ -1,6 +1,7 @@
 package de.dbauer.expensetracker.shared.ui.upcomingexpenses
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -78,7 +80,14 @@ fun UpcomingPaymentsScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     upcomingPaymentsViewModel: UpcomingPaymentsViewModel = koinViewModel<UpcomingPaymentsViewModel>(),
 ) {
-    if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
+    if (upcomingPaymentsViewModel.isLoading) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier.fillMaxSize(),
+        ) {
+            CircularProgressIndicator()
+        }
+    } else if (upcomingPaymentsViewModel.upcomingPaymentsData.isNotEmpty()) {
         UpcomingPaymentsOverview(
             upcomingPaymentsData = upcomingPaymentsViewModel.upcomingPaymentsData,
             upcomingStartIndex = upcomingPaymentsViewModel.upcomingStartIndex,

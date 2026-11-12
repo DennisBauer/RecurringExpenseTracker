@@ -5,30 +5,70 @@ import de.dbauer.expensetracker.shared.data.UpcomingPaymentData
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
 import de.dbauer.expensetracker.shared.toLocaleString
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
 
+/**
+ * Payment days of a set of expenses, computed once per expense and grouped by month, so the
+ * month-by-month expansion does not have to walk each expense's recurrence again for every month.
+ * Create it with [UpcomingPaymentsExpander.computePaymentSchedule] and use it for one expansion run.
+ */
+class PaymentSchedule internal constructor(
+    private val daysByExpenseId: Map<Int, Map<Int, List<LocalDate>>>,
+) {
+    private val dateLabels = mutableMapOf<LocalDate, String>()
+
+    /** Payment days of [expense] in the month of [yearMonth], in ascending order. */
+    fun daysOf(
+        expense: RecurringExpenseData,
+        yearMonth: LocalDate,
+    ): List<LocalDate> {
+        return daysByExpenseId[expense.id]?.get(yearMonth.monthKey()) ?: emptyList()
+    }
+
+    /** Localized date string of [day]. Formats every distinct day only once. */
+    fun dateLabelOf(day: LocalDate): String {
+        return dateLabels.getOrPut(day) { day.atStartOfDayIn(TimeZone.UTC).toLocaleString() }
+    }
+}
+
+private fun LocalDate.monthKey(): Int = year * 12 + month.ordinal
+
 object UpcomingPaymentsExpander {
+    /**
+     * Computes the payment days of all [recurringExpenses] inside
+     * [[rangeStart], [rangeEndExclusive]).
+     */
+    fun computePaymentSchedule(
+        recurringExpenses: List<RecurringExpenseData>,
+        rangeStart: LocalDate,
+        rangeEndExclusive: LocalDate,
+    ): PaymentSchedule {
+        return PaymentSchedule(
+            recurringExpenses.associate { expense ->
+                expense.id to
+                    expense
+                        .getPaymentDaysBetween(rangeStart, rangeEndExclusive)
+                        .groupBy { it.monthKey() }
+            },
+        )
+    }
+
     fun expandAutoAdvance(
         expense: RecurringExpenseData,
+        schedule: PaymentSchedule,
         yearMonthIterator: LocalDate,
         from: LocalDate,
         payments: MutableList<UpcomingPaymentData>,
     ) {
-        var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return
-        while (nextPaymentDay < from) {
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
-        }
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
+        for (nextPaymentDay in schedule.daysOf(expense, yearMonthIterator)) {
+            if (nextPaymentDay < from) continue
             val nextPaymentRemainingDays =
                 DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
+            val nextPaymentDate = schedule.dateLabelOf(nextPaymentDay)
             val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
             payments.add(
                 UpcomingPaymentData(
@@ -43,28 +83,24 @@ object UpcomingPaymentsExpander {
                     paymentDateEpoch = paymentDateEpoch,
                 ),
             )
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
         }
     }
 
     fun expandManualConfirmation(
         expense: RecurringExpenseData,
+        schedule: PaymentSchedule,
         yearMonthIterator: LocalDate,
         from: LocalDate,
         paidDates: Set<Long>,
         unpaidPayments: MutableList<UpcomingPaymentData>,
         paidPayments: MutableList<UpcomingPaymentData>,
     ) {
-        var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return
-
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
+        for (nextPaymentDay in schedule.daysOf(expense, yearMonthIterator)) {
             val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
             val isPaid = paidDates.contains(paymentDateEpoch)
             val nextPaymentRemainingDays =
                 DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
+            val nextPaymentDate = schedule.dateLabelOf(nextPaymentDay)
 
             val paymentData =
                 UpcomingPaymentData(
@@ -86,24 +122,19 @@ object UpcomingPaymentsExpander {
                     unpaidPayments.add(paymentData)
                 }
             }
-
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
         }
     }
 
     fun expandPastMonth(
         expense: RecurringExpenseData,
+        schedule: PaymentSchedule,
         yearMonthIterator: LocalDate,
         from: LocalDate,
         paidDates: Set<Long>,
         unpaidPayments: MutableList<UpcomingPaymentData>,
         paidPayments: MutableList<UpcomingPaymentData>,
     ) {
-        var nextPaymentDay = expense.getNextPaymentDayAfter(yearMonthIterator) ?: return
-
-        while (nextPaymentDay.isSameMonth(yearMonthIterator)) {
+        for (nextPaymentDay in schedule.daysOf(expense, yearMonthIterator)) {
             val paymentDateEpoch = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
             val isPaid =
                 if (expense.requireManualConfirmation) {
@@ -113,7 +144,7 @@ object UpcomingPaymentsExpander {
                 }
             val nextPaymentRemainingDays =
                 DateTimeCalculator.getDaysFromUntil(from = from, until = nextPaymentDay)
-            val nextPaymentDate = nextPaymentDay.atStartOfDayIn(TimeZone.UTC).toLocaleString()
+            val nextPaymentDate = schedule.dateLabelOf(nextPaymentDay)
 
             val paymentData =
                 UpcomingPaymentData(
@@ -133,10 +164,6 @@ object UpcomingPaymentsExpander {
             } else {
                 unpaidPayments.add(paymentData)
             }
-
-            nextPaymentDay =
-                expense.getNextPaymentDayAfter(nextPaymentDay.plus(1, DateTimeUnit.DAY))
-                    ?: return
         }
     }
 
@@ -162,6 +189,8 @@ object UpcomingPaymentsExpander {
             paidByExpense[expense.id] = expenseRepository.getPaymentRecordsForExpense(expense.id).toSet()
         }
 
+        val schedule = computePaymentSchedule(activeExpenses, yearMonthIterator, yearMonthUntil)
+
         val result = mutableListOf<UpcomingPaymentData>()
         do {
             val unpaidThisMonth = mutableListOf<UpcomingPaymentData>()
@@ -171,6 +200,7 @@ object UpcomingPaymentsExpander {
                 if (expense.requireManualConfirmation) {
                     expandManualConfirmation(
                         expense = expense,
+                        schedule = schedule,
                         yearMonthIterator = yearMonthIterator,
                         from = from,
                         paidDates = paidDates,
@@ -180,6 +210,7 @@ object UpcomingPaymentsExpander {
                 } else {
                     expandAutoAdvance(
                         expense = expense,
+                        schedule = schedule,
                         yearMonthIterator = yearMonthIterator,
                         from = from,
                         payments = unpaidThisMonth,
