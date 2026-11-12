@@ -63,8 +63,6 @@ class RecurringExpenseDataTest {
 
     @Test
     fun `getPaymentDaysBetween returns the same days as repeated getNextPaymentDayAfter`() {
-        val rangeStart = LocalDate(2026, 8, 1)
-        val rangeEndExclusive = LocalDate(2029, 3, 1)
         val firstPayments =
             listOf(
                 // Month end: repeated addition clamps to the 28th and stays there
@@ -86,31 +84,76 @@ class RecurringExpenseDataTest {
                 LocalDateTime(2027, 9, 15, 0, 0),
             ).map { it?.toInstant(TimeZone.UTC) }
 
-        for (recurrence in Recurrence.entries) {
-            for (everyXRecurrence in listOf(1, 2, 5)) {
-                for (firstPayment in firstPayments) {
-                    for (endDate in endDates) {
-                        val expense =
-                            buildExpense(
-                                firstPayment = firstPayment,
-                                endDate = endDate,
-                                everyXRecurrence = everyXRecurrence,
-                                recurrence = recurrence,
-                            )
+        val shortStepRecurrences = listOf(Recurrence.Daily, Recurrence.Weekly)
+        for (recurrence in Recurrence.entries - shortStepRecurrences) {
+            assertSameDaysAsRepeatedNextPaymentDay(
+                recurrence = recurrence,
+                rangeStart = LocalDate(2026, 8, 1),
+                rangeEndExclusive = LocalDate(2029, 3, 1),
+                firstPayments = firstPayments,
+                endDates = endDates,
+            )
+        }
 
-                        val expected = mutableListOf<LocalDate>()
-                        var next = expense.getNextPaymentDayAfter(rangeStart)
-                        while (next != null && next < rangeEndExclusive) {
-                            expected.add(next)
-                            next = expense.getNextPaymentDayAfter(next.plus(1, DateTimeUnit.DAY))
-                        }
+        // The reference walks from the first payment once per payment, which is quadratic. Daily
+        // and weekly payments therefore use a short range close to the first payments, as years of
+        // such steps are too slow on Kotlin/JS. Month end clamping and leap days do not apply to them.
+        for (recurrence in shortStepRecurrences) {
+            assertSameDaysAsRepeatedNextPaymentDay(
+                recurrence = recurrence,
+                rangeStart = LocalDate(2026, 8, 1),
+                rangeEndExclusive = LocalDate(2026, 11, 1),
+                firstPayments =
+                    listOf(
+                        // Before the range
+                        LocalDateTime(2026, 6, 20, 0, 0),
+                        // Inside the range
+                        LocalDateTime(2026, 9, 10, 0, 0),
+                        // After the range
+                        LocalDateTime(2027, 1, 1, 0, 0),
+                    ).map { it.toInstant(TimeZone.UTC) },
+                endDates =
+                    listOf(
+                        null,
+                        // Before the range
+                        LocalDateTime(2026, 7, 1, 0, 0),
+                        // Inside the range
+                        LocalDateTime(2026, 10, 5, 0, 0),
+                    ).map { it?.toInstant(TimeZone.UTC) },
+            )
+        }
+    }
 
-                        assertEquals(
-                            expected,
-                            expense.getPaymentDaysBetween(rangeStart, rangeEndExclusive),
-                            "$recurrence x$everyXRecurrence first=$firstPayment end=$endDate",
+    private fun assertSameDaysAsRepeatedNextPaymentDay(
+        recurrence: Recurrence,
+        rangeStart: LocalDate,
+        rangeEndExclusive: LocalDate,
+        firstPayments: List<Instant>,
+        endDates: List<Instant?>,
+    ) {
+        for (everyXRecurrence in listOf(1, 2, 5)) {
+            for (firstPayment in firstPayments) {
+                for (endDate in endDates) {
+                    val expense =
+                        buildExpense(
+                            firstPayment = firstPayment,
+                            endDate = endDate,
+                            everyXRecurrence = everyXRecurrence,
+                            recurrence = recurrence,
                         )
+
+                    val expected = mutableListOf<LocalDate>()
+                    var next = expense.getNextPaymentDayAfter(rangeStart)
+                    while (next != null && next < rangeEndExclusive) {
+                        expected.add(next)
+                        next = expense.getNextPaymentDayAfter(next.plus(1, DateTimeUnit.DAY))
                     }
+
+                    assertEquals(
+                        expected,
+                        expense.getPaymentDaysBetween(rangeStart, rangeEndExclusive),
+                        "$recurrence x$everyXRecurrence first=$firstPayment end=$endDate",
+                    )
                 }
             }
         }
