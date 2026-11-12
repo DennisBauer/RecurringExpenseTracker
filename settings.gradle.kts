@@ -34,3 +34,5 @@ plugins {
 
 include(":app")
 include(":shared")
+include(":webApp")
+include(":webSqliteWorker")
