@@ -314,6 +314,7 @@ class MainActivity : AppCompatActivity() {
                             navigateToPermissionsSettings = {
                                 navigateToNotificationPermissionSettings()
                             },
+                            canUseBackup = true,
                             onClickBackup = {
                                 backupPathLauncher.launch(Constants.DEFAULT_BACKUP_NAME)
                             },

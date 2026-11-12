@@ -46,6 +46,7 @@ fun main() =
                     onBiometricSecurityChange = {},
                     requestNotificationPermission = {},
                     navigateToPermissionsSettings = {},
+                    canUseBackup = false,
                     onClickBackup = {},
                     onClickRestore = {},
                     updateWidget = {},
