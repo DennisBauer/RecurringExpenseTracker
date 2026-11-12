@@ -100,6 +100,7 @@ fun SettingsMainScreen(
     biometricsChecked: Boolean,
     canUseBiometric: Boolean,
     canUseNotifications: Boolean,
+    canUseBackup: Boolean,
     hasNotificationPermission: Boolean,
     onClickBackup: () -> Unit,
     onClickRestore: () -> Unit,
@@ -247,19 +248,21 @@ fun SettingsMainScreen(
             }
         }
 
-        SettingsHeaderElement(
-            header = Res.string.settings_backup,
-        )
-        SettingsClickableElement(
-            title = stringResource(Res.string.settings_backup_create),
-            onClick = onClickBackup,
-            icon = Icons.Rounded.Backup,
-        )
-        SettingsClickableElement(
-            title = stringResource(Res.string.settings_backup_restore),
-            onClick = onClickRestore,
-            icon = Icons.Rounded.Restore,
-        )
+        if (canUseBackup) {
+            SettingsHeaderElement(
+                header = Res.string.settings_backup,
+            )
+            SettingsClickableElement(
+                title = stringResource(Res.string.settings_backup_create),
+                onClick = onClickBackup,
+                icon = Icons.Rounded.Backup,
+            )
+            SettingsClickableElement(
+                title = stringResource(Res.string.settings_backup_restore),
+                onClick = onClickRestore,
+                icon = Icons.Rounded.Restore,
+            )
+        }
         SettingsHeaderElement(
             header = Res.string.settings_about,
         )

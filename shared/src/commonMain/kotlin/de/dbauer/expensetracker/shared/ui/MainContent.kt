@@ -107,6 +107,7 @@ fun MainContent(
     biometricSecurity: Boolean,
     canUseBiometric: Boolean,
     canUseNotifications: Boolean,
+    canUseBackup: Boolean,
     hasNotificationPermission: Boolean,
     toggleGridMode: () -> Unit,
     onBiometricSecurityChange: (Boolean) -> Unit,
@@ -382,6 +383,7 @@ fun MainContent(
                     SettingsScreen(
                         onClickTags = { navController.navigate(TagsPane) },
                         biometricsChecked = biometricSecurity,
+                        canUseBackup = canUseBackup,
                         onClickBackup = onClickBackup,
                         onClickRestore = onClickRestore,
                         onBiometricCheckedChange = onBiometricSecurityChange,
@@ -519,6 +521,7 @@ private fun MainActivityContentPreview() {
                 onBiometricSecurityChange = { biometricSecurity = it },
                 requestNotificationPermission = {},
                 navigateToPermissionsSettings = {},
+                canUseBackup = true,
                 onClickBackup = {},
                 onClickRestore = {},
                 updateWidget = {},

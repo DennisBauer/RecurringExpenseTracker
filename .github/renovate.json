@@ -33,7 +33,8 @@
       "groupName": "Room and SQLite",
       "matchPackageNames": [
         "/androidx\\.room/",
-        "/androidx\\.sqlite/"
+        "/androidx\\.sqlite/",
+        "@sqlite.org/sqlite-wasm"
       ]
     },
     {

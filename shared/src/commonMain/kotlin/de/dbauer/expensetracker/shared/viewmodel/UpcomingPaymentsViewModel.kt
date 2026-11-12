@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dbauer.expensetracker.shared.data.RecurringExpenseData
 import de.dbauer.expensetracker.shared.data.UpcomingPaymentData
+import de.dbauer.expensetracker.shared.ioDispatcher
 import de.dbauer.expensetracker.shared.model.IExchangeRateProvider
 import de.dbauer.expensetracker.shared.model.UpcomingPaymentsExpander
 import de.dbauer.expensetracker.shared.model.database.IExpenseRepository
@@ -15,8 +16,6 @@ import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepositor
 import de.dbauer.expensetracker.shared.model.getSystemCurrencyCode
 import de.dbauer.expensetracker.shared.toCurrencyString
 import de.dbauer.expensetracker.shared.toMonthYearStringUTC
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -170,7 +169,7 @@ class UpcomingPaymentsViewModel(
         until: LocalDate,
         pastMonths: Int = 0,
     ): List<UpcomingPayment> =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val currentMonthStart = LocalDate(from.year, from.month, 1)
             val pastFrom =
                 if (pastMonths > 0) {

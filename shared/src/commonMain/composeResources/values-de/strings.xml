@@ -173,4 +173,6 @@
     <string name="unarchive">Wiederherstellen</string>
     <string name="edit_expense_end_date">Enddatum (optional)</string>
     <string name="edit_expense_end_date_placeholder">Datum wählen</string>
+    <string name="web_already_open_title">Bereits in einem anderen Tab geöffnet</string>
+    <string name="web_already_open_message">Die App ist bereits in einem anderen Browser-Tab geöffnet. Schließe den anderen Tab und lade diese Seite neu.</string>
 </resources>

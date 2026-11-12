@@ -3,6 +3,9 @@ package de.dbauer.expensetracker.shared.model.database
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+// Kotlin/JS represents Float as a 64-bit JS number, so results are not rounded to 32 bit.
+private const val PRICE_TOLERANCE = 0.0001f
+
 class RecurringExpenseTest {
     @Test
     fun checkGetMonthlyPrice_usingDailyRecurrence_onceADay() {
@@ -19,7 +22,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(152.08333f, expense.getMonthlyPrice())
+        assertEquals(152.08333f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -37,7 +40,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(26.614582f, expense.getMonthlyPrice())
+        assertEquals(26.614582f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -55,7 +58,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(43.333336f, expense.getMonthlyPrice())
+        assertEquals(43.333336f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -73,7 +76,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(8.666667f, expense.getMonthlyPrice())
+        assertEquals(8.666667f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -91,7 +94,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(10f, expense.getMonthlyPrice())
+        assertEquals(10f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -109,7 +112,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(2.0f, expense.getMonthlyPrice())
+        assertEquals(2.0f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -127,7 +130,7 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(0.8333333f, expense.getMonthlyPrice())
+        assertEquals(0.8333333f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 
     @Test
@@ -145,6 +148,6 @@ class RecurringExpenseTest {
                 notifyForExpense = true,
             )
 
-        assertEquals(0.16666667f, expense.getMonthlyPrice())
+        assertEquals(0.16666667f, expense.getMonthlyPrice(), PRICE_TOLERANCE)
     }
 }

@@ -1,5 +1,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,6 +15,15 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
 }
+
+// Web tests run in a headless browser. Both launchers are registered so the yarn lock file
+// stays identical; karma.config.d/browser.js picks one (Chrome by default, which is
+// preinstalled on the CI runners; set KARMA_BROWSER=FirefoxHeadless to use Firefox).
+fun KotlinJsTest.useHeadlessBrowser() =
+    useKarma {
+        useChromeHeadless()
+        useFirefoxHeadless()
+    }
 
 kotlin {
     android {
@@ -36,6 +49,19 @@ kotlin {
 
     jvm()
 
+    js {
+        browser {
+            testTask { useHeadlessBrowser() }
+        }
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            testTask { useHeadlessBrowser() }
+        }
+    }
+
     listOf(
         iosArm64(),
         iosSimulatorArm64(),
@@ -45,6 +71,29 @@ kotlin {
             isStatic = true
             // Required when using NativeSQLiteDriver
             linkerOpts.add("-lsqlite3")
+        }
+    }
+
+    // Default hierarchy plus two custom groups:
+    // - nonWebMain: code relying on APIs unavailable on js/wasmJs (DataStore, Dispatchers.IO).
+    // - nonAndroidMain: code shared by every target except Android (e.g. the static theme).
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("nonWeb") {
+                // withAndroidTarget() does not match the AGP KMP library target.
+                withCompilations { it.target.platformType == KotlinPlatformType.androidJvm }
+                withJvm()
+                group("ios") { withIos() }
+            }
+            group("nonAndroid") {
+                withJvm()
+                group("ios") { withIos() }
+                group("web") {
+                    withJs()
+                    withWasmJs()
+                }
+            }
         }
     }
 
@@ -59,7 +108,6 @@ kotlin {
             implementation(libs.sqlite.framework)
         }
         commonMain.dependencies {
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.compose)
 
@@ -80,11 +128,16 @@ kotlin {
             implementation(libs.aboutlibraries.compose.m3)
             implementation(libs.ksafe)
             implementation(libs.room.runtime)
+            implementation(libs.sqlite.async)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+        }
+        named("nonWebMain").dependencies {
+            // Kept only for the one-time migration of legacy preferences into KSafe.
+            implementation(libs.androidx.datastore.preferences)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -137,10 +190,18 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 dependencies {
     add("kspAndroid", libs.room.compiler)
     add("kspJvm", libs.room.compiler)
+    add("kspJs", libs.room.compiler)
+    add("kspWasmJs", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
 
     ktlintRuleset(libs.ktlint)
 
     androidRuntimeClasspath(libs.compose.ui.tooling)
+}
+
+// shared has no Compose UI tests; the web tests only cover plain logic, so the Compose check
+// that demands an executable binary for Skiko-backed UI tests does not apply.
+tasks.matching { it.name.startsWith("checkComposeUiTestConfigurationFor") }.configureEach {
+    enabled = false
 }
