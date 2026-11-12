@@ -11,15 +11,23 @@ import de.dbauer.expensetracker.shared.di.sharedModule
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
+import de.dbauer.expensetracker.shared.ui.getDefaultTabRoute
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
+import org.koin.mp.KoinPlatform
+import platform.UIKit.UIViewController
 
-fun MainViewController() =
-    ComposeUIViewController {
+fun MainViewController(): UIViewController {
+    // Koin is started by initKoin() before the view controller is created
+    val startRoute =
+        runBlocking { KoinPlatform.getKoin().get<IUserPreferencesRepository>().getDefaultTabRoute() }
+
+    return ComposeUIViewController {
         val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
         val selectedTheme by userPreferencesRepository.themeMode.collectAsState()
@@ -30,6 +38,7 @@ fun MainViewController() =
                 color = MaterialTheme.colorScheme.background,
             ) {
                 MainContent(
+                    startRoute = startRoute,
                     isGridMode = isGridMode,
                     biometricSecurity = false,
                     canUseBiometric = false,
@@ -51,6 +60,7 @@ fun MainViewController() =
             }
         }
     }
+}
 
 fun initKoin() {
     startKoin {

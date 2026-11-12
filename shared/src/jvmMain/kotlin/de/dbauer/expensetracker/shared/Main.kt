@@ -9,17 +9,21 @@ import de.dbauer.expensetracker.shared.di.sharedModule
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
+import de.dbauer.expensetracker.shared.ui.getDefaultTabRoute
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 
-fun main() =
-    application {
+fun main() {
+    val koin =
         startKoin {
             modules(sharedModule, platformModule)
-        }
+        }.koin
+    val startRoute = runBlocking { koin.get<IUserPreferencesRepository>().getDefaultTabRoute() }
 
+    application {
         val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
         val isGridMode by userPreferencesRepository.gridMode.collectAsState()
 
@@ -33,6 +37,7 @@ fun main() =
 
             ExpenseTrackerTheme(themeMode = ThemeMode.fromInt(selectedTheme)) {
                 MainContent(
+                    startRoute = startRoute,
                     isGridMode = isGridMode,
                     biometricSecurity = false,
                     canUseBiometric = false,
@@ -54,3 +59,4 @@ fun main() =
             }
         }
     }
+}

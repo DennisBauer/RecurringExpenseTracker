@@ -5,22 +5,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import androidx.sqlite.SQLiteDriver
-import de.dbauer.expensetracker.shared.data.HomePane
-import de.dbauer.expensetracker.shared.data.MainNavRoute
-import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.di.platformModule
 import de.dbauer.expensetracker.shared.di.sharedModule
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.initSystemCurrencyCode
 import de.dbauer.expensetracker.shared.ui.AlreadyOpenInAnotherTabScreen
-import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
+import de.dbauer.expensetracker.shared.ui.getDefaultTabRoute
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.websqlite.createWebSQLiteDriver
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
@@ -67,17 +63,7 @@ private suspend fun startApp() {
         startKoin {
             modules(sharedModule, platformModule, webDriverModule)
         }.koin
-    val startRoute: MainNavRoute =
-        when (
-            koin
-                .get<IUserPreferencesRepository>()
-                .defaultTab
-                .get()
-                .first()
-        ) {
-            DefaultTab.Upcoming.value -> UpcomingPane
-            else -> HomePane()
-        }
+    val startRoute = koin.get<IUserPreferencesRepository>().getDefaultTabRoute()
 
     ComposeViewport {
         val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
