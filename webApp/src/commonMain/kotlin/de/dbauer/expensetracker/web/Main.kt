@@ -5,17 +5,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import androidx.sqlite.SQLiteDriver
+import de.dbauer.expensetracker.shared.data.HomePane
+import de.dbauer.expensetracker.shared.data.MainNavRoute
+import de.dbauer.expensetracker.shared.data.UpcomingPane
 import de.dbauer.expensetracker.shared.di.platformModule
 import de.dbauer.expensetracker.shared.di.sharedModule
 import de.dbauer.expensetracker.shared.model.datastore.IUserPreferencesRepository
 import de.dbauer.expensetracker.shared.model.initSystemCurrencyCode
 import de.dbauer.expensetracker.shared.ui.AlreadyOpenInAnotherTabScreen
+import de.dbauer.expensetracker.shared.ui.DefaultTab
 import de.dbauer.expensetracker.shared.ui.MainContent
 import de.dbauer.expensetracker.shared.ui.ThemeMode
 import de.dbauer.expensetracker.shared.ui.theme.ExpenseTrackerTheme
 import de.dbauer.expensetracker.websqlite.createWebSQLiteDriver
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
@@ -57,10 +62,22 @@ private fun showAlreadyOpenInAnotherTab() {
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-private fun startApp() {
-    startKoin {
-        modules(sharedModule, platformModule, webDriverModule)
-    }
+private suspend fun startApp() {
+    val koin =
+        startKoin {
+            modules(sharedModule, platformModule, webDriverModule)
+        }.koin
+    val startRoute: MainNavRoute =
+        when (
+            koin
+                .get<IUserPreferencesRepository>()
+                .defaultTab
+                .get()
+                .first()
+        ) {
+            DefaultTab.Upcoming.value -> UpcomingPane
+            else -> HomePane()
+        }
 
     ComposeViewport {
         val userPreferencesRepository = koinInject<IUserPreferencesRepository>()
@@ -70,6 +87,7 @@ private fun startApp() {
 
         ExpenseTrackerTheme(themeMode = ThemeMode.fromInt(selectedTheme)) {
             MainContent(
+                startRoute = startRoute,
                 isGridMode = isGridMode,
                 biometricSecurity = false,
                 canUseBiometric = false,
@@ -83,6 +101,7 @@ private fun startApp() {
                 onBiometricSecurityChange = {},
                 requestNotificationPermission = {},
                 navigateToPermissionsSettings = {},
+                canUseBackup = false,
                 onClickBackup = {},
                 onClickRestore = {},
                 updateWidget = {},
