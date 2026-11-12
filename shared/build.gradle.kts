@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -35,6 +36,24 @@ kotlin {
     }
 
     jvm()
+
+    js {
+        browser {
+            testTask {
+                // Web unit tests need a browser, which is unavailable on CI.
+                enabled = false
+            }
+        }
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            testTask {
+                enabled = false
+            }
+        }
+    }
 
     listOf(
         iosArm64(),
@@ -153,6 +172,8 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 dependencies {
     add("kspAndroid", libs.room.compiler)
     add("kspJvm", libs.room.compiler)
+    add("kspJs", libs.room.compiler)
+    add("kspWasmJs", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
 
