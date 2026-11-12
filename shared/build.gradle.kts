@@ -1,6 +1,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -12,6 +15,15 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.kotlin.serialization)
 }
+
+// Web tests run in a headless browser. Both launchers are registered so the yarn lock file
+// stays identical; karma.config.d/browser.js picks one (Chrome by default, which is
+// preinstalled on the CI runners; set KARMA_BROWSER=FirefoxHeadless to use Firefox).
+fun KotlinJsTest.useHeadlessBrowser() =
+    useKarma {
+        useChromeHeadless()
+        useFirefoxHeadless()
+    }
 
 kotlin {
     android {
@@ -39,19 +51,14 @@ kotlin {
 
     js {
         browser {
-            testTask {
-                // Web unit tests need a browser, which is unavailable on CI.
-                enabled = false
-            }
+            testTask { useHeadlessBrowser() }
         }
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            testTask {
-                enabled = false
-            }
+            testTask { useHeadlessBrowser() }
         }
     }
 
@@ -67,19 +74,30 @@ kotlin {
         }
     }
 
-    // Explicit call keeps the default template applied despite the manual
-    // dependsOn edges for nonWebMain below.
-    applyDefaultHierarchyTemplate()
+    // Default hierarchy plus two custom groups:
+    // - nonWebMain: code relying on APIs unavailable on js/wasmJs (DataStore, Dispatchers.IO).
+    // - nonAndroidMain: code shared by every target except Android (e.g. the static theme).
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("nonWeb") {
+                // withAndroidTarget() does not match the AGP KMP library target.
+                withCompilations { it.target.platformType == KotlinPlatformType.androidJvm }
+                withJvm()
+                group("ios") { withIos() }
+            }
+            group("nonAndroid") {
+                withJvm()
+                group("ios") { withIos() }
+                group("web") {
+                    withJs()
+                    withWasmJs()
+                }
+            }
+        }
+    }
 
     sourceSets {
-        // nonWebMain holds code that relies on APIs unavailable on js/wasmJs
-        // (DataStore, Dispatchers.IO).
-        val nonWebMain = create("nonWebMain")
-        nonWebMain.dependsOn(commonMain.get())
-        androidMain.get().dependsOn(nonWebMain)
-        jvmMain.get().dependsOn(nonWebMain)
-        iosMain.get().dependsOn(nonWebMain)
-
         all {
             languageSettings.optIn("kotlin.time.ExperimentalTime")
         }
@@ -117,7 +135,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
         }
-        getByName("nonWebMain").dependencies {
+        named("nonWebMain").dependencies {
             // Kept only for the one-time migration of legacy preferences into KSafe.
             implementation(libs.androidx.datastore.preferences)
         }
@@ -180,4 +198,10 @@ dependencies {
     ktlintRuleset(libs.ktlint)
 
     androidRuntimeClasspath(libs.compose.ui.tooling)
+}
+
+// shared has no Compose UI tests; the web tests only cover plain logic, so the Compose check
+// that demands an executable binary for Skiko-backed UI tests does not apply.
+tasks.matching { it.name.startsWith("checkComposeUiTestConfigurationFor") }.configureEach {
+    enabled = false
 }

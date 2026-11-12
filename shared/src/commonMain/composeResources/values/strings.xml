@@ -181,4 +181,6 @@
     <string name="unarchive">Unarchive</string>
     <string name="edit_expense_end_date">End Date (optional)</string>
     <string name="edit_expense_end_date_placeholder">Pick a Date</string>
+    <string name="web_already_open_title">Already open in another tab</string>
+    <string name="web_already_open_message">The app is already open in another browser tab. Close the other tab, then reload this page.</string>
 </resources>

@@ -3,12 +3,20 @@
  * protocol (open / prepare / step / close) on top of SQLite WASM with OPFS
  * persistence.
  *
+ * Storage uses the "opfs-sahpool" VFS. Unlike the plain "opfs" VFS it needs no
+ * SharedArrayBuffer and therefore no COOP/COEP headers, so the app runs on any
+ * static host (e.g. GitHub Pages). The pool holds exclusive OPFS access handles,
+ * so only one tab can open the database at a time.
+ *
  * Adapted from the androidx sample worker (Apache License 2.0):
  * https://github.com/danysantiago/room-web-demo
  */
 import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
 
 let sqlite3 = null;
+let sahPool = null;
+// Set when SQLite or the OPFS pool failed to initialize; every request is answered with it.
+let initError = null;
 
 // Maps to track active database connections and prepared statements by their unique IDs.
 const databases = new Map(); // stores databaseId -> SQLiteDbObject
@@ -20,8 +28,8 @@ let nextStatementId = 0;
 
 function openRequest(id, requestData) {
     try {
+        const newDatabase = new sahPool.OpfsSAHPoolDb(requestData.fileName);
         const newDatabaseId = nextDatabaseId++;
-        const newDatabase = new sqlite3.oo1.OpfsDb(requestData.fileName);
         databases.set(newDatabaseId, newDatabase);
         postMessage({'id': id, data: {'databaseId': newDatabaseId}});
     } catch (error) {
@@ -31,24 +39,27 @@ function openRequest(id, requestData) {
 
 function prepareRequest(id, requestData) {
     try {
-        const newStatementId = nextStatementId++;
-        const resultData = {
-            'statementId': newStatementId,
-            'parameterCount': 0,
-            'columnNames': []
-        };
         const database = databases.get(requestData.databaseId);
         if (!database) {
             postMessage({'id': id, error: "Invalid database ID: " + requestData.databaseId});
             return;
         }
         const statement = database.prepare(requestData.sql);
+        const newStatementId = nextStatementId++;
         statements.set(newStatementId, statement);
-        resultData.parameterCount = sqlite3.capi.sqlite3_bind_parameter_count(statement);
+        // Not Stmt.getColumnNames(): it throws for statements without result columns (e.g. DDL).
+        const columnNames = [];
         for (let i = 0; i < statement.columnCount; i++) {
-            resultData.columnNames.push(sqlite3.capi.sqlite3_column_name(statement, i));
+            columnNames.push(statement.getColumnName(i));
         }
-        postMessage({'id': id, data: resultData});
+        postMessage({
+            'id': id,
+            data: {
+                'statementId': newStatementId,
+                'parameterCount': statement.parameterCount,
+                'columnNames': columnNames,
+            },
+        });
     } catch (error) {
         postMessage({'id': id, error: error.message});
     }
@@ -65,8 +76,8 @@ function stepRequest(id, requestData) {
             'rows': [],
             'columnTypes': []
         };
-        statement.reset()
-        statement.clearBindings()
+        statement.reset();
+        statement.clearBindings();
         for (let i = 0; i < requestData.bindings.length; i++) {
             statement.bind(i + 1, requestData.bindings[i]);
         }
@@ -84,82 +95,104 @@ function stepRequest(id, requestData) {
     }
 }
 
-function closeRequest(id, requestData) {
-    if (requestData.statementId) {
+// "close" is a one-way command: the driver expects no response, so failures are only logged.
+// IDs start at 0, hence the explicit null checks.
+function closeRequest(requestData) {
+    if (requestData.statementId != null) {
         const statement = statements.get(requestData.statementId);
+        statements.delete(requestData.statementId);
         if (!statement) {
-            postMessage({'id': id, error: "Invalid statement ID: " + requestData.statementId});
-            return;
-        }
-        try {
-            statement.finalize();
-            statements.delete(requestData.statementId);
-        } catch (error) {
-            postMessage({'id': id, error: error.message});
+            console.error("close: invalid statement ID: " + requestData.statementId);
+        } else {
+            try {
+                statement.finalize();
+            } catch (error) {
+                console.error("close: failed to finalize statement", error);
+            }
         }
     }
 
-    if (requestData.databaseId) {
+    if (requestData.databaseId != null) {
         const database = databases.get(requestData.databaseId);
+        databases.delete(requestData.databaseId);
         if (!database) {
-            postMessage({'id': id, error: "Invalid database ID: " + requestData.databaseId});
-            return;
-        }
-        try {
-            database.close();
-            databases.delete(requestData.databaseId);
-        } catch (error) {
-            postMessage({'id': id, error: error.message});
+            console.error("close: invalid database ID: " + requestData.databaseId);
+        } else {
+            try {
+                database.close();
+            } catch (error) {
+                console.error("close: failed to close database", error);
+            }
         }
     }
 }
 
-// A map that links command names (strings) to their respective handler functions.
-const commandMap = {
-    'open': openRequest,
-    'prepare': prepareRequest,
-    'step': stepRequest,
-    'close': closeRequest,
-};
-
 function handleMessage(e) {
     const requestMsg = e.data;
-    if (!Object.hasOwn(requestMsg, 'data') && requestMsg.data == null) {
+    if (requestMsg == null || requestMsg.data == null) {
         postMessage(
-            {'id': requestMsg.id, 'error': "Invalid request, missing 'data'."}
+            {'id': requestMsg?.id, 'error': "Invalid request, missing 'data'."}
         );
         return;
     }
-    if (!Object.hasOwn(requestMsg.data, 'cmd') && requestMsg.data.cmd == null) {
+    const requestData = requestMsg.data;
+    if (requestData.cmd == null) {
         postMessage(
             {'id': requestMsg.id, 'error': "Invalid request, missing 'cmd'."}
         );
         return;
     }
-    const command = requestMsg.data.cmd;
-    const requestHandler = commandMap[command];
-    if (requestHandler) {
-        requestHandler(requestMsg.id, requestMsg.data);
-    } else {
-        postMessage(
-            {'id': requestMsg.id, 'error': "Invalid request, unknown command: '" + command + "'."}
-        );
+    if (initError) {
+        if (requestData.cmd !== 'close') {
+            postMessage({'id': requestMsg.id, 'error': initError});
+        }
+        return;
+    }
+    switch (requestData.cmd) {
+        case 'open':
+            openRequest(requestMsg.id, requestData);
+            break;
+        case 'prepare':
+            prepareRequest(requestMsg.id, requestData);
+            break;
+        case 'step':
+            stepRequest(requestMsg.id, requestData);
+            break;
+        case 'close':
+            closeRequest(requestData);
+            break;
+        default:
+            postMessage(
+                {'id': requestMsg.id, 'error': "Invalid request, unknown command: '" + requestData.cmd + "'."}
+            );
     }
 }
 
-// Queue incoming requests until the SQLite WASM module has finished initializing.
+// Queue incoming requests until SQLite WASM and the OPFS pool have finished initializing.
 const messageQueue = [];
+let ready = false;
 onmessage = (e) => {
-    if (!sqlite3) {
+    if (!ready) {
         messageQueue.push(e);
     } else {
         handleMessage(e);
     }
 };
 
-sqlite3InitModule().then(instance => {
-    sqlite3 = instance;
+function drainQueue() {
+    ready = true;
     while (messageQueue.length > 0) {
         handleMessage(messageQueue.shift());
     }
-});
+}
+
+sqlite3InitModule()
+    .then(async (instance) => {
+        sqlite3 = instance;
+        sahPool = await sqlite3.installOpfsSAHPoolVfs();
+    })
+    .catch((error) => {
+        initError = "SQLite initialization failed: " + (error?.message ?? error);
+        console.error(initError, error);
+    })
+    .finally(drainQueue);

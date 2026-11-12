@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -34,6 +35,14 @@ kotlin {
             implementation(libs.koin.compose)
         }
     }
+}
+
+// Webpack does not track node_modules; rebundle when the local sqlite worker package changes.
+tasks.withType<KotlinWebpack>().configureEach {
+    inputs
+        .dir(rootProject.layout.projectDirectory.dir("webSqliteWorker/worker"))
+        .withPropertyName("sqliteWasmWorkerSources")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

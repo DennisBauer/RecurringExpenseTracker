@@ -11,9 +11,21 @@
             height: 100%;
             overflow: hidden;
         }
+        /* Sits behind the Compose canvas; hidden once the app paints its first frame. */
+        #loading {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            color: #666;
+        }
     </style>
 </head>
 <body>
+<div id="loading">Loading…</div>
 <script src="webApp.js"></script>
 </body>
 </html>
