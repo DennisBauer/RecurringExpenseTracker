@@ -9,6 +9,9 @@ class LocalizedNumberParsingTest {
 
     private fun de(input: String) = parseLocalizedFloat(input, decimalSeparator = ',', groupSeparator = '.')
 
+    private fun ar(input: String) =
+        parseLocalizedFloat(input, decimalSeparator = '\u066B', groupSeparator = '\u066C')
+
     private fun fr(input: String) = parseLocalizedFloat(input, decimalSeparator = ',', groupSeparator = ' ')
 
     @Test
@@ -44,6 +47,29 @@ class LocalizedNumberParsingTest {
         assertNull(de("1,234.56"))
         assertNull(en("1.234,56"))
         assertNull(de("1.23.4"))
+    }
+
+    @Test
+    fun rejectsMalformedGroupingBeforeDecimalSeparator() {
+        assertNull(en("12,34.56"))
+        assertNull(de("1..234,56"))
+        assertNull(en("1,2345.6"))
+        assertNull(en(",234.5"))
+    }
+
+    @Test
+    fun parsesIndianGrouping() {
+        assertEquals(123456f, en("1,23,456"))
+        assertEquals(123456f, en("1,23,456.00"))
+        assertEquals(12345678f, en("1,23,45,678"))
+        assertNull(en("1,23,456,789"))
+    }
+
+    @Test
+    fun parsesArabicIndicDigits() {
+        assertEquals(1234.5f, ar("\u0661\u066C\u0662\u0663\u0664\u066B\u0665\u0660"))
+        assertEquals(12.5f, ar("\u200F\u0661\u0662\u066B\u0665"))
+        assertEquals(42f, en("\u06F4\u06F2"))
     }
 
     @Test
