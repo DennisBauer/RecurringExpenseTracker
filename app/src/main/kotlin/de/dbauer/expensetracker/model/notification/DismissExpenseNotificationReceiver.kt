@@ -3,8 +3,6 @@ package de.dbauer.expensetracker.model.notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import androidx.core.content.ContextCompat
 import de.dbauer.expensetracker.shared.model.notification.ExpenseNotificationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -26,19 +24,6 @@ class DismissExpenseNotificationReceiver : BroadcastReceiver() {
                 expenseNotificationManager.markNotificationAsShown(expenseId)
             }
         }
-    }
-
-    fun registerReceiver(context: Context) {
-        ContextCompat.registerReceiver(
-            context,
-            this,
-            IntentFilter(DISMISS_EXPENSE_NOTIFICATION_ACTION),
-            ContextCompat.RECEIVER_NOT_EXPORTED,
-        )
-    }
-
-    fun unregisterReceiver(context: Context) {
-        context.unregisterReceiver(this)
     }
 
     companion object {

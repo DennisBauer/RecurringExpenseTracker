@@ -15,12 +15,6 @@ class SystemNotificationBuilder(
     private val context: Context,
     private val notificationManager: NotificationManager,
 ) {
-    private val dismissExpenseNotificationReceiver = DismissExpenseNotificationReceiver()
-
-    init {
-        dismissExpenseNotificationReceiver.registerReceiver(context)
-    }
-
     suspend fun buildSystemNotification(data: NotificationData): Notification {
         val channel = createChannel(data.channel)
         notificationManager.createNotificationChannel(channel)
