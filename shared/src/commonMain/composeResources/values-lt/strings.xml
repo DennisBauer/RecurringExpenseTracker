@@ -147,4 +147,6 @@
     <string name="unarchive">Išarchyvuoti</string>
     <string name="edit_expense_end_date">Pabaigos data (nebūtina)</string>
     <string name="edit_expense_end_date_placeholder">Pasirinkti datą</string>
+    <string name="web_already_open_title">Jau atverta kitoje kortelėje.</string>
+    <string name="web_already_open_message">Programa jau atverta kitoje naršyklės kortelėje. Užverkite kitą kortelę, tada iš naujo įkelkite šį puslapį.</string>
 </resources>
