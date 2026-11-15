@@ -2,7 +2,7 @@
     "data": {
         "AED": {
             "symbol": "AED",
-            "name": "United Arab Emirates Dirham",
+            "name": "UAE Dirham",
             "symbol_native": "\u062f.\u0625",
             "decimal_digits": 2,
             "rounding": 0,
@@ -54,13 +54,13 @@
         },
         "ANG": {
             "symbol": "\u0192",
-            "name": "NL Antillean Guilder",
+            "name": "Netherlands Antillean Guilder",
             "symbol_native": "NA\u0192",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "ANG",
             "icon_name": "ang",
-            "name_plural": "NL Antillean Guilders",
+            "name_plural": "Netherlands Antillean guilders",
             "type": "fiat",
             "countries": []
         },
@@ -140,12 +140,12 @@
         },
         "BAM": {
             "symbol": "KM",
-            "name": "Bosnia-Herzegovina Convertible Mark",
+            "name": "Bosnia and Herzegovina Convertible Mark",
             "symbol_native": "KM",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "BAM",
-            "name_plural": "Bosnia-Herzegovina convertible marks",
+            "name_plural": "Bosnia and Herzegovina convertible marks",
             "type": "fiat",
             "countries": [
                 "BA"
@@ -153,13 +153,13 @@
         },
         "BBD": {
             "symbol": "Bds$",
-            "name": "Barbadian Dollar",
+            "name": "Barbados Dollar",
             "symbol_native": "$",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "BBD",
             "icon_name": "bbd",
-            "name_plural": "Barbadian Dollars",
+            "name_plural": "Barbados dollars",
             "type": "fiat",
             "countries": [
                 "BB"
@@ -217,13 +217,13 @@
         },
         "BMD": {
             "symbol": "BD$",
-            "name": "Bermudan Dollar",
+            "name": "Bermudian Dollar",
             "symbol_native": "$",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "BMD",
             "icon_name": "bmd",
-            "name_plural": "Bermudan Dollars",
+            "name_plural": "Bermudian dollars",
             "type": "fiat",
             "countries": [
                 "BM"
@@ -298,12 +298,12 @@
         },
         "BWP": {
             "symbol": "BWP",
-            "name": "Botswanan Pula",
+            "name": "Botswana Pula",
             "symbol_native": "P",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "BWP",
-            "name_plural": "Botswanan pulas",
+            "name_plural": "Botswana pula",
             "type": "fiat",
             "countries": [
                 "BW"
@@ -311,7 +311,7 @@
         },
         "BYN": {
             "symbol": "Br",
-            "name": "Belarusian ruble",
+            "name": "Belarusian Ruble",
             "symbol_native": "Br",
             "decimal_digits": 2,
             "rounding": 0,
@@ -479,12 +479,12 @@
         },
         "CVE": {
             "symbol": "CV$",
-            "name": "Cape Verdean Escudo",
+            "name": "Cabo Verde Escudo",
             "symbol_native": "CV$",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "CVE",
-            "name_plural": "Cape Verdean escudos",
+            "name_plural": "Cabo Verde escudos",
             "type": "fiat",
             "countries": [
                 "CV"
@@ -492,12 +492,12 @@
         },
         "CZK": {
             "symbol": "K\u010d",
-            "name": "Czech Republic Koruna",
+            "name": "Czech Koruna",
             "symbol_native": "K\u010d",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "CZK",
-            "name_plural": "Czech Republic korunas",
+            "name_plural": "Czech korunas",
             "type": "fiat",
             "countries": [
                 "CZ"
@@ -681,12 +681,12 @@
         },
         "GBP": {
             "symbol": "\u00a3",
-            "name": "British Pound Sterling",
+            "name": "Pound Sterling",
             "symbol_native": "\u00a3",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "GBP",
-            "name_plural": "British pounds sterling",
+            "name_plural": "pounds sterling",
             "type": "fiat",
             "countries": [
                 "GB",
@@ -713,7 +713,7 @@
         },
         "GGP": {
             "symbol": "\u00a3",
-            "name": "Guernsey pound",
+            "name": "Guernsey Pound",
             "symbol_native": "\u00a3",
             "decimal_digits": 2,
             "rounding": 0,
@@ -791,13 +791,13 @@
         },
         "GYD": {
             "symbol": "G$",
-            "name": "Guyanaese Dollar",
+            "name": "Guyana Dollar",
             "symbol_native": "$",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "GYD",
             "icon_name": "gyd",
-            "name_plural": "Guyanaese Dollar",
+            "name_plural": "Guyana dollars",
             "type": "fiat",
             "countries": [
                 "GY"
@@ -882,12 +882,12 @@
         },
         "ILS": {
             "symbol": "\u20aa",
-            "name": "Israeli New Sheqel",
+            "name": "New Israeli Sheqel",
             "symbol_native": "\u20aa",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "ILS",
-            "name_plural": "Israeli new sheqels",
+            "name_plural": "new Israeli sheqels",
             "type": "fiat",
             "countries": [
                 "IL",
@@ -896,7 +896,7 @@
         },
         "IMP": {
             "symbol": "\u00a3",
-            "name": "Manx pound",
+            "name": "Manx Pound",
             "symbol_native": "\u00a3",
             "decimal_digits": 2,
             "rounding": 0,
@@ -960,12 +960,12 @@
         },
         "JEP": {
             "symbol": "\u00a3",
-            "name": "Jersey pound",
+            "name": "Jersey Pound",
             "symbol_native": "\u00a3",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "JEP",
-            "name_plural": "Jersey pound",
+            "name_plural": "Jersey pounds",
             "type": "fiat",
             "countries": []
         },
@@ -1024,13 +1024,13 @@
         },
         "KGS": {
             "symbol": "KGS",
-            "name": "Kyrgystani Som",
+            "name": "Kyrgyzstani Som",
             "symbol_native": "KGS",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "KGS",
             "icon_name": "kgs",
-            "name_plural": "Kyrgystani Som",
+            "name_plural": "Kyrgyzstani soms",
             "type": "fiat",
             "countries": [
                 "KG"
@@ -1131,12 +1131,12 @@
         },
         "LAK": {
             "symbol": "\u20adN",
-            "name": "Laotian Kip",
+            "name": "Lao Kip",
             "symbol_native": "\u20ad\u200f\u200f",
             "decimal_digits": 0,
             "rounding": 0,
             "code": "LAK",
-            "name_plural": "Laotian Kip",
+            "name_plural": "Lao kips",
             "type": "fiat",
             "countries": [
                 "LA"
@@ -1265,7 +1265,7 @@
             "decimal_digits": 0,
             "rounding": 0,
             "code": "MGA",
-            "name_plural": "Malagasy Ariaries",
+            "name_plural": "Malagasy ariary",
             "type": "fiat",
             "countries": [
                 "MG"
@@ -1286,12 +1286,12 @@
         },
         "MMK": {
             "symbol": "MMK",
-            "name": "Myanma Kyat",
+            "name": "Myanmar Kyat",
             "symbol_native": "K",
             "decimal_digits": 0,
             "rounding": 0,
             "code": "MMK",
-            "name_plural": "Myanma kyats",
+            "name_plural": "Myanmar kyats",
             "type": "fiat",
             "countries": [
                 "MM"
@@ -1326,12 +1326,12 @@
         },
         "MRO": {
             "symbol": "UM",
-            "name": "Mauritanian ouguiya",
+            "name": "Mauritanian Ouguiya (until 2017)",
             "symbol_native": "UM",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "MRO",
-            "name_plural": "Mauritanian ouguiyas",
+            "name_plural": "Mauritanian ouguiyas (until 2017)",
             "type": "fiat",
             "countries": []
         },
@@ -1526,12 +1526,12 @@
         },
         "PEN": {
             "symbol": "S/.",
-            "name": "Peruvian Nuevo Sol",
+            "name": "Peruvian Sol",
             "symbol_native": "S/.",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "PEN",
-            "name_plural": "Peruvian nuevos soles",
+            "name_plural": "Peruvian soles",
             "type": "fiat",
             "countries": [
                 "PE"
@@ -1765,13 +1765,13 @@
         },
         "SLL": {
             "symbol": "Le",
-            "name": "Sierra Leonean Leone",
+            "name": "Sierra Leonean Leone (until 2024)",
             "symbol_native": "Le",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "SLL",
             "icon_name": "sll",
-            "name_plural": "Sierra Leonean Leone",
+            "name_plural": "Sierra Leonean leones (until 2024)",
             "type": "fiat",
             "countries": []
         },
@@ -1804,12 +1804,12 @@
         },
         "STD": {
             "symbol": "Db",
-            "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe dobra",
+            "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe Dobra (until 2017)",
             "symbol_native": "Db",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "STD",
-            "name_plural": "S\u00e3o Tom\u00e9 and Pr\u00edncipe dobras",
+            "name_plural": "S\u00e3o Tom\u00e9 and Pr\u00edncipe dobras (until 2017)",
             "type": "fiat",
             "countries": []
         },
@@ -1881,13 +1881,13 @@
         },
         "TMT": {
             "symbol": "T",
-            "name": "Turkmenistani Manat",
+            "name": "Turkmenistan New Manat",
             "symbol_native": "T\u200f",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "TMT",
             "icon_name": "tmt",
-            "name_plural": "Turkmenistani Manat",
+            "name_plural": "Turkmenistan new manats",
             "type": "fiat",
             "countries": [
                 "TM"
@@ -2045,12 +2045,12 @@
         },
         "UZS": {
             "symbol": "UZS",
-            "name": "Uzbekistan Som",
+            "name": "Uzbekistan Sum",
             "symbol_native": "UZS",
             "decimal_digits": 0,
             "rounding": 0,
             "code": "UZS",
-            "name_plural": "Uzbekistan som",
+            "name_plural": "Uzbekistan sums",
             "type": "fiat",
             "countries": [
                 "UZ"
@@ -2058,12 +2058,12 @@
         },
         "VEF": {
             "symbol": "Bs.F.",
-            "name": "Venezuelan Bol\u00edvar",
+            "name": "Venezuelan Bol\u00edvar Fuerte",
             "symbol_native": "Bs.F.",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "VEF",
-            "name_plural": "Venezuelan bol\u00edvars",
+            "name_plural": "Venezuelan bol\u00edvares fuertes",
             "type": "fiat",
             "countries": []
         },
@@ -2171,12 +2171,12 @@
         },
         "XDR": {
             "symbol": "SDR",
-            "name": "Special drawing rights",
+            "name": "Special Drawing Rights",
             "symbol_native": "SDR",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "XDR",
-            "name_plural": "Special drawing rights",
+            "name_plural": "Special Drawing Rights",
             "type": "fiat",
             "countries": []
         },
@@ -2246,12 +2246,12 @@
         },
         "ZMK": {
             "symbol": "ZK",
-            "name": "Zambian Kwacha",
+            "name": "Zambian Kwacha (until 2012)",
             "symbol_native": "ZK",
             "decimal_digits": 0,
             "rounding": 0,
             "code": "ZMK",
-            "name_plural": "Zambian kwachas",
+            "name_plural": "Zambian kwachas (until 2012)",
             "type": "fiat",
             "countries": []
         },
@@ -2479,12 +2479,12 @@
         },
         "VES": {
             "symbol": "Bs.S.",
-            "name": "Venezuelan Bol\u00edvar",
+            "name": "Venezuelan Bol\u00edvar Soberano",
             "symbol_native": "Bs.S.",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "VES",
-            "name_plural": "Venezuelan bol\u00edvars",
+            "name_plural": "Venezuelan bol\u00edvares soberanos",
             "type": "fiat",
             "countries": [
                 "VE"
@@ -2492,12 +2492,12 @@
         },
         "STN": {
             "symbol": "STN",
-            "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe dobra",
+            "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe Dobra",
             "symbol_native": "STN",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "STN",
-            "name_plural": "dobra",
+            "name_plural": "S\u00e3o Tom\u00e9 and Pr\u00edncipe dobras",
             "type": "fiat",
             "countries": [
                 "ST"
@@ -2505,12 +2505,12 @@
         },
         "MRU": {
             "symbol": "MRU",
-            "name": "Mauritanian ouguiya",
+            "name": "Mauritanian Ouguiya",
             "symbol_native": "MRU",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "MRU",
-            "name_plural": "ouguiya",
+            "name_plural": "Mauritanian ouguiyas",
             "type": "fiat",
             "countries": [
                 "MR"
@@ -2531,12 +2531,12 @@
         },
         "SLE": {
             "symbol": "SLE",
-            "name": "Sierra Leonean leone",
+            "name": "Sierra Leonean Leone",
             "symbol_native": "SLE",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "SLE",
-            "name_plural": "leone",
+            "name_plural": "Sierra Leonean leones",
             "type": "fiat",
             "countries": [
                 "SL"
@@ -2544,12 +2544,12 @@
         },
         "XCG": {
             "symbol": "XCG",
-            "name": "Caribbean guilder",
+            "name": "Caribbean Guilder",
             "symbol_native": "XCG",
             "decimal_digits": 2,
             "rounding": 0,
             "code": "XCG",
-            "name_plural": "guilders",
+            "name_plural": "Caribbean guilders",
             "type": "fiat",
             "countries": [
                 "CW",
