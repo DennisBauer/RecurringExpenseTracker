@@ -1,0 +1,8 @@
+Changelog 0.21.5:
+* Fix: Speed up first load of the Upcoming tab
+* Fix: Notification alarm scheduling
+* (Lithuanian, Chinese (Simplified Han script)) translation updated
+* Update exchange rates and licenses
+* Update dependencies
+
+Full Changelog: https://github.com/DennisBauer/RecurringExpenseTracker/releases/tag/v0.21.5
