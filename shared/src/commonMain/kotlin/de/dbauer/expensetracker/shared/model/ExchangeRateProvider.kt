@@ -23,6 +23,8 @@ private data class ExchangeRates(
 private data class Meta(
     @SerialName("last_updated_at")
     val lastUpdatedAt: String,
+    @SerialName("base_currency")
+    val baseCurrency: String,
 )
 
 @Serializable
